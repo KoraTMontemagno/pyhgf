@@ -38,7 +38,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
@@ -51,6 +50,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ghgf/pymc';</script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -106,6 +106,8 @@
     <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image">
     <img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
   
+  
+    <p class="title logo__title">gHGF</p>
   
 </a>
     
@@ -188,7 +190,7 @@
           
           
           
-          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github-square"></i></span>
+          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
@@ -199,7 +201,7 @@
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter-square"></i></span>
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
             <label class="sr-only">Twitter</label></a>
         </li>
         <li class="nav-item">
@@ -210,7 +212,7 @@
           
           
           
-          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fas fa-box"></i></span>
+          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
             <label class="sr-only">Pypi</label></a>
         </li>
       </ul>
@@ -318,7 +320,7 @@
           
           
           
-          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github-square"></i></span>
+          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
@@ -329,7 +331,7 @@
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter-square"></i></span>
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
             <label class="sr-only">Twitter</label></a>
         </li>
         <li class="nav-item">
@@ -340,7 +342,7 @@
           
           
           
-          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fas fa-box"></i></span>
+          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
             <label class="sr-only">Pypi</label></a>
         </li>
       </ul>
@@ -385,7 +387,6 @@
 <span class="kn">from</span> <span class="nn">jax.tree_util</span> <span class="kn">import</span> <span class="n">Partial</span>
 
 <span class="kn">from</span> <span class="nn">ghgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
-<span class="kn">from</span> <span class="nn">ghgf.response</span> <span class="kn">import</span> <span class="n">gaussian_surprise</span>
 
 
 <div class="viewcode-block" id="hgf_logp"><a class="viewcode-back" href="../../generated/ghgf.pymc/ghgf.pymc.hgf_logp.html#ghgf.pymc.hgf_logp">[docs]</a><span class="k">def</span> <span class="nf">hgf_logp</span><span class="p">(</span>
@@ -401,7 +402,7 @@
     <span class="n">kappa_1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="n">bias</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
-    <span class="n">response_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">,</span>
+    <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
     <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
@@ -419,8 +420,7 @@
 <span class="sd">    response_function : callable</span>
 <span class="sd">        The response function to use to compute the model surprise.</span>
 <span class="sd">    response_function_parameters : tuple</span>
-<span class="sd">        (Optional) Additional parameters to the response function.    model_type : str</span>
-<span class="sd">    The type of HGF (can be `&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
+<span class="sd">        (Optional) Additional parameters to the response function.    </span>
 <span class="sd">    model_type : str</span>
 <span class="sd">        The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
 <span class="sd">    n_levels : int</span>
@@ -467,7 +467,7 @@
         <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continous&quot;</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="n">response_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">,</span>
+        <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="p">):</span>
 
@@ -557,65 +557,61 @@
 <span class="sd">    This class should be used in the context of a PyMC probabilistic model to estimate</span>
 <span class="sd">    one or many parameter-s probability density with MCMC sampling.</span>
 
-<span class="sd">    .. python::</span>
+<span class="sd">    &gt;&gt;&gt; import arviz as az</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pymc as pm</span>
+<span class="sd">    &gt;&gt;&gt; from math import log</span>
+<span class="sd">    &gt;&gt;&gt; from ghgf import load_data</span>
+<span class="sd">    &gt;&gt;&gt; from ghgf.pymc import HGFDistribution</span>
+<span class="sd">    &gt;&gt;&gt; from ghgf.response import gaussian_surprise</span>
 
-<span class="sd">        import arviz as az</span>
-<span class="sd">        import numpy as np</span>
-<span class="sd">        import pymc as pm</span>
-<span class="sd">        from math import log</span>
-<span class="sd">        from ghgf import load_data</span>
-<span class="sd">        from ghgf.pymc import HGFDistribution</span>
-<span class="sd">        from ghgf.response import gaussian_surprise</span>
+<span class="sd">    Create the data (value and time vectors)</span>
+<span class="sd">    &gt;&gt;&gt; timeserie = load_data(&quot;continuous&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; input_data = np.array(</span>
+<span class="sd">    &gt;&gt;&gt;     [timeserie, np.arange(1, len(timeserie) + 1, dtype=float)]</span>
+<span class="sd">    &gt;&gt;&gt; ).T</span>
 
-<span class="sd">        # Create the data (value and time vectors)</span>
-<span class="sd">        timeserie = load_data(&quot;continuous&quot;)</span>
-<span class="sd">        input_data = np.array(</span>
-<span class="sd">            [timeserie, np.arange(1, len(timeserie) + 1, dtype=float)]</span>
-<span class="sd">        ).T</span>
+<span class="sd">    We create the PyMC distribution here, specifying the type of model and</span>
+<span class="sd">    response function we want to use (i.e simple gaussian surprise).</span>
+<span class="sd">    &gt;&gt;&gt; hgf_logp_op = HGFDistribution(</span>
+<span class="sd">    &gt;&gt;&gt;     n_levels=2,</span>
+<span class="sd">    &gt;&gt;&gt;     data=input_data,</span>
+<span class="sd">    &gt;&gt;&gt;     response_function=gaussian_surprise,</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
 
-<span class="sd">        # We create the PyMC distribution here, specifying the type of model and</span>
-<span class="sd">        # response function we want to use (i.e simple gaussian surprise).</span>
-<span class="sd">        hgf_logp_op = HGFDistribution(</span>
-<span class="sd">            n_levels=2,</span>
-<span class="sd">            data=input_data,</span>
-<span class="sd">            response_function=gaussian_surprise,</span>
-<span class="sd">        )</span>
+<span class="sd">    Create the PyMC model</span>
+<span class="sd">    Here we are fixing all the paramters to arbitrary values and sampling the</span>
+<span class="sd">    posterior probability density of Omega in the second level, using a normal</span>
+<span class="sd">    distribution as prior : ω_2 ~ N(-11, 2).</span>
 
-<span class="sd">        # Create the PyMC model</span>
-<span class="sd">        # Here we are fixing all the paramters to arbitrary values and sampling the</span>
-<span class="sd">        # posterior probability density of Omega in the second level, using a normal</span>
-<span class="sd">        # distribution as prior : ω_2 ~ N(-11, 2).</span>
+<span class="sd">    &gt;&gt;&gt; with pm.Model() as model:</span>
+<span class="sd">    &gt;&gt;&gt;     ω_2 = pm.Normal(&quot;ω_2&quot;, -11.0, 2)</span>
+<span class="sd">    &gt;&gt;&gt;     pm.Potential(</span>
+<span class="sd">    &gt;&gt;&gt;         &quot;hhgf_loglike&quot;,</span>
+<span class="sd">    &gt;&gt;&gt;         hgf_logp_op(</span>
+<span class="sd">    &gt;&gt;&gt;             omega_1=0.0,</span>
+<span class="sd">    &gt;&gt;&gt;             omega_2=ω_2,</span>
+<span class="sd">    &gt;&gt;&gt;             omega_input=log(1e-4),</span>
+<span class="sd">    &gt;&gt;&gt;             rho_1=0.0,</span>
+<span class="sd">    &gt;&gt;&gt;             rho_2=0.0,</span>
+<span class="sd">    &gt;&gt;&gt;             pi_1=1e4,</span>
+<span class="sd">    &gt;&gt;&gt;             pi_2=1e1,</span>
+<span class="sd">    &gt;&gt;&gt;             mu_1=input_data[0, 0],</span>
+<span class="sd">    &gt;&gt;&gt;             mu_2=0.0,</span>
+<span class="sd">    &gt;&gt;&gt;             kappa_1=1.0,</span>
+<span class="sd">    &gt;&gt;&gt;             bias=0.0,</span>
+<span class="sd">    &gt;&gt;&gt;         ),</span>
+<span class="sd">    &gt;&gt;&gt;     )</span>
 
-<span class="sd">        with pm.Model() as model:</span>
+<span class="sd">    Sample the model - Using 4 chain, 4 cores and 1000 warmups.</span>
+<span class="sd">    &gt;&gt;&gt; with model:</span>
+<span class="sd">    &gt;&gt;&gt;     hgf_samples = pm.sample(chains=4, cores=4, tune=1000)</span>
 
-<span class="sd">            ω_2 = pm.Normal(&quot;ω_2&quot;, -11.0, 2)</span>
-
-<span class="sd">            pm.Potential(</span>
-<span class="sd">                &quot;hhgf_loglike&quot;,</span>
-<span class="sd">                hgf_logp_op(</span>
-<span class="sd">                    omega_1=0.0,</span>
-<span class="sd">                    omega_2=ω_2,</span>
-<span class="sd">                    omega_input=log(1e-4),</span>
-<span class="sd">                    rho_1=0.0,</span>
-<span class="sd">                    rho_2=0.0,</span>
-<span class="sd">                    pi_1=1e4,</span>
-<span class="sd">                    pi_2=1e1,</span>
-<span class="sd">                    mu_1=input_data[0, 0],</span>
-<span class="sd">                    mu_2=0.0,</span>
-<span class="sd">                    kappa_1=1.0,</span>
-<span class="sd">                    bias=0.0,</span>
-<span class="sd">                ),</span>
-<span class="sd">            )</span>
-
-<span class="sd">        # Sample the model - Using 4 chain, 4 cores and 1000 warmups.</span>
-<span class="sd">        with model:</span>
-<span class="sd">            hgf_samples = pm.sample(chains=4, cores=4, tune=1000)</span>
-
-<span class="sd">        # Print a summary of the results using Arviz</span>
-<span class="sd">        az.summary(hgf_samples, var_names=&quot;ω_2&quot;)</span>
-<span class="sd">        ===  =======  =====  =======  =======  =====  =====  ====  ====  =</span>
-<span class="sd">        ω_2  -12.846  1.305  -15.466  -10.675  0.038  0.027  1254  1726  1</span>
-<span class="sd">        ===  =======  =====  =======  =======  =====  =====  ====  ====  =</span>
+<span class="sd">    Print a summary of the results using Arviz</span>
+<span class="sd">    &gt;&gt;&gt; az.summary(hgf_samples, var_names=&quot;ω_2&quot;)</span>
+<span class="sd">    ===  =======  =====  =======  =======  =====  =====  ====  ====  =</span>
+<span class="sd">    ω_2  -12.846  1.305  -15.466  -10.675  0.038  0.027  1254  1726  1</span>
+<span class="sd">    ===  =======  =====  =======  =======  =====  =====  ====  ====  =</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -624,13 +620,18 @@
         <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="n">response_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">,</span>
+        <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        data : DeviceArray</span>
+<span class="sd">        model_type : str</span>
+<span class="sd">        n_levels : int</span>
+<span class="sd">        response_function : callable (optional)</span>
+<span class="sd">        response_function_parameters : Tuple</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># The value function</span>
@@ -787,7 +788,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.4.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
 </p>
 
   </div>
