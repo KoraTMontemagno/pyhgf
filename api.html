@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; ghgf 0.0.1dev documentation</title>
+    <title>API &#8212; ghgf 0.0.1dev documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -54,6 +54,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ghgf.binary.binary_node_update" href="generated/ghgf.binary/ghgf.binary.binary_node_update.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="user_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="None">
   </head>
@@ -123,6 +125,40 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
+                <li class="nav-item">
+                    <a class="nav-link" href="theory.html">
+                        Theory
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="user_guide.html">
+                        Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="#">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="cite.html">
+                        Cite
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="references.html">
+                        References
+                    </a>
+                </li>
+                
     </ul>
 </nav>
       </div>
@@ -222,6 +258,40 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
+                <li class="nav-item">
+                    <a class="nav-link" href="theory.html">
+                        Theory
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="user_guide.html">
+                        Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="#">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="cite.html">
+                        Cite
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="references.html">
+                        References
+                    </a>
+                </li>
+                
     </ul>
 </nav>
       </div>
@@ -305,7 +375,237 @@
             
             <article class="bd-article" role="main">
               
-  
+  <div class="contents topic" id="table-of-contents">
+<span id="api-ref"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#api" id="id1">API</a></p>
+<ul>
+<li><p><a class="reference internal" href="#binary" id="id2">Binary</a></p></li>
+<li><p><a class="reference internal" href="#continuous" id="id3">Continuous</a></p></li>
+<li><p><a class="reference internal" href="#model" id="id4">Model</a></p></li>
+<li><p><a class="reference internal" href="#plots" id="id5">Plots</a></p></li>
+<li><p><a class="reference internal" href="#pymc" id="id6">PyMC</a></p></li>
+<li><p><a class="reference internal" href="#response" id="id7">Response</a></p></li>
+<li><p><a class="reference internal" href="#typing" id="id8">Typing</a></p></li>
+<li><p><a class="reference internal" href="#python" id="id9">Python</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="api">
+<h1><a class="toc-backref" href="#id1">API</a><a class="headerlink" href="#api" title="Permalink to this headline">#</a></h1>
+<section id="binary">
+<h2><a class="toc-backref" href="#id2">Binary</a><a class="headerlink" href="#binary" title="Permalink to this headline">#</a></h2>
+<p>Core functionnalities of the JAX implementation to update <em>binary</em> nodes.</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.binary_node_update.html#ghgf.binary.binary_node_update" title="ghgf.binary.binary_node_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_node_update</span></code></a>(node_parameters, ...)</p></td>
+<td><p>Update the value and volatility parents of a binary node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.binary_input_update.html#ghgf.binary.binary_input_update" title="ghgf.binary.binary_input_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_input_update</span></code></a>(input_node, value, ...)</p></td>
+<td><p>Update the input node structure given one value for a time interval and return gaussian surprise.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.gaussian_density.html#ghgf.binary.gaussian_density" title="ghgf.binary.gaussian_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_density</span></code></a>(x, mu, pi)</p></td>
+<td><p>The Gaussian density as defined by mean and precision.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.sgm.html#ghgf.binary.sgm" title="ghgf.binary.sgm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgm</span></code></a>(x[, lower_bound, upper_bound])</p></td>
+<td><p>The logistic sigmoid function</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.binary_surprise.html#ghgf.binary.binary_surprise" title="ghgf.binary.binary_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_surprise</span></code></a>(x, muhat)</p></td>
+<td><p>Surprise at a binary outcome.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.loop_binary_inputs.html#ghgf.binary.loop_binary_inputs" title="ghgf.binary.loop_binary_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loop_binary_inputs</span></code></a>(res, el)</p></td>
+<td><p>The HGF function to be scanned by JAX.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="continuous">
+<h2><a class="toc-backref" href="#id3">Continuous</a><a class="headerlink" href="#continuous" title="Permalink to this headline">#</a></h2>
+<p>Core functionnalities of the JAX implementation to update <em>continuous</em> nodes.</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.continuous/ghgf.continuous.continuous_node_update.html#ghgf.continuous.continuous_node_update" title="ghgf.continuous.continuous_node_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">continuous_node_update</span></code></a>(node_parameters, ...)</p></td>
+<td><p>Update the value and volatility parents of a continuous node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.continuous/ghgf.continuous.continuous_input_update.html#ghgf.continuous.continuous_input_update" title="ghgf.continuous.continuous_input_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">continuous_input_update</span></code></a>(input_node, value, ...)</p></td>
+<td><p>Update the input node structure given one value for a time interval and return gaussian surprise.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.continuous/ghgf.continuous.gaussian_surprise.html#ghgf.continuous.gaussian_surprise" title="ghgf.continuous.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(x, muhat, pihat)</p></td>
+<td><p>Surprise at an outcome under a Gaussian prediction.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.continuous/ghgf.continuous.loop_continuous_inputs.html#ghgf.continuous.loop_continuous_inputs" title="ghgf.continuous.loop_continuous_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loop_continuous_inputs</span></code></a>(res, el)</p></td>
+<td><p>The HGF function to be scanned by JAX.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="model">
+<h2><a class="toc-backref" href="#id4">Model</a><a class="headerlink" href="#model" title="Permalink to this headline">#</a></h2>
+<p>The main class used to create a standard Hierarchical Gaussian Filter for binary or
+continuous inputs, with two or three levels. This class wraps the previous JAX modules
+and create a standard node structure for these models.</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.model/ghgf.model.HGF.html#ghgf.model.HGF" title="ghgf.model.HGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGF</span></code></a>([n_levels, model_type, initial_mu, ...])</p></td>
+<td><p>The standard 2 or 3 levels HGF for continuous or binary inputs.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="plots">
+<h2><a class="toc-backref" href="#id5">Plots</a><a class="headerlink" href="#plots" title="Permalink to this headline">#</a></h2>
+<p>Plotting functionnalities to visualize parameters trajectories and correlations after
+observing new data.</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.plots/ghgf.plots.plot_trajectories.html#ghgf.plots.plot_trajectories" title="ghgf.plots.plot_trajectories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_trajectories</span></code></a>(hgf[, ci, figsize])</p></td>
+<td><p>Plot perceptual HGF parameters time series.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.plots/ghgf.plots.plot_correlations.html#ghgf.plots.plot_correlations" title="ghgf.plots.plot_correlations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlations</span></code></a>(hgf)</p></td>
+<td><p>Plot the heatmap correlation of beliefs trajectories.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="pymc">
+<h2><a class="toc-backref" href="#id6">PyMC</a><a class="headerlink" href="#pymc" title="Permalink to this headline">#</a></h2>
+<p>The Herarchical Gaussian Filter as a PyMC distribution. This distribution can be
+embedded in a PyMC model and the free paramters will be estimated e.g. using MCMC
+sampling.</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.pymc/ghgf.pymc.hgf_logp.html#ghgf.pymc.hgf_logp" title="ghgf.pymc.hgf_logp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hgf_logp</span></code></a>(omega_1, omega_2, omega_input, ...)</p></td>
+<td><p>Compute the log probability from the HGF model given the data and parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.pymc/ghgf.pymc.HGFLogpGradOp.html#ghgf.pymc.HGFLogpGradOp" title="ghgf.pymc.HGFLogpGradOp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGFLogpGradOp</span></code></a>(data, model_type, n_levels, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.pymc/ghgf.pymc.HGFDistribution.html#ghgf.pymc.HGFDistribution" title="ghgf.pymc.HGFDistribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGFDistribution</span></code></a>(data, model_type, n_levels, ...)</p></td>
+<td><p>The HGF distribution to be used in the context of a PyMC 4.0 model.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="response">
+<h2><a class="toc-backref" href="#id7">Response</a><a class="headerlink" href="#response" title="Permalink to this headline">#</a></h2>
+<p>A collection of responses functions. A response function is simply a callable taking at
+least the HGF instance as input after observation and returning surprise.</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.response/ghgf.response.gaussian_surprise.html#ghgf.response.gaussian_surprise" title="ghgf.response.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(hgf_results, ...)</p></td>
+<td><p>The sum of the gaussian surprise along the time series (continuous HGF).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.response/ghgf.response.hrd_behaviors.html#ghgf.response.hrd_behaviors" title="ghgf.response.hrd_behaviors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrd_behaviors</span></code></a>(hgf_results, ...)</p></td>
+<td><p>The binary response function for the HRD task.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.response/ghgf.response.hrd_ideal_oberver.html#ghgf.response.hrd_ideal_oberver" title="ghgf.response.hrd_ideal_oberver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrd_ideal_oberver</span></code></a>(hgf_results, ...)</p></td>
+<td><p>The binary response function for the HRD task given by an ideal observer.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="typing">
+<h2><a class="toc-backref" href="#id8">Typing</a><a class="headerlink" href="#typing" title="Permalink to this headline">#</a></h2>
+<p>Types hints.</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.typing/ghgf.typing.node_validation.html#ghgf.typing.node_validation" title="ghgf.typing.node_validation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_validation</span></code></a>(node)</p></td>
+<td><p>&quot;Verify that the node structure is valid.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="python">
+<h2><a class="toc-backref" href="#id9">Python</a><a class="headerlink" href="#python" title="Permalink to this headline">#</a></h2>
+<p>The pure Python implementation of the Hierarchical Gaussian Filter for binary or
+continuous inputs, with two or three levels. This implementation is independent from the
+more recent JAX implementation and is not required to run the code. It is currently used
+for testing.</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.Model.html#ghgf.python.Model" title="ghgf.python.Model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Model</span></code></a>()</p></td>
+<td><p>Generic HGF model</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.StandardHGF.html#ghgf.python.StandardHGF" title="ghgf.python.StandardHGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StandardHGF</span></code></a>([n_levels, process_type, ...])</p></td>
+<td><p>The standard n-level HGF for continuous inputs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.StandardBinaryHGF.html#ghgf.python.StandardBinaryHGF" title="ghgf.python.StandardBinaryHGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StandardBinaryHGF</span></code></a>(*, initial_mu2, ...[, ...])</p></td>
+<td><p>The standard 3-level HGF for binary inputs</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.StateNode.html#ghgf.python.StateNode" title="ghgf.python.StateNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StateNode</span></code></a>(*, initial_mu, initial_pi[, rho, ...])</p></td>
+<td><p>HGF continuous state node</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.BinaryNode.html#ghgf.python.BinaryNode" title="ghgf.python.BinaryNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinaryNode</span></code></a>()</p></td>
+<td><p>HGF binary state node</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.InputNode.html#ghgf.python.InputNode" title="ghgf.python.InputNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InputNode</span></code></a>(*, omega)</p></td>
+<td><p>An HGF node that receives input on a continuous scale</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.BinaryInputNode.html#ghgf.python.BinaryInputNode" title="ghgf.python.BinaryInputNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinaryInputNode</span></code></a>(*[, pihat, eta0, eta1])</p></td>
+<td><p>An HGF node that receives binary input.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.Parameter.html#ghgf.python.Parameter" title="ghgf.python.Parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Parameter</span></code></a>(*[, space, lower_bound, ...])</p></td>
+<td><p>Parameters of nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.exp_shift_mirror.html#ghgf.python.exp_shift_mirror" title="ghgf.python.exp_shift_mirror"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exp_shift_mirror</span></code></a>(x, *[, lower_bound, ...])</p></td>
+<td><p>The (shifted and mirrored) exponential function</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.log_shift_mirror.html#ghgf.python.log_shift_mirror" title="ghgf.python.log_shift_mirror"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_shift_mirror</span></code></a>(x, *[, lower_bound, ...])</p></td>
+<td><p>The (shifted and mirrored) natural logarithm</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.sgm.html#ghgf.python.sgm" title="ghgf.python.sgm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgm</span></code></a>(x, *[, lower_bound, upper_bound])</p></td>
+<td><p>The logistic sigmoid function</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.logit.html#ghgf.python.logit" title="ghgf.python.logit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logit</span></code></a>(x, *[, lower_bound, upper_bound])</p></td>
+<td><p>The logistic function</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.gaussian.html#ghgf.python.gaussian" title="ghgf.python.gaussian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian</span></code></a>(x, mu, pi)</p></td>
+<td><p>The Gaussian density as defined by mean and precision</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.gaussian_surprise.html#ghgf.python.gaussian_surprise" title="ghgf.python.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(x, muhat, pihat)</p></td>
+<td><p>Surprise at an outcome under a Gaussian prediction</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.binary_surprise.html#ghgf.python.binary_surprise" title="ghgf.python.binary_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_surprise</span></code></a>(x, muhat)</p></td>
+<td><p>Surprise at a binary outcome</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
 
             </article>
             
@@ -314,6 +614,20 @@
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="user_guide.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">&lt;no title&gt;</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="generated/ghgf.binary/ghgf.binary.binary_node_update.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">ghgf.binary.binary_node_update</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
 </div>
             </footer>
             
@@ -329,7 +643,47 @@
     <i class="fa-solid fa-list"></i> On this page
 </div>
 <nav id="bd-toc-nav" class="page-toc">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#binary">
+   Binary
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#continuous">
+   Continuous
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model">
+   Model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plots">
+   Plots
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pymc">
+   PyMC
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#response">
+   Response
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#typing">
+   Typing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#python">
+   Python
+  </a>
+ </li>
 </ul>
 
 </nav>

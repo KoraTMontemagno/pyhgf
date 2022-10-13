@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; ghgf 0.0.1dev documentation</title>
+    <title>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding &#8212; ghgf 0.0.1dev documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -54,6 +54,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="theory.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="None">
   </head>
@@ -123,6 +124,40 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
+                <li class="nav-item">
+                    <a class="nav-link" href="theory.html">
+                        Theory
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="user_guide.html">
+                        Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="api.html">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="cite.html">
+                        Cite
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="references.html">
+                        References
+                    </a>
+                </li>
+                
     </ul>
 </nav>
       </div>
@@ -222,6 +257,40 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
+                <li class="nav-item">
+                    <a class="nav-link" href="theory.html">
+                        Theory
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="user_guide.html">
+                        Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="api.html">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="cite.html">
+                        Cite
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="references.html">
+                        References
+                    </a>
+                </li>
+                
     </ul>
 </nav>
       </div>
@@ -305,7 +374,111 @@
             
             <article class="bd-article" role="main">
               
-  
+  <img src="docs/source/images/logo.png" align="center" alt="hgf" VSPACE=30>
+<p><a class="reference external" href="https://github.com/pre-commit/pre-commit"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" /></a> <a class="reference external" href="https://github.com/LegrandNico/metadPy/blob/master/LICENSE"><img alt="license" src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" /></a> <a class="reference external" href="https://travis-ci.com/LegandNico/ghgf"><img alt="travis" src="https://travis-ci.com/LegrandNico/ghgf.svg?branch=master" /></a> <a class="reference external" href="https://codecov.io/gh/LegrandNico/ghgf"><img alt="codecov" src="https://codecov.io/gh/LegrandNico/ghgf/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://github.com/psf/black"><img alt="black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a> <a class="reference external" href="http://mypy-lang.org/"><img alt="mypy" src="http://www.mypy-lang.org/static/mypy_badge.svg" /></a> <a class="reference external" href="https://pycqa.github.io/isort/"><img alt="Imports: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336" /></a></p>
+<section id="the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding">
+<h1>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding<a class="headerlink" href="#the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding" title="Permalink to this headline">#</a></h1>
+<p><strong>GHGF</strong> is a Python library that implements the generalized and nodalized Hierarchical Gaussian Filter in Python. It is built on the to of <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax.html">JAX</a> and <a class="reference external" href="http://numba.pydata.org/">Numba</a> and can easily be embedded in any <a class="reference external" href="https://www.pymc.io/welcome.html">PyMC</a> probabilisic model for MCMC sampling.</p>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">#</a></h2>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h3>
+<p>The latest release of <strong>HGF</strong> can be installed from the GitHub folder:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">“git+https://github.com/ilabcode/ghgf.git&#64;ecg”</span></code></p>
+</section>
+<section id="how-does-it-works">
+<h3>How does it works?<a class="headerlink" href="#how-does-it-works" title="Permalink to this headline">#</a></h3>
+<p>The Hierarchical Gaussian Filter consists of a hierarchy of interdependent nodes that are being updated after observing input data. The value of a node depends on the value of its value and volatility parents. A node is formally defined as a Python tuple containing 3 variables:</p>
+<ol class="arabic simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">parameter</span></code> dictionary containing the node parameters (value, precision and parameters controlling the dependencies from values and variability parents).</p></li>
+<li><p>A value parent (optional).</p></li>
+<li><p>A volatility parent (optional).</p></li>
+</ol>
+<p>Value parent (<code class="docutils literal notranslate"><span class="pre">vapa</span></code>) and volatility (<code class="docutils literal notranslate"><span class="pre">vopa</span></code>) parent are nodes themself and are organized following the same principle.</p>
+<p>The node structure consists of nodes embedding other nodes hierarchically (i.e. tuples embedding other tuples). A generalization of the standard Hierarchical Gaussian Filter can build a hierarchical structure containing an arbitrary number of nodes, inputs and non-linear transformation between nodes. The structure continues as long as a given node has value or volatility parents. Well-known special cases of such hierarchies are the 2-level and 3-level Hierarchical Gaussian Filters.</p>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">#</a></h3>
+<p>Fitting a continuous 3 levels HGF model on a time series.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
+<span class="kn">from</span> <span class="nn">ghgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+<span class="kn">from</span> <span class="nn">ghgf</span> <span class="kn">import</span> <span class="n">load_data</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+
+<span class="c1"># Load time series example data</span>
+<span class="n">timeserie</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
+
+<span class="c1"># Format input data and add a time vector </span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">timeserie</span><span class="p">,</span> 
+        <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">timeserie</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># This is where we define all the model parameters - You can control the value of</span>
+<span class="c1"># different variables at different levels using the corresponding dictionary.</span>
+<span class="n">hgf_model</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
+    <span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">initial_mu</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.04</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+    <span class="n">initial_pi</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+    <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">13.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">},</span>
+    <span class="n">rho</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+    <span class="n">kappas</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+<span class="p">)</span>
+
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Fitting</span> <span class="pre">the</span> <span class="pre">continuous</span> <span class="pre">Hierarchical</span> <span class="pre">Gaussian</span> <span class="pre">Filter</span> <span class="pre">(JAX)</span> <span class="pre">with</span> <span class="pre">2</span> <span class="pre">levels.</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">jaxhgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Get the surprise associated with this model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">jaxhgf</span><span class="o">.</span><span class="n">surprise</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">DeviceArray(-1922.2267,</span> <span class="pre">dtype=float32)</span></code></p>
+<p>Plot the beliefs trajectories.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">jaxhgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="png" src="docs/source/images/trajectories.png" /></p>
+</section>
+</section>
+<section id="tutorials">
+<h2>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">#</a></h2>
+<p>You can find detailled introduction to different version of the Hierarchical Gaussian Filter applied to binary or continuous dataset in the following notebooks:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Notebook</p></th>
+<th class="head"><p>Colab</p></th>
+<th class="head"><p>nbViewer</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Binary HGF</p></td>
+<td><p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/ghgf/raw/ecg/notebooks/1-Binary%20HGF.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p></td>
+<td><p><a class="reference external" href="https://nbviewer.jupyter.org/github/ilabcode/ghgf/raw/ecg/notebooks/1-Binary%20HGF.ipynb"><img alt="View the notebook" src="https://img.shields.io/badge/render-nbviewer-orange.svg" /></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Continuous HGF</p></td>
+<td><p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/ghgf/raw/ecg/notebooks/2-Continuous%20HGF.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p></td>
+<td><p><a class="reference external" href="https://nbviewer.jupyter.org/github/ilabcode/ghgf/raw/ecg/notebooks/2-Continuous%20HGF.ipynb"><img alt="View the notebook" src="https://img.shields.io/badge/render-nbviewer-orange.svg" /></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Hierarchical HGF</p></td>
+<td><p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/ghgf/raw/ecg/notebooks/3-HierarchicalHGF.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p></td>
+<td><p><a class="reference external" href="https://nbviewer.jupyter.org/github/ilabcode/ghgf/raw/ecg/notebooks/3-HierarchicalHGF.ipynb"><img alt="View the notebook" src="https://img.shields.io/badge/render-nbviewer-orange.svg" /></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="acknoledgements">
+<h1>Acknoledgements<a class="headerlink" href="#acknoledgements" title="Permalink to this headline">#</a></h1>
+<p>This implementation of the Hierarchical Gaussian Filter was largely inspired by the original <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">Matlab implementation</a>. A Julia implementation can be found <a class="reference external" href="https://github.com/ilabcode/HGF.jl">here</a>.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
 
             </article>
             
@@ -314,6 +487,13 @@
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+  <a class='right-next' id="next-link" href="theory.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">&lt;no title&gt;</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
 </div>
             </footer>
             
@@ -329,7 +509,46 @@
     <i class="fa-solid fa-list"></i> On this page
 </div>
 <nav id="bd-toc-nav" class="page-toc">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#getting-started">
+     Getting started
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#installation">
+       Installation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#how-does-it-works">
+       How does it works?
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example">
+       Example
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tutorials">
+     Tutorials
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#acknoledgements">
+   Acknoledgements
+  </a>
+ </li>
 </ul>
 
 </nav>

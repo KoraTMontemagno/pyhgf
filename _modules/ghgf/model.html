@@ -1,0 +1,742 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ghgf.model &#8212; ghgf 0.0.1dev documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ghgf/model';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="None">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../theory.html">
+                        Theory
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../user_guide.html">
+                        Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../api.html">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../cite.html">
+                        Cite
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../references.html">
+                        References
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fas fa-box"></i></span>
+            <label class="sr-only">Pypi</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../theory.html">
+                        Theory
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../user_guide.html">
+                        Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../api.html">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../cite.html">
+                        Cite
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../references.html">
+                        References
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fas fa-box"></i></span>
+            <label class="sr-only">Pypi</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <h1>Source code for ghgf.model</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cfin.au.dk&gt;</span>
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">jax.lax</span> <span class="kn">import</span> <span class="n">scan</span>
+
+<span class="kn">from</span> <span class="nn">ghgf.binary</span> <span class="kn">import</span> <span class="n">loop_binary_inputs</span>
+<span class="kn">from</span> <span class="nn">ghgf.continuous</span> <span class="kn">import</span> <span class="n">loop_continuous_inputs</span>
+<span class="kn">from</span> <span class="nn">ghgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_trajectories</span>
+<span class="kn">from</span> <span class="nn">ghgf.response</span> <span class="kn">import</span> <span class="n">gaussian_surprise</span>
+<span class="kn">from</span> <span class="nn">ghgf.typing</span> <span class="kn">import</span> <span class="n">ParametersType</span><span class="p">,</span> <span class="n">node_validation</span>
+
+
+<div class="viewcode-block" id="HGF"><a class="viewcode-back" href="../../generated/ghgf.model/ghgf.model.HGF.html#ghgf.model.HGF">[docs]</a><span class="k">class</span> <span class="nc">HGF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The standard 2 or 3 levels HGF for continuous or binary inputs.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        Verbosity level.</span>
+<span class="sd">    n_levels : int</span>
+<span class="sd">        The number of hierarchies in the model, including the input vector. Cannot be</span>
+<span class="sd">        less than 2.</span>
+<span class="sd">    model_type : str</span>
+<span class="sd">        The model implemented (can be `&quot;continous&quot;` or `&quot;binary&quot;`).</span>
+<span class="sd">    nodes : tuple</span>
+<span class="sd">        A tuple of tuples representing the nodes hierarchy.</span>
+<span class="sd">    hgf_results : dict</span>
+<span class="sd">        After oberving the data using the `input_data` method, the output of the model</span>
+<span class="sd">        are stored in the `hgf_results` dictionary.</span>
+<span class="sd">    bias : float</span>
+<span class="sd">        Input bias (only relevant is `model_type=&quot;continuous&quot;`).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="HGF.__init__"><a class="viewcode-back" href="../../generated/ghgf.model/ghgf.model.HGF.html#ghgf.model.HGF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_levels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
+        <span class="n">initial_mu</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+        <span class="n">initial_pi</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+        <span class="n">omega_input</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">),</span>
+        <span class="n">omega</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">},</span>
+        <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+        <span class="n">eta0</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">eta1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">pihat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+        <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+        <span class="n">bias</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Parameterization of the HGF model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_levels : int | None</span>
+<span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
+<span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward</span>
+<span class="sd">            using `add_nodes()`. Defaults to `2` for a 2-levels HGF.</span>
+<span class="sd">        model_type : str</span>
+<span class="sd">            The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
+<span class="sd">        initial_mu : dict</span>
+<span class="sd">            Dictionary containing the initial values for the `initial_mu` parameter at</span>
+<span class="sd">            different levels of the hierarchy. Defaults set to `{&quot;1&quot;: 0.0, &quot;2&quot;: 0.0}`</span>
+<span class="sd">            for a 2-levels model.</span>
+<span class="sd">        initial_pi : dict</span>
+<span class="sd">            Dictionary containing the initial values for the `initial_pi` parameter at</span>
+<span class="sd">            different levels of the hierarchy. Pis values encode the precision of the</span>
+<span class="sd">            values at each level (Var = 1/pi) Defaults set to `{&quot;1&quot;: 1.0, &quot;2&quot;: 1.0}` for</span>
+<span class="sd">            a 2-levels model.</span>
+<span class="sd">        omega : dict</span>
+<span class="sd">            Dictionary containing the initial values for the `omega` parameter at</span>
+<span class="sd">            different levels of the hierarchy. Omegas represent the tonic part of the</span>
+<span class="sd">            variance (the part that is not affected by the parent node). Defaults set to</span>
+<span class="sd">            `{&quot;1&quot;: -10.0, &quot;2&quot;: -10.0}` for a 2-levels model. This parameters only when</span>
+<span class="sd">            `model_type=&quot;GRW&quot;`.</span>
+<span class="sd">        omega_input : float</span>
+<span class="sd">            Default value sets to `log(1e-4)`. Represents the noise associated with</span>
+<span class="sd">            the input.</span>
+<span class="sd">        rho : dict</span>
+<span class="sd">            Dictionary containing the initial values for the `rho` parameter at</span>
+<span class="sd">            different levels of the hierarchy. Rho represents the drift of the random</span>
+<span class="sd">            walk. Only required when `model_type=&quot;GRW&quot;`. Defaults set all entries to</span>
+<span class="sd">            `0` according to the number of required levels.</span>
+<span class="sd">        kappas : dict</span>
+<span class="sd">            Dictionary containing the initial values for the `kappa` parameter at</span>
+<span class="sd">            different levels of the hierarchy. Kappa represents the phasic part of the</span>
+<span class="sd">            variance (the part that is affected by the parents nodes) and will defines</span>
+<span class="sd">            the strenght of the connection between the node and the parent node. Often</span>
+<span class="sd">            fixed to 1. Defaults set to `{&quot;1&quot;: 1.0}` for a 2-levels model. Only</span>
+<span class="sd">            required when `model_type=&quot;GRW&quot;`.</span>
+<span class="sd">        eta0 : float</span>
+<span class="sd">            This value is used by the binary input node. Defaults to `0.0`. Only</span>
+<span class="sd">            relevant if `model_type=&quot;binary&quot;`.</span>
+<span class="sd">        eta1 : float</span>
+<span class="sd">            This value is used by the binary input node. Default to `1.0`. Only relevant</span>
+<span class="sd">            if `model_type=&quot;binary&quot;`.</span>
+<span class="sd">        pihat : float</span>
+<span class="sd">            This value is used by the binary input node. Default to `jnp.inf`. Only</span>
+<span class="sd">            relevant if `model_type=&quot;binary&quot;`.</span>
+<span class="sd">        bias : DeviceArray</span>
+<span class="sd">            The bias introduced in the perception of the input signal. This value is</span>
+<span class="sd">            added to the input time serie before model fitting.</span>
+<span class="sd">        verbose : bool</span>
+<span class="sd">            Default is `True`.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `model_type` is not `&quot;continuous&quot;` or `&quot;binary&quot;`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">=</span> <span class="n">model_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">=</span> <span class="n">n_levels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">bias</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Creating a </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model_type</span><span class="si">}</span><span class="s2"> Hierarchical Gaussian Filter &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span><span class="si">}</span><span class="s2"> levels (JAX backend).&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="c1"># Second level</span>
+            <span class="n">x2_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="p">((</span><span class="n">x2_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+
+            <span class="c1"># Third level</span>
+            <span class="n">x3_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="n">x3</span> <span class="o">=</span> <span class="p">((</span><span class="n">x3_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+
+            <span class="c1"># Second level</span>
+            <span class="n">x2_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">kappas</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],),</span>  <span class="c1"># type: ignore</span>
+                <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="p">((</span><span class="n">x2_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x3</span><span class="p">),)</span>
+
+        <span class="n">x1_parameters</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">kappas</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],),</span>
+            <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
+
+            <span class="c1"># First level (continuous node)</span>
+            <span class="n">x1</span> <span class="o">=</span> <span class="p">((</span><span class="n">x1_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x2</span><span class="p">),)</span>
+
+            <span class="c1"># Input node</span>
+            <span class="n">input_node_parameters</span><span class="p">:</span> <span class="n">ParametersType</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega_input</span><span class="p">,</span>
+                <span class="s2">&quot;bias&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="k">elif</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
+
+            <span class="c1"># First level (binary node)</span>
+            <span class="n">x1</span> <span class="o">=</span> <span class="p">((</span><span class="n">x1_parameters</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+
+            <span class="n">input_node_parameters</span><span class="p">:</span> <span class="n">ParametersType</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pihat</span><span class="p">,</span>
+                <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="n">eta0</span><span class="p">,</span>
+                <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="n">eta1</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;model_type should be &#39;continuous&#39; or &#39;binary&#39;&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">add_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a custom node structure.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes : tuple</span>
+<span class="sd">            The input node embeding the node hierarchy that will be updated during</span>
+<span class="sd">            model fit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node_validation</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">input_node</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span> <span class="o">=</span> <span class="n">nodes</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="nf">input_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">((</span><span class="sa">f</span><span class="s2">&quot;Add </span><span class="si">{</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> new </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model_type</span><span class="si">}</span><span class="s2"> observations.&quot;</span><span class="p">))</span>
+
+        <span class="c1"># Initialise the first values</span>
+        <span class="n">res_init</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">input_data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">input_data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span>
+                <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="c1"># This is where the HGF functions are used to scan the input time series</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
+            <span class="n">last</span><span class="p">,</span> <span class="n">final</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_continuous_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">input_data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
+            <span class="n">last</span><span class="p">,</span> <span class="n">final</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_binary_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">input_data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
+
+        <span class="c1"># Save results in the HGF dictionary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;last&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">last</span>  <span class="c1"># The last tuple returned</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">[</span>
+            <span class="s2">&quot;final&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">final</span>  <span class="c1"># The commulative update of the nodes and results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_data</span>  <span class="c1"># type: ignore</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">plot_trajectories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">plot_trajectories</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">plot_correlations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">plot_correlations</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">surprise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">response_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">,</span>
+        <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the model surprise (negative log probability) given the input data</span>
+<span class="sd">        and a response function and additional parameters to the response function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        response_function : callable</span>
+<span class="sd">            The response function to use to compute the model surprise.</span>
+<span class="sd">        response_function_parameters : tuple</span>
+<span class="sd">            (Optional) Additional parameters to the response function.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        surprise : float</span>
+<span class="sd">            The model surprise given the input data and the response function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">response_function</span><span class="p">(</span>
+            <span class="n">hgf_results</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">,</span>
+            <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2022-2022, Nicolas Legrand.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.4.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
