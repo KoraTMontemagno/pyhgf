@@ -378,7 +378,7 @@
   <section id="the-generative-model-of-the-hgf-volatility-vs-value-coupling">
 <h1>The generative model of the HGF: Volatility vs. value coupling<a class="headerlink" href="#the-generative-model-of-the-hgf-volatility-vs-value-coupling" title="Permalink to this headline">#</a></h1>
 <p>In the generative model of the HGF, (hidden) states of the world perform Gaussian random walks in time and can produce outcomes which are perceived by an observer as inputs. States can influence each other via volatility coupling or via value coupling.</p>
-<p>In the classical 3-level binary HGF as presented in \cite{Mathys2011}, the two states of interest, $x_2$ and $x_3$, are coupled to each other via volatility coupling, which means that for state $x_2$, the mean of the Gaussian random walk on trial $k$ is given by its previous value $x_2^{(k-1)}$, while the step size (or variance) depends on the current value of the higher level state, $x_3^{(k)}$:</p>
+<p>In the classical 3-level binary HGF as presented in Mathys (2011), the two states of interest, $x_2$ and $x_3$, are coupled to each other via volatility coupling, which means that for state $x_2$, the mean of the Gaussian random walk on trial $k$ is given by its previous value $x_2^{(k-1)}$, while the step size (or variance) depends on the current value of the higher level state, $x_3^{(k)}$:</p>
 <p>$$
 x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, , f(x_3^{(k)})),
 $$</p>
@@ -394,18 +394,20 @@ $$</p>
 <p>$$
 x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)} + \alpha_{4,2} x_4^{(k)}, , \exp(\kappa_2 x_3^{(k)} + \omega_2)).
 $$</p>
-<p>In other words, any given state in the world can be modelled as having a volatility parent state, a value parent state, or both, or none (in which case it evolves as a Gaussian random walk around its previous value with fixed step size). Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see \cite{Mathys2011}) depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or \textsf{VAPE}s, and via volatility prediction errors, or \textsf{VOPE}s, with their volatility parents.</p>
-<p><a class="reference download internal" download="" href="../_downloads/e96d7871ead61db005e45e09643eec1c/genmod.svg"><span class="xref download myst">Figure1</span></a></p>
+<p>In other words, any given state in the world can be modelled as having a volatility parent state, a value parent state, or both, or none (in which case it evolves as a Gaussian random walk around its previous value with fixed step size). Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see Mathys (2011) depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
+<p><span class="xref myst">Figure1</span></p>
 <p>In figure \ref{fig:genmod} we have drawn an example setup with six different environmental states and one outcome. Here, we have denoted states that function as value parents for other states as $x_i$, and states that function as volatility parents as $\check{x}_i$. Volatility coupling is depicted by curvy arrows, value coupling by straight arrows, and observable outcomes are linked to their hidden states via double arrows.</p>
-<p>For the example illustrated in figure \ref{fig:genmod}, the following equations describe the generative model:</p>
+<p>For the example illustrated in <span class="xref myst">Figure1</span> the following equations describe the generative model:</p>
 <p>$$
-u^{(k)}             &amp;\sim \mathcal{N}(u^{(k)} | x_1^{(k)}, , &amp;\sigma_u)
-x_1^{(k)}           &amp;\sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{2,1} x_2^{(k)}, , &amp;\exp(\kappa_1 \check{x}_1^{(k)} + \omega_1))
-\check{x}_1^{(k)}   &amp;\sim \mathcal{N}(\check{x}<em>1^{(k)} | \check{x}<em>1^{(k-1)} + \alpha</em>{3,\check{1}} x_3^{(k)}, , &amp;\exp(\omega</em>{\check{1}}))
-x_2^{(k)}           &amp;\sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, , &amp;\exp(\kappa_2 \check{x}_2^{(k)} + \omega_2))
-\check{x}_2^{(k)}   &amp;\sim \mathcal{N}(\check{x}_2^{(k)} | \check{x}<em>2^{(k-1)}, , &amp;\exp(\omega</em>{\check{2}}))
-x_3^{(k)}           &amp;\sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, , &amp;\exp(\kappa_3 \check{x}_3^{(k)} + \omega_3))
-\check{x}_3^{(k)}   &amp;\sim \mathcal{N}(\check{x}_3^{(k)} | \check{x}<em>3^{(k-1)}, , &amp;\exp(\omega</em>{\check{3}})).
+\begin{align}
+u^{(k)} &amp;\sim \mathcal{N}(u^{(k)} | x_1^{(k)}, , \sigma_u) \
+x_1^{(k)}           &amp;\sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{2,1} x_2^{(k)}, , \exp(\kappa_1 \check{x}_1^{(k)} + \omega_1)) \
+\check{x}_1^{(k)}   &amp;\sim \mathcal{N}(\check{x}<em>1^{(k)} | \check{x}<em>1^{(k-1)} + \alpha</em>{3,\check{1}} x_3^{(k)}, , \exp(\omega</em>{\check{1}})) \
+x_2^{(k)}           &amp;\sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, , \exp(\kappa_2 \check{x}_2^{(k)} + \omega_2)) \
+\check{x}_2^{(k)}   &amp;\sim \mathcal{N}(\check{x}_2^{(k)} | \check{x}<em>2^{(k-1)}, , \exp(\omega</em>{\check{2}})) \
+x_3^{(k)}           &amp;\sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, , \exp(\kappa_3 \check{x}_3^{(k)} + \omega_3)) \
+\check{x}_3^{(k)}   &amp;\sim \mathcal{N}(\check{x}_3^{(k)} | \check{x}<em>3^{(k-1)}, , \exp(\omega</em>{\check{3}})) \
+\end{align}
 $$</p>
 <p>Note that in this example, all states that are value parents of other states (or outcomes) have their own volatility parent, while states that are volatility parents to other nodes either have a value parent (as state $\check{x}_1$), or no parents (as states $\check{x}_2$ and $\check{x}_3$). This is deliberately so, and we will see these two motifs - every state of a hierarchy has its own volatility estimation, and volatility states only have value parents - reappear in the following chapters.</p>
 </section>
