@@ -382,6 +382,7 @@
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
 <span class="kn">from</span> <span class="nn">jax.interpreters.xla</span> <span class="kn">import</span> <span class="n">DeviceArray</span>
+<span class="kn">from</span> <span class="nn">jax.lax</span> <span class="kn">import</span> <span class="n">cond</span>
 
 <span class="kn">from</span> <span class="nn">ghgf.continuous</span> <span class="kn">import</span> <span class="n">continuous_node_update</span>
 <span class="kn">from</span> <span class="nn">ghgf.typing</span> <span class="kn">import</span> <span class="n">NodeType</span><span class="p">,</span> <span class="n">ParametersType</span><span class="p">,</span> <span class="n">ParentsType</span>
@@ -639,31 +640,14 @@
         <span class="c1"># 2. Compute surprise</span>
         <span class="c1"># -------------------</span>
         <span class="n">eta0</span><span class="p">:</span> <span class="n">DeviceArray</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;eta0&quot;</span><span class="p">]</span>
-        <span class="n">eta1</span><span class="p">:</span> <span class="n">DeviceArray</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;eta1&quot;</span><span class="p">]</span>
+        <span class="n">eta1</span><span class="p">:</span> <span class="n">DeviceArray</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;eta1&quot;</span><span class="p">]</span>     
 
-        <span class="c1"># Likelihood under eta1</span>
-        <span class="n">und1</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-
-        <span class="c1"># Likelihood under eta0</span>
-        <span class="n">und0</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-
-        <span class="c1"># Eq. 39 in Mathys et al. (2014) (i.e., Bayes)</span>
-        <span class="n">mu_va_pa</span> <span class="o">=</span> <span class="n">muhat_va_pa</span> <span class="o">*</span> <span class="n">und1</span> <span class="o">/</span> <span class="p">(</span><span class="n">muhat_va_pa</span> <span class="o">*</span> <span class="n">und1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">*</span> <span class="n">und0</span><span class="p">)</span>
-        <span class="n">pi_va_pa</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">mu_va_pa</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">mu_va_pa</span><span class="p">))</span>
-
-        <span class="c1"># Surprise</span>
-        <span class="n">surprise</span> <span class="o">=</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-            <span class="n">muhat_va_pa</span> <span class="o">*</span> <span class="n">gaussian_density</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span>
-            <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">*</span> <span class="n">gaussian_density</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span>
-        <span class="p">)</span>
-
-        <span class="c1"># 3. Special case if pihat==inf</span>
-        <span class="c1"># Just pass the value through in the absence of noise</span>
-        <span class="n">mu_va_pa</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pihat</span> <span class="o">==</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mu_va_pa</span><span class="p">)</span>
-        <span class="n">pi_va_pa</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pihat</span> <span class="o">==</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">pi_va_pa</span><span class="p">)</span>
-        <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-            <span class="n">pihat</span> <span class="o">==</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">binary_surprise</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">muhat_va_pa</span><span class="p">),</span> <span class="n">surprise</span>
-        <span class="p">)</span>
+        <span class="n">mu_va_pa</span><span class="p">,</span> <span class="n">pi_va_pa</span><span class="p">,</span> <span class="n">surprise</span> <span class="o">=</span> <span class="n">cond</span><span class="p">(</span>
+            <span class="n">pihat</span><span class="o">==</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> 
+            <span class="n">input_surprise_inf</span><span class="p">,</span> 
+            <span class="n">input_surprise_reg</span><span class="p">,</span> 
+            <span class="p">(</span><span class="n">pihat</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">muhat_va_pa</span><span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="c1"># Update value parent&#39;s parameters</span>
         <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_va_pa</span>
@@ -777,6 +761,41 @@
     <span class="n">res</span> <span class="o">=</span> <span class="n">new_node_structure</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">new_time</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="n">surprise</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">res</span><span class="p">,</span> <span class="n">res</span>  <span class="c1"># (&quot;carryover&quot;, &quot;accumulated&quot;)</span></div>
+
+
+<span class="k">def</span> <span class="nf">input_surprise_inf</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Special case if pihat==inf, just pass the value through in the absence</span>
+<span class="sd">    of noise&quot;&quot;&quot;</span>
+    <span class="p">(</span><span class="n">pihat</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">=</span> <span class="n">op</span>
+    <span class="n">mu_va_pa</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">pi_va_pa</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span>
+    <span class="n">surprise</span> <span class="o">=</span> <span class="n">binary_surprise</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">muhat_va_pa</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mu_va_pa</span><span class="p">,</span> <span class="n">pi_va_pa</span><span class="p">,</span> <span class="n">surprise</span>
+
+
+<span class="k">def</span> <span class="nf">input_surprise_reg</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the surprise, mu_va_pa and pi_va_pa if pihat!=inf&quot;&quot;&quot;</span>
+    
+    <span class="p">(</span><span class="n">pihat</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">=</span> <span class="n">op</span>
+
+    <span class="c1"># Likelihood under eta1</span>
+    <span class="n">und1</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Likelihood under eta0</span>
+    <span class="n">und0</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Eq. 39 in Mathys et al. (2014) (i.e., Bayes)</span>
+    <span class="n">mu_va_pa</span> <span class="o">=</span> <span class="n">muhat_va_pa</span> <span class="o">*</span> <span class="n">und1</span> <span class="o">/</span> <span class="p">(</span><span class="n">muhat_va_pa</span> <span class="o">*</span> <span class="n">und1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">*</span> <span class="n">und0</span><span class="p">)</span>
+    <span class="n">pi_va_pa</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">mu_va_pa</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">mu_va_pa</span><span class="p">))</span>
+
+    <span class="c1"># Surprise</span>
+    <span class="n">surprise</span> <span class="o">=</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+        <span class="n">muhat_va_pa</span> <span class="o">*</span> <span class="n">gaussian_density</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span>
+        <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">*</span> <span class="n">gaussian_density</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">mu_va_pa</span><span class="p">,</span> <span class="n">pi_va_pa</span><span class="p">,</span> <span class="n">surprise</span>
 </pre></div>
 
             </article>

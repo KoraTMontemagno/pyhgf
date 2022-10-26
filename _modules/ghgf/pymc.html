@@ -399,13 +399,13 @@
     <span class="n">pi_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">mu_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">mu_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">kappa_1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-    <span class="n">bias</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
-    <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">kappa_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">bias</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">response_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Compute the log probability from the HGF model given the data and parameters.</span>
 
@@ -420,13 +420,13 @@
 <span class="sd">    response_function : callable</span>
 <span class="sd">        The response function to use to compute the model surprise.</span>
 <span class="sd">    response_function_parameters : tuple</span>
-<span class="sd">        (Optional) Additional parameters to the response function.    </span>
+<span class="sd">        Additional parameters to the response function.    </span>
 <span class="sd">    model_type : str</span>
 <span class="sd">        The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
 <span class="sd">    n_levels : int</span>
 <span class="sd">        The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
 <span class="sd">        `None`, the nodes hierarchy is not created and might be provided afterward</span>
-<span class="sd">        using `add_nodes()`. Default sets to `2`.</span>
+<span class="sd">        using `add_nodes()`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -447,8 +447,11 @@
             <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span>
             <span class="n">kappas</span><span class="o">=</span><span class="n">kappas</span><span class="p">,</span>
             <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
+            <span class="n">eta0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">eta1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">pihat</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="o">.</span><span class="n">surprise</span><span class="p">(</span>
