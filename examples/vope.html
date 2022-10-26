@@ -1,0 +1,609 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Computations for VOPE coupling &#8212; ghgf 0.0.1dev documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/vope';</script>
+    <link rel="shortcut icon" href="../_static/logo_small.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="None">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../_static/logo_small.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo_small.svg" class="logo__image only-dark" alt="Logo image">
+  
+  
+    <p class="title logo__title">gHGF</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../theory.html">
+                        Theory
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../user_guide.html">
+                        Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api.html">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../cite.html">
+                        Cite
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../references.html">
+                        References
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
+            <label class="sr-only">Pypi</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../theory.html">
+                        Theory
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../user_guide.html">
+                        Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api.html">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../cite.html">
+                        Cite
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../references.html">
+                        References
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
+            <label class="sr-only">Pypi</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="computations-for-vope-coupling">
+<h1>Computations for VOPE coupling<a class="headerlink" href="#computations-for-vope-coupling" title="Permalink to this headline">#</a></h1>
+<p>As in the case of <strong>VAPE</strong> coupling, the exact computations of the <strong>UPDATE step</strong> depend on the nature of the coupling with the child node(s), while both the <strong>PE step</strong> and the <strong>PREDICTION step</strong> depend on the coupling with the parent node(s).</p>
+<p>To describe the computations entailed by <strong>VOPE</strong> coupling, we will introduce two changes to the notation. First of all, we will express the volatility PE, or <strong>VOPE</strong>, as a function of the previously defined value PE, or <strong>VAPE</strong>. That means from now on, we will use the character $\delta_i$ only for <strong>VAPE</strong>s:</p>
+<p>$$
+\begin{equation}
+\delta_i^{(k)} \equiv \delta_i^{(k, VAPE)} = \mu_i^{(k)} - \hat{\mu}_i^{(k)},
+\end{equation}
+$$</p>
+<p>and introduce a new character $\Delta_i$ for <strong>VOPE</strong>s, which we define as</p>
+<p>$$
+\begin{equation}
+\begin{split}
+\Delta_i^{(k)} \equiv \delta_i^{(k, VOPE)} &amp;= \frac{ \frac{1}{\pi_{i}^{(k)}} + (\mu_i^{(k)} - \hat{\mu}<em>i^{(k)})^2 }{ \frac{1}{\pi</em>{i}^{(k-1)}} + \nu_{i}^{(k)} } - 1 \
+&amp;= \hat{\pi}<em>i^{(k)} \left( \frac{1}{\pi</em>{i}^{(k)}} + (\mu_i^{(k)} - \hat{\mu}_i^{(k)})^2 \right) - 1 \
+&amp;= \hat{\pi}<em>i^{(k)} \left( \frac{1}{\pi</em>{i}^{(k)}} + (\delta_i^{(k)})^2 \right) - 1 \
+&amp;=  \frac{\hat{\pi}<em>i^{(k)}}{\pi</em>{i}^{(k)}} + \hat{\pi}_i^{(k)} (\delta_i^{(k)})^2 - 1. \
+\end{split}
+\end{equation}
+$$</p>
+<p>Note that from the first to the second line, we have used the following definition:</p>
+<p>$$
+\begin{equation*}
+\hat{\pi}<em>{i-1}^{(k)} = \frac{1}{ \frac{1}{\pi</em>{i-1}^{(k-1)}} + \nu_{i-1}^{(k)} }.
+\end{equation*}
+$$</p>
+<p>This ensures that a given node does not need to have access to the posterior precision from the level below: $\pi_{i-1}^{(k-1)}$, which facilitates implementation.</p>
+<p>In sum, we are introducing a second prediction error unit $\Delta_i$ which is concerned with deviations from predicted uncertainty and is informed by value prediction errors and other estimates of uncertainty. It is this prediction error - a function of the unweighted (squared) value prediction error with a new precision weight - which communicates between a level’s nodes and a level’s volatility parent’s nodes.</p>
+<p>Second, we will introduce another quantity, which we term the (auxiliary) expected precision</p>
+<p>$$
+\begin{equation}
+\gamma_i^{(k)} = \nu_i^{(k)} \hat{\pi}_i^{(k)},
+\end{equation}
+$$</p>
+<p>which will be computed as part of the <strong>PREDICTION step</strong> and only serves to simplify the equations and the corresponding message passing.</p>
+<section id="update-step">
+<h2>Update Step<a class="headerlink" href="#update-step" title="Permalink to this headline">#</a></h2>
+<p>If Node $i$ is the volatility parent of Node $i-1$, then the following update equations apply to Node $i$:</p>
+<p>$$
+\begin{align*}
+\pi_i^{(k)} &amp;= \hat{\pi}_i^{(k)}</p>
+<ul class="simple">
+<li><p>\frac{1}{2}(\kappa_{i-1} \nu_{i-1}^{(k)} \hat{\pi}_{i-1}^{(k)})^2</p></li>
+</ul>
+<ul class="simple">
+<li><p>(1 + (1 - \frac{1}{\pi_{i-1}^{(k-1)} \nu_{i-1}^{(k)}})
+\delta_{i-1}^{(k)})\
+&amp;= \hat{\pi}_i^{(k)}</p></li>
+</ul>
+<ul class="simple">
+<li><p>\frac{1}{2}(\kappa_{i-1} \nu_{i-1}^{(k)} \hat{\pi}_{i-1}^{(k)})^2</p></li>
+</ul>
+<ul class="simple">
+<li><p>(1 + (2 - \frac{1}{\hat{\pi}<em>{i-1}^{(k)} \nu</em>{i-1}^{(k)}})
+\delta_{i-1}^{(k)})\
+\mu_i^{(k)} &amp;= \hat{\mu}_i^{(k)}</p></li>
+</ul>
+<ul class="simple">
+<li><p>\frac{1}{2}\kappa_{i-1} \nu_{i-1}^{(k)}
+\frac{\hat{\pi}<em>{i-1}^{(k)}}{\pi</em>{i}^{(k)}} \delta_{i-1}^{(k)},
+\end{align*}
+$$</p></li>
+</ul>
+<p>where we have again used the definition of the predicted precision $\hat{\pi}<em>{i-1}^{(k)}$ to derive an expression for the posterior precision from the previous trial $\pi</em>{i-1}^{(k-1)}$:</p>
+<p>$$
+\begin{align*}
+\hat{\pi}<em>{i-1}^{(k)} &amp;= \frac{1}{ \frac{1}{\pi</em>{i-1}^{(k-1)}} + \nu_{i-1}^{(k)} }\
+\Leftrightarrow \pi_{i-1}^{(k-1)} &amp;= \frac{1}{ \frac{1}{\hat{\pi}<em>{i-1}^{(k)}} - \nu</em>{i-1}^{(k)} }.
+\end{align*}
+$$</p>
+<p>With the changes from above, namely the definitions of the \textsf{VOPE} $\Delta_i$ and the expected precision $\gamma_i^{(k)}$, the update equations for the precision and the mean in volatility coupling simplify to:
+\vspace{0.5cm}</p>
+<p>$$
+\begin{align}
+\pi_i^{(k)} &amp;= \hat{\pi}_i^{(k)}</p>
+<ul class="simple">
+<li><p>\frac{1}{2} (\kappa_{i,i-1} \gamma_{i-1}^{(k)})^2</p></li>
+<li><p>(\kappa_{i,i-1} \gamma_{i-1}^{(k)})^2 \Delta_{i-1}^{(k)}</p></li>
+</ul>
+<ul class="simple">
+<li><p>\frac{1}{2} \kappa_{i,i-1}^2 \gamma_{i-1}^{(k)} \Delta_{i-1}^{(k)}\
+\mu_i^{(k)} &amp;= \hat{\mu}_i^{(k)}</p></li>
+</ul>
+<ul class="simple">
+<li><p>\frac{1}{2} \frac{\kappa_{i,i-1} \gamma_{i-1}^{(k)}}{\pi_i^{(k)}} \Delta_{i-1}^{(k)}
+\end{align}
+$$</p></li>
+</ul>
+<p>Therefore, at the time of the update, Node $i$ needs to have access to the following quantities:</p>
+<ul class="simple">
+<li><p>Its own predictions: $\hat{\mu}_i^{(k)}$, $\hat{\pi}_i^{(k)}$</p></li>
+<li><p>Coupling strength: $\kappa_{i,i-1}$</p></li>
+<li><p>From level below: $\Delta_{i-1}^{(k)}$, $\gamma_{i-1}^{(k)}$</p></li>
+</ul>
+</section>
+<section id="prediction-error-step">
+<h2>Prediction Error Step<a class="headerlink" href="#prediction-error-step" title="Permalink to this headline">#</a></h2>
+<p>The exact computation of the prediction error depends, like the computation of the new prediction, on the nature of the coupling with the parent nodes. We will therefore assume in the following, that Node $i$ is the volatility child of Node $i+1$. Then the following quantities have to be sent up to Node $i+1$ (see also necessary information from level below in a volatility parent):</p>
+<ul class="simple">
+<li><p>Expected precision: $\gamma_{i}^{(k)}$</p></li>
+<li><p>Prediction error: $\Delta_{i}^{(k)}$</p></li>
+</ul>
+<p>Node $i$ has already performed the \textsf{PREDICTION step} on the previous trial, so it has already computed the predicted precision, $\hat{\pi}<em>{i}^{(k)}$, and the volatiliy estimate, $\nu_i^{(k)}$, and out of these the expected precision, $\gamma</em>{i}^{(k)}$, for the current trial. Hence, in the <strong>PE step</strong>, it needs to perform only the following calculations:</p>
+<p>$$
+\begin{align}
+\delta_i^{(k)} &amp;= \mu_i^{(k)} - \hat{\mu}_i^{(k)}\
+\Delta_i^{(k)} &amp;= \frac{\hat{\pi}<em>i^{(k)}}{\pi</em>{i}^{(k)}} + \hat{\pi}_i^{(k)} (\delta_i^{(k)})^2 - 1.
+\end{align}
+$$</p>
+</section>
+<section id="prediction-step">
+<h2>Prediction Step<a class="headerlink" href="#prediction-step" title="Permalink to this headline">#</a></h2>
+<p>Still assuming that Node $i$ is the volatility child of Node $i+1$, the <strong>PREDICTION step</strong> consists of the following simple computations:</p>
+<p>$$
+\begin{align}
+\hat{\mu}<em>i^{(k+1)} &amp;= \mu_i^{(k)}\
+\nu_i^{(k+1)} &amp;= \exp(\kappa_i \mu</em>{i+1}^{(k)} + \omega_i)\
+\hat{\pi}_i^{(k+1)} &amp;= \frac{1}{\frac{1}{\pi_i^{(k)}} + \nu_i^{(k+1)} }\
+\gamma_i^{(k+1)} &amp;= \nu_i^{(k+1)} \hat{\pi}_i^{(k+1)}
+\end{align}
+$$</p>
+<p>Thus, the prediction for trial $k+1$ depends again only on receiving the posterior mean of Node $i+1$ on trial $k$, and knowing the Node’s own posteriors.</p>
+<p>Note that if Node~$i$ additionally has a <strong>VAPE</strong> parent node, the prediction of the new mean, $\hat{\mu}_i^{k+1}$ would also depend on the posterior mean of that value parent (cf. <strong>PREDICTION step</strong> for <strong>VAPE</strong> coupling).</p>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#update-step">
+   Update Step
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#prediction-error-step">
+   Prediction Error Step
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#prediction-step">
+   Prediction Step
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../_sources/examples/vope.md.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2022-2022, Nicolas Legrand.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
