@@ -429,36 +429,48 @@
 <span class="sd">        using `add_nodes()`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># Broadcast inputs to an array with length n&gt;=1</span>
+    <span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_input</span><span class="p">,</span> <span class="n">rho_1</span><span class="p">,</span> <span class="n">rho_2</span><span class="p">,</span> <span class="n">pi_1</span><span class="p">,</span> <span class="n">pi_2</span><span class="p">,</span> <span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span><span class="p">,</span> \
+        <span class="n">kappa_1</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
+            <span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_input</span><span class="p">,</span> <span class="n">rho_1</span><span class="p">,</span> <span class="n">rho_2</span><span class="p">,</span> 
+            <span class="n">pi_1</span><span class="p">,</span> <span class="n">pi_2</span><span class="p">,</span> <span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span><span class="p">,</span> <span class="n">kappa_1</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)])</span>
+            <span class="p">)</span>
+    
+    <span class="n">surprise</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-    <span class="c1"># Format HGF parameters</span>
-    <span class="n">initial_mu</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">mu_1</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">mu_2</span><span class="p">}</span>
-    <span class="n">initial_pi</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">pi_1</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">pi_2</span><span class="p">}</span>
-    <span class="n">omega</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">omega_1</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">omega_2</span><span class="p">}</span>
-    <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">rho_1</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">rho_2</span><span class="p">}</span>
-    <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">kappa_1</span><span class="p">}</span>
+    <span class="c1"># Fitting n HGF models to the n datasets</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
 
-    <span class="n">surprise</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">HGF</span><span class="p">(</span>
-            <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
-            <span class="n">initial_mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">,</span>
-            <span class="n">initial_pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">,</span>
-            <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
-            <span class="n">omega_input</span><span class="o">=</span><span class="n">omega_input</span><span class="p">,</span>
-            <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span>
-            <span class="n">kappas</span><span class="o">=</span><span class="n">kappas</span><span class="p">,</span>
-            <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
-            <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
-            <span class="n">eta0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">eta1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">pihat</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="c1"># Format HGF parameters</span>
+        <span class="n">initial_mu</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">mu_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">mu_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+        <span class="n">initial_pi</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">pi_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">pi_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+        <span class="n">omega</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">omega_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">omega_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+        <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">rho_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">rho_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+        <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">kappa_1</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+
+        <span class="n">surprise</span> <span class="o">=</span> <span class="n">surprise</span> <span class="o">+</span> <span class="p">(</span>
+            <span class="n">HGF</span><span class="p">(</span>
+                <span class="n">initial_mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">,</span>
+                <span class="n">initial_pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">,</span>
+                <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
+                <span class="n">omega_input</span><span class="o">=</span><span class="n">omega_input</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span>
+                <span class="n">kappas</span><span class="o">=</span><span class="n">kappas</span><span class="p">,</span>
+                <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
+                <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
+                <span class="n">eta0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">eta1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                <span class="n">pihat</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">surprise</span><span class="p">(</span>
+                <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
+                <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="p">)</span>
-        <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">surprise</span><span class="p">(</span>
-            <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
-            <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
 
     <span class="c1"># Return the sum of the log probabilities (negative surprise)</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">surprise</span></div>

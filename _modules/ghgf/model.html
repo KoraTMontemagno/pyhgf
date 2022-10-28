@@ -388,7 +388,7 @@
 <span class="kn">from</span> <span class="nn">ghgf.continuous</span> <span class="kn">import</span> <span class="n">loop_continuous_inputs</span>
 <span class="kn">from</span> <span class="nn">ghgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_trajectories</span>
 <span class="kn">from</span> <span class="nn">ghgf.response</span> <span class="kn">import</span> <span class="n">gaussian_surprise</span>
-<span class="kn">from</span> <span class="nn">ghgf.typing</span> <span class="kn">import</span> <span class="n">ParametersType</span><span class="p">,</span> <span class="n">node_validation</span>
+<span class="kn">from</span> <span class="nn">ghgf.typing</span> <span class="kn">import</span> <span class="n">ParametersType</span>
 
 
 <div class="viewcode-block" id="HGF"><a class="viewcode-back" href="../../generated/ghgf.model/ghgf.model.HGF.html#ghgf.model.HGF">[docs]</a><span class="k">class</span> <span class="nc">HGF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -409,7 +409,7 @@
 <span class="sd">        After oberving the data using the `input_data` method, the output of the model</span>
 <span class="sd">        are stored in the `hgf_results` dictionary.</span>
 <span class="sd">    bias : float</span>
-<span class="sd">        Input bias (only relevant is `model_type=&quot;continuous&quot;`).</span>
+<span class="sd">        Input bias (only relevant if `model_type=&quot;continuous&quot;`).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -594,14 +594,16 @@
 
     <span class="k">def</span> <span class="nf">add_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a custom node structure.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        nodes : tuple</span>
 <span class="sd">            The input node embeding the node hierarchy that will be updated during</span>
 <span class="sd">            model fit.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">node_validation</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">input_node</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span> <span class="o">=</span> <span class="n">nodes</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">input_data</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
