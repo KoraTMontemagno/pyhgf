@@ -382,12 +382,12 @@
             
             <article class="bd-article" role="main">
               
-  <section id="embeding-the-hgf-in-a-multilevel-model">
+  <section class="tex2jax_ignore mathjax_ignore" id="embeding-the-hgf-in-a-multilevel-model">
 <span id="multilevel-hgf"></span><h1>Embeding the HGF in a multilevel model<a class="headerlink" href="#embeding-the-hgf-in-a-multilevel-model" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
-<span class="kn">from</span> <span class="nn">ghgf.pymc</span> <span class="kn">import</span> <span class="n">hgf_logp</span><span class="p">,</span> <span class="n">HGFDistribution</span>
+<span class="kn">from</span> <span class="nn">ghgf.distribution</span> <span class="kn">import</span> <span class="n">hgf_logp</span><span class="p">,</span> <span class="n">HGFDistribution</span>
 <span class="kn">from</span> <span class="nn">ghgf</span> <span class="kn">import</span> <span class="n">load_data</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -397,22 +397,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">from</span> <span class="nn">ghgf.pymc</span> <span class="kn">import</span> <span class="n">hgf_logp</span><span class="p">,</span> <span class="n">HGFDistribution</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">ghgf</span> <span class="kn">import</span> <span class="n">load_data</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-
-<span class="n">File</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">hostedtoolcache</span><span class="o">/</span><span class="n">Python</span><span class="o">/</span><span class="mf">3.9.16</span><span class="o">/</span><span class="n">x64</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.9</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">ghgf</span><span class="o">/</span><span class="n">pymc</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cfin.au.dk&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">aesara.tensor</span> <span class="k">as</span> <span class="nn">at</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;aesara&#39;
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
 </div>
@@ -458,6 +443,11 @@
     <span class="n">n_levels</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
     <span class="n">response_function</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(1934.7451, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -514,6 +504,48 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/model_graph.py:245,</span> in <span class="ni">ModelGraph.make_graph</span><span class="nt">(self, var_names, formatting)</span>
+<span class="g g-Whitespace">    </span><span class="mi">244</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">245</span>     <span class="kn">import</span> <span class="nn">graphviz</span>
+<span class="g g-Whitespace">    </span><span class="mi">246</span> <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;graphviz&#39;
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/model_graph.py:454,</span> in <span class="ni">model_to_graphviz</span><span class="nt">(model, var_names, formatting)</span>
+<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">449</span>         <span class="s2">&quot;Formattings other than &#39;plain&#39; are currently not supported.&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">450</span>         <span class="ne">UserWarning</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">451</span>         <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">452</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">453</span> <span class="n">model</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">modelcontext</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">454</span> <span class="k">return</span> <span class="n">ModelGraph</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">make_graph</span><span class="p">(</span><span class="n">var_names</span><span class="o">=</span><span class="n">var_names</span><span class="p">,</span> <span class="n">formatting</span><span class="o">=</span><span class="n">formatting</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/model_graph.py:247,</span> in <span class="ni">ModelGraph.make_graph</span><span class="nt">(self, var_names, formatting)</span>
+<span class="g g-Whitespace">    </span><span class="mi">245</span>     <span class="kn">import</span> <span class="nn">graphviz</span>
+<span class="g g-Whitespace">    </span><span class="mi">246</span> <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">247</span>     <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">248</span>         <span class="s2">&quot;This function requires the python library graphviz, along with binaries. &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">249</span>         <span class="s2">&quot;The easiest way to install all of this is by running</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">250</span>         <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">conda install -c conda-forge python-graphviz&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">251</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">252</span> <span class="n">graph</span> <span class="o">=</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">Digraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">253</span> <span class="k">for</span> <span class="n">plate_label</span><span class="p">,</span> <span class="n">all_var_names</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_plates</span><span class="p">(</span><span class="n">var_names</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+<span class="ne">ImportError</span>: This function requires the python library graphviz, along with binaries. The easiest way to install all of this is by running
+
+	<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span><span class="o">-</span><span class="n">graphviz</span>
 </pre></div>
 </div>
 </div>
