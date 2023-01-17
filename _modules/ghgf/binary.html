@@ -402,7 +402,7 @@
     <span class="n">old_time</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">],</span>
     <span class="n">new_time</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeType</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Update the value and volatility parents of a binary node. If the parents have</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the value and volatility parents of a binary node. If the parents have</span>
 <span class="sd">    value and/or volatility parents, they will be updated recursively.</span>
 
 <span class="sd">    Updating the node&#39;s parents is a two step process:</span>
@@ -560,7 +560,7 @@
     <span class="n">new_time</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span>
     <span class="n">old_time</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">DeviceArray</span><span class="p">,</span> <span class="n">NodeType</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;Update the input node structure given one value for a time interval and return</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure given one value for a time interval and return</span>
 <span class="sd">    gaussian surprise.</span>
 
 <span class="sd">    This function is the entry level of the model fitting. It update the partents of</span>
@@ -692,7 +692,7 @@
 <div class="viewcode-block" id="gaussian_density"><a class="viewcode-back" href="../../generated/ghgf.binary/ghgf.binary.gaussian_density.html#ghgf.binary.gaussian_density">[docs]</a><span class="k">def</span> <span class="nf">gaussian_density</span><span class="p">(</span>
     <span class="n">x</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span> <span class="n">pi</span><span class="p">:</span> <span class="n">DeviceArray</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;The Gaussian density as defined by mean and precision.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Gaussian density as defined by mean and precision.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">pi</span>
         <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
@@ -705,12 +705,12 @@
     <span class="n">lower_bound</span><span class="p">:</span> <span class="n">DeviceArray</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
     <span class="n">upper_bound</span><span class="p">:</span> <span class="n">DeviceArray</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The logistic sigmoid function&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The logistic sigmoid function&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span> <span class="o">+</span> <span class="n">lower_bound</span></div>
 
 
 <div class="viewcode-block" id="binary_surprise"><a class="viewcode-back" href="../../generated/ghgf.binary/ghgf.binary.binary_surprise.html#ghgf.binary.binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">binary_surprise</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span> <span class="n">muhat</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Surprise at a binary outcome.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surprise at a binary outcome.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -734,7 +734,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
     <span class="n">Tuple</span><span class="p">[</span><span class="n">NodeType</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">]],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NodeType</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">]]</span>
 <span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;The HGF function to be scanned by JAX. One time step updating node structure and</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The HGF function to be scanned by JAX. One time step updating node structure and</span>
 <span class="sd">    returning the new node structure with time, value and surprise.</span>
 
 <span class="sd">    Parameters</span>
@@ -771,7 +771,7 @@
 
 
 <span class="k">def</span> <span class="nf">input_surprise_inf</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Special case if pihat==inf, just pass the value through in the absence</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Special case if pihat==inf, just pass the value through in the absence</span>
 <span class="sd">    of noise&quot;&quot;&quot;</span>
     <span class="p">(</span><span class="n">pihat</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">=</span> <span class="n">op</span>
     <span class="n">mu_va_pa</span> <span class="o">=</span> <span class="n">value</span>
@@ -782,7 +782,7 @@
 
 
 <span class="k">def</span> <span class="nf">input_surprise_reg</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compute the surprise, mu_va_pa and pi_va_pa if pihat!=inf&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the surprise, mu_va_pa and pi_va_pa if pihat!=inf&quot;&quot;&quot;</span>
     
     <span class="p">(</span><span class="n">pihat</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">=</span> <span class="n">op</span>
 
@@ -860,7 +860,7 @@
     
 <p class="copyright">
 
-    &copy; Copyright 2022-2022, Nicolas Legrand.<br>
+    &copy; Copyright 2022-2023, Nicolas Legrand.<br>
 
 </p>
 
