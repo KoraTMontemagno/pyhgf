@@ -582,7 +582,7 @@ Add 614 new continuous observations.
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Add 614 new continuous observations.
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ghgf.model.HGF at 0x7f9df20b9100&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ghgf.model.HGF at 0x7f31af4a51f0&gt;
 </pre></div>
 </div>
 </div>
@@ -676,7 +676,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c428732be6f6c917610a9ff89c91e963c62d292c0209260d6ee7a1c62d3c1b36.svg" src="../_images/c428732be6f6c917610a9ff89c91e963c62d292c0209260d6ee7a1c62d3c1b36.svg" /></div>
+<img alt="../_images/069a9ddd25293168cba08f9af784c30e7509630ffc22df62368ccc31b2a26b47.svg" src="../_images/069a9ddd25293168cba08f9af784c30e7509630ffc22df62368ccc31b2a26b47.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -695,328 +695,97 @@ Add 614 new continuous observations.
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
 </pre></div>
 </div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">two_level_hgf</span><span class="p">:</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/sampling/mcmc.py:456,</span> in <span class="ni">sample</span><span class="nt">(draws, step, init, n_init, initvals, trace, chains, cores, tune, progressbar, model, random_seed, discard_tuned_samples, compute_convergence_checks, callback, jitter_max_retries, return_inferencedata, keep_warning_stat, idata_kwargs, mp_ctx, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">454</span>         <span class="p">[</span><span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">nuts_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
-<span class="g g-Whitespace">    </span><span class="mi">455</span>     <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Auto-assigning NUTS sampler...&quot;</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">456</span>     <span class="n">initial_points</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="n">init_nuts</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">457</span>         <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">458</span>         <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">459</span>         <span class="n">n_init</span><span class="o">=</span><span class="n">n_init</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">460</span>         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">461</span>         <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed_list</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">462</span>         <span class="n">progressbar</span><span class="o">=</span><span class="n">progressbar</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">463</span>         <span class="n">jitter_max_retries</span><span class="o">=</span><span class="n">jitter_max_retries</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">464</span>         <span class="n">tune</span><span class="o">=</span><span class="n">tune</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">465</span>         <span class="n">initvals</span><span class="o">=</span><span class="n">initvals</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">466</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">467</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">469</span> <span class="k">if</span> <span class="n">initial_points</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">470</span>     <span class="c1"># Time to draw/evaluate numeric start points for each chain.</span>
-<span class="g g-Whitespace">    </span><span class="mi">471</span>     <span class="n">ipfns</span> <span class="o">=</span> <span class="n">make_initial_point_fns_per_chain</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">472</span>         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">473</span>         <span class="n">overrides</span><span class="o">=</span><span class="n">initvals</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">474</span>         <span class="n">jitter_rvs</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span>
-<span class="g g-Whitespace">    </span><span class="mi">475</span>         <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">476</span>     <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/sampling/mcmc.py:1199,</span> in <span class="ni">init_nuts</span><span class="nt">(init, chains, n_init, model, random_seed, progressbar, jitter_max_retries, tune, initvals, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing NUTS using </span><span class="si">{</span><span class="n">init</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1194</span> <span class="n">cb</span> <span class="o">=</span> <span class="p">[</span>
-<span class="g g-Whitespace">   </span><span class="mi">1195</span>     <span class="n">pm</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">CheckParametersConvergence</span><span class="p">(</span><span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">diff</span><span class="o">=</span><span class="s2">&quot;absolute&quot;</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1196</span>     <span class="n">pm</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">CheckParametersConvergence</span><span class="p">(</span><span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">diff</span><span class="o">=</span><span class="s2">&quot;relative&quot;</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1197</span> <span class="p">]</span>
-<span class="ne">-&gt; </span><span class="mi">1199</span> <span class="n">initial_points</span> <span class="o">=</span> <span class="n">_init_jitter</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1200</span>     <span class="n">model</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1201</span>     <span class="n">initvals</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1202</span>     <span class="n">seeds</span><span class="o">=</span><span class="n">random_seed_list</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1203</span>     <span class="n">jitter</span><span class="o">=</span><span class="s2">&quot;jitter&quot;</span> <span class="ow">in</span> <span class="n">init</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1204</span>     <span class="n">jitter_max_retries</span><span class="o">=</span><span class="n">jitter_max_retries</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1205</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1207</span> <span class="n">apoints</span> <span class="o">=</span> <span class="p">[</span><span class="n">DictToArrayBijection</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">initial_points</span><span class="p">]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1208</span> <span class="n">apoints_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">apoint</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">apoint</span> <span class="ow">in</span> <span class="n">apoints</span><span class="p">]</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/sampling/mcmc.py:1093,</span> in <span class="ni">_init_jitter</span><span class="nt">(model, initvals, seeds, jitter, jitter_max_retries)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1091</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">jitter_max_retries</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1092</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1093</span>         <span class="n">model</span><span class="o">.</span><span class="n">check_start_vals</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1094</span>     <span class="k">except</span> <span class="n">SamplingError</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1095</span>         <span class="c1"># Retry with a new seed</span>
-<span class="g g-Whitespace">   </span><span class="mi">1096</span>         <span class="n">seed</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">30</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/model.py:1765,</span> in <span class="ni">Model.check_start_vals</span><span class="nt">(self, start)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1759</span>     <span class="n">valid_keys</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">value_names_set</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1760</span>     <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1761</span>         <span class="s2">&quot;Some start parameters do not appear in the model!</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1762</span>         <span class="sa">f</span><span class="s2">&quot;Valid keys are: </span><span class="si">{</span><span class="n">valid_keys</span><span class="si">}</span><span class="s2">, but </span><span class="si">{</span><span class="n">extra_keys</span><span class="si">}</span><span class="s2"> was supplied&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1763</span>     <span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1765</span> <span class="n">initial_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_logps</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">elem</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1767</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">initial_eval</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1768</span>     <span class="k">raise</span> <span class="n">SamplingError</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1769</span>         <span class="s2">&quot;Initial evaluation of model at starting point failed!</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1770</span>         <span class="sa">f</span><span class="s2">&quot;Starting values:</span><span class="se">\n</span><span class="si">{</span><span class="n">elem</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1771</span>         <span class="sa">f</span><span class="s2">&quot;Initial evaluation results:</span><span class="se">\n</span><span class="si">{</span><span class="n">initial_eval</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1772</span>     <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/model.py:1799,</span> in <span class="ni">Model.point_logps</span><span class="nt">(self, point, round_vals)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1793</span> <span class="n">factors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basic_RVs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">potentials</span>
-<span class="g g-Whitespace">   </span><span class="mi">1794</span> <span class="n">factor_logps_fn</span> <span class="o">=</span> <span class="p">[</span><span class="n">at</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span> <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">logp</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="nb">sum</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1795</span> <span class="k">return</span> <span class="p">{</span>
-<span class="g g-Whitespace">   </span><span class="mi">1796</span>     <span class="n">factor</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">factor_logp</span><span class="p">),</span> <span class="n">round_vals</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1797</span>     <span class="k">for</span> <span class="n">factor</span><span class="p">,</span> <span class="n">factor_logp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1798</span>         <span class="n">factors</span><span class="p">,</span>
-<span class="ne">-&gt; </span><span class="mi">1799</span>         <span class="bp">self</span><span class="o">.</span><span class="n">compile_fn</span><span class="p">(</span><span class="n">factor_logps_fn</span><span class="p">)(</span><span class="n">point</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1800</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1801</span> <span class="p">}</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/model.py:1643,</span> in <span class="ni">Model.compile_fn</span><span class="nt">(self, outs, inputs, mode, point_fn, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1640</span>     <span class="n">inputs</span> <span class="o">=</span> <span class="n">inputvars</span><span class="p">(</span><span class="n">outs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1642</span> <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1643</span>     <span class="n">fn</span> <span class="o">=</span> <span class="n">compile_pymc</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1644</span>         <span class="n">inputs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1645</span>         <span class="n">outs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1646</span>         <span class="n">allow_input_downcast</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1647</span>         <span class="n">accept_inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1648</span>         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1649</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1650</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1652</span> <span class="k">if</span> <span class="n">point_fn</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1653</span>     <span class="k">return</span> <span class="n">PointFunc</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/pytensorf.py:1121,</span> in <span class="ni">compile_pymc</span><span class="nt">(inputs, outputs, random_seed, mode, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="n">opt_qry</span> <span class="o">=</span> <span class="n">mode</span><span class="o">.</span><span class="n">provided_optimizer</span><span class="o">.</span><span class="n">including</span><span class="p">(</span><span class="s2">&quot;random_make_inplace&quot;</span><span class="p">,</span> <span class="n">check_parameter_opt</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1120</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span><span class="n">linker</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">linker</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt_qry</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1121</span> <span class="n">pytensor_function</span> <span class="o">=</span> <span class="n">pytensor</span><span class="o">.</span><span class="n">function</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1122</span>     <span class="n">inputs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1123</span>     <span class="n">outputs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1124</span>     <span class="n">updates</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="n">rng_updates</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;updates&quot;</span><span class="p">,</span> <span class="p">{})},</span>
-<span class="g g-Whitespace">   </span><span class="mi">1125</span>     <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1126</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1127</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1128</span> <span class="k">return</span> <span class="n">pytensor_function</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/compile/function/__init__.py:315,</span> in <span class="ni">function</span><span class="nt">(inputs, outputs, mode, updates, givens, no_default_updates, accept_inplace, name, rebuild_strict, allow_input_downcast, profile, on_unused_input)</span>
-<span class="g g-Whitespace">    </span><span class="mi">309</span>     <span class="n">fn</span> <span class="o">=</span> <span class="n">orig_function</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">310</span>         <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">accept_inplace</span><span class="o">=</span><span class="n">accept_inplace</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span>
-<span class="g g-Whitespace">    </span><span class="mi">311</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">312</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">313</span>     <span class="c1"># note: pfunc will also call orig_function -- orig_function is</span>
-<span class="g g-Whitespace">    </span><span class="mi">314</span>     <span class="c1">#      a choke point that all compilation must pass through</span>
-<span class="ne">--&gt; </span><span class="mi">315</span>     <span class="n">fn</span> <span class="o">=</span> <span class="n">pfunc</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">316</span>         <span class="n">params</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">317</span>         <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">318</span>         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">319</span>         <span class="n">updates</span><span class="o">=</span><span class="n">updates</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">320</span>         <span class="n">givens</span><span class="o">=</span><span class="n">givens</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">321</span>         <span class="n">no_default_updates</span><span class="o">=</span><span class="n">no_default_updates</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">322</span>         <span class="n">accept_inplace</span><span class="o">=</span><span class="n">accept_inplace</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">323</span>         <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">324</span>         <span class="n">rebuild_strict</span><span class="o">=</span><span class="n">rebuild_strict</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">325</span>         <span class="n">allow_input_downcast</span><span class="o">=</span><span class="n">allow_input_downcast</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">326</span>         <span class="n">on_unused_input</span><span class="o">=</span><span class="n">on_unused_input</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">327</span>         <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">328</span>         <span class="n">output_keys</span><span class="o">=</span><span class="n">output_keys</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">329</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">330</span> <span class="k">return</span> <span class="n">fn</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/compile/function/pfunc.py:367,</span> in <span class="ni">pfunc</span><span class="nt">(params, outputs, mode, updates, givens, no_default_updates, accept_inplace, name, rebuild_strict, allow_input_downcast, profile, on_unused_input, output_keys, fgraph)</span>
-<span class="g g-Whitespace">    </span><span class="mi">353</span>     <span class="n">profile</span> <span class="o">=</span> <span class="n">ProfileStats</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">profile</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">355</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">cloned_outputs</span> <span class="o">=</span> <span class="n">construct_pfunc_ins_and_outs</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">356</span>     <span class="n">params</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">357</span>     <span class="n">outputs</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">364</span>     <span class="n">fgraph</span><span class="o">=</span><span class="n">fgraph</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">365</span> <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">367</span> <span class="k">return</span> <span class="n">orig_function</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">368</span>     <span class="n">inputs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">369</span>     <span class="n">cloned_outputs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">370</span>     <span class="n">mode</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">371</span>     <span class="n">accept_inplace</span><span class="o">=</span><span class="n">accept_inplace</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">372</span>     <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">373</span>     <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">374</span>     <span class="n">on_unused_input</span><span class="o">=</span><span class="n">on_unused_input</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">375</span>     <span class="n">output_keys</span><span class="o">=</span><span class="n">output_keys</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">376</span>     <span class="n">fgraph</span><span class="o">=</span><span class="n">fgraph</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">377</span> <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/compile/function/types.py:1766,</span> in <span class="ni">orig_function</span><span class="nt">(inputs, outputs, mode, accept_inplace, name, profile, on_unused_input, output_keys, fgraph)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1754</span>     <span class="n">m</span> <span class="o">=</span> <span class="n">Maker</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1755</span>         <span class="n">inputs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1756</span>         <span class="n">outputs</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1763</span>         <span class="n">fgraph</span><span class="o">=</span><span class="n">fgraph</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1764</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1765</span>     <span class="k">with</span> <span class="n">config</span><span class="o">.</span><span class="n">change_flags</span><span class="p">(</span><span class="n">compute_test_value</span><span class="o">=</span><span class="s2">&quot;off&quot;</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1766</span>         <span class="n">fn</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">defaults</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1767</span> <span class="k">finally</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1768</span>     <span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/compile/function/types.py:1659,</span> in <span class="ni">FunctionMaker.create</span><span class="nt">(self, input_storage, trustme, storage_map)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1656</span> <span class="n">start_import_time</span> <span class="o">=</span> <span class="n">pytensor</span><span class="o">.</span><span class="n">link</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">cmodule</span><span class="o">.</span><span class="n">import_time</span>
-<span class="g g-Whitespace">   </span><span class="mi">1658</span> <span class="k">with</span> <span class="n">config</span><span class="o">.</span><span class="n">change_flags</span><span class="p">(</span><span class="n">traceback__limit</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">traceback__compile_limit</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1659</span>     <span class="n">_fn</span><span class="p">,</span> <span class="n">_i</span><span class="p">,</span> <span class="n">_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linker</span><span class="o">.</span><span class="n">make_thunk</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1660</span>         <span class="n">input_storage</span><span class="o">=</span><span class="n">input_storage_lists</span><span class="p">,</span> <span class="n">storage_map</span><span class="o">=</span><span class="n">storage_map</span>
-<span class="g g-Whitespace">   </span><span class="mi">1661</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1663</span> <span class="n">end_linker</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1665</span> <span class="n">linker_time</span> <span class="o">=</span> <span class="n">end_linker</span> <span class="o">-</span> <span class="n">start_linker</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/basic.py:254,</span> in <span class="ni">LocalLinker.make_thunk</span><span class="nt">(self, input_storage, output_storage, storage_map, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">247</span> <span class="k">def</span> <span class="nf">make_thunk</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">248</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">249</span>     <span class="n">input_storage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;InputStorageType&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">252</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">253</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="s2">&quot;BasicThunkType&quot;</span><span class="p">,</span> <span class="s2">&quot;InputStorageType&quot;</span><span class="p">,</span> <span class="s2">&quot;OutputStorageType&quot;</span><span class="p">]:</span>
-<span class="ne">--&gt; </span><span class="mi">254</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_all</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">255</span>         <span class="n">input_storage</span><span class="o">=</span><span class="n">input_storage</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span>         <span class="n">output_storage</span><span class="o">=</span><span class="n">output_storage</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>         <span class="n">storage_map</span><span class="o">=</span><span class="n">storage_map</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span>     <span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/vm.py:1246,</span> in <span class="ni">VMLinker.make_all</span><span class="nt">(self, profiler, input_storage, output_storage, storage_map)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1241</span> <span class="n">thunk_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1242</span> <span class="c1"># no-recycling is done at each VM.__call__ So there is</span>
-<span class="g g-Whitespace">   </span><span class="mi">1243</span> <span class="c1"># no need to cause duplicate c code by passing</span>
-<span class="g g-Whitespace">   </span><span class="mi">1244</span> <span class="c1"># no_recycling here.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1245</span> <span class="n">thunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-<span class="ne">-&gt; </span><span class="mi">1246</span>     <span class="n">node</span><span class="o">.</span><span class="n">op</span><span class="o">.</span><span class="n">make_thunk</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">storage_map</span><span class="p">,</span> <span class="n">compute_map</span><span class="p">,</span> <span class="p">[],</span> <span class="n">impl</span><span class="o">=</span><span class="n">impl</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1247</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1248</span> <span class="n">linker_make_thunk_time</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">thunk_start</span>
-<span class="g g-Whitespace">   </span><span class="mi">1249</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">thunks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;lazy&quot;</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1250</span>     <span class="c1"># We don&#39;t want all ops maker to think about lazy Ops.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1251</span>     <span class="c1"># So if they didn&#39;t specify that its lazy or not, it isn&#39;t.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1252</span>     <span class="c1"># If this member isn&#39;t present, it will crash later.</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/c/op.py:131,</span> in <span class="ni">COp.make_thunk</span><span class="nt">(self, node, storage_map, compute_map, no_recycling, impl)</span>
-<span class="g g-Whitespace">    </span><span class="mi">127</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_node</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">128</span>     <span class="n">node</span><span class="p">,</span> <span class="n">storage_map</span><span class="o">=</span><span class="n">storage_map</span><span class="p">,</span> <span class="n">compute_map</span><span class="o">=</span><span class="n">compute_map</span><span class="p">,</span> <span class="n">impl</span><span class="o">=</span><span class="s2">&quot;c&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">129</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">130</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">131</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_c_thunk</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">storage_map</span><span class="p">,</span> <span class="n">compute_map</span><span class="p">,</span> <span class="n">no_recycling</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">132</span> <span class="k">except</span> <span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">,</span> <span class="n">MethodNotDefined</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">133</span>     <span class="c1"># We requested the c code, so don&#39;t catch the error.</span>
-<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="k">if</span> <span class="n">impl</span> <span class="o">==</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/c/op.py:96,</span> in <span class="ni">COp.make_c_thunk</span><span class="nt">(self, node, storage_map, compute_map, no_recycling)</span>
-<span class="g g-Whitespace">     </span><span class="mi">94</span>         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Disabling C code for </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2"> due to unsupported float16&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">95</span>         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;float16&quot;</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">96</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">make_thunk</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">97</span>     <span class="n">input_storage</span><span class="o">=</span><span class="n">node_input_storage</span><span class="p">,</span> <span class="n">output_storage</span><span class="o">=</span><span class="n">node_output_storage</span>
-<span class="g g-Whitespace">     </span><span class="mi">98</span> <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">99</span> <span class="n">thunk</span><span class="p">,</span> <span class="n">node_input_filters</span><span class="p">,</span> <span class="n">node_output_filters</span> <span class="o">=</span> <span class="n">outputs</span>
-<span class="g g-Whitespace">    </span><span class="mi">101</span> <span class="nd">@is_cthunk_wrapper_type</span>
-<span class="g g-Whitespace">    </span><span class="mi">102</span> <span class="k">def</span> <span class="nf">rval</span><span class="p">():</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/c/basic.py:1202,</span> in <span class="ni">CLinker.make_thunk</span><span class="nt">(self, input_storage, output_storage, storage_map, cache, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1167</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;Compile this linker&#39;s `self.fgraph` and return a function that performs the computations.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1168</span><span class="sd"> </span>
-<span class="g g-Whitespace">   </span><span class="mi">1169</span><span class="sd"> The return values can be used as follows:</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1199</span><span class="sd"> </span>
-<span class="g g-Whitespace">   </span><span class="mi">1200</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1201</span> <span class="n">init_tasks</span><span class="p">,</span> <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_init_tasks</span><span class="p">()</span>
-<span class="ne">-&gt; </span><span class="mi">1202</span> <span class="n">cthunk</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">in_storage</span><span class="p">,</span> <span class="n">out_storage</span><span class="p">,</span> <span class="n">error_storage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compile__</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1203</span>     <span class="n">input_storage</span><span class="p">,</span> <span class="n">output_storage</span><span class="p">,</span> <span class="n">storage_map</span><span class="p">,</span> <span class="n">cache</span>
-<span class="g g-Whitespace">   </span><span class="mi">1204</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1206</span> <span class="n">res</span> <span class="o">=</span> <span class="n">_CThunk</span><span class="p">(</span><span class="n">cthunk</span><span class="p">,</span> <span class="n">init_tasks</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">error_storage</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1207</span> <span class="n">res</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_order</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/c/basic.py:1122,</span> in <span class="ni">CLinker.__compile__</span><span class="nt">(self, input_storage, output_storage, storage_map, cache)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1120</span> <span class="n">input_storage</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">input_storage</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1121</span> <span class="n">output_storage</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">output_storage</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1122</span> <span class="n">thunk</span><span class="p">,</span> <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cthunk_factory</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1123</span>     <span class="n">error_storage</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1124</span>     <span class="n">input_storage</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1125</span>     <span class="n">output_storage</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1126</span>     <span class="n">storage_map</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1127</span>     <span class="n">cache</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1128</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1129</span> <span class="k">return</span> <span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1130</span>     <span class="n">thunk</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1131</span>     <span class="n">module</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1140</span>     <span class="n">error_storage</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1141</span> <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/c/basic.py:1647,</span> in <span class="ni">CLinker.cthunk_factory</span><span class="nt">(self, error_storage, in_storage, out_storage, storage_map, cache)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1645</span>     <span class="k">if</span> <span class="n">cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1646</span>         <span class="n">cache</span> <span class="o">=</span> <span class="n">get_module_cache</span><span class="p">()</span>
-<span class="ne">-&gt; </span><span class="mi">1647</span>     <span class="n">module</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">module_from_key</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">lnk</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1649</span> <span class="nb">vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">orphans</span>
-<span class="g g-Whitespace">   </span><span class="mi">1650</span> <span class="c1"># List of indices that should be ignored when passing the arguments</span>
-<span class="g g-Whitespace">   </span><span class="mi">1651</span> <span class="c1"># (basically, everything that the previous call to uniq eliminated)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/c/cmodule.py:1231,</span> in <span class="ni">ModuleCache.module_from_key</span><span class="nt">(self, key, lnk)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1229</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1230</span>     <span class="n">location</span> <span class="o">=</span> <span class="n">dlimport_workdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirname</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1231</span>     <span class="n">module</span> <span class="o">=</span> <span class="n">lnk</span><span class="o">.</span><span class="n">compile_cmodule</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1232</span>     <span class="n">name</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="vm">__file__</span>
-<span class="g g-Whitespace">   </span><span class="mi">1233</span>     <span class="k">assert</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/c/basic.py:1546,</span> in <span class="ni">CLinker.compile_cmodule</span><span class="nt">(self, location)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1544</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1545</span>     <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LOCATION </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1546</span>     <span class="n">module</span> <span class="o">=</span> <span class="n">c_compiler</span><span class="o">.</span><span class="n">compile_str</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1547</span>         <span class="n">module_name</span><span class="o">=</span><span class="n">mod</span><span class="o">.</span><span class="n">code_hash</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1548</span>         <span class="n">src_code</span><span class="o">=</span><span class="n">src_code</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1549</span>         <span class="n">location</span><span class="o">=</span><span class="n">location</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1550</span>         <span class="n">include_dirs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">header_dirs</span><span class="p">(),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1551</span>         <span class="n">lib_dirs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib_dirs</span><span class="p">(),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1552</span>         <span class="n">libs</span><span class="o">=</span><span class="n">libs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1553</span>         <span class="n">preargs</span><span class="o">=</span><span class="n">preargs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1554</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1555</span> <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1556</span>     <span class="n">e</span><span class="o">.</span><span class="n">args</span> <span class="o">+=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fgraph</span><span class="p">),)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/link/c/cmodule.py:2591,</span> in <span class="ni">GCC_compiler.compile_str</span><span class="nt">(module_name, src_code, location, include_dirs, lib_dirs, libs, preargs, py_module, hide_symbols)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2588</span>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2590</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">2591</span>     <span class="n">p_out</span> <span class="o">=</span> <span class="n">output_subprocess_Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2592</span>     <span class="n">compile_stderr</span> <span class="o">=</span> <span class="n">p_out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">2593</span> <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">2594</span>     <span class="c1"># An exception can occur e.g. if `g++` is not found.</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pytensor/utils.py:261,</span> in <span class="ni">output_subprocess_Popen</span><span class="nt">(command, **params)</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess_Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span> <span class="c1"># we need to use communicate to make sure we don&#39;t deadlock around</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span> <span class="c1"># the stdout/stderr pipe.</span>
-<span class="ne">--&gt; </span><span class="mi">261</span> <span class="n">out</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span> <span class="k">return</span> <span class="n">out</span> <span class="o">+</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">returncode</span><span class="p">,)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/subprocess.py:1134,</span> in <span class="ni">Popen.communicate</span><span class="nt">(self, input, timeout)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1131</span>     <span class="n">endtime</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">   </span><span class="mi">1133</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1134</span>     <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_communicate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">endtime</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1135</span> <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1136</span>     <span class="c1"># https://bugs.python.org/issue25942</span>
-<span class="g g-Whitespace">   </span><span class="mi">1137</span>     <span class="c1"># See the detailed comment in .wait().</span>
-<span class="g g-Whitespace">   </span><span class="mi">1138</span>     <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/subprocess.py:1979,</span> in <span class="ni">Popen._communicate</span><span class="nt">(self, input, endtime, orig_timeout)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1972</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_check_timeout</span><span class="p">(</span><span class="n">endtime</span><span class="p">,</span> <span class="n">orig_timeout</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1973</span>                         <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1974</span>                         <span class="n">skip_check_and_raise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1975</span>     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>  <span class="c1"># Impossible :)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1976</span>         <span class="s1">&#39;_check_timeout(..., skip_check_and_raise=True) &#39;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1977</span>         <span class="s1">&#39;failed to raise TimeoutExpired.&#39;</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1979</span> <span class="n">ready</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1980</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_timeout</span><span class="p">(</span><span class="n">endtime</span><span class="p">,</span> <span class="n">orig_timeout</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1982</span> <span class="c1"># XXX Rewrite these to use non-blocking I/O on the file</span>
-<span class="g g-Whitespace">   </span><span class="mi">1983</span> <span class="c1"># objects; they are no longer using C stdio!</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/selectors.py:416,</span> in <span class="ni">_PollLikeSelector.select</span><span class="nt">(self, timeout)</span>
-<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="n">ready</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">    </span><span class="mi">415</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">416</span>     <span class="n">fd_event_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selector</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">417</span> <span class="k">except</span> <span class="ne">InterruptedError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">418</span>     <span class="k">return</span> <span class="n">ready</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (4 chains in 1 job)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_1, omega_1, omega_2]
+</pre></div>
+</div>
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:13&lt;00:00 Sampling chain 0, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:11&lt;00:00 Sampling chain 1, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:10&lt;00:00 Sampling chain 2, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:11&lt;00:00 Sampling chain 3, 0 divergences]
+    </div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 47 seconds.
 </pre></div>
 </div>
 </div>
@@ -1027,6 +796,9 @@ Add 614 new continuous observations.
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/52e7738183b766e3492534099399916e8ff0f6a0b2fa0feb7d0a0288b01f03f9.png" src="../_images/52e7738183b766e3492534099399916e8ff0f6a0b2fa0feb7d0a0288b01f03f9.png" />
 </div>
 </div>
 </section>
@@ -1057,6 +829,12 @@ Add 614 new continuous observations.
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a continuous Hierarchical Gaussian Filter with 2 levels (JAX backend).
+Add 614 new continuous observations.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1064,10 +842,18 @@ Add 614 new continuous observations.
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="../_images/67daa59c1216139fbf8144d104325b7fdbbb83335ad47a471af2c24f522a0e93.png" src="../_images/67daa59c1216139fbf8144d104325b7fdbbb83335ad47a471af2c24f522a0e93.png" />
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">surprise</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-2150.1448, dtype=float32)
 </pre></div>
 </div>
 </div>
