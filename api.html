@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>API &#8212; ghgf 0.0.1dev documentation</title>
   
@@ -32,8 +32,6 @@
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
@@ -42,7 +40,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
@@ -53,7 +53,7 @@
     <link rel="next" title="ghgf.binary.binary_node_update" href="generated/ghgf.binary/ghgf.binary.binary_node_update.html" />
     <link rel="prev" title="Tutorials" href="tutorials.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="docsearch:language" content="None">
+  <meta name="docsearch:language" content="en">
   </head>
   
   
@@ -384,7 +384,7 @@
             
             <article class="bd-article" role="main">
               
-  <div class="contents topic" id="table-of-contents">
+  <nav class="contents" id="table-of-contents" role="doc-toc">
 <span id="api-ref"></span><p class="topic-title">Table of Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#api" id="id1">API</a></p>
@@ -400,17 +400,13 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="api">
-<h1><a class="toc-backref" href="#id1">API</a><a class="headerlink" href="#api" title="Permalink to this headline">#</a></h1>
+<h1><a class="toc-backref" href="#id1" role="doc-backlink">API</a><a class="headerlink" href="#api" title="Permalink to this heading">#</a></h1>
 <section id="binary">
-<h2><a class="toc-backref" href="#id2">Binary</a><a class="headerlink" href="#binary" title="Permalink to this headline">#</a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Binary</a><a class="headerlink" href="#binary" title="Permalink to this heading">#</a></h2>
 <p>Core functionnalities of the JAX implementation to update <em>binary</em> nodes.</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.binary_node_update.html#ghgf.binary.binary_node_update" title="ghgf.binary.binary_node_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_node_update</span></code></a>(node_parameters, ...)</p></td>
 <td><p>Update the value and volatility parents of a binary node.</p></td>
@@ -434,13 +430,9 @@
 </table>
 </section>
 <section id="continuous">
-<h2><a class="toc-backref" href="#id3">Continuous</a><a class="headerlink" href="#continuous" title="Permalink to this headline">#</a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Continuous</a><a class="headerlink" href="#continuous" title="Permalink to this heading">#</a></h2>
 <p>Core functionnalities of the JAX implementation to update <em>continuous</em> nodes.</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.continuous/ghgf.continuous.continuous_node_update.html#ghgf.continuous.continuous_node_update" title="ghgf.continuous.continuous_node_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">continuous_node_update</span></code></a>(node_parameters, ...)</p></td>
 <td><p>Update the value and volatility parents of a continuous node.</p></td>
@@ -458,15 +450,11 @@
 </table>
 </section>
 <section id="model">
-<h2><a class="toc-backref" href="#id4">Model</a><a class="headerlink" href="#model" title="Permalink to this headline">#</a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Model</a><a class="headerlink" href="#model" title="Permalink to this heading">#</a></h2>
 <p>The main class used to create a standard Hierarchical Gaussian Filter for binary or
 continuous inputs, with two or three levels. This class wraps the previous JAX modules
 and create a standard node structure for these models.</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.model/ghgf.model.HGF.html#ghgf.model.HGF" title="ghgf.model.HGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGF</span></code></a>([n_levels, model_type, initial_mu, ...])</p></td>
 <td><p>The standard 2 or 3 levels HGF for continuous or binary inputs.</p></td>
@@ -475,14 +463,10 @@ and create a standard node structure for these models.</p>
 </table>
 </section>
 <section id="plots">
-<h2><a class="toc-backref" href="#id5">Plots</a><a class="headerlink" href="#plots" title="Permalink to this headline">#</a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Plots</a><a class="headerlink" href="#plots" title="Permalink to this heading">#</a></h2>
 <p>Plotting functionnalities to visualize parameters trajectories and correlations after
 observing new data.</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.plots/ghgf.plots.plot_trajectories.html#ghgf.plots.plot_trajectories" title="ghgf.plots.plot_trajectories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_trajectories</span></code></a>(hgf[, ci, figsize])</p></td>
 <td><p>Plot perceptual HGF parameters time series.</p></td>
@@ -494,28 +478,29 @@ observing new data.</p>
 </table>
 </section>
 <section id="pymc">
-<h2><a class="toc-backref" href="#id6">PyMC</a><a class="headerlink" href="#pymc" title="Permalink to this headline">#</a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">PyMC</a><a class="headerlink" href="#pymc" title="Permalink to this heading">#</a></h2>
 <p>The Herarchical Gaussian Filter as a PyMC distribution. This distribution can be
 embedded in a PyMC model and the free paramters will be estimated e.g. using MCMC
 sampling.</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.distribution/ghgf.distribution.hgf_logp.html#ghgf.distribution.hgf_logp" title="ghgf.distribution.hgf_logp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hgf_logp</span></code></a>(omega_1, omega_2, omega_input, ...)</p></td>
+<td><p>Compute the log probability from the HGF model given the data and parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.distribution/ghgf.distribution.HGFLogpGradOp.html#ghgf.distribution.HGFLogpGradOp" title="ghgf.distribution.HGFLogpGradOp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGFLogpGradOp</span></code></a>([data, model_type, n_levels, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.distribution/ghgf.distribution.HGFDistribution.html#ghgf.distribution.HGFDistribution" title="ghgf.distribution.HGFDistribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGFDistribution</span></code></a>([data, model_type, ...])</p></td>
+<td><p>The HGF distribution to be used in the context of a PyMC 4.0 model.</p></td>
+</tr>
 </tbody>
 </table>
 </section>
 <section id="response">
-<h2><a class="toc-backref" href="#id7">Response</a><a class="headerlink" href="#response" title="Permalink to this headline">#</a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Response</a><a class="headerlink" href="#response" title="Permalink to this heading">#</a></h2>
 <p>A collection of responses functions. A response function is simply a callable taking at
 least the HGF instance as input after observation and returning surprise.</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.response/ghgf.response.gaussian_surprise.html#ghgf.response.gaussian_surprise" title="ghgf.response.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(hgf_results, ...)</p></td>
 <td><p>The sum of the gaussian surprise along the time series (continuous HGF).</p></td>
@@ -527,13 +512,9 @@ least the HGF instance as input after observation and returning surprise.</p>
 </table>
 </section>
 <section id="typing">
-<h2><a class="toc-backref" href="#id8">Typing</a><a class="headerlink" href="#typing" title="Permalink to this headline">#</a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Typing</a><a class="headerlink" href="#typing" title="Permalink to this heading">#</a></h2>
 <p>Types hints.</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.typing/ghgf.typing.node_validation.html#ghgf.typing.node_validation" title="ghgf.typing.node_validation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_validation</span></code></a>(node)</p></td>
 <td><p>&quot;Verify that the node structure is valid.</p></td>
@@ -542,16 +523,12 @@ least the HGF instance as input after observation and returning surprise.</p>
 </table>
 </section>
 <section id="python">
-<h2><a class="toc-backref" href="#id9">Python</a><a class="headerlink" href="#python" title="Permalink to this headline">#</a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Python</a><a class="headerlink" href="#python" title="Permalink to this heading">#</a></h2>
 <p>The pure Python implementation of the Hierarchical Gaussian Filter for binary or
 continuous inputs, with two or three levels. This implementation is independent from the
 more recent JAX implementation and is not required to run the code. It is currently used
 for testing.</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.Model.html#ghgf.python.Model" title="ghgf.python.Model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Model</span></code></a>()</p></td>
 <td><p>Generic HGF model</p></td>
@@ -750,7 +727,7 @@ for testing.</p>
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
 
   </div>

@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>The continuous Hirarchical Gaussian Filter &#8212; ghgf 0.0.1dev documentation</title>
   
@@ -32,8 +32,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
@@ -42,18 +40,20 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/2-Continuous_HGF';</script>
     <link rel="shortcut icon" href="../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="docsearch:language" content="None">
+  <meta name="docsearch:language" content="en">
   </head>
   
   
@@ -385,13 +385,16 @@
             <article class="bd-article" role="main">
               
   <section class="tex2jax_ignore mathjax_ignore" id="the-continuous-hirarchical-gaussian-filter">
-<span id="continuous-hgf"></span><h1>The continuous Hirarchical Gaussian Filter<a class="headerlink" href="#the-continuous-hirarchical-gaussian-filter" title="Permalink to this headline">#</a></h1>
+<span id="continuous-hgf"></span><h1>The continuous Hirarchical Gaussian Filter<a class="headerlink" href="#the-continuous-hirarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">ghgf</span> <span class="kn">import</span> <span class="n">load_data</span>
 <span class="kn">from</span> <span class="nn">ghgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;talk&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -403,7 +406,7 @@
 </div>
 <p>In this example, we will use the exchange rate of the US Dollar to the Swiss Franc during much of 2010 and 2011 as a time series that the Hierarchical Gaussian Filter is going to predict.</p>
 <section id="data-import">
-<h2>Data import<a class="headerlink" href="#data-import" title="Permalink to this headline">#</a></h2>
+<h2>Data import<a class="headerlink" href="#data-import" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">timeserie</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
@@ -443,7 +446,7 @@
 </div>
 </section>
 <section id="using-a-two-levels-model">
-<h2>Using a two-levels model<a class="headerlink" href="#using-a-two-levels-model" title="Permalink to this headline">#</a></h2>
+<h2>Using a two-levels model<a class="headerlink" href="#using-a-two-levels-model" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_hgf</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
@@ -473,7 +476,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/34b909012305481f5c59d52e589aeca1c74667f948b33398f209d934785727e6.png" src="../_images/34b909012305481f5c59d52e589aeca1c74667f948b33398f209d934785727e6.png" />
+<img alt="../_images/4d3b0da5944e896af06c9f99c59c192c13c778e6e5ad12b297325bbbcd2dfedc.png" src="../_images/4d3b0da5944e896af06c9f99c59c192c13c778e6e5ad12b297325bbbcd2dfedc.png" />
 </div>
 </div>
 <p>We can see that the surprise will increase when the time series exhibit more unexpected behaviors. The degree to which a given observation is expected will deppends on the expeted value and volatility in the input node, that are influenced by the values of higher order nodes. One way to assess model fit is to look at the total gaussian surprise for each observation. This values can be returned using the <code class="docutils literal notranslate"><span class="pre">surprise</span></code> method:</p>
@@ -496,7 +499,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2bcfeeaa0824dc22059e9ccade7870c168bef7d657a013a9ebd9db1fa75fb3a3.png" src="../_images/2bcfeeaa0824dc22059e9ccade7870c168bef7d657a013a9ebd9db1fa75fb3a3.png" />
+<img alt="../_images/b07334dfd00b41c0aedf6edf9e1f564be5fef127599124a3a2490e2b1ab6a0ec.png" src="../_images/b07334dfd00b41c0aedf6edf9e1f564be5fef127599124a3a2490e2b1ab6a0ec.png" />
 </div>
 </div>
 <p>The model fit will directly be influenced by the model parameters. One important parameters for each node is <span class="math notranslate nohighlight">\(\omega\)</span> (<code class="docutils literal notranslate"><span class="pre">omega</span></code>). This is the tonic part of the variance (the part of the variance in each node that is not affected by the parent node). Here we are going to change <span class="math notranslate nohighlight">\(\omega\)</span> for both the first and the second level:</p>
@@ -529,7 +532,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3626059510cf9fe85ac1c7ca52da73011a93e8b0e507ab0d1908d22e5691eb91.png" src="../_images/3626059510cf9fe85ac1c7ca52da73011a93e8b0e507ab0d1908d22e5691eb91.png" />
+<img alt="../_images/3359cebc275032915a5eb14299884c359179cd96032fc1235ce495b41f3f409a.png" src="../_images/3359cebc275032915a5eb14299884c359179cd96032fc1235ce495b41f3f409a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -546,9 +549,9 @@ Add 614 new continuous observations.
 </div>
 </section>
 <section id="using-a-three-level-model">
-<h2>Using a three-level model<a class="headerlink" href="#using-a-three-level-model" title="Permalink to this headline">#</a></h2>
+<h2>Using a three-level model<a class="headerlink" href="#using-a-three-level-model" title="Permalink to this heading">#</a></h2>
 <section id="create-the-model">
-<h3>Create the model<a class="headerlink" href="#create-the-model" title="Permalink to this headline">#</a></h3>
+<h3>Create the model<a class="headerlink" href="#create-the-model" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_hgf</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
@@ -570,7 +573,7 @@ Add 614 new continuous observations.
 </div>
 </section>
 <section id="add-data">
-<h3>Add data<a class="headerlink" href="#add-data" title="Permalink to this headline">#</a></h3>
+<h3>Add data<a class="headerlink" href="#add-data" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Provide new observations</span>
@@ -582,14 +585,14 @@ Add 614 new continuous observations.
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Add 614 new continuous observations.
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ghgf.model.HGF at 0x7f31af4a51f0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ghgf.model.HGF at 0x7fdae97df1f0&gt;
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="plot-trajectories">
-<h3>Plot trajectories<a class="headerlink" href="#plot-trajectories" title="Permalink to this headline">#</a></h3>
+<h3>Plot trajectories<a class="headerlink" href="#plot-trajectories" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">()</span>
@@ -597,14 +600,14 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1a056e468fa281efd8352d03d0cb9bf46f740f2c73af4dc4c655b249cd1f2c4e.png" src="../_images/1a056e468fa281efd8352d03d0cb9bf46f740f2c73af4dc4c655b249cd1f2c4e.png" />
+<img alt="../_images/e629f403f007b5f84dfc3156e32911e7aa82c9b028bea6443a298ef95d3fa02c.png" src="../_images/e629f403f007b5f84dfc3156e32911e7aa82c9b028bea6443a298ef95d3fa02c.png" />
 </div>
 </div>
 </section>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="parameters-optimization-using-mcmc-sampling">
-<h1>Parameters optimization using MCMC sampling<a class="headerlink" href="#parameters-optimization-using-mcmc-sampling" title="Permalink to this headline">#</a></h1>
+<h1>Parameters optimization using MCMC sampling<a class="headerlink" href="#parameters-optimization-using-mcmc-sampling" title="Permalink to this heading">#</a></h1>
 <p>The variety of parameters that are embedded in the Hierarchical Gaussian Filter can all influence the quality of the model prediction, here measured using the gaussian surprise. One key question is then to estimate the parameters values that are more likely to minimise surprise, given the observations already made by the model. Because the HGF models we use here are all written in <a class="reference external" href="https://github.com/google/jax">JAX</a>, it is straightforward to embed this code into a computational graph, such as the ones build by <a class="reference external" href="https://aesara.readthedocs.io/en/latest/">Aesara</a>, now forked as <a class="reference external" href="https://pytensor.readthedocs.io/en/latest/">PyTensor</a>, in order to use MCMC sampling (e.g. NUST) to estimate the probability density for each of our parameters of interest. Here, we are going to use <a class="reference external" href="https://www.pymc.io/welcome.html">PyMC</a> to perform this step.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -618,7 +621,7 @@ Add 614 new continuous observations.
 </div>
 <p>We first import the <code class="docutils literal notranslate"><span class="pre">HGFDistribution</span></code>, that encapsulate a custom log_probability function of the HG (and its gradient). We also load the <code class="docutils literal notranslate"><span class="pre">gaussian_surprise</span></code> function from the <code class="docutils literal notranslate"><span class="pre">response</span></code> module. This function define how the agent is getting its insight on the model fit (here the surprise simply comes from observing a new value).</p>
 <section id="creating-the-model">
-<h2>Creating the model<a class="headerlink" href="#creating-the-model" title="Permalink to this headline">#</a></h2>
+<h2>Creating the model<a class="headerlink" href="#creating-the-model" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
@@ -668,7 +671,7 @@ Add 614 new continuous observations.
 </div>
 </section>
 <section id="visualizing-the-model">
-<h2>Visualizing the model<a class="headerlink" href="#visualizing-the-model" title="Permalink to this headline">#</a></h2>
+<h2>Visualizing the model<a class="headerlink" href="#visualizing-the-model" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">two_level_hgf</span><span class="p">)</span>
@@ -676,11 +679,11 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/069a9ddd25293168cba08f9af784c30e7509630ffc22df62368ccc31b2a26b47.svg" src="../_images/069a9ddd25293168cba08f9af784c30e7509630ffc22df62368ccc31b2a26b47.svg" /></div>
+<img alt="../_images/d2aa958b16a10c03b379c84877ed84bb40e7f6398a03b7875dc6db086cb713d4.svg" src="../_images/d2aa958b16a10c03b379c84877ed84bb40e7f6398a03b7875dc6db086cb713d4.svg" /></div>
 </div>
 </section>
 <section id="sampling">
-<h2>Sampling<a class="headerlink" href="#sampling" title="Permalink to this headline">#</a></h2>
+<h2>Sampling<a class="headerlink" href="#sampling" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">two_level_hgf</span><span class="p">:</span>
@@ -720,7 +723,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:13&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:12&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -741,7 +744,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:11&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:12&lt;00:00 Sampling chain 1, 1 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -762,7 +765,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:10&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:11&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -783,7 +786,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:11&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:10&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
     </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 47 seconds.
 </pre></div>
@@ -798,12 +801,12 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/52e7738183b766e3492534099399916e8ff0f6a0b2fa0feb7d0a0288b01f03f9.png" src="../_images/52e7738183b766e3492534099399916e8ff0f6a0b2fa0feb7d0a0288b01f03f9.png" />
+<img alt="../_images/09d4d4e0e00b6f0e4509a38dde63f54b5727abac16864c5aaf86941bbb940762.png" src="../_images/09d4d4e0e00b6f0e4509a38dde63f54b5727abac16864c5aaf86941bbb940762.png" />
 </div>
 </div>
 </section>
 <section id="visualizing-the-most-likely-model">
-<h2>Visualizing the most likely model<a class="headerlink" href="#visualizing-the-most-likely-model" title="Permalink to this headline">#</a></h2>
+<h2>Visualizing the most likely model<a class="headerlink" href="#visualizing-the-most-likely-model" title="Permalink to this heading">#</a></h2>
 <p>We can see that the most probables values are not exactly the ones we tried in the first instance. We can then refit a new model from scratch using the most probable ones.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -843,7 +846,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/67daa59c1216139fbf8144d104325b7fdbbb83335ad47a471af2c24f522a0e93.png" src="../_images/67daa59c1216139fbf8144d104325b7fdbbb83335ad47a471af2c24f522a0e93.png" />
+<img alt="../_images/f65fea58220af361b3b54f37613b1a2370a8be899fb0a31a034ce735ec278859.png" src="../_images/f65fea58220af361b3b54f37613b1a2370a8be899fb0a31a034ce735ec278859.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -853,13 +856,78 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-2150.1448, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-2150.188, dtype=float32)
 </pre></div>
 </div>
 </div>
 </div>
 <p>Looking at the volatility (ie, the second) level, we see that there are two salient events in our time series where volatility shoots up. The first is in April 2010 when the currency markets react to the news that Greece is effectively broke. This leads to a flight into the US dollar (green dots rising very quickly), sending the volatility higher. The second is an accelarating increase in the value of the Swiss Franc in Augutst and September 2011, as the Euro crisis drags on. The point where the Swiss central bank intervened and put a floor under how far the Euro could fall with respect to the Franc is clearly visible in the Franc’s valuation against the dollar. This surprising intervention shows up as another spike in volatitlity.</p>
 </section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="system-configuration">
+<h1>System configuration<a class="headerlink" href="#system-configuration" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -p ghgf,jax,jaxlib
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;load_ext&#39;</span><span class="p">,</span> <span class="s1">&#39;watermark&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;watermark&#39;</span><span class="p">,</span> <span class="s1">&#39;-n -u -v -iv -w -p ghgf,jax,jaxlib&#39;</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/IPython/core/interactiveshell.py:2369,</span> in <span class="ni">InteractiveShell.run_line_magic</span><span class="nt">(self, magic_name, line, _stack_depth)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2367</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;local_ns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_local_scope</span><span class="p">(</span><span class="n">stack_depth</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2368</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">builtin_trap</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">2369</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2370</span> <span class="k">return</span> <span class="n">result</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/IPython/core/magics/extension.py:33,</span> in <span class="ni">ExtensionMagics.load_ext</span><span class="nt">(self, module_str)</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">module_str</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">32</span>     <span class="k">raise</span> <span class="n">UsageError</span><span class="p">(</span><span class="s1">&#39;Missing module name.&#39;</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">33</span> <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">extension_manager</span><span class="o">.</span><span class="n">load_extension</span><span class="p">(</span><span class="n">module_str</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;already loaded&#39;</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The </span><span class="si">%s</span><span class="s2"> extension is already loaded. To reload it, use:&quot;</span> <span class="o">%</span> <span class="n">module_str</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/IPython/core/extensions.py:76,</span> in <span class="ni">ExtensionManager.load_extension</span><span class="nt">(self, module_str)</span>
+<span class="g g-Whitespace">     </span><span class="mi">69</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;Load an IPython extension by its module name.</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span><span class="sd"> </span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span><span class="sd"> Returns the string &quot;already loaded&quot; if the extension is already loaded,</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span><span class="sd"> &quot;no load function&quot; if the module doesn&#39;t have a load_ipython_extension</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span><span class="sd"> function, or None if it succeeded.</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">75</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">76</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_extension</span><span class="p">(</span><span class="n">module_str</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">77</span> <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">78</span>     <span class="k">if</span> <span class="n">module_str</span> <span class="ow">in</span> <span class="n">BUILTINS_EXTS</span><span class="p">:</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/IPython/core/extensions.py:91,</span> in <span class="ni">ExtensionManager._load_extension</span><span class="nt">(self, module_str)</span>
+<span class="g g-Whitespace">     </span><span class="mi">89</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">builtin_trap</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">90</span>     <span class="k">if</span> <span class="n">module_str</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">91</span>         <span class="n">mod</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="n">module_str</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">92</span>     <span class="n">mod</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_str</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">93</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_load_ipython_extension</span><span class="p">(</span><span class="n">mod</span><span class="p">):</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/importlib/__init__.py:127,</span> in <span class="ni">import_module</span><span class="nt">(name, package)</span>
+<span class="g g-Whitespace">    </span><span class="mi">125</span>             <span class="k">break</span>
+<span class="g g-Whitespace">    </span><span class="mi">126</span>         <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="ne">--&gt; </span><span class="mi">127</span> <span class="k">return</span> <span class="n">_bootstrap</span><span class="o">.</span><span class="n">_gcd_import</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="n">level</span><span class="p">:],</span> <span class="n">package</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+
+<span class="nn">File &lt;frozen importlib._bootstrap&gt;:1030,</span> in <span class="ni">_gcd_import</span><span class="nt">(name, package, level)</span>
+
+<span class="nn">File &lt;frozen importlib._bootstrap&gt;:1007,</span> in <span class="ni">_find_and_load</span><span class="nt">(name, import_)</span>
+
+<span class="nn">File &lt;frozen importlib._bootstrap&gt;:984,</span> in <span class="ni">_find_and_load_unlocked</span><span class="nt">(name, import_)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;watermark&#39;
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
 
@@ -952,6 +1020,11 @@ Add 614 new continuous observations.
    </li>
   </ul>
  </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#system-configuration">
+   System configuration
+  </a>
+ </li>
 </ul>
 
 </nav>
@@ -1021,7 +1094,7 @@ Add 614 new continuous observations.
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
 
   </div>

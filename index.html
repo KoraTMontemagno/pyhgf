@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding &#8212; ghgf 0.0.1dev documentation</title>
   
@@ -32,8 +32,6 @@
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
@@ -42,7 +40,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
@@ -52,7 +52,7 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The Hierarchical Gaussian Filter" href="theory.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="docsearch:language" content="None">
+  <meta name="docsearch:language" content="en">
   </head>
   
   
@@ -384,30 +384,38 @@
             <article class="bd-article" role="main">
               
   <p><img alt="png" src="_images/logo.png" /></p>
-<p><a class="reference external" href="https://github.com/pre-commit/pre-commit"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" /></a> <a class="reference external" href="https://github.com/LegrandNico/metadPy/blob/master/LICENSE"><img alt="license" src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" /></a> <a class="reference external" href="https://travis-ci.com/LegandNico/ghgf"><img alt="travis" src="https://travis-ci.com/LegrandNico/ghgf.svg?branch=master" /></a> <a class="reference external" href="https://codecov.io/gh/LegrandNico/ghgf"><img alt="codecov" src="https://codecov.io/gh/LegrandNico/ghgf/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://github.com/psf/black"><img alt="black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a> <a class="reference external" href="http://mypy-lang.org/"><img alt="mypy" src="http://www.mypy-lang.org/static/mypy_badge.svg" /></a> <a class="reference external" href="https://pycqa.github.io/isort/"><img alt="Imports: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336" /></a></p>
+<p><a class="reference external" href="https://github.com/pre-commit/pre-commit"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" /></a> <a class="reference external" href="https://github.com/ilabcode/ghgf/blob/master/LICENSE"><img alt="license" src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" /></a> <a class="reference external" href="https://codecov.io/gh/ilabcode/ghgf"><img alt="codecov" src="https://codecov.io/gh/ilabcode/ghgf/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://github.com/psf/black"><img alt="black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a> <a class="reference external" href="http://mypy-lang.org/"><img alt="mypy" src="http://www.mypy-lang.org/static/mypy_badge.svg" /></a> <a class="reference external" href="https://pycqa.github.io/isort/"><img alt="Imports: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336" /></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding">
-<h1>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding<a class="headerlink" href="#the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding" title="Permalink to this headline">#</a></h1>
-<p><strong>GHGF</strong> is a Python library that implements the generalized and nodalized Hierarchical Gaussian Filter in Python. It is built on the to of <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax.html">JAX</a> and <a class="reference external" href="http://numba.pydata.org/">Numba</a> and can easily be embedded in any <a class="reference external" href="https://www.pymc.io/welcome.html">PyMC</a> probabilisic model for MCMC sampling.</p>
+<h1>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding<a class="headerlink" href="#the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding" title="Permalink to this heading">#</a></h1>
+<p>gHGF is a library for generalized and nodalized Hierarchical Gaussian Filters for predictive coding written in <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax.html">JAX</a>. The library consists in a set of function to create graphs of interconnected nodes and recursively update them using prediction errors under new observations. The codebase is also compatible with other JAX libraries to perform Hamiltonian Monte Carlo (<a class="reference external" href="https://www.pymc.io/welcome.html">PyMC</a>, <a class="reference external" href="https://blackjax-devs.github.io/blackjax/">Blackjax</a>) or gradient descent for parameters estimation.</p>
+<p>📖 <a class="reference external" href="https://ilabcode.github.io/ghgf/">Documentation</a><br />
+🎓 <a class="reference external" href="https://ilabcode.github.io/ghgf/theory.html">Theory</a><br />
+✏️ <a class="reference external" href="https://ilabcode.github.io/ghgf/tutorials.html">Examples</a></p>
 <section id="getting-started">
-<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">#</a></h2>
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading">#</a></h2>
 <section id="installation">
-<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h3>
-<p>The latest release of <strong>HGF</strong> can be installed from the GitHub folder:</p>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">“git+https://github.com/ilabcode/ghgf.git&#64;ecg”</span></code></p>
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h3>
+<p>The latest release of gHGF can be installed from the GitHub folder:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ghgf</span></code></p>
+<p>The latest development version of the codebase can be installed from the GitHub folder:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">“git+https://github.com/ilabcode/ghgf”</span></code></p>
 </section>
 <section id="how-does-it-works">
-<h3>How does it works?<a class="headerlink" href="#how-does-it-works" title="Permalink to this headline">#</a></h3>
-<p>The Hierarchical Gaussian Filter consists of a hierarchy of interdependent nodes that are being updated after observing input data. The value of a node depends on the value of its value and volatility parents. A node is formally defined as a Python tuple containing 3 variables:</p>
+<h3>How does it works?<a class="headerlink" href="#how-does-it-works" title="Permalink to this heading">#</a></h3>
+<p>A Hierarchical Gaussian Filter is a hierarchy of interdependent nodes. Each node can (optionnaly) inherite its values and/or variability for other node higer in the hierarchy. The observation of an input data in the entry node at the lower part of the hierarchy trigger a recursuve update of the nodes values.</p>
+<p>A node is formally defined as a Python tuple containing 3 variables:</p>
 <ol class="arabic simple">
 <li><p>A <code class="docutils literal notranslate"><span class="pre">parameter</span></code> dictionary containing the node parameters (value, precision and parameters controlling the dependencies from values and variability parents).</p></li>
 <li><p>A value parent (optional).</p></li>
 <li><p>A volatility parent (optional).</p></li>
 </ol>
-<p>Value parent (<code class="docutils literal notranslate"><span class="pre">vapa</span></code>) and volatility (<code class="docutils literal notranslate"><span class="pre">vopa</span></code>) parent are nodes themself and are organized following the same principle.</p>
-<p>The node structure consists of nodes embedding other nodes hierarchically (i.e. tuples embedding other tuples). A generalization of the standard Hierarchical Gaussian Filter can build a hierarchical structure containing an arbitrary number of nodes, inputs and non-linear transformation between nodes. The structure continues as long as a given node has value or volatility parents. Well-known special cases of such hierarchies are the 2-level and 3-level Hierarchical Gaussian Filters.</p>
+<p><img alt="Figure1" src="_images/genmod.png" /></p>
+<p>Value parent (<code class="docutils literal notranslate"><span class="pre">vapa</span></code>) and volatility parent (<code class="docutils literal notranslate"><span class="pre">vopa</span></code>) are also nodes that can have value and/or volatility parents.</p>
+<p>The node structure consists of nodes embedding other nodes hierarchically (i.e. here tuples containing other tuples). A generalization of the “standard” Hierarchical Gaussian Filter is any hierarchical structure containing an arbitrary number of nodes, inputs and (linear or non-linear) transformation between nodes. The structure ends when a an orphean node is declared (a node that has no value and no volatility parents).</p>
+<p>Well-known special cases of such hierarchies are the 2-level and 3-level Hierarchical Gaussian Filters for binary of continuous inputs.</p>
 </section>
 <section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">#</a></h3>
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
 <p>Fitting a continuous 3 levels HGF model on a time series.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
 <span class="kn">from</span> <span class="nn">ghgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
@@ -455,9 +463,9 @@
 </section>
 </section>
 <section id="tutorials">
-<h2>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">#</a></h2>
+<h2>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this heading">#</a></h2>
 <p>You can find detailled introduction to different version of the Hierarchical Gaussian Filter applied to binary or continuous dataset in the following notebooks:</p>
-<table class="colwidths-auto table">
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Notebook</p></th>
 <th class="head"><p>Colab</p></th>
@@ -482,8 +490,8 @@
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="acknoledgements">
-<h1>Acknoledgements<a class="headerlink" href="#acknoledgements" title="Permalink to this headline">#</a></h1>
-<p>This implementation of the Hierarchical Gaussian Filter was largely inspired by the original <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">Matlab implementation</a>. A Julia implementation can be found <a class="reference external" href="https://github.com/ilabcode/HGF.jl">here</a>.</p>
+<h1>Acknoledgements<a class="headerlink" href="#acknoledgements" title="Permalink to this heading">#</a></h1>
+<p>This implementation of the Hierarchical Gaussian Filter was largely inspired by the original <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">Matlab version</a>. A Julia implementation is also available <a class="reference external" href="https://github.com/ilabcode/HGF.jl">here</a>.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -627,7 +635,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
 
   </div>
