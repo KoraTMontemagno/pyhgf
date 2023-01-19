@@ -410,16 +410,8 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an example dataset using inverted copies of the original time series</span>
 <span class="n">timeserie</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
-<span class="n">time</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">timeserie</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
-<span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="n">timeserie</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">100</span><span class="p">:</span><span class="n">i</span><span class="o">*</span><span class="mi">100</span><span class="o">+</span><span class="mi">100</span><span class="p">],</span> 
-            <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">timeserie</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">100</span><span class="p">:</span><span class="n">i</span><span class="o">*</span><span class="mi">100</span><span class="o">+</span><span class="mi">100</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-        <span class="p">]</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">timeserie</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">100</span><span class="p">:</span><span class="n">i</span><span class="o">*</span><span class="mi">100</span><span class="o">+</span><span class="mi">100</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)]</span>
 </pre></div>
 </div>
 </div>
@@ -438,7 +430,7 @@
     <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">kappa_1</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="n">bias</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span>
+    <span class="n">input_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span>
     <span class="n">model_type</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
     <span class="n">n_levels</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
     <span class="n">response_function</span> <span class="o">=</span> <span class="kc">None</span>
@@ -460,7 +452,7 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -549,9 +541,9 @@
 </div><div class="output text_html">
     <div>
       <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:46&lt;00:00 Sampling 4 chains, 0 divergences]
+      100.00% [8000/8000 00:55&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 48 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 56 seconds.
 </pre></div>
 </div>
 </div>
@@ -569,7 +561,7 @@
         &lt;AxesSubplot: title={&#39;center&#39;: &#39;mu_1&#39;}&gt;]], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/fab14638140d466075ec4e97f6f8bac62be801c63967a040071c434618f7ee50.png" src="../_images/fab14638140d466075ec4e97f6f8bac62be801c63967a040071c434618f7ee50.png" />
+<img alt="../_images/50076d44d166a07dc9b15060f1e6b15c8d290a93f74723bd3e2261301d589729.png" src="../_images/50076d44d166a07dc9b15060f1e6b15c8d290a93f74723bd3e2261301d589729.png" />
 </div>
 </div>
 </section>

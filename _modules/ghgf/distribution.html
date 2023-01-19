@@ -408,11 +408,12 @@
     <span class="n">mu_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">kappa_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">bias</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="n">response_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
     <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the log probability from the HGF model given the data and parameters.</span>
 
@@ -436,18 +437,28 @@
 <span class="sd">        using `add_nodes()`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># number of models</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
     
     <span class="c1"># Broadcast inputs to an array with length n&gt;=1</span>
     <span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_input</span><span class="p">,</span> <span class="n">rho_1</span><span class="p">,</span> <span class="n">rho_2</span><span class="p">,</span> <span class="n">pi_1</span><span class="p">,</span> <span class="n">pi_2</span><span class="p">,</span> <span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span><span class="p">,</span> \
         <span class="n">kappa_1</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
             <span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_input</span><span class="p">,</span> <span class="n">rho_1</span><span class="p">,</span> <span class="n">rho_2</span><span class="p">,</span> 
-            <span class="n">pi_1</span><span class="p">,</span> <span class="n">pi_2</span><span class="p">,</span> <span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span><span class="p">,</span> <span class="n">kappa_1</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)])</span>
+            <span class="n">pi_1</span><span class="p">,</span> <span class="n">pi_2</span><span class="p">,</span> <span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span><span class="p">,</span> <span class="n">kappa_1</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="p">)</span>
+    
+    <span class="c1"># if no time vecors provided, set it to None (will defaults to integers vectors)</span>
+    <span class="c1"># otherwise check consistency with the input data</span>
+    <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span>
     
     <span class="n">surprise</span> <span class="o">=</span> <span class="mf">0.0</span>
 
     <span class="c1"># Fitting n HGF models to the n datasets</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
 
         <span class="c1"># Format HGF parameters</span>
         <span class="n">initial_mu</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">mu_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">mu_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
@@ -472,7 +483,7 @@
                 <span class="n">pihat</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="o">.</span><span class="n">surprise</span><span class="p">(</span>
                 <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
                 <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
@@ -486,7 +497,8 @@
 <div class="viewcode-block" id="HGFLogpGradOp"><a class="viewcode-back" href="../../generated/ghgf.distribution/ghgf.distribution.HGFLogpGradOp.html#ghgf.distribution.HGFLogpGradOp">[docs]</a><span class="k">class</span> <span class="nc">HGFLogpGradOp</span><span class="p">(</span><span class="n">Op</span><span class="p">):</span>
 <div class="viewcode-block" id="HGFLogpGradOp.__init__"><a class="viewcode-back" href="../../generated/ghgf.distribution/ghgf.distribution.HGFLogpGradOp.html#ghgf.distribution.HGFLogpGradOp.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continous&quot;</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -498,7 +510,8 @@
                 <span class="n">Partial</span><span class="p">(</span>
                     <span class="n">hgf_logp</span><span class="p">,</span>
                     <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
-                    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                    <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
+                    <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
                     <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
                     <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
                     <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
@@ -572,7 +585,7 @@
 
 
 <div class="viewcode-block" id="HGFDistribution"><a class="viewcode-back" href="../../generated/ghgf.distribution/ghgf.distribution.HGFDistribution.html#ghgf.distribution.HGFDistribution">[docs]</a><span class="k">class</span> <span class="nc">HGFDistribution</span><span class="p">(</span><span class="n">Op</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The HGF distribution to be used in the context of a PyMC 4.0 model.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The HGF distribution PyMC &gt;= 5.0 compatible.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -589,15 +602,12 @@
 
 <span class="sd">    Create the data (value and time vectors)</span>
 <span class="sd">    &gt;&gt;&gt; timeserie = load_data(&quot;continuous&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; input_data = np.array(</span>
-<span class="sd">    &gt;&gt;&gt;     [timeserie, np.arange(1, len(timeserie) + 1, dtype=float)]</span>
-<span class="sd">    &gt;&gt;&gt; ).T</span>
 
 <span class="sd">    We create the PyMC distribution here, specifying the type of model and response </span>
 <span class="sd">    function we want to use (i.e simple gaussian surprise).</span>
 <span class="sd">    &gt;&gt;&gt; hgf_logp_op = HGFDistribution(</span>
 <span class="sd">    &gt;&gt;&gt;     n_levels=2,</span>
-<span class="sd">    &gt;&gt;&gt;     data=input_data,</span>
+<span class="sd">    &gt;&gt;&gt;     input_data=timeserie,</span>
 <span class="sd">    &gt;&gt;&gt;     response_function=gaussian_surprise,</span>
 <span class="sd">    &gt;&gt;&gt; )</span>
 
@@ -618,7 +628,7 @@
 <span class="sd">    &gt;&gt;&gt;             rho_2=0.0,</span>
 <span class="sd">    &gt;&gt;&gt;             pi_1=1e4,</span>
 <span class="sd">    &gt;&gt;&gt;             pi_2=1e1,</span>
-<span class="sd">    &gt;&gt;&gt;             mu_1=input_data[0, 0],</span>
+<span class="sd">    &gt;&gt;&gt;             mu_1=timeserie[0],</span>
 <span class="sd">    &gt;&gt;&gt;             mu_2=0.0,</span>
 <span class="sd">    &gt;&gt;&gt;             kappa_1=1.0,</span>
 <span class="sd">    &gt;&gt;&gt;             bias=0.0,</span>
@@ -639,7 +649,8 @@
 
 <div class="viewcode-block" id="HGFDistribution.__init__"><a class="viewcode-back" href="../../generated/ghgf.distribution/ghgf.distribution.HGFDistribution.html#ghgf.distribution.HGFDistribution.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -649,7 +660,8 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        data : DeviceArray</span>
+<span class="sd">        data : list</span>
+<span class="sd">        time : list</span>
 <span class="sd">        model_type : str</span>
 <span class="sd">        n_levels : int</span>
 <span class="sd">        response_function : callable (optional)</span>
@@ -661,7 +673,8 @@
             <span class="n">Partial</span><span class="p">(</span>
                 <span class="n">hgf_logp</span><span class="p">,</span>
                 <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
                 <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
                 <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
                 <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
@@ -670,7 +683,8 @@
 
         <span class="c1"># The gradient function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hgf_logp_grad_op</span> <span class="o">=</span> <span class="n">HGFLogpGradOp</span><span class="p">(</span>
-            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
+            <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
             <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
             <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
             <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
