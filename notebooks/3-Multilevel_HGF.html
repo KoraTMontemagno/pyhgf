@@ -408,7 +408,7 @@
 <p>Estimating group-level parameters in the context of a graphical probabilistic model require to fit multiple models at the same time, either on different input data, or on the same data with different parameters, or on different datasets with different parameters. This steps is handled natively both by the <code class="docutils literal notranslate"><span class="pre">:py:class:ghgf.distribution.hgf_logp</span></code> class and the <code class="docutils literal notranslate"><span class="pre">:py:class:ghgf.distribution.HGFDistribution</span></code> class through automated <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an example dataset using inverted copies of the original time series</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an example dataset using slice copies of the original currencies exchange rate time series</span>
 <span class="n">timeserie</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">timeserie</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">100</span><span class="p">:</span><span class="n">i</span><span class="o">*</span><span class="mi">100</span><span class="o">+</span><span class="mi">100</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)]</span>
@@ -541,9 +541,9 @@
 </div><div class="output text_html">
     <div>
       <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:55&lt;00:00 Sampling 4 chains, 0 divergences]
+      100.00% [8000/8000 00:47&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 56 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 47 seconds.
 </pre></div>
 </div>
 </div>
@@ -561,7 +561,7 @@
         &lt;AxesSubplot: title={&#39;center&#39;: &#39;mu_1&#39;}&gt;]], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/50076d44d166a07dc9b15060f1e6b15c8d290a93f74723bd3e2261301d589729.png" src="../_images/50076d44d166a07dc9b15060f1e6b15c8d290a93f74723bd3e2261301d589729.png" />
+<img alt="../_images/d794665b31162cced1aa69f5128b07108cad85d3d069e4f757443cb833816b23.png" src="../_images/d794665b31162cced1aa69f5128b07108cad85d3d069e4f757443cb833816b23.png" />
 </div>
 </div>
 </section>
