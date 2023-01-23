@@ -384,14 +384,14 @@
   <h1>Source code for ghgf.distribution</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cfin.au.dk&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">pytensor.tensor</span> <span class="k">as</span> <span class="nn">pt</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pytensor.graph</span> <span class="kn">import</span> <span class="n">Apply</span><span class="p">,</span> <span class="n">Op</span>
+<span class="kn">import</span> <span class="nn">pytensor.tensor</span> <span class="k">as</span> <span class="nn">pt</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">grad</span><span class="p">,</span> <span class="n">jit</span>
 <span class="kn">from</span> <span class="nn">jax.tree_util</span> <span class="kn">import</span> <span class="n">Partial</span>
+<span class="kn">from</span> <span class="nn">pytensor.graph</span> <span class="kn">import</span> <span class="n">Apply</span><span class="p">,</span> <span class="n">Op</span>
 
 <span class="kn">from</span> <span class="nn">ghgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 
@@ -399,14 +399,19 @@
 <div class="viewcode-block" id="hgf_logp"><a class="viewcode-back" href="../../generated/ghgf.distribution/ghgf.distribution.hgf_logp.html#ghgf.distribution.hgf_logp">[docs]</a><span class="k">def</span> <span class="nf">hgf_logp</span><span class="p">(</span>
     <span class="n">omega_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">omega_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">omega_3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">omega_input</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">rho_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">rho_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">rho_3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">pi_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">pi_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">pi_3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">mu_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">mu_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">mu_3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">kappa_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">kappa_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">bias</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="n">response_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
@@ -428,7 +433,7 @@
 <span class="sd">    response_function : callable</span>
 <span class="sd">        The response function to use to compute the model surprise.</span>
 <span class="sd">    response_function_parameters : tuple</span>
-<span class="sd">        Additional parameters to the response function.    </span>
+<span class="sd">        Additional parameters to the response function.</span>
 <span class="sd">    model_type : str</span>
 <span class="sd">        The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
 <span class="sd">    n_levels : int</span>
@@ -440,32 +445,76 @@
 
     <span class="c1"># number of models</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
-    
+
     <span class="c1"># Broadcast inputs to an array with length n&gt;=1</span>
-    <span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_input</span><span class="p">,</span> <span class="n">rho_1</span><span class="p">,</span> <span class="n">rho_2</span><span class="p">,</span> <span class="n">pi_1</span><span class="p">,</span> <span class="n">pi_2</span><span class="p">,</span> <span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span><span class="p">,</span> \
-        <span class="n">kappa_1</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_input</span><span class="p">,</span> <span class="n">rho_1</span><span class="p">,</span> <span class="n">rho_2</span><span class="p">,</span> 
-            <span class="n">pi_1</span><span class="p">,</span> <span class="n">pi_2</span><span class="p">,</span> <span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span><span class="p">,</span> <span class="n">kappa_1</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-            <span class="p">)</span>
-    
+    <span class="p">(</span>
+        <span class="n">omega_1</span><span class="p">,</span>
+        <span class="n">omega_2</span><span class="p">,</span>
+        <span class="n">omega_3</span><span class="p">,</span>
+        <span class="n">omega_input</span><span class="p">,</span>
+        <span class="n">rho_1</span><span class="p">,</span>
+        <span class="n">rho_2</span><span class="p">,</span>
+        <span class="n">rho_3</span><span class="p">,</span>
+        <span class="n">pi_1</span><span class="p">,</span>
+        <span class="n">pi_2</span><span class="p">,</span>
+        <span class="n">pi_3</span><span class="p">,</span>
+        <span class="n">mu_1</span><span class="p">,</span>
+        <span class="n">mu_2</span><span class="p">,</span>
+        <span class="n">mu_3</span><span class="p">,</span>
+        <span class="n">kappa_1</span><span class="p">,</span>
+        <span class="n">kappa_2</span><span class="p">,</span>
+        <span class="n">bias</span><span class="p">,</span>
+        <span class="n">_</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span>
+        <span class="n">omega_1</span><span class="p">,</span>
+        <span class="n">omega_2</span><span class="p">,</span>
+        <span class="n">omega_3</span><span class="p">,</span>
+        <span class="n">omega_input</span><span class="p">,</span>
+        <span class="n">rho_1</span><span class="p">,</span>
+        <span class="n">rho_2</span><span class="p">,</span>
+        <span class="n">rho_3</span><span class="p">,</span>
+        <span class="n">pi_1</span><span class="p">,</span>
+        <span class="n">pi_2</span><span class="p">,</span>
+        <span class="n">pi_3</span><span class="p">,</span>
+        <span class="n">mu_1</span><span class="p">,</span>
+        <span class="n">mu_2</span><span class="p">,</span>
+        <span class="n">mu_3</span><span class="p">,</span>
+        <span class="n">kappa_1</span><span class="p">,</span>
+        <span class="n">kappa_2</span><span class="p">,</span>
+        <span class="n">bias</span><span class="p">,</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+    <span class="p">)</span>
+
     <span class="c1"># if no time vecors provided, set it to None (will defaults to integers vectors)</span>
     <span class="c1"># otherwise check consistency with the input data</span>
     <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">time</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span>
-    
+
     <span class="n">surprise</span> <span class="o">=</span> <span class="mf">0.0</span>
 
     <span class="c1"># Fitting n HGF models to the n datasets</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
 
         <span class="c1"># Format HGF parameters</span>
-        <span class="n">initial_mu</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">mu_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">mu_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
-        <span class="n">initial_pi</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">pi_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">pi_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
-        <span class="n">omega</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">omega_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">omega_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
-        <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">rho_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">rho_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
-        <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">kappa_1</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+        <span class="n">initial_mu</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">mu_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">mu_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">mu_3</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">initial_pi</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">pi_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">pi_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">pi_3</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">omega</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">omega_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">omega_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">omega_3</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">rho_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">rho_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">rho_3</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+        <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">kappa_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">kappa_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
 
         <span class="n">surprise</span> <span class="o">=</span> <span class="n">surprise</span> <span class="o">+</span> <span class="p">(</span>
             <span class="n">HGF</span><span class="p">(</span>
@@ -516,7 +565,7 @@
                     <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
                     <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
                 <span class="p">),</span>
-                <span class="n">argnums</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+                <span class="n">argnums</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
 
@@ -524,14 +573,19 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">omega_1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">),</span>
         <span class="n">omega_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">),</span>
+        <span class="n">omega_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">omega_input</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">),</span>
         <span class="n">rho_1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">rho_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">rho_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">pi_1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1e4</span><span class="p">),</span>
         <span class="n">pi_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1e1</span><span class="p">),</span>
+        <span class="n">pi_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">mu_1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">mu_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">mu_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">kappa_1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">kappa_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">bias</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
     <span class="p">):</span>
 
@@ -539,14 +593,19 @@
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_2</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_3</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_input</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_2</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_3</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">pi_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">pi_2</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">pi_3</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">mu_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">mu_2</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">mu_3</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">kappa_1</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">kappa_2</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">bias</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="c1"># This `Op` will return one gradient per input. For simplicity, we assume</span>
@@ -560,28 +619,38 @@
         <span class="p">(</span>
             <span class="n">grad_omega_1</span><span class="p">,</span>
             <span class="n">grad_omega_2</span><span class="p">,</span>
+            <span class="n">grad_omega_3</span><span class="p">,</span>
             <span class="n">grad_omega_input</span><span class="p">,</span>
             <span class="n">grad_rho_1</span><span class="p">,</span>
             <span class="n">grad_rho_2</span><span class="p">,</span>
+            <span class="n">grad_rho_3</span><span class="p">,</span>
             <span class="n">grad_pi_1</span><span class="p">,</span>
             <span class="n">grad_pi_2</span><span class="p">,</span>
+            <span class="n">grad_pi_3</span><span class="p">,</span>
             <span class="n">grad_mu_1</span><span class="p">,</span>
             <span class="n">grad_mu_2</span><span class="p">,</span>
+            <span class="n">grad_mu_3</span><span class="p">,</span>
             <span class="n">grad_kappa_1</span><span class="p">,</span>
+            <span class="n">grad_kappa_2</span><span class="p">,</span>
             <span class="n">grad_bias</span><span class="p">,</span>
         <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad_logp</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
 
         <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_omega_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">outputs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_omega_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_omega_input</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_rho_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_rho_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_pi_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_pi_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_mu_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_mu_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">9</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_kappa_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">10</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_bias</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_omega_3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_omega_input</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_rho_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_rho_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_rho_3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_pi_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_pi_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">9</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_pi_3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">10</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_mu_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">11</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_mu_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">12</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_mu_3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">13</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_kappa_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">14</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_kappa_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">15</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_bias</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="HGFDistribution"><a class="viewcode-back" href="../../generated/ghgf.distribution/ghgf.distribution.HGFDistribution.html#ghgf.distribution.HGFDistribution">[docs]</a><span class="k">class</span> <span class="nc">HGFDistribution</span><span class="p">(</span><span class="n">Op</span><span class="p">):</span>
@@ -603,7 +672,7 @@
 <span class="sd">    Create the data (value and time vectors)</span>
 <span class="sd">    &gt;&gt;&gt; timeserie = load_data(&quot;continuous&quot;)</span>
 
-<span class="sd">    We create the PyMC distribution here, specifying the type of model and response </span>
+<span class="sd">    We create the PyMC distribution here, specifying the type of model and response</span>
 <span class="sd">    function we want to use (i.e simple gaussian surprise).</span>
 <span class="sd">    &gt;&gt;&gt; hgf_logp_op = HGFDistribution(</span>
 <span class="sd">    &gt;&gt;&gt;     n_levels=2,</span>
@@ -660,7 +729,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        data : list</span>
+<span class="sd">        input_data : list</span>
 <span class="sd">        time : list</span>
 <span class="sd">        model_type : str</span>
 <span class="sd">        n_levels : int</span>
@@ -695,14 +764,19 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">omega_1</span><span class="p">,</span>
         <span class="n">omega_2</span><span class="p">,</span>
+        <span class="n">omega_3</span><span class="p">,</span>
         <span class="n">omega_input</span><span class="p">,</span>
         <span class="n">rho_1</span><span class="p">,</span>
         <span class="n">rho_2</span><span class="p">,</span>
+        <span class="n">rho_3</span><span class="p">,</span>
         <span class="n">pi_1</span><span class="p">,</span>
         <span class="n">pi_2</span><span class="p">,</span>
+        <span class="n">pi_3</span><span class="p">,</span>
         <span class="n">mu_1</span><span class="p">,</span>
         <span class="n">mu_2</span><span class="p">,</span>
+        <span class="n">mu_3</span><span class="p">,</span>
         <span class="n">kappa_1</span><span class="p">,</span>
+        <span class="n">kappa_2</span><span class="p">,</span>
         <span class="n">bias</span><span class="p">,</span>
     <span class="p">):</span>
 
@@ -710,14 +784,19 @@
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_2</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_3</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_input</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_2</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_3</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">pi_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">pi_2</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">pi_3</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">mu_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">mu_2</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">mu_3</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">kappa_1</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">kappa_2</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">bias</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="c1"># Define the type of the output returned by the wrapped JAX function</span>
@@ -732,14 +811,19 @@
         <span class="p">(</span>
             <span class="n">grad_omega_1</span><span class="p">,</span>
             <span class="n">grad_omega_2</span><span class="p">,</span>
+            <span class="n">grad_omega_3</span><span class="p">,</span>
             <span class="n">grad_omega_input</span><span class="p">,</span>
             <span class="n">grad_rho_1</span><span class="p">,</span>
             <span class="n">grad_rho_2</span><span class="p">,</span>
+            <span class="n">grad_rho_3</span><span class="p">,</span>
             <span class="n">grad_pi_1</span><span class="p">,</span>
             <span class="n">grad_pi_2</span><span class="p">,</span>
+            <span class="n">grad_pi_3</span><span class="p">,</span>
             <span class="n">grad_mu_1</span><span class="p">,</span>
             <span class="n">grad_mu_2</span><span class="p">,</span>
+            <span class="n">grad_mu_3</span><span class="p">,</span>
             <span class="n">grad_kappa_1</span><span class="p">,</span>
+            <span class="n">grad_kappa_2</span><span class="p">,</span>
             <span class="n">grad_bias</span><span class="p">,</span>
         <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hgf_logp_grad_op</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
         <span class="c1"># If there are inputs for which the gradients will never be needed or cannot</span>
@@ -749,14 +833,19 @@
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_omega_1</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_omega_2</span><span class="p">,</span>
+            <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_omega_3</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_omega_input</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_rho_1</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_rho_2</span><span class="p">,</span>
+            <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_rho_3</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_pi_1</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_pi_2</span><span class="p">,</span>
+            <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_pi_3</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_mu_1</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_mu_2</span><span class="p">,</span>
+            <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_mu_3</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_kappa_1</span><span class="p">,</span>
+            <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_kappa_2</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_bias</span><span class="p">,</span>
         <span class="p">]</span></div>
 </pre></div>

@@ -414,10 +414,12 @@
     x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)} + \alpha_{4,2} x_4^{(k)}, \, \exp(\kappa_2 x_3^{(k)} + \omega_2)).
 \]</div>
 <p>In other words, any given state in the world can be modelled as having a volatility parent state, a value parent state, or both, or none (in which case it evolves as a Gaussian random walk around its previous value with fixed step size). Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
-<p><img alt="Figure1" src="_images/genmod.svg" />
-<em>An example of a generative model of sensory inputs with six hidden states. Volatility coupling is depicted with dashed lines, value coupling with straight lines.</em></p>
-<p>In <span class="xref myst">Figure 1</span> we have drawn an example setup with six different environmental states and one outcome. Here, we have denoted states that function as value parents for other states as <span class="math notranslate nohighlight">\(x_i\)</span>, and states that function as volatility parents as <span class="math notranslate nohighlight">\(\check{x}_i\)</span>. Volatility coupling is depicted by curvy arrows, value coupling by straight arrows, and observable outcomes are linked to their hidden states via double arrows.</p>
-<p>For the example illustrated in <span class="xref myst">Figure 1</span> the following equations describe the generative model:</p>
+<p>:::{figure-md} fig1
+<img src="./images/genmod.svg" alt="fishy" class="bg-primary mb-1"></p>
+<p>An example of a generative model of sensory inputs with six hidden states. Volatility coupling is depicted with dashed lines, value coupling with straight lines.
+:::</p>
+<p>In <span class="xref myst"></span> we have drawn an example setup with six different environmental states and one outcome. Here, we have denoted states that function as value parents for other states as <span class="math notranslate nohighlight">\(x_i\)</span>, and states that function as volatility parents as <span class="math notranslate nohighlight">\(\check{x}_i\)</span>. Volatility coupling is depicted by curvy arrows, value coupling by straight arrows, and observable outcomes are linked to their hidden states via double arrows.</p>
+<p>For the example illustrated in <span class="xref myst"></span> the following equations describe the generative model:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align}

@@ -466,7 +466,7 @@ one or many parameter-s probability density with MCMC sampling.</p>
 </div>
 <p>Create the data (value and time vectors)
 &gt;&gt;&gt; timeserie = load_data(“continuous”)</p>
-<p>We create the PyMC distribution here, specifying the type of model and response 
+<p>We create the PyMC distribution here, specifying the type of model and response
 function we want to use (i.e simple gaussian surprise).
 &gt;&gt;&gt; hgf_logp_op = HGFDistribution(
 &gt;&gt;&gt;     n_levels=2,
@@ -511,7 +511,7 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>data</strong><span class="classifier">list</span></dt><dd></dd>
+<dt><strong>input_data</strong><span class="classifier">list</span></dt><dd></dd>
 <dt><strong>time</strong><span class="classifier">list</span></dt><dd></dd>
 <dt><strong>model_type</strong><span class="classifier">str</span></dt><dd></dd>
 <dt><strong>n_levels</strong><span class="classifier">int</span></dt><dd></dd>
@@ -550,7 +550,7 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad</span></code>(inputs, output_gradients)</p></td>
 <td><p>Construct a graph for the gradient with respect to each input variable.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_node</span></code>(omega_1, omega_2, omega_input, ...)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_node</span></code>(omega_1, omega_2, omega_3, ...)</p></td>
 <td><p>Construct an <cite>Apply</cite> node that represent the application of this operation to the given inputs.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_py_thunk</span></code>(node, storage_map, ...[, debug])</p></td>
