@@ -400,8 +400,10 @@
     <span class="n">old_time</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">],</span>
     <span class="n">new_time</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeType</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the value and volatility parents of a continuous node. If the parents have</span>
-<span class="sd">    value and/or volatility parents, they will be updated recursively.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the value and volatility parents of a continuous node.</span>
+<span class="sd">    </span>
+<span class="sd">    If the parents have value and/or volatility parents, they will be updated</span>
+<span class="sd">    recursively.</span>
 
 <span class="sd">    Updating the node&#39;s parents is a two step process:</span>
 <span class="sd">        1. Update value parent(s) and their parents (if provided).</span>
@@ -440,7 +442,7 @@
 <span class="sd">    new_time : DeviceArray</span>
 <span class="sd">        The previous time stamp.</span>
 
-<span class="sd">    See also</span>
+<span class="sd">    See Also</span>
 <span class="sd">    --------</span>
 <span class="sd">    update_continuous_input_parents, update_binary_input_parents</span>
 
@@ -626,8 +628,7 @@
     <span class="n">new_time</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span>
     <span class="n">old_time</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">DeviceArray</span><span class="p">,</span> <span class="n">NodeType</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure given one value for a time interval and return</span>
-<span class="sd">    gaussian surprise.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure.</span>
 
 <span class="sd">    This function is the entry level of the model fitting. It update the partents of</span>
 <span class="sd">    the input node and then call py:func:`ghgf.jax.continuous_node_update` recursively</span>
@@ -653,7 +654,7 @@
 <span class="sd">    new_input_node : tuple</span>
 <span class="sd">        The input node structure after recursively updating all the nodes.</span>
 
-<span class="sd">    See also</span>
+<span class="sd">    See Also</span>
 <span class="sd">    --------</span>
 <span class="sd">    continuous_node_update, update_binary_input_parents</span>
 
@@ -866,8 +867,10 @@
 
 <div class="viewcode-block" id="loop_continuous_inputs"><a class="viewcode-back" href="../../generated/ghgf.continuous/ghgf.continuous.loop_continuous_inputs.html#ghgf.continuous.loop_continuous_inputs">[docs]</a><span class="nd">@jit</span>
 <span class="k">def</span> <span class="nf">loop_continuous_inputs</span><span class="p">(</span><span class="n">res</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">el</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The HGF function to be scanned by JAX. One time step updating node structure and</span>
-<span class="sd">    returning the new node structure with time, value and surprise.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the node structure after observing one new data point.</span>
+<span class="sd">    </span>
+<span class="sd">    One time step updating node structure and returning the new node structure with</span>
+<span class="sd">    time, value and surprise.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -880,7 +883,6 @@
 <span class="sd">        and values (i.e. the input time series).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c1"># Extract the current iteration variables values and time</span>
     <span class="n">value</span><span class="p">,</span> <span class="n">new_time</span> <span class="o">=</span> <span class="n">el</span>
 

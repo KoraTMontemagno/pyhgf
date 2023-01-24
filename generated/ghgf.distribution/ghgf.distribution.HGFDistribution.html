@@ -508,15 +508,29 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="ghgf.distribution.HGFDistribution.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'continuous'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_levels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_function_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ghgf/distribution.html#HGFDistribution.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ghgf.distribution.HGFDistribution.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Distribution initialization.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>input_data</strong><span class="classifier">list</span></dt><dd></dd>
-<dt><strong>time</strong><span class="classifier">list</span></dt><dd></dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd></dd>
-<dt><strong>n_levels</strong><span class="classifier">int</span></dt><dd></dd>
-<dt><strong>response_function</strong><span class="classifier">callable (optional)</span></dt><dd></dd>
-<dt><strong>response_function_parameters</strong><span class="classifier">Tuple</span></dt><dd></dd>
+<dt><strong>input_data</strong><span class="classifier">list</span></dt><dd><p>List of input data. When <cite>n</cite> models should be fitted, the list contains <cite>n</cite>
+1d Numpy arrays. By default, the associated time vector is the integers
+vector starting at <cite>0</cite>. A different time vector can be passed to the <cite>time</cite>
+argument.</p>
+</dd>
+<dt><strong>time</strong><span class="classifier">list | optional</span></dt><dd><p>List of 1d Numpy arrays containing the time vectors for each input time
+series. If one of the list item is <cite>None</cite>, or if <cite>None</cite> is provided instead,
+the time vector will defaults to integers vector starting at 0.</p>
+</dd>
+<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be “continuous” or “binary”).</p>
+</dd>
+<dt><strong>n_levels</strong><span class="classifier">int</span></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
+<cite>None</cite>, the nodes hierarchy is not created and might be provided afterward
+using <cite>add_nodes()</cite>.</p>
+</dd>
+<dt><strong>response_function</strong><span class="classifier">callable</span></dt><dd><p>The response function to use to compute the model surprise.</p>
+</dd>
+<dt><strong>response_function_parameters</strong><span class="classifier">tuple</span></dt><dd><p>Additional parameters to the response function.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -532,11 +546,7 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <td><p>Construct a graph for the R-operator.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ghgf.distribution.HGFDistribution.__init__" title="ghgf.distribution.HGFDistribution.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([input_data, time, model_type, ...])</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-</p></td>
+<td><p>Distribution initialization.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_tag_trace</span></code>(thing[, user_line])</p></td>
 <td><p>Add tag.trace to a node or variable.</p></td>
@@ -548,10 +558,10 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <td><p>Try to get parameters for the <cite>Op</cite> when <code class="xref py py-attr docutils literal notranslate"><span class="pre">Op.params_type</span></code> is set to a <cite>ParamsType</cite>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad</span></code>(inputs, output_gradients)</p></td>
-<td><p>Construct a graph for the gradient with respect to each input variable.</p></td>
+<td><p>Gradient of the function.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_node</span></code>(omega_1, omega_2, omega_3, ...)</p></td>
-<td><p>Construct an <cite>Apply</cite> node that represent the application of this operation to the given inputs.</p></td>
+<td><p>Convert inputs to symbolic variables.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_py_thunk</span></code>(node, storage_map, ...[, debug])</p></td>
 <td><p>Make a Python thunk.</p></td>
@@ -560,7 +570,7 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <td><p>Create a thunk.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">perform</span></code>(node, inputs, outputs)</p></td>
-<td><p>Calculate the function on the inputs and put the variables in the output storage.</p></td>
+<td><p>Run the function forward.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_node</span></code>(node, storage_map, compute_map, ...)</p></td>
 <td><p>Make any special modifications that the <cite>Op</cite> needs before doing <code class="xref py py-meth docutils literal notranslate"><span class="pre">Op.make_thunk()</span></code>.</p></td>

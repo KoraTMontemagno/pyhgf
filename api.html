@@ -412,19 +412,19 @@
 <td><p>Update the value and volatility parents of a binary node.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.binary_input_update.html#ghgf.binary.binary_input_update" title="ghgf.binary.binary_input_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_input_update</span></code></a>(input_node, value, ...)</p></td>
-<td><p>Update the input node structure given one value for a time interval and return gaussian surprise.</p></td>
+<td><p>Update the input node structure given one observation.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.gaussian_density.html#ghgf.binary.gaussian_density" title="ghgf.binary.gaussian_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_density</span></code></a>(x, mu, pi)</p></td>
-<td><p>The Gaussian density as defined by mean and precision.</p></td>
+<td><p>Gaussian density as defined by mean and precision.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.sgm.html#ghgf.binary.sgm" title="ghgf.binary.sgm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgm</span></code></a>(x[, lower_bound, upper_bound])</p></td>
-<td><p>The logistic sigmoid function</p></td>
+<td><p>Logistic sigmoid function.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.binary_surprise.html#ghgf.binary.binary_surprise" title="ghgf.binary.binary_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_surprise</span></code></a>(x, muhat)</p></td>
 <td><p>Surprise at a binary outcome.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.binary/ghgf.binary.loop_binary_inputs.html#ghgf.binary.loop_binary_inputs" title="ghgf.binary.loop_binary_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loop_binary_inputs</span></code></a>(res, el)</p></td>
-<td><p>The HGF function to be scanned by JAX.</p></td>
+<td><p>Add new observation and update the node structures.</p></td>
 </tr>
 </tbody>
 </table>
@@ -438,13 +438,13 @@
 <td><p>Update the value and volatility parents of a continuous node.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.continuous/ghgf.continuous.continuous_input_update.html#ghgf.continuous.continuous_input_update" title="ghgf.continuous.continuous_input_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">continuous_input_update</span></code></a>(input_node, value, ...)</p></td>
-<td><p>Update the input node structure given one value for a time interval and return gaussian surprise.</p></td>
+<td><p>Update the input node structure.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.continuous/ghgf.continuous.gaussian_surprise.html#ghgf.continuous.gaussian_surprise" title="ghgf.continuous.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(x, muhat, pihat)</p></td>
 <td><p>Surprise at an outcome under a Gaussian prediction.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.continuous/ghgf.continuous.loop_continuous_inputs.html#ghgf.continuous.loop_continuous_inputs" title="ghgf.continuous.loop_continuous_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loop_continuous_inputs</span></code></a>(res, el)</p></td>
-<td><p>The HGF function to be scanned by JAX.</p></td>
+<td><p>Update the node structure after observing one new data point.</p></td>
 </tr>
 </tbody>
 </table>
@@ -488,7 +488,7 @@ sampling.</p>
 <td><p>Compute the log probability from the HGF model given the data and parameters.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.distribution/ghgf.distribution.HGFLogpGradOp.html#ghgf.distribution.HGFLogpGradOp" title="ghgf.distribution.HGFLogpGradOp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGFLogpGradOp</span></code></a>([input_data, time, ...])</p></td>
-<td><p></p></td>
+<td><p>Gradient Op for the HGF distribution.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.distribution/ghgf.distribution.HGFDistribution.html#ghgf.distribution.HGFDistribution" title="ghgf.distribution.HGFDistribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGFDistribution</span></code></a>([input_data, time, ...])</p></td>
 <td><p>The HGF distribution PyMC &gt;= 5.0 compatible.</p></td>
@@ -503,10 +503,10 @@ least the HGF instance as input after observation and returning surprise.</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.response/ghgf.response.gaussian_surprise.html#ghgf.response.gaussian_surprise" title="ghgf.response.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(hgf_results, ...)</p></td>
-<td><p>The sum of the gaussian surprise along the time series (continuous HGF).</p></td>
+<td><p>Sum of the gaussian surprise along the time series (continuous HGF).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.response/ghgf.response.binary_surprise.html#ghgf.response.binary_surprise" title="ghgf.response.binary_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_surprise</span></code></a>(hgf_results, ...)</p></td>
-<td><p>The sum of the binary surprise along the time series (binary HGF).</p></td>
+<td><p>Sum of the binary surprise along the time series (binary HGF).</p></td>
 </tr>
 </tbody>
 </table>
@@ -517,7 +517,7 @@ least the HGF instance as input after observation and returning surprise.</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.typing/ghgf.typing.node_validation.html#ghgf.typing.node_validation" title="ghgf.typing.node_validation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_validation</span></code></a>(node)</p></td>
-<td><p>&quot;Verify that the node structure is valid.</p></td>
+<td><p>Verify that the node structure is valid.</p></td>
 </tr>
 </tbody>
 </table>
@@ -531,7 +531,7 @@ for testing.</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.Model.html#ghgf.python.Model" title="ghgf.python.Model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Model</span></code></a>()</p></td>
-<td><p>Generic HGF model</p></td>
+<td><p>Generic HGF model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.StandardHGF.html#ghgf.python.StandardHGF" title="ghgf.python.StandardHGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StandardHGF</span></code></a>([n_levels, process_type, ...])</p></td>
 <td><p>The standard n-level HGF for continuous inputs.</p></td>
@@ -540,13 +540,13 @@ for testing.</p>
 <td><p>The standard 3-level HGF for binary inputs.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.StateNode.html#ghgf.python.StateNode" title="ghgf.python.StateNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StateNode</span></code></a>(*, initial_mu, initial_pi[, rho, ...])</p></td>
-<td><p>HGF continuous state node</p></td>
+<td><p>HGF continuous state node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.BinaryNode.html#ghgf.python.BinaryNode" title="ghgf.python.BinaryNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinaryNode</span></code></a>()</p></td>
-<td><p>HGF binary state node</p></td>
+<td><p>HGF binary state node.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.InputNode.html#ghgf.python.InputNode" title="ghgf.python.InputNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InputNode</span></code></a>(*, omega)</p></td>
-<td><p>An HGF node that receives input on a continuous scale</p></td>
+<td><p>An HGF node that receives input on a continuous scale.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.BinaryInputNode.html#ghgf.python.BinaryInputNode" title="ghgf.python.BinaryInputNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinaryInputNode</span></code></a>(*[, pihat, eta0, eta1])</p></td>
 <td><p>An HGF node that receives binary input.</p></td>
@@ -555,25 +555,25 @@ for testing.</p>
 <td><p>Parameters of nodes.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.exp_shift_mirror.html#ghgf.python.exp_shift_mirror" title="ghgf.python.exp_shift_mirror"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exp_shift_mirror</span></code></a>(x, *[, lower_bound, ...])</p></td>
-<td><p>The (shifted and mirrored) exponential function</p></td>
+<td><p>Exponential function (shifted and mirrored).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.log_shift_mirror.html#ghgf.python.log_shift_mirror" title="ghgf.python.log_shift_mirror"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_shift_mirror</span></code></a>(x, *[, lower_bound, ...])</p></td>
-<td><p>The (shifted and mirrored) natural logarithm</p></td>
+<td><p>Natural logarithm (shifted and mirrored).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.sgm.html#ghgf.python.sgm" title="ghgf.python.sgm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgm</span></code></a>(x, *[, lower_bound, upper_bound])</p></td>
-<td><p>The logistic sigmoid function</p></td>
+<td><p>Logistic sigmoid function.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.logit.html#ghgf.python.logit" title="ghgf.python.logit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logit</span></code></a>(x, *[, lower_bound, upper_bound])</p></td>
-<td><p>The logistic function</p></td>
+<td><p>Logistic function.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.gaussian.html#ghgf.python.gaussian" title="ghgf.python.gaussian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian</span></code></a>(x, mu, pi)</p></td>
-<td><p>The Gaussian density as defined by mean and precision</p></td>
+<td><p>Gaussian density as defined by mean and precision.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.gaussian_surprise.html#ghgf.python.gaussian_surprise" title="ghgf.python.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(x, muhat, pihat)</p></td>
-<td><p>Surprise at an outcome under a Gaussian prediction</p></td>
+<td><p>Surprise at an outcome under a Gaussian prediction.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/ghgf.python/ghgf.python.binary_surprise.html#ghgf.python.binary_surprise" title="ghgf.python.binary_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_surprise</span></code></a>(x, muhat)</p></td>
-<td><p>Surprise at a binary outcome</p></td>
+<td><p>Surprise at a binary outcome.</p></td>
 </tr>
 </tbody>
 </table>

@@ -402,8 +402,10 @@
     <span class="n">old_time</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">],</span>
     <span class="n">new_time</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeType</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the value and volatility parents of a binary node. If the parents have</span>
-<span class="sd">    value and/or volatility parents, they will be updated recursively.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the value and volatility parents of a binary node.</span>
+<span class="sd">    </span>
+<span class="sd">    If the parents have value and/or volatility parents, they will be updated</span>
+<span class="sd">    recursively.</span>
 
 <span class="sd">    Updating the node&#39;s parents is a two step process:</span>
 <span class="sd">        1. Update value parent(s) and their parents (if provided).</span>
@@ -431,7 +433,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    node_parameters : dict</span>
-<span class="sd">        The new node parameters containing the following keys:</span>
+<span class="sd">        The new node parameters. It contains the following keys:</span>
 <span class="sd">        `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;`.</span>
 <span class="sd">    value_parents : tuple | None</span>
 <span class="sd">        The new value parent (optional).</span>
@@ -560,8 +562,7 @@
     <span class="n">new_time</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span>
     <span class="n">old_time</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">DeviceArray</span><span class="p">,</span> <span class="n">NodeType</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure given one value for a time interval and return</span>
-<span class="sd">    gaussian surprise.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure given one observation.</span>
 
 <span class="sd">    This function is the entry level of the model fitting. It update the partents of</span>
 <span class="sd">    the input node and then call py:func:`ghgf.binary.binary_node_update` to update the</span>
@@ -587,7 +588,7 @@
 <span class="sd">    new_input_node : tuple</span>
 <span class="sd">        The input node structure after recursively updating all the nodes.</span>
 
-<span class="sd">    See also</span>
+<span class="sd">    See Also</span>
 <span class="sd">    --------</span>
 <span class="sd">    update_continuous_parents, update_continuous_input_parents</span>
 
@@ -692,7 +693,7 @@
 <div class="viewcode-block" id="gaussian_density"><a class="viewcode-back" href="../../generated/ghgf.binary/ghgf.binary.gaussian_density.html#ghgf.binary.gaussian_density">[docs]</a><span class="k">def</span> <span class="nf">gaussian_density</span><span class="p">(</span>
     <span class="n">x</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span> <span class="n">pi</span><span class="p">:</span> <span class="n">DeviceArray</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Gaussian density as defined by mean and precision.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gaussian density as defined by mean and precision.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">pi</span>
         <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
@@ -705,7 +706,7 @@
     <span class="n">lower_bound</span><span class="p">:</span> <span class="n">DeviceArray</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
     <span class="n">upper_bound</span><span class="p">:</span> <span class="n">DeviceArray</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The logistic sigmoid function&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logistic sigmoid function.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span> <span class="o">+</span> <span class="n">lower_bound</span></div>
 
 
@@ -734,7 +735,9 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
     <span class="n">Tuple</span><span class="p">[</span><span class="n">NodeType</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">]],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NodeType</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DeviceArray</span><span class="p">]]</span>
 <span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The HGF function to be scanned by JAX. One time step updating node structure and</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add new observation and update the node structures.</span>
+<span class="sd">    </span>
+<span class="sd">    The HGF function to be scanned by JAX. One time step updating node structure and</span>
 <span class="sd">    returning the new node structure with time, value and surprise.</span>
 
 <span class="sd">    Parameters</span>
@@ -748,7 +751,6 @@
 <span class="sd">        and values (i.e. the input time series).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c1"># Extract the current iteration variables values and time</span>
     <span class="n">value</span><span class="p">,</span> <span class="n">new_time</span> <span class="o">=</span> <span class="n">el</span>
 
@@ -771,8 +773,7 @@
 
 
 <span class="k">def</span> <span class="nf">input_surprise_inf</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Special case if pihat==inf, just pass the value through in the absence</span>
-<span class="sd">    of noise&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply special case if pihat is `jnp.inf` (just pass the value through).&quot;&quot;&quot;</span>
     <span class="p">(</span><span class="n">pihat</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">=</span> <span class="n">op</span>
     <span class="n">mu_va_pa</span> <span class="o">=</span> <span class="n">value</span>
     <span class="n">pi_va_pa</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span>
@@ -782,8 +783,7 @@
 
 
 <span class="k">def</span> <span class="nf">input_surprise_reg</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the surprise, mu_va_pa and pi_va_pa if pihat!=inf&quot;&quot;&quot;</span>
-
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the surprise, mu_va_pa and pi_va_pa if pihat is not `jnp.inf`.&quot;&quot;&quot;</span>
     <span class="p">(</span><span class="n">pihat</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">muhat_va_pa</span><span class="p">)</span> <span class="o">=</span> <span class="n">op</span>
 
     <span class="c1"># Likelihood under eta1</span>

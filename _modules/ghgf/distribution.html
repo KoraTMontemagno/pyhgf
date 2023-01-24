@@ -420,29 +420,82 @@
     <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the log probability from the HGF model given the data and parameters.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the log probability from the HGF model given the data and parameters.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    omega_1, omega_2, omega_3, rho_1, rho_2, rho_3, pi_1, pi_2, pi_3, mu_1, mu_2,</span>
-<span class="sd">    mu_3, kappa_1, kappa_2, bias : DeviceArray</span>
+<span class="sd">    omega_1 : float</span>
+<span class="sd">        The $\omega$ parameter, or *evolution rate*, at the first level of the HGF. This</span>
+<span class="sd">        parameter represents the tonic part of the variance (the part that is not</span>
+<span class="sd">        inherited from parents nodes). </span>
+<span class="sd">    omega_2 : float</span>
+<span class="sd">        The $\omega$ parameter, or *evolution rate*, at the second level of the HGF.</span>
+<span class="sd">        This parameter represents the tonic part of the variance (the part that is not</span>
+<span class="sd">        inherited from parents nodes).</span>
+<span class="sd">    omega_3 : float</span>
+<span class="sd">        The $\omega$ parameter, or *evolution rate*, at the third level of the HGF. This</span>
+<span class="sd">        parameter represents the tonic part of the variance (the part that is not</span>
+<span class="sd">        inherited from parents nodes). The value of this parameter will be ignored when</span>
+<span class="sd">        using a 2-levels HGF (`n_levels=2`).</span>
+<span class="sd">    omega_input : float</span>
+<span class="sd">        Represent the noise associated with the input observation.</span>
+<span class="sd">    rho_1 : float</span>
+<span class="sd">        The $\rho$ parameter at the first level of the HGF. This parameter represents</span>
+<span class="sd">        the drift of the random walk.</span>
+<span class="sd">    rho_2 : float</span>
+<span class="sd">        The $\rho$ parameter at the second level of the HGF. This parameter represents</span>
+<span class="sd">            the drift of the random walk.</span>
+<span class="sd">    rho_3 : float</span>
+<span class="sd">        The $\rho$ parameter at the first level of the HGF. This parameter represents</span>
+<span class="sd">        the drift of the random walk. The value of this parameter will be ignored when</span>
+<span class="sd">        using a 2-levels HGF (`n_levels=2`).</span>
+<span class="sd">    pi_1 : float</span>
+<span class="sd">        The $\pi$ parameter, or *precision*, at the first level of the HGF.</span>
+<span class="sd">    pi_2 : float</span>
+<span class="sd">        The $\pi$ parameter, or *precision*, at the second level of the HGF.</span>
+<span class="sd">    pi_3 : float</span>
+<span class="sd">        The $\pi$ parameter, or *precision*, at the third level of the HGF.The value of</span>
+<span class="sd">        this parameter will be ignored when using a 2-levels HGF (`n_levels=2`).</span>
+<span class="sd">    mu_1 : float</span>
+<span class="sd">        The $\mu$ parameter, or *mean*, at the first level of the HGF.</span>
+<span class="sd">    mu_2 : float</span>
+<span class="sd">        The $\mu$ parameter, or *mean*, at the second level of the HGF.</span>
+<span class="sd">    mu_3 : float</span>
+<span class="sd">        The $\mu$ parameter, or *mean*, at the third level of the HGF. The value of this</span>
+<span class="sd">        parameter will be ignored when using a 2-levels HGF (`n_levels=2`).</span>
+<span class="sd">    kappa_1 : float</span>
+<span class="sd">        The value of the $\kappa$ parameter at the first level of the HGF. Kappa</span>
+<span class="sd">        represents the phasic part of the variance (the part that is affected by the</span>
+<span class="sd">        parents nodes) and will defines the strenght of the connection between the node</span>
+<span class="sd">        and the parent node. Often fixed to `1`.   </span>
+<span class="sd">    kappa_2 : float</span>
+<span class="sd">        The value of the $\kappa$ parameter at the second level of the HGF. Kappa</span>
+<span class="sd">        represents the phasic part of the variance (the part that is affected by the</span>
+<span class="sd">        parents nodes) and will defines the strenght of the connection between the node</span>
+<span class="sd">        and the parent node. Often fixed to `1`. The value of this parameter will be</span>
+<span class="sd">        ignored when using a 2-levels HGF (`n_levels=2`).</span>
+<span class="sd">    bias : float</span>
 <span class="sd">        The HGD parameters (see py:class:`ghgf.model.HGF` for details).</span>
-<span class="sd">    data : list</span>
-<span class="sd">        List of input data. If `model_type` is `&quot;continuous&quot;`, the data should be two</span>
-<span class="sd">        times series (time and values).</span>
+<span class="sd">    input_data : list</span>
+<span class="sd">        List of input data. When `n` models should be fitted, the list contains `n` 1d</span>
+<span class="sd">        Numpy arrays. By default, the associated time vector is the integers vector</span>
+<span class="sd">        starting at `0`. A different time vector can be passed to the `time` argument.</span>
 <span class="sd">    response_function : callable</span>
 <span class="sd">        The response function to use to compute the model surprise.</span>
-<span class="sd">    response_function_parameters : tuple</span>
-<span class="sd">        Additional parameters to the response function.</span>
 <span class="sd">    model_type : str</span>
 <span class="sd">        The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
 <span class="sd">    n_levels : int</span>
 <span class="sd">        The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
 <span class="sd">        `None`, the nodes hierarchy is not created and might be provided afterward</span>
 <span class="sd">        using `add_nodes()`.</span>
+<span class="sd">    response_function_parameters : tuple</span>
+<span class="sd">        Additional parameters to the response function.</span>
+<span class="sd">    time : list | optional</span>
+<span class="sd">        List of 1d Numpy arrays containing the time vectors for each input time series.</span>
+<span class="sd">        If one of the list item is `None`, or if `None` is provided instead, the time</span>
+<span class="sd">        vector will defaults to integers vector starting at 0.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c1"># number of models</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
 
@@ -544,6 +597,8 @@
 
 
 <div class="viewcode-block" id="HGFLogpGradOp"><a class="viewcode-back" href="../../generated/ghgf.distribution/ghgf.distribution.HGFLogpGradOp.html#ghgf.distribution.HGFLogpGradOp">[docs]</a><span class="k">class</span> <span class="nc">HGFLogpGradOp</span><span class="p">(</span><span class="n">Op</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient Op for the HGF distribution.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="HGFLogpGradOp.__init__"><a class="viewcode-back" href="../../generated/ghgf.distribution/ghgf.distribution.HGFLogpGradOp.html#ghgf.distribution.HGFLogpGradOp.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[],</span>
@@ -553,7 +608,31 @@
         <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize function.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_data : list</span>
+<span class="sd">            List of input data. When `n` models should be fitted, the list contains `n`</span>
+<span class="sd">            1d Numpy arrays. By default, the associated time vector is the integers</span>
+<span class="sd">            vector starting at `0`. A different time vector can be passed to the `time`</span>
+<span class="sd">            argument.</span>
+<span class="sd">        time : list | optional</span>
+<span class="sd">            List of 1d Numpy arrays containing the time vectors for each input time</span>
+<span class="sd">            series. If one of the list item is `None`, or if `None` is provided instead,</span>
+<span class="sd">            the time vector will defaults to integers vector starting at 0.</span>
+<span class="sd">        model_type : str</span>
+<span class="sd">            The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
+<span class="sd">        n_levels : int</span>
+<span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
+<span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward</span>
+<span class="sd">            using `add_nodes()`.</span>
+<span class="sd">        response_function : callable</span>
+<span class="sd">            The response function to use to compute the model surprise.</span>
+<span class="sd">        response_function_parameters : tuple</span>
+<span class="sd">            Additional parameters to the response function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grad_logp</span> <span class="o">=</span> <span class="n">jit</span><span class="p">(</span>
             <span class="n">grad</span><span class="p">(</span>
                 <span class="n">Partial</span><span class="p">(</span>
@@ -588,7 +667,7 @@
         <span class="n">kappa_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">bias</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
     <span class="p">):</span>
-
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize node structure.&quot;&quot;&quot;</span>
         <span class="c1"># Convert our inputs to symbolic variables</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_1</span><span class="p">),</span>
@@ -616,6 +695,7 @@
         <span class="k">return</span> <span class="n">Apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">perform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform node operations.&quot;&quot;&quot;</span>
         <span class="p">(</span>
             <span class="n">grad_omega_1</span><span class="p">,</span>
             <span class="n">grad_omega_2</span><span class="p">,</span>
@@ -725,16 +805,29 @@
         <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Distribution initialization.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        input_data : list</span>
-<span class="sd">        time : list</span>
+<span class="sd">            List of input data. When `n` models should be fitted, the list contains `n`</span>
+<span class="sd">            1d Numpy arrays. By default, the associated time vector is the integers</span>
+<span class="sd">            vector starting at `0`. A different time vector can be passed to the `time`</span>
+<span class="sd">            argument.</span>
+<span class="sd">        time : list | optional</span>
+<span class="sd">            List of 1d Numpy arrays containing the time vectors for each input time</span>
+<span class="sd">            series. If one of the list item is `None`, or if `None` is provided instead,</span>
+<span class="sd">            the time vector will defaults to integers vector starting at 0.</span>
 <span class="sd">        model_type : str</span>
+<span class="sd">            The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
 <span class="sd">        n_levels : int</span>
-<span class="sd">        response_function : callable (optional)</span>
-<span class="sd">        response_function_parameters : Tuple</span>
+<span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
+<span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward</span>
+<span class="sd">            using `add_nodes()`.</span>
+<span class="sd">        response_function : callable</span>
+<span class="sd">            The response function to use to compute the model surprise.</span>
+<span class="sd">        response_function_parameters : tuple</span>
+<span class="sd">            Additional parameters to the response function.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># The value function</span>
@@ -779,8 +872,7 @@
         <span class="n">kappa_2</span><span class="p">,</span>
         <span class="n">bias</span><span class="p">,</span>
     <span class="p">):</span>
-
-        <span class="c1"># Convert our inputs to symbolic variables</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert inputs to symbolic variables.&quot;&quot;&quot;</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_2</span><span class="p">),</span>
@@ -804,10 +896,12 @@
         <span class="k">return</span> <span class="n">Apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">perform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the function forward.&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hgf_logp</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
         <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">output_gradients</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gradient of the function.&quot;&quot;&quot;</span>
         <span class="p">(</span>
             <span class="n">grad_omega_1</span><span class="p">,</span>
             <span class="n">grad_omega_2</span><span class="p">,</span>

@@ -515,14 +515,14 @@ the strenght of the connection between the node and the parent node. Often
 fixed to 1. Defaults set to <cite>{“1”: 1.0}</cite> for a 2-levels model. Only
 required when <cite>model_type=”GRW”</cite>.</p>
 </dd>
-<dt><strong>eta0</strong><span class="classifier">float</span></dt><dd><p>This value is used by the binary input node. Defaults to <cite>0.0</cite>. Only
+<dt><strong>eta0</strong><span class="classifier">float</span></dt><dd><p>The first categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
 relevant if <cite>model_type=”binary”</cite>.</p>
 </dd>
-<dt><strong>eta1</strong><span class="classifier">float</span></dt><dd><p>This value is used by the binary input node. Default to <cite>1.0</cite>. Only relevant
+<dt><strong>eta1</strong><span class="classifier">float</span></dt><dd><p>The second categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
+relevant if <cite>model_type=”binary”</cite>.</p>
+</dd>
+<dt><strong>pihat</strong><span class="classifier">float</span></dt><dd><p>The precision of the binary input node. Default to <cite>jnp.inf</cite>. Only relevant
 if <cite>model_type=”binary”</cite>.</p>
-</dd>
-<dt><strong>pihat</strong><span class="classifier">float</span></dt><dd><p>This value is used by the binary input node. Default to <cite>jnp.inf</cite>. Only
-relevant if <cite>model_type=”binary”</cite>.</p>
 </dd>
 <dt><strong>bias</strong><span class="classifier">DeviceArray</span></dt><dd><p>The bias introduced in the perception of the input signal. This value is
 added to the input time serie before model fitting.</p>
@@ -553,13 +553,13 @@ added to the input time serie before model fitting.</p>
 <td><p>Add new observations.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlations</span></code>()</p></td>
-<td><p></p></td>
+<td><p>Plot the heatmap of cross-trajectories correlation.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_trajectories</span></code>(**kwargs)</p></td>
-<td><p></p></td>
+<td><p>Plot the parameters trajectories.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">surprise</span></code>([response_function, ...])</p></td>
-<td><p>Returns the model surprise (negative log probability) given the input data and a response function and additional parameters to the response function.</p></td>
+<td><p>Surprise (negative log probability) under new observations.</p></td>
 </tr>
 </tbody>
 </table>

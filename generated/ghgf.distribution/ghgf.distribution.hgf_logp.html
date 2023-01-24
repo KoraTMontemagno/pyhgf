@@ -455,21 +455,77 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>omega_1, omega_2, omega_3, rho_1, rho_2, rho_3, pi_1, pi_2, pi_3, mu_1, mu_2,</strong></dt><dd></dd>
-<dt><strong>mu_3, kappa_1, kappa_2, bias</strong><span class="classifier">DeviceArray</span></dt><dd><p>The HGD parameters (see py:class:<cite>ghgf.model.HGF</cite> for details).</p>
+<dt><strong>omega_1</strong><span class="classifier">float</span></dt><dd><p>The $omega$ parameter, or <em>evolution rate</em>, at the first level of the HGF. This
+parameter represents the tonic part of the variance (the part that is not
+inherited from parents nodes).</p>
 </dd>
-<dt><strong>data</strong><span class="classifier">list</span></dt><dd><p>List of input data. If <cite>model_type</cite> is <cite>“continuous”</cite>, the data should be two
-times series (time and values).</p>
+<dt><strong>omega_2</strong><span class="classifier">float</span></dt><dd><p>The $omega$ parameter, or <em>evolution rate</em>, at the second level of the HGF.
+This parameter represents the tonic part of the variance (the part that is not
+inherited from parents nodes).</p>
+</dd>
+<dt><strong>omega_3</strong><span class="classifier">float</span></dt><dd><p>The $omega$ parameter, or <em>evolution rate</em>, at the third level of the HGF. This
+parameter represents the tonic part of the variance (the part that is not
+inherited from parents nodes). The value of this parameter will be ignored when
+using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+</dd>
+<dt><strong>omega_input</strong><span class="classifier">float</span></dt><dd><p>Represent the noise associated with the input observation.</p>
+</dd>
+<dt><strong>rho_1</strong><span class="classifier">float</span></dt><dd><p>The $rho$ parameter at the first level of the HGF. This parameter represents
+the drift of the random walk.</p>
+</dd>
+<dt><strong>rho_2</strong><span class="classifier">float</span></dt><dd><dl class="simple">
+<dt>The $rho$ parameter at the second level of the HGF. This parameter represents</dt><dd><p>the drift of the random walk.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>rho_3</strong><span class="classifier">float</span></dt><dd><p>The $rho$ parameter at the first level of the HGF. This parameter represents
+the drift of the random walk. The value of this parameter will be ignored when
+using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+</dd>
+<dt><strong>pi_1</strong><span class="classifier">float</span></dt><dd><p>The $pi$ parameter, or <em>precision</em>, at the first level of the HGF.</p>
+</dd>
+<dt><strong>pi_2</strong><span class="classifier">float</span></dt><dd><p>The $pi$ parameter, or <em>precision</em>, at the second level of the HGF.</p>
+</dd>
+<dt><strong>pi_3</strong><span class="classifier">float</span></dt><dd><p>The $pi$ parameter, or <em>precision</em>, at the third level of the HGF.The value of
+this parameter will be ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+</dd>
+<dt><strong>mu_1</strong><span class="classifier">float</span></dt><dd><p>The $mu$ parameter, or <em>mean</em>, at the first level of the HGF.</p>
+</dd>
+<dt><strong>mu_2</strong><span class="classifier">float</span></dt><dd><p>The $mu$ parameter, or <em>mean</em>, at the second level of the HGF.</p>
+</dd>
+<dt><strong>mu_3</strong><span class="classifier">float</span></dt><dd><p>The $mu$ parameter, or <em>mean</em>, at the third level of the HGF. The value of this
+parameter will be ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+</dd>
+<dt><strong>kappa_1</strong><span class="classifier">float</span></dt><dd><p>The value of the $kappa$ parameter at the first level of the HGF. Kappa
+represents the phasic part of the variance (the part that is affected by the
+parents nodes) and will defines the strenght of the connection between the node
+and the parent node. Often fixed to <cite>1</cite>.</p>
+</dd>
+<dt><strong>kappa_2</strong><span class="classifier">float</span></dt><dd><p>The value of the $kappa$ parameter at the second level of the HGF. Kappa
+represents the phasic part of the variance (the part that is affected by the
+parents nodes) and will defines the strenght of the connection between the node
+and the parent node. Often fixed to <cite>1</cite>. The value of this parameter will be
+ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+</dd>
+<dt><strong>bias</strong><span class="classifier">float</span></dt><dd><p>The HGD parameters (see py:class:<cite>ghgf.model.HGF</cite> for details).</p>
+</dd>
+<dt><strong>input_data</strong><span class="classifier">list</span></dt><dd><p>List of input data. When <cite>n</cite> models should be fitted, the list contains <cite>n</cite> 1d
+Numpy arrays. By default, the associated time vector is the integers vector
+starting at <cite>0</cite>. A different time vector can be passed to the <cite>time</cite> argument.</p>
 </dd>
 <dt><strong>response_function</strong><span class="classifier">callable</span></dt><dd><p>The response function to use to compute the model surprise.</p>
-</dd>
-<dt><strong>response_function_parameters</strong><span class="classifier">tuple</span></dt><dd><p>Additional parameters to the response function.</p>
 </dd>
 <dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be “continuous” or “binary”).</p>
 </dd>
 <dt><strong>n_levels</strong><span class="classifier">int</span></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
 <cite>None</cite>, the nodes hierarchy is not created and might be provided afterward
 using <cite>add_nodes()</cite>.</p>
+</dd>
+<dt><strong>response_function_parameters</strong><span class="classifier">tuple</span></dt><dd><p>Additional parameters to the response function.</p>
+</dd>
+<dt><strong>time</strong><span class="classifier">list | optional</span></dt><dd><p>List of 1d Numpy arrays containing the time vectors for each input time series.
+If one of the list item is <cite>None</cite>, or if <cite>None</cite> is provided instead, the time
+vector will defaults to integers vector starting at 0.</p>
 </dd>
 </dl>
 </dd>
