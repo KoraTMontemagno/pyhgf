@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>The continuous Hirarchical Gaussian Filter &#8212; ghgf 0.0.1dev documentation</title>
+    <title>The continuous Hierarchical Gaussian Filter &#8212; ghgf 0.0.1dev documentation</title>
   
   
   
@@ -384,8 +384,8 @@
             
             <article class="bd-article" role="main">
               
-  <section class="tex2jax_ignore mathjax_ignore" id="the-continuous-hirarchical-gaussian-filter">
-<span id="continuous-hgf"></span><h1>The continuous Hirarchical Gaussian Filter<a class="headerlink" href="#the-continuous-hirarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="the-continuous-hierarchical-gaussian-filter">
+<span id="continuous-hgf"></span><h1>The continuous Hierarchical Gaussian Filter<a class="headerlink" href="#the-continuous-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
@@ -719,7 +719,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e67c33da3958002def4c68e4b5daea856610c21debc0e822aa1cfb3fcaf396e7.svg" src="../_images/e67c33da3958002def4c68e4b5daea856610c21debc0e822aa1cfb3fcaf396e7.svg" /></div>
+<img alt="../_images/1196bb5f6aa77486e010f7759ef61f0c5e0a79861afc713efdf3e42638ade633.svg" src="../_images/1196bb5f6aa77486e010f7759ef61f0c5e0a79861afc713efdf3e42638ade633.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -763,7 +763,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:23&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:32&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -784,7 +784,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:21&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:27&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -805,7 +805,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:21&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:27&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -826,22 +826,22 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:22&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:27&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 89 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 116 seconds.
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="s2">&quot;mu_1&quot;</span><span class="p">,</span> <span class="s2">&quot;mu_2&quot;</span><span class="p">]);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="s2">&quot;mu_1&quot;</span><span class="p">]);</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d5cd5f296e68e2ef0d45e7e2e8f7383c222cabbc7fecf4ae9702d2a7a3f80b64.png" src="../_images/d5cd5f296e68e2ef0d45e7e2e8f7383c222cabbc7fecf4ae9702d2a7a3f80b64.png" />
+<img alt="../_images/3970109ca73a02d853a505d8c2aa48a18771798ecc84b04ef63d783594c7ed3a.png" src="../_images/3970109ca73a02d853a505d8c2aa48a18771798ecc84b04ef63d783594c7ed3a.png" />
 </div>
 </div>
 </section>
@@ -886,7 +886,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2ed70ef81558ae45150e81d9c35610b35b1187564cad014febf9df0f5689bd38.png" src="../_images/2ed70ef81558ae45150e81d9c35610b35b1187564cad014febf9df0f5689bd38.png" />
+<img alt="../_images/1f8d569126f0e77b2de687315d8a741d1263b7a2ea5c5c0e5068adc1014719e6.png" src="../_images/1f8d569126f0e77b2de687315d8a741d1263b7a2ea5c5c0e5068adc1014719e6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -896,7 +896,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-2181.7908, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-2181.7808, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -979,7 +979,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/861cd1a08ba8249676bf53522b915bd89e912774604a6844357579179821ddcf.svg" src="../_images/861cd1a08ba8249676bf53522b915bd89e912774604a6844357579179821ddcf.svg" /></div>
+<img alt="../_images/c50dedaf62aae7a37f3e833d152f334909749c549199b55589f72ad525e975dd.svg" src="../_images/c50dedaf62aae7a37f3e833d152f334909749c549199b55589f72ad525e975dd.svg" /></div>
 </div>
 </section>
 <section id="id7">
@@ -1023,7 +1023,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:35&lt;00:00 Sampling chain 0, 268 divergences]
+      100.00% [2000/2000 00:48&lt;00:00 Sampling chain 0, 274 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1044,7 +1044,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:35&lt;00:00 Sampling chain 1, 319 divergences]
+      100.00% [2000/2000 00:42&lt;00:00 Sampling chain 1, 366 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1065,7 +1065,7 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:33&lt;00:00 Sampling chain 2, 310 divergences]
+      100.00% [2000/2000 00:42&lt;00:00 Sampling chain 2, 324 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1086,9 +1086,9 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:35&lt;00:00 Sampling chain 3, 302 divergences]
+      100.00% [2000/2000 00:44&lt;00:00 Sampling chain 3, 329 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 140 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 178 seconds.
 </pre></div>
 </div>
 </div>
@@ -1101,7 +1101,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/dccfb98e2e20c4c546e631b1773670610ab45791e094533e60701f49ad8beace.png" src="../_images/dccfb98e2e20c4c546e631b1773670610ab45791e094533e60701f49ad8beace.png" />
+<img alt="../_images/02e489491d8521b849868c85b1cb75d616e0af88d39cc029034914e63a2f85ca.png" src="../_images/02e489491d8521b849868c85b1cb75d616e0af88d39cc029034914e63a2f85ca.png" />
 </div>
 </div>
 </section>
@@ -1148,7 +1148,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4119977a04a2f08a9a6c7746c25e67f9c9caf7b5fd0c35889f28c4efa1b55165.png" src="../_images/4119977a04a2f08a9a6c7746c25e67f9c9caf7b5fd0c35889f28c4efa1b55165.png" />
+<img alt="../_images/c5c744f8c4ae43bf239c3124a007a7436c408e218265177345c7ab985c7e4d9b.png" src="../_images/c5c744f8c4ae43bf239c3124a007a7436c408e218265177345c7ab985c7e4d9b.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1158,7 +1158,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1941.9373, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1941.6459, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1176,21 +1176,21 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Jan 24 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Jan 27 2023
 
 Python implementation: CPython
 Python version       : 3.9.16
 IPython version      : 8.8.0
 
 ghgf  : 0.0.1.dev0
-jax   : 0.4.1
-jaxlib: 0.4.1
+jax   : 0.4.2
+jaxlib: 0.4.2
 
-pymc      : 5.0.2
-jax       : 0.4.1
-seaborn   : 0.12.2
 matplotlib: 3.6.3
+seaborn   : 0.12.2
 arviz     : 0.14.0
+pymc      : 5.0.2
+jax       : 0.4.2
 
 Watermark: 2.3.1
 </pre></div>

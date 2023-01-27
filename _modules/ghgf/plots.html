@@ -384,7 +384,7 @@
   <h1>Source code for ghgf.plots</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cfin.au.dk&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -393,7 +393,12 @@
 <span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
 
 
-<div class="viewcode-block" id="plot_trajectories"><a class="viewcode-back" href="../../generated/ghgf.plots/ghgf.plots.plot_trajectories.html#ghgf.plots.plot_trajectories">[docs]</a><span class="k">def</span> <span class="nf">plot_trajectories</span><span class="p">(</span><span class="n">hgf</span><span class="p">,</span> <span class="n">ci</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">Axes</span><span class="p">:</span>
+<div class="viewcode-block" id="plot_trajectories"><a class="viewcode-back" href="../../generated/ghgf.plots/ghgf.plots.plot_trajectories.html#ghgf.plots.plot_trajectories">[docs]</a><span class="k">def</span> <span class="nf">plot_trajectories</span><span class="p">(</span>
+    <span class="n">hgf</span><span class="p">,</span>
+    <span class="n">ci</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span>
+    <span class="n">axs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Axes</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axes</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot perceptual HGF parameters trajectores.</span>
 
 <span class="sd">    Parameters</span>
@@ -405,6 +410,8 @@
 <span class="sd">    figsize : tuple</span>
 <span class="sd">        The width and height of the figure. Defaults to `(18, 9)` for a 2-levels model,</span>
 <span class="sd">        or to `(18, 12)` for a 3-levels model.</span>
+<span class="sd">    axs : :class:`matplotlib.axes.Axes` list or None</span>
+<span class="sd">        Where to draw the plot. Default is `None` (create a new figure).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -416,7 +423,8 @@
     <span class="n">time</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
     <span class="n">node</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]</span>
 
-    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">axs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Level 3</span>
     <span class="c1">#########</span>
