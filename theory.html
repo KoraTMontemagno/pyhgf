@@ -386,17 +386,47 @@
             
             <article class="bd-article" role="main">
               
-  <section class="tex2jax_ignore mathjax_ignore" id="the-hierarchical-gaussian-filter">
+  <p>(=theory)</p>
+<section class="tex2jax_ignore mathjax_ignore" id="the-hierarchical-gaussian-filter">
 <h1>The Hierarchical Gaussian Filter<a class="headerlink" href="#the-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
-<div class="toctree-wrapper compound">
+<p>In this notebook, we are going to introduce the basic concepts on which the Hierarchical Gaussian Filter (HGF) is based. We introduce the main equations and illustrate some of the examples with Python code. We start with the generative model of the HGF, which can be seen as the structure creating the sensory inputs that the agent tries to use to produce behaviours. This can be seen as the process occurring in the environment. Next, we show how this model can be “inverted” and used by an agent to infer parameter values that generated the sensory inputs. From there, we discuss the notion of prediction error and how derivations of the model can be used to infer probability densities given observed behavioural outcomes.</p>
+<section id="the-generative-model-of-the-hgf">
+<h2>The generative model of the HGF<a class="headerlink" href="#the-generative-model-of-the-hgf" title="Permalink to this heading">#</a></h2>
+<p>In this section we will use the two-level HGF as an example (see also the tutorial <a class="reference internal" href="notebooks/2-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">The continuous Hierarchical Gaussian Filter</span></a>). The generative model that underpine the continuous HGF can be seen as a generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Random_walk#Gaussian_random_walk">Gaussian Random Walk</a> (GRW). Put simply, a GRW generate a new observation <span class="math notranslate nohighlight">\(x_1^{(k)}\)</span> at each time step <span class="math notranslate nohighlight">\(k\)</span> from a normal distribution and using the previous observation <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span> such as:</p>
+<div class="math notranslate nohighlight">
+\[
+x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma^2\)</span> is the variance of the distribution. In the example below, we use <span class="math notranslate nohighlight">\(\sigma^2 = 1\)</span> and <span class="math notranslate nohighlight">\(x_1^{(0)} = 0\)</span>.</p>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># random walk</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">);</span>
+</pre></div>
 </div>
-<section id="the-generative-model-of-the-hgf-volatility-vs-value-coupling">
-<h2>The generative model of the HGF: Volatility vs. value coupling<a class="headerlink" href="#the-generative-model-of-the-hgf-volatility-vs-value-coupling" title="Permalink to this heading">#</a></h2>
-<p>In the generative model of the HGF, (hidden) states of the world perform Gaussian random walks in time and can produce outcomes which are perceived by an observer as inputs. States can influence each other via volatility coupling or via value coupling.</p>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/df9722d3755561af61a6ab0a385910ea3314227508606ce36fad7dd50862e145.png" src="_images/df9722d3755561af61a6ab0a385910ea3314227508606ce36fad7dd50862e145.png" />
+</div>
+</details>
+</div>
+<p>This simple process will be our first building block. Importantly here, the variability of the sensory input is constant across time: even if we don’t know exactly in which direction the time series is going to move in the future, we know that is is unlikely to make certain kind of big jumps, which is controlled by the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>. The HGF generalize this idea by letting the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span> being controlled by another random walk, in a higher level of the hierarchie, which is defined as <em>volatility coupling</em> (see below). This lead us to the generative model of the HGF, which can be seen as a hierarchical Gaussian Random Walk, where (hidden) states of the world perform Gaussian random walks in time and produce outcomes which are perceived by an observer as inputs.</p>
+<p>States can influence each other via volatility coupling or via value coupling.</p>
 <p>In the classical 3-level binary HGF as presented in <span id="id1">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>, the two states of interest, <span class="math notranslate nohighlight">\(x_2\)</span> and <span class="math notranslate nohighlight">\(x_3\)</span>, are coupled to each other via volatility coupling, which means that for state <span class="math notranslate nohighlight">\(x_2\)</span>, the mean of the Gaussian random walk on trial <span class="math notranslate nohighlight">\(k\)</span> is given by its previous value <span class="math notranslate nohighlight">\(x_2^{(k-1)}\)</span>, while the step size (or variance) depends on the current value of the higher level state, <span class="math notranslate nohighlight">\(x_3^{(k)}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
-    x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, f(x_3^{(k)})),
+x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, f(x_3^{(k)})),
 \]</div>
 <p>where the exact dependency is of the form</p>
 <div class="math notranslate nohighlight">
@@ -413,6 +443,9 @@
 \[
     x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)} + \alpha_{4,2} x_4^{(k)}, \, \exp(\kappa_2 x_3^{(k)} + \omega_2)).
 \]</div>
+</section>
+<section id="volatility-vs-value-coupling">
+<h2>Volatility vs. value coupling<a class="headerlink" href="#volatility-vs-value-coupling" title="Permalink to this heading">#</a></h2>
 <p>In other words, any given state in the world can be modelled as having a volatility parent state, a value parent state, or both, or none (in which case it evolves as a Gaussian random walk around its previous value with fixed step size). Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
 <p>:::{figure-md} fig1
 <img src="./images/genmod.svg" alt="fishy" class="bg-primary mb-1"></p>
@@ -681,8 +714,13 @@ $<span class="math notranslate nohighlight">\(
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#the-generative-model-of-the-hgf-volatility-vs-value-coupling">
-   The generative model of the HGF: Volatility vs. value coupling
+  <a class="reference internal nav-link" href="#the-generative-model-of-the-hgf">
+   The generative model of the HGF
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#volatility-vs-value-coupling">
+   Volatility vs. value coupling
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
