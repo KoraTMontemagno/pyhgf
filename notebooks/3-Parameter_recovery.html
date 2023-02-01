@@ -555,30 +555,10 @@
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='0' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      0.00% [0/8000 00:00&lt;? Sampling 4 chains, 0 divergences]
+      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [8000/8000 00:59&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">model</span><span class="p">:</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tune</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/sampling/mcmc.py:571,</span> in <span class="ni">sample</span><span class="nt">(draws, step, init, n_init, initvals, trace, chains, cores, tune, progressbar, model, random_seed, discard_tuned_samples, compute_convergence_checks, callback, jitter_max_retries, return_inferencedata, keep_warning_stat, idata_kwargs, mp_ctx, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">569</span> <span class="c1"># Wrap chain traces in a MultiTrace</span>
-<span class="g g-Whitespace">    </span><span class="mi">570</span> <span class="k">if</span> <span class="n">discard_tuned_samples</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">571</span>     <span class="n">traces</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">_choose_chains</span><span class="p">(</span><span class="n">traces</span><span class="p">,</span> <span class="n">tune</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">572</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">573</span>     <span class="n">traces</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">_choose_chains</span><span class="p">(</span><span class="n">traces</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/backends/base.py:527,</span> in <span class="ni">_choose_chains</span><span class="nt">(traces, tune)</span>
-<span class="g g-Whitespace">    </span><span class="mi">525</span> <span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span> <span class="o">-</span> <span class="n">tune</span><span class="p">)</span> <span class="k">for</span> <span class="n">trace</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">526</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lengths</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">527</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not enough samples to build a trace.&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">529</span> <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">530</span> <span class="n">l_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lengths</span><span class="p">)[</span><span class="n">idxs</span><span class="p">]</span>
-
-<span class="ne">ValueError</span>: Not enough samples to build a trace.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 60 seconds.
 </pre></div>
 </div>
 </div>
@@ -590,6 +570,9 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="../_images/1587abd2b5652c83ac401c0e4360b9036749b9b4dabaf39e66e8ccdefd3fa812.png" src="../_images/1587abd2b5652c83ac401c0e4360b9036749b9b4dabaf39e66e8ccdefd3fa812.png" />
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -597,6 +580,112 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>omega_1[0]</th>
+      <td>-10.317</td>
+      <td>0.216</td>
+      <td>-10.701</td>
+      <td>-9.888</td>
+      <td>0.003</td>
+      <td>0.002</td>
+      <td>6101.0</td>
+      <td>3299.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>omega_1[1]</th>
+      <td>-9.808</td>
+      <td>0.224</td>
+      <td>-10.225</td>
+      <td>-9.388</td>
+      <td>0.003</td>
+      <td>0.002</td>
+      <td>4985.0</td>
+      <td>2983.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>omega_1[2]</th>
+      <td>-8.959</td>
+      <td>0.290</td>
+      <td>-9.493</td>
+      <td>-8.415</td>
+      <td>0.004</td>
+      <td>0.003</td>
+      <td>5556.0</td>
+      <td>2775.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>omega_1[3]</th>
+      <td>-10.569</td>
+      <td>0.166</td>
+      <td>-10.872</td>
+      <td>-10.254</td>
+      <td>0.002</td>
+      <td>0.002</td>
+      <td>5211.0</td>
+      <td>3242.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>omega_1[4]</th>
+      <td>-10.043</td>
+      <td>0.217</td>
+      <td>-10.441</td>
+      <td>-9.643</td>
+      <td>0.003</td>
+      <td>0.002</td>
+      <td>4426.0</td>
+      <td>2994.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>omega_1[5]</th>
+      <td>-10.245</td>
+      <td>0.194</td>
+      <td>-10.624</td>
+      <td>-9.893</td>
+      <td>0.003</td>
+      <td>0.002</td>
+      <td>4394.0</td>
+      <td>3303.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </section>
 <section id="binary-hgf">
@@ -682,6 +771,8 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="../_images/bfabb4ac5999587ede50e844a515172a793c3968b3af3e1988eeeb3bf44bd920.svg" src="../_images/bfabb4ac5999587ede50e844a515172a793c3968b3af3e1988eeeb3bf44bd920.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -690,6 +781,45 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
     <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">SamplingError</span><span class="g g-Whitespace">                             </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
+<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/sampling/mcmc.py:486,</span> in <span class="ni">sample</span><span class="nt">(draws, step, init, n_init, initvals, trace, chains, cores, tune, progressbar, model, random_seed, discard_tuned_samples, compute_convergence_checks, callback, jitter_max_retries, return_inferencedata, keep_warning_stat, idata_kwargs, mp_ctx, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">484</span> <span class="c1"># One final check that shapes and logps at the starting points are okay.</span>
+<span class="g g-Whitespace">    </span><span class="mi">485</span> <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">initial_points</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">486</span>     <span class="n">model</span><span class="o">.</span><span class="n">check_start_vals</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">487</span>     <span class="n">_check_start_shape</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ip</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">489</span> <span class="c1"># Create trace backends for each chain</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/model.py:1768,</span> in <span class="ni">Model.check_start_vals</span><span class="nt">(self, start)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1765</span> <span class="n">initial_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_logps</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">elem</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1767</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">initial_eval</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+<span class="ne">-&gt; </span><span class="mi">1768</span>     <span class="k">raise</span> <span class="n">SamplingError</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1769</span>         <span class="s2">&quot;Initial evaluation of model at starting point failed!</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1770</span>         <span class="sa">f</span><span class="s2">&quot;Starting values:</span><span class="se">\n</span><span class="si">{</span><span class="n">elem</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1771</span>         <span class="sa">f</span><span class="s2">&quot;Initial evaluation results:</span><span class="se">\n</span><span class="si">{</span><span class="n">initial_eval</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1772</span>     <span class="p">)</span>
+
+<span class="ne">SamplingError</span>: Initial evaluation of model at starting point failed!
+<span class="n">Starting</span> <span class="n">values</span><span class="p">:</span>
+<span class="p">{</span><span class="s1">&#39;omega_2_interval__&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.81253632</span><span class="p">,</span>  <span class="mf">0.86743894</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.31215225</span><span class="p">,</span>  <span class="mf">0.98778218</span><span class="p">,</span>  <span class="mf">0.70105349</span><span class="p">,</span>
+       <span class="o">-</span><span class="mf">0.37774927</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.95025464</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.57878325</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.90162045</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.20782913</span><span class="p">])}</span>
+
+<span class="n">Initial</span> <span class="n">evaluation</span> <span class="n">results</span><span class="p">:</span>
+<span class="p">{</span><span class="s1">&#39;omega_2&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">15.13</span><span class="p">,</span> <span class="s1">&#39;hgf_loglike&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">inf</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
