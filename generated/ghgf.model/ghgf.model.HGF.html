@@ -46,6 +46,8 @@
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generated/ghgf.model/ghgf.model.HGF';</script>
     <link rel="shortcut icon" href="../../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -451,7 +453,9 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="ghgf.model.HGF">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ghgf.model.</span></span><span class="sig-name descname"><span class="pre">HGF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_levels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'continuous'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_mu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'1':</span> <span class="pre">0.0,</span> <span class="pre">'2':</span> <span class="pre">0.0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_pi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'1':</span> <span class="pre">1.0,</span> <span class="pre">'2':</span> <span class="pre">1.0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-9.210340371976182</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'1':</span> <span class="pre">-3.0,</span> <span class="pre">'2':</span> <span class="pre">-3.0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'1':</span> <span class="pre">1.0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pihat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'1':</span> <span class="pre">0.0,</span> <span class="pre">'2':</span> <span class="pre">0.0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ghgf/model.html#HGF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ghgf.model.HGF" title="Permalink to this definition">#</a></dt>
-<dd><p>The standard 2 or 3 levels HGF for continuous or binary inputs.</p>
+<dd><p>The two-level and three-level Hierarchical Gaussian Filters (HGF).</p>
+<p>This class use pre-made nodes structures that corresponds to the most widely used
+HGF. The inputs can be continuous or binary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -481,39 +485,40 @@ are stored in the <cite>hgf_results</cite> dictionary.</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n_levels</strong><span class="classifier">int | None</span></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
 <cite>None</cite>, the nodes hierarchy is not created and might be provided afterward
-using <cite>add_nodes()</cite>. Defaults to <cite>2</cite> for a 2-levels HGF.</p>
+using <cite>add_nodes()</cite>. Defaults to <cite>2</cite> for a 2-level HGF.</p>
 </dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be “continuous” or “binary”).</p>
+<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be <cite>“continuous”</cite> or <cite>“binary”</cite>).</p>
 </dd>
-<dt><strong>initial_mu</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <cite>initial_mu</cite> parameter at
+<dt><strong>initial_mu</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\mu\)</span> parameter at
 different levels of the hierarchy. Defaults set to <cite>{“1”: 0.0, “2”: 0.0}</cite>
-for a 2-levels model.</p>
+for a 2-level model for continuous inputs.</p>
 </dd>
-<dt><strong>initial_pi</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <cite>initial_pi</cite> parameter at
+<dt><strong>initial_pi</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\pi\)</span> parameter at
 different levels of the hierarchy. Pis values encode the precision of the
 values at each level (Var = 1/pi) Defaults set to <cite>{“1”: 1.0, “2”: 1.0}</cite> for
-a 2-levels model.</p>
+a 2-level model.</p>
 </dd>
-<dt><strong>omega</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <cite>omega</cite> parameter at
-different levels of the hierarchy. Omegas represent the tonic part of the
-variance (the part that is not affected by the parent node). Defaults set to
-<cite>{“1”: -10.0, “2”: -10.0}</cite> for a 2-levels model. This parameters only when
-<cite>model_type=”GRW”</cite>.</p>
+<dt><strong>omega</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\omega\)</span> parameter
+at different levels of the hierarchy. <span class="math notranslate nohighlight">\(\\omega\)</span> represents the tonic
+part of the variance (the part that is not affected by the parent node).
+Defaults set to <cite>{“1”: -10.0, “2”: -10.0}</cite> for a 2-level model for
+continuous inputs. This parameter is only required for Gaussian Random Walk
+nodes.</p>
 </dd>
 <dt><strong>omega_input</strong><span class="classifier">float</span></dt><dd><p>Default value sets to <cite>log(1e-4)</cite>. Represents the noise associated with
 the input.</p>
 </dd>
-<dt><strong>rho</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <cite>rho</cite> parameter at
+<dt><strong>rho</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\rho\)</span> parameter at
 different levels of the hierarchy. Rho represents the drift of the random
-walk. Only required when <cite>model_type=”GRW”</cite>. Defaults set all entries to
-<cite>0</cite> according to the number of required levels.</p>
+walk. This parameter is only required for Gaussian Random Walk nodes.
+Defaults set all entries to <cite>0</cite> according to the number of required levels.</p>
 </dd>
-<dt><strong>kappas</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <cite>kappa</cite> parameter at
-different levels of the hierarchy. Kappa represents the phasic part of the
-variance (the part that is affected by the parents nodes) and will defines
-the strenght of the connection between the node and the parent node. Often
-fixed to 1. Defaults set to <cite>{“1”: 1.0}</cite> for a 2-levels model. Only
-required when <cite>model_type=”GRW”</cite>.</p>
+<dt><strong>kappas</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\kappa\)</span> parameter
+at different levels of the hierarchy. Kappa represents the phasic part of
+the variance (the part that is affected by the parents nodes) and will
+defines the strenght of the connection between the node and the parent
+node. Often fixed to <cite>1</cite>. Defaults set to <cite>{“1”: 1.0}</cite> for a 2-level model.
+This parameter is only required for Gaussian Random Walk nodes.</p>
 </dd>
 <dt><strong>eta0</strong><span class="classifier">float</span></dt><dd><p>The first categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
 relevant if <cite>model_type=”binary”</cite>.</p>
@@ -527,7 +532,7 @@ if <cite>model_type=”binary”</cite>.</p>
 <dt><strong>bias</strong><span class="classifier">DeviceArray</span></dt><dd><p>The bias introduced in the perception of the input signal. This value is
 added to the input time serie before model fitting.</p>
 </dd>
-<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Default is <cite>True</cite>.</p>
+<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Verbosity of the methods for model creation and fitting. Defaults to <cite>True</cite>.</p>
 </dd>
 </dl>
 </dd>

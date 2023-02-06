@@ -46,6 +46,8 @@
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generated/ghgf.distribution/ghgf.distribution.hgf_logp';</script>
     <link rel="shortcut icon" href="../../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -451,57 +453,66 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ghgf.distribution.hgf_logp">
 <span class="sig-prename descclassname"><span class="pre">ghgf.distribution.</span></span><span class="sig-name descname"><span class="pre">hgf_logp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pi_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pi_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pi_3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_levels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_function_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DeviceArrayBase</span></span></span><a class="reference internal" href="../../_modules/ghgf/distribution.html#hgf_logp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ghgf.distribution.hgf_logp" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute the log probability from the HGF model given the data and parameters.</p>
+<dd><p>Log probability from HGF model(s) given input data and parameter(s).</p>
+<p>This function support broadcasting along the first axis:
+* If the input data contains many time series, the function will automatically
+create the corresponding number of HGF models and fit them separately.
+* If a single input data is provided but some parameters have array-like inputs, the
+number of HGF models will match the length of the arrays, using the value <em>i</em>
+for the <em>i*th model. When floats are provided for some parameters, the same value
+will be used for all HGF models.
+* If multiple input data are provided with array-like inputs for some parameter, the
+function will create and fit the models separately using the value *i</em> for the
+<a href="#id1"><span class="problematic" id="id2">*</span></a>i*th model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>omega_1</strong><span class="classifier">float</span></dt><dd><p>The $omega$ parameter, or <em>evolution rate</em>, at the first level of the HGF. This
-parameter represents the tonic part of the variance (the part that is not
-inherited from parents nodes).</p>
+<dt><strong>omega_1</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\omega\)</span> parameter, or <em>evolution rate</em>, at the first level of the
+HGF. This parameter represents the tonic part of the variance (the part that is
+not inherited from parents nodes).</p>
 </dd>
-<dt><strong>omega_2</strong><span class="classifier">float</span></dt><dd><p>The $omega$ parameter, or <em>evolution rate</em>, at the second level of the HGF.
-This parameter represents the tonic part of the variance (the part that is not
-inherited from parents nodes).</p>
+<dt><strong>omega_2</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\omega\)</span> parameter, or <em>evolution rate</em>, at the second level of the
+HGF. This parameter represents the tonic part of the variance (the part that is
+not inherited from parents nodes).</p>
 </dd>
-<dt><strong>omega_3</strong><span class="classifier">float</span></dt><dd><p>The $omega$ parameter, or <em>evolution rate</em>, at the third level of the HGF. This
-parameter represents the tonic part of the variance (the part that is not
-inherited from parents nodes). The value of this parameter will be ignored when
-using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+<dt><strong>omega_3</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\omega\)</span> parameter, or <em>evolution rate</em>, at the third level of the
+HGF. This parameter represents the tonic part of the variance (the part that is
+not inherited from parents nodes). The value of this parameter will be ignored
+when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
 </dd>
 <dt><strong>omega_input</strong><span class="classifier">float</span></dt><dd><p>Represent the noise associated with the input observation.</p>
 </dd>
-<dt><strong>rho_1</strong><span class="classifier">float</span></dt><dd><p>The $rho$ parameter at the first level of the HGF. This parameter represents
-the drift of the random walk.</p>
+<dt><strong>rho_1</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\rho\)</span> parameter at the first level of the HGF. This parameter
+represents the drift of the random walk.</p>
 </dd>
-<dt><strong>rho_2</strong><span class="classifier">float</span></dt><dd><dl class="simple">
-<dt>The $rho$ parameter at the second level of the HGF. This parameter represents</dt><dd><p>the drift of the random walk.</p>
+<dt><strong>rho_2</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\rho\)</span> parameter at the second level of the HGF. This parameter
+represents the drift of the random walk.</p>
 </dd>
-</dl>
+<dt><strong>rho_3</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\rho\)</span> parameter at the first level of the HGF. This parameter
+represents the drift of the random walk. The value of this parameter will be
+ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
 </dd>
-<dt><strong>rho_3</strong><span class="classifier">float</span></dt><dd><p>The $rho$ parameter at the first level of the HGF. This parameter represents
-the drift of the random walk. The value of this parameter will be ignored when
-using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+<dt><strong>pi_1</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\pi\)</span> parameter, or <em>precision</em>, at the first level of the HGF.</p>
 </dd>
-<dt><strong>pi_1</strong><span class="classifier">float</span></dt><dd><p>The $pi$ parameter, or <em>precision</em>, at the first level of the HGF.</p>
+<dt><strong>pi_2</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\pi\)</span> parameter, or <em>precision</em>, at the second level of the HGF.</p>
 </dd>
-<dt><strong>pi_2</strong><span class="classifier">float</span></dt><dd><p>The $pi$ parameter, or <em>precision</em>, at the second level of the HGF.</p>
+<dt><strong>pi_3</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\pi\)</span> parameter, or <em>precision</em>, at the third level of the HGF. The
+value of this parameter will be ignored when using a 2-levels HGF
+(<cite>n_levels=2</cite>).</p>
 </dd>
-<dt><strong>pi_3</strong><span class="classifier">float</span></dt><dd><p>The $pi$ parameter, or <em>precision</em>, at the third level of the HGF.The value of
-this parameter will be ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+<dt><strong>mu_1</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\mu\)</span> parameter, or <em>mean</em>, at the first level of the HGF.</p>
 </dd>
-<dt><strong>mu_1</strong><span class="classifier">float</span></dt><dd><p>The $mu$ parameter, or <em>mean</em>, at the first level of the HGF.</p>
+<dt><strong>mu_2</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\mu\)</span> parameter, or <em>mean</em>, at the second level of the HGF.</p>
 </dd>
-<dt><strong>mu_2</strong><span class="classifier">float</span></dt><dd><p>The $mu$ parameter, or <em>mean</em>, at the second level of the HGF.</p>
+<dt><strong>mu_3</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\\mu\)</span> parameter, or <em>mean</em>, at the third level of the HGF. The value
+of this parameter will be ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
 </dd>
-<dt><strong>mu_3</strong><span class="classifier">float</span></dt><dd><p>The $mu$ parameter, or <em>mean</em>, at the third level of the HGF. The value of this
-parameter will be ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
-</dd>
-<dt><strong>kappa_1</strong><span class="classifier">float</span></dt><dd><p>The value of the $kappa$ parameter at the first level of the HGF. Kappa
+<dt><strong>kappa_1</strong><span class="classifier">float</span></dt><dd><p>The value of the <span class="math notranslate nohighlight">\(\\kappa\)</span> parameter at the first level of the HGF. Kappa
 represents the phasic part of the variance (the part that is affected by the
 parents nodes) and will defines the strenght of the connection between the node
 and the parent node. Often fixed to <cite>1</cite>.</p>
 </dd>
-<dt><strong>kappa_2</strong><span class="classifier">float</span></dt><dd><p>The value of the $kappa$ parameter at the second level of the HGF. Kappa
+<dt><strong>kappa_2</strong><span class="classifier">float</span></dt><dd><p>The value of the <span class="math notranslate nohighlight">\(\\kappa\)</span> parameter at the second level of the HGF. Kappa
 represents the phasic part of the variance (the part that is affected by the
 parents nodes) and will defines the strenght of the connection between the node
 and the parent node. Often fixed to <cite>1</cite>. The value of this parameter will be
@@ -526,6 +537,12 @@ using <cite>add_nodes()</cite>.</p>
 <dt><strong>time</strong><span class="classifier">list | optional</span></dt><dd><p>List of 1d Numpy arrays containing the time vectors for each input time series.
 If one of the list item is <cite>None</cite>, or if <cite>None</cite> is provided instead, the time
 vector will defaults to integers vector starting at 0.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>log_prob</strong><span class="classifier">DeviceArray</span></dt><dd><p>The sum of the log-probabilities (or negative surprise).</p>
 </dd>
 </dl>
 </dd>

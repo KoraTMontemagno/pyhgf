@@ -420,56 +420,68 @@
     <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the log probability from the HGF model given the data and parameters.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Log probability from HGF model(s) given input data and parameter(s).</span>
+
+<span class="sd">    This function support broadcasting along the first axis:</span>
+<span class="sd">    * If the input data contains many time series, the function will automatically</span>
+<span class="sd">    create the corresponding number of HGF models and fit them separately.</span>
+<span class="sd">    * If a single input data is provided but some parameters have array-like inputs, the</span>
+<span class="sd">    number of HGF models will match the length of the arrays, using the value *i*</span>
+<span class="sd">    for the *i*th model. When floats are provided for some parameters, the same value</span>
+<span class="sd">    will be used for all HGF models.</span>
+<span class="sd">    * If multiple input data are provided with array-like inputs for some parameter, the</span>
+<span class="sd">    function will create and fit the models separately using the value *i* for the</span>
+<span class="sd">    *i*th model.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    omega_1 : float</span>
-<span class="sd">        The $\omega$ parameter, or *evolution rate*, at the first level of the HGF. This</span>
-<span class="sd">        parameter represents the tonic part of the variance (the part that is not</span>
-<span class="sd">        inherited from parents nodes).</span>
+<span class="sd">        The :math:`\\omega` parameter, or *evolution rate*, at the first level of the</span>
+<span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
+<span class="sd">        not inherited from parents nodes).</span>
 <span class="sd">    omega_2 : float</span>
-<span class="sd">        The $\omega$ parameter, or *evolution rate*, at the second level of the HGF.</span>
-<span class="sd">        This parameter represents the tonic part of the variance (the part that is not</span>
-<span class="sd">        inherited from parents nodes).</span>
+<span class="sd">        The :math:`\\omega` parameter, or *evolution rate*, at the second level of the</span>
+<span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
+<span class="sd">        not inherited from parents nodes).</span>
 <span class="sd">    omega_3 : float</span>
-<span class="sd">        The $\omega$ parameter, or *evolution rate*, at the third level of the HGF. This</span>
-<span class="sd">        parameter represents the tonic part of the variance (the part that is not</span>
-<span class="sd">        inherited from parents nodes). The value of this parameter will be ignored when</span>
-<span class="sd">        using a 2-levels HGF (`n_levels=2`).</span>
+<span class="sd">        The :math:`\\omega` parameter, or *evolution rate*, at the third level of the</span>
+<span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
+<span class="sd">        not inherited from parents nodes). The value of this parameter will be ignored</span>
+<span class="sd">        when using a 2-levels HGF (`n_levels=2`).</span>
 <span class="sd">    omega_input : float</span>
 <span class="sd">        Represent the noise associated with the input observation.</span>
 <span class="sd">    rho_1 : float</span>
-<span class="sd">        The $\rho$ parameter at the first level of the HGF. This parameter represents</span>
-<span class="sd">        the drift of the random walk.</span>
+<span class="sd">        The :math:`\\rho` parameter at the first level of the HGF. This parameter</span>
+<span class="sd">        represents the drift of the random walk.</span>
 <span class="sd">    rho_2 : float</span>
-<span class="sd">        The $\rho$ parameter at the second level of the HGF. This parameter represents</span>
-<span class="sd">            the drift of the random walk.</span>
+<span class="sd">        The :math:`\\rho` parameter at the second level of the HGF. This parameter</span>
+<span class="sd">        represents the drift of the random walk.</span>
 <span class="sd">    rho_3 : float</span>
-<span class="sd">        The $\rho$ parameter at the first level of the HGF. This parameter represents</span>
-<span class="sd">        the drift of the random walk. The value of this parameter will be ignored when</span>
-<span class="sd">        using a 2-levels HGF (`n_levels=2`).</span>
+<span class="sd">        The :math:`\\rho` parameter at the first level of the HGF. This parameter</span>
+<span class="sd">        represents the drift of the random walk. The value of this parameter will be</span>
+<span class="sd">        ignored when using a 2-levels HGF (`n_levels=2`).</span>
 <span class="sd">    pi_1 : float</span>
-<span class="sd">        The $\pi$ parameter, or *precision*, at the first level of the HGF.</span>
+<span class="sd">        The :math:`\\pi` parameter, or *precision*, at the first level of the HGF.</span>
 <span class="sd">    pi_2 : float</span>
-<span class="sd">        The $\pi$ parameter, or *precision*, at the second level of the HGF.</span>
+<span class="sd">        The :math:`\\pi` parameter, or *precision*, at the second level of the HGF.</span>
 <span class="sd">    pi_3 : float</span>
-<span class="sd">        The $\pi$ parameter, or *precision*, at the third level of the HGF.The value of</span>
-<span class="sd">        this parameter will be ignored when using a 2-levels HGF (`n_levels=2`).</span>
+<span class="sd">        The :math:`\\pi` parameter, or *precision*, at the third level of the HGF. The</span>
+<span class="sd">        value of this parameter will be ignored when using a 2-levels HGF</span>
+<span class="sd">        (`n_levels=2`).</span>
 <span class="sd">    mu_1 : float</span>
-<span class="sd">        The $\mu$ parameter, or *mean*, at the first level of the HGF.</span>
+<span class="sd">        The :math:`\\mu` parameter, or *mean*, at the first level of the HGF.</span>
 <span class="sd">    mu_2 : float</span>
-<span class="sd">        The $\mu$ parameter, or *mean*, at the second level of the HGF.</span>
+<span class="sd">        The :math:`\\mu` parameter, or *mean*, at the second level of the HGF.</span>
 <span class="sd">    mu_3 : float</span>
-<span class="sd">        The $\mu$ parameter, or *mean*, at the third level of the HGF. The value of this</span>
-<span class="sd">        parameter will be ignored when using a 2-levels HGF (`n_levels=2`).</span>
+<span class="sd">        The :math:`\\mu` parameter, or *mean*, at the third level of the HGF. The value</span>
+<span class="sd">        of this parameter will be ignored when using a 2-levels HGF (`n_levels=2`).</span>
 <span class="sd">    kappa_1 : float</span>
-<span class="sd">        The value of the $\kappa$ parameter at the first level of the HGF. Kappa</span>
+<span class="sd">        The value of the :math:`\\kappa` parameter at the first level of the HGF. Kappa</span>
 <span class="sd">        represents the phasic part of the variance (the part that is affected by the</span>
 <span class="sd">        parents nodes) and will defines the strenght of the connection between the node</span>
 <span class="sd">        and the parent node. Often fixed to `1`.</span>
 <span class="sd">    kappa_2 : float</span>
-<span class="sd">        The value of the $\kappa$ parameter at the second level of the HGF. Kappa</span>
+<span class="sd">        The value of the :math:`\\kappa` parameter at the second level of the HGF. Kappa</span>
 <span class="sd">        represents the phasic part of the variance (the part that is affected by the</span>
 <span class="sd">        parents nodes) and will defines the strenght of the connection between the node</span>
 <span class="sd">        and the parent node. Often fixed to `1`. The value of this parameter will be</span>
@@ -494,6 +506,11 @@
 <span class="sd">        List of 1d Numpy arrays containing the time vectors for each input time series.</span>
 <span class="sd">        If one of the list item is `None`, or if `None` is provided instead, the time</span>
 <span class="sd">        vector will defaults to integers vector starting at 0.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    log_prob : DeviceArray</span>
+<span class="sd">        The sum of the log-probabilities (or negative surprise).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># number of models</span>

@@ -400,7 +400,10 @@
 
 
 <div class="viewcode-block" id="HGF"><a class="viewcode-back" href="../../generated/ghgf.model/ghgf.model.HGF.html#ghgf.model.HGF">[docs]</a><span class="k">class</span> <span class="nc">HGF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The standard 2 or 3 levels HGF for continuous or binary inputs.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The two-level and three-level Hierarchical Gaussian Filters (HGF).</span>
+
+<span class="sd">    This class use pre-made nodes structures that corresponds to the most widely used</span>
+<span class="sd">    HGF. The inputs can be continuous or binary.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -437,46 +440,47 @@
         <span class="n">bias</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parameterization of the HGF model.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Parameterization of the HGF model.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        n_levels : int | None</span>
 <span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
 <span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward</span>
-<span class="sd">            using `add_nodes()`. Defaults to `2` for a 2-levels HGF.</span>
+<span class="sd">            using `add_nodes()`. Defaults to `2` for a 2-level HGF.</span>
 <span class="sd">        model_type : str</span>
-<span class="sd">            The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
+<span class="sd">            The model type to use (can be `&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
 <span class="sd">        initial_mu : dict</span>
-<span class="sd">            Dictionary containing the initial values for the `initial_mu` parameter at</span>
+<span class="sd">            Dictionary containing the initial values for the :math:`\\mu` parameter at</span>
 <span class="sd">            different levels of the hierarchy. Defaults set to `{&quot;1&quot;: 0.0, &quot;2&quot;: 0.0}`</span>
-<span class="sd">            for a 2-levels model.</span>
+<span class="sd">            for a 2-level model for continuous inputs.</span>
 <span class="sd">        initial_pi : dict</span>
-<span class="sd">            Dictionary containing the initial values for the `initial_pi` parameter at</span>
+<span class="sd">            Dictionary containing the initial values for the :math:`\\pi` parameter at</span>
 <span class="sd">            different levels of the hierarchy. Pis values encode the precision of the</span>
 <span class="sd">            values at each level (Var = 1/pi) Defaults set to `{&quot;1&quot;: 1.0, &quot;2&quot;: 1.0}` for</span>
-<span class="sd">            a 2-levels model.</span>
+<span class="sd">            a 2-level model.</span>
 <span class="sd">        omega : dict</span>
-<span class="sd">            Dictionary containing the initial values for the `omega` parameter at</span>
-<span class="sd">            different levels of the hierarchy. Omegas represent the tonic part of the</span>
-<span class="sd">            variance (the part that is not affected by the parent node). Defaults set to</span>
-<span class="sd">            `{&quot;1&quot;: -10.0, &quot;2&quot;: -10.0}` for a 2-levels model. This parameters only when</span>
-<span class="sd">            `model_type=&quot;GRW&quot;`.</span>
+<span class="sd">            Dictionary containing the initial values for the :math:`\\omega` parameter</span>
+<span class="sd">            at different levels of the hierarchy. :math:`\\omega` represents the tonic</span>
+<span class="sd">            part of the variance (the part that is not affected by the parent node).</span>
+<span class="sd">            Defaults set to `{&quot;1&quot;: -10.0, &quot;2&quot;: -10.0}` for a 2-level model for</span>
+<span class="sd">            continuous inputs. This parameter is only required for Gaussian Random Walk</span>
+<span class="sd">            nodes.</span>
 <span class="sd">        omega_input : float</span>
 <span class="sd">            Default value sets to `log(1e-4)`. Represents the noise associated with</span>
 <span class="sd">            the input.</span>
 <span class="sd">        rho : dict</span>
-<span class="sd">            Dictionary containing the initial values for the `rho` parameter at</span>
+<span class="sd">            Dictionary containing the initial values for the :math:`\\rho` parameter at</span>
 <span class="sd">            different levels of the hierarchy. Rho represents the drift of the random</span>
-<span class="sd">            walk. Only required when `model_type=&quot;GRW&quot;`. Defaults set all entries to</span>
-<span class="sd">            `0` according to the number of required levels.</span>
+<span class="sd">            walk. This parameter is only required for Gaussian Random Walk nodes.</span>
+<span class="sd">            Defaults set all entries to `0` according to the number of required levels.</span>
 <span class="sd">        kappas : dict</span>
-<span class="sd">            Dictionary containing the initial values for the `kappa` parameter at</span>
-<span class="sd">            different levels of the hierarchy. Kappa represents the phasic part of the</span>
-<span class="sd">            variance (the part that is affected by the parents nodes) and will defines</span>
-<span class="sd">            the strenght of the connection between the node and the parent node. Often</span>
-<span class="sd">            fixed to 1. Defaults set to `{&quot;1&quot;: 1.0}` for a 2-levels model. Only</span>
-<span class="sd">            required when `model_type=&quot;GRW&quot;`.</span>
+<span class="sd">            Dictionary containing the initial values for the :math:`\\kappa` parameter</span>
+<span class="sd">            at different levels of the hierarchy. Kappa represents the phasic part of</span>
+<span class="sd">            the variance (the part that is affected by the parents nodes) and will</span>
+<span class="sd">            defines the strenght of the connection between the node and the parent</span>
+<span class="sd">            node. Often fixed to `1`. Defaults set to `{&quot;1&quot;: 1.0}` for a 2-level model.</span>
+<span class="sd">            This parameter is only required for Gaussian Random Walk nodes.</span>
 <span class="sd">        eta0 : float</span>
 <span class="sd">            The first categorical value of the binary node. Defaults to `0.0`. Only</span>
 <span class="sd">            relevant if `model_type=&quot;binary&quot;`.</span>
@@ -490,7 +494,7 @@
 <span class="sd">            The bias introduced in the perception of the input signal. This value is</span>
 <span class="sd">            added to the input time serie before model fitting.</span>
 <span class="sd">        verbose : bool</span>
-<span class="sd">            Default is `True`.</span>
+<span class="sd">            Verbosity of the methods for model creation and fitting. Defaults to `True`.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>

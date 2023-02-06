@@ -386,67 +386,209 @@
             
             <article class="bd-article" role="main">
               
-  <p>(=theory)</p>
-<section class="tex2jax_ignore mathjax_ignore" id="the-hierarchical-gaussian-filter">
-<h1>The Hierarchical Gaussian Filter<a class="headerlink" href="#the-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
-<p>In this notebook, we are going to introduce the basic concepts on which the Hierarchical Gaussian Filter (HGF) is based. We introduce the main equations and illustrate some of the examples with Python code. We start with the generative model of the HGF, which can be seen as the structure creating the sensory inputs that the agent tries to use to produce behaviours. This can be seen as the process occurring in the environment. Next, we show how this model can be “inverted” and used by an agent to infer parameter values that generated the sensory inputs. From there, we discuss the notion of prediction error and how derivations of the model can be used to infer probability densities given observed behavioural outcomes.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="the-hierarchical-gaussian-filter">
+<span id="theory"></span><h1>The Hierarchical Gaussian Filter<a class="headerlink" href="#the-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
+<p>In this notebook, we are going to introduce some of the oncepts on which the Hierarchical Gaussian Filter (HGF) is based. We describe the main equations and illustrate the examples with Python code. We start with the generative model of the HGF, which can be seen as the structurekd process generating the sensory inputs that the agent tries to use to produce behaviours. Next, we show how this model can be “inverted” and used by an agent to infer parameter values that generated the sensory inputs. From there, we discuss the notion of prediction error and how derivations of the model can be used to infer probability densities given observed behavioural outcomes.</p>
 <section id="the-generative-model-of-the-hgf">
 <h2>The generative model of the HGF<a class="headerlink" href="#the-generative-model-of-the-hgf" title="Permalink to this heading">#</a></h2>
-<p>In this section we will use the two-level HGF as an example (see also the tutorial <a class="reference internal" href="notebooks/2-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">The continuous Hierarchical Gaussian Filter</span></a>). The generative model that underpine the continuous HGF can be seen as a generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Random_walk#Gaussian_random_walk">Gaussian Random Walk</a> (GRW). Put simply, a GRW generate a new observation <span class="math notranslate nohighlight">\(x_1^{(k)}\)</span> at each time step <span class="math notranslate nohighlight">\(k\)</span> from a normal distribution and using the previous observation <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span> such as:</p>
+<p>In this section we are using the two-level HGF as example (see also the tutorial <a class="reference internal" href="notebooks/2-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">The continuous Hierarchical Gaussian Filter</span></a>). The generative model that underpine the continuous HGF is a generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Random_walk#Gaussian_random_walk">Gaussian Random Walk</a> (GRW). A GRW generate a new observation <span class="math notranslate nohighlight">\(x_1^{(k)}\)</span> at each time step <span class="math notranslate nohighlight">\(k\)</span> from a normal distribution and using the previous observation <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span> such as:</p>
 <div class="math notranslate nohighlight">
 \[
 x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(\sigma^2\)</span> is the variance of the distribution. In the example below, we use <span class="math notranslate nohighlight">\(\sigma^2 = 1\)</span> and <span class="math notranslate nohighlight">\(x_1^{(0)} = 0\)</span>.</p>
-<div class="cell tag_hide-cell docutils container">
+<div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell content</span>
-<span class="expanded">Hide code cell content</span>
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 
 <span class="c1"># random walk</span>
-<span class="n">x_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">200</span><span class="p">))</span>  <span class="c1"># GRW</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># starting at 0</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.4</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time step (k)&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="_images/1b1291990f932ef9a4d97490f841eae5e41af24bb7753ec7d9d93d3ea2dd0ea6.png" src="_images/1b1291990f932ef9a4d97490f841eae5e41af24bb7753ec7d9d93d3ea2dd0ea6.png" />
-</div>
 </details>
+<div class="cell_output docutils container">
+<img alt="_images/e36c6eda8171306aa8c7a963d22b1a475895f266ac32a85fad0fdd5b479b3353.png" src="_images/e36c6eda8171306aa8c7a963d22b1a475895f266ac32a85fad0fdd5b479b3353.png" />
 </div>
-<p>This simple process will be our first building block. Importantly here, the variability of the sensory input is constant across time: even if we don’t know exactly in which direction the time series is going to move in the future, we know that is is unlikely to make certain kind of big jumps, which is controlled by the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>. The HGF generalize this idea by letting the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span> being controlled by another random walk, in a higher level of the hierarchie, which is defined as <em>volatility coupling</em> (see below). This lead us to the generative model of the HGF, which can be seen as a hierarchical Gaussian Random Walk, where (hidden) states of the world perform Gaussian random walks in time and produce outcomes which are perceived by an observer as inputs.</p>
-<p>States can influence each other via volatility coupling or via value coupling.</p>
-<p>In the classical 3-level binary HGF as presented in <span id="id1">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>, the two states of interest, <span class="math notranslate nohighlight">\(x_2\)</span> and <span class="math notranslate nohighlight">\(x_3\)</span>, are coupled to each other via volatility coupling, which means that for state <span class="math notranslate nohighlight">\(x_2\)</span>, the mean of the Gaussian random walk on trial <span class="math notranslate nohighlight">\(k\)</span> is given by its previous value <span class="math notranslate nohighlight">\(x_2^{(k-1)}\)</span>, while the step size (or variance) depends on the current value of the higher level state, <span class="math notranslate nohighlight">\(x_3^{(k)}\)</span>:</p>
+</div>
+<p>This simple process will be our first building block. Importantly here, the variability of the sensory input is constant across time: even if we don’t know exactly in which direction the time series is going to move in the future, we know that is is unlikely to make certain kind of big jumps, because it is controlled by a fixed parameter, the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</p>
+<section id="volatility-coupling">
+<h3>Volatility coupling<a class="headerlink" href="#volatility-coupling" title="Permalink to this heading">#</a></h3>
+<p>Now, we can also decide to change that and let the variance itself being a stochastic process generated by another randome walk. The HGF fundamentaly captitalize on this notion and generalize the standard GRW by letting the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span> being controlled by a higher level node.</p>
+<p>If we take as example the two-level continuous HGF <span id="id1">[<a class="reference internal" href="references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span>, the model is constituded of two states of interest, <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>. <span class="math notranslate nohighlight">\(x_1\)</span> is performing a GRW as previously defined, but it is also paired with <span class="math notranslate nohighlight">\(x_2\)</span> to each other via <em>volatility coupling</em>. This means that for state <span class="math notranslate nohighlight">\(x_1\)</span>, the mean of the Gaussian random walk on trial <span class="math notranslate nohighlight">\(k\)</span> is given by its previous value <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span>, while the step size (or variance) depends on the current value of the higher level state, <span class="math notranslate nohighlight">\(x_2^{(k)}\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[
-x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, f(x_3^{(k)})),
+x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \, f(x_2^{(k)}))
 \]</div>
 <p>where the exact dependency is of the form</p>
 <div class="math notranslate nohighlight">
 \[
-    f(x_3^{(k)}) = \exp(\kappa_2 x_3^{(k)} + \omega_2).
+    f(x_2^{(k)}) = \exp(\kappa_1 x_2^{(k)} + \omega_1)
 \]</div>
-<p>However, a higher-level state can also have influence on a lower-level state by influencing its mean. In that case, the mean of the Gaussian random walk at one level is a function not only of its own previous value, but also the current value of the higher-level state (with step size either constant or a function of another state):</p>
+<p>with <span class="math notranslate nohighlight">\(\kappa\)</span> as scalling parameter (by defaults in most case it is set to <code class="docutils literal notranslate"><span class="pre">1</span></code> which indicates a complete volatility coupling), and <span class="math notranslate nohighlight">\(\omega_1\)</span> being the <em>evolution rate</em>, also refered as the tonic part of the variance, the part that is not inherited from parent nodes.</p>
+<p>At the higher level of the hierarchy (here the second level), the nodes are not inheriting anything from their parents anymore, and only rely on their own variance:</p>
 <div class="math notranslate nohighlight">
 \[
-    x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)} + \alpha_{4,2} x_4^{(k)}, \, \exp(\omega_2)),
+x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 \]</div>
-<p>which means constant step size, or</p>
-<div class="math notranslate nohighlight">
-\[
-    x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)} + \alpha_{4,2} x_4^{(k)}, \, \exp(\kappa_2 x_3^{(k)} + \omega_2)).
-\]</div>
+<p>The model described above can be implemented in Python as the following:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">kappa_1</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">omega_1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.0</span>
+<span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.0</span>
+<span class="n">mu_1</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">mu_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x_2</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># two-level hierarchical gaussian random walk</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">):</span>
+
+    <span class="c1"># x2</span>
+    <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
+    <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_2</span><span class="p">)</span>
+
+    <span class="c1"># x1</span>
+    <span class="n">pi_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">kappa_1</span> <span class="o">*</span> <span class="n">mu_2</span> <span class="o">+</span> <span class="n">omega_1</span><span class="p">)</span>
+    <span class="n">mu_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_1</span><span class="p">,</span> <span class="n">pi_1</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+
+    <span class="n">x_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_1</span><span class="p">)</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_2</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;indianred&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time step (k)&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/935a31ccc3bb28a2f60457a1120efb80391e7678a7b5bde7529d119acd4aaa07.png" src="_images/935a31ccc3bb28a2f60457a1120efb80391e7678a7b5bde7529d119acd4aaa07.png" />
+</div>
+</div>
+<p>In this example, it becomes apparent that the volatility of the observation is not constant in time anymore, but depends on the values observed at the level above.</p>
 </section>
-<section id="volatility-vs-value-coupling">
-<h2>Volatility vs. value coupling<a class="headerlink" href="#volatility-vs-value-coupling" title="Permalink to this heading">#</a></h2>
-<p>In other words, any given state in the world can be modelled as having a volatility parent state, a value parent state, or both, or none (in which case it evolves as a Gaussian random walk around its previous value with fixed step size). Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
+<section id="value-coupling">
+<h3>Value coupling<a class="headerlink" href="#value-coupling" title="Permalink to this heading">#</a></h3>
+<p>This distant influence of one node on another is called <em>volatility coupling</em> (see below). However, a higher-level state can also have influence on a lower-level state by influencing its mean instead of its variance. In that case, the mean of the Gaussian random walk at one level is a function not only of its own previous value, but also the current value of the higher-level state. Such model can be formalized as follow:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{1} x_2^{(k)}, \, \exp(\omega_1)) \\
+    x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is the value coupling between the two nodes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">alpha_1</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span>
+<span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x_2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># two-level hierarchical gaussian random walk</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+
+    <span class="c1"># x2</span>
+    <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
+    <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_2</span><span class="p">)</span>
+
+    <span class="c1"># x1</span>
+    <span class="n">pi_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_1</span><span class="p">)</span>
+    <span class="n">mu_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_1</span> <span class="o">+</span> <span class="p">(</span><span class="n">alpha_1</span> <span class="o">*</span> <span class="n">mu_2</span><span class="p">),</span> <span class="n">pi_1</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_1</span><span class="p">)</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_2</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;indianred&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time step (k)&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f7d4b43a6f10c4dc2448089594abc11924180796b6417c03e0a518ccc8f713aa.png" src="_images/f7d4b43a6f10c4dc2448089594abc11924180796b6417c03e0a518ccc8f713aa.png" />
+</div>
+</div>
+<p>Finally, volatility and value coupling can operate at the same time on the same node, like in this example where <span class="math notranslate nohighlight">\(x_{1}\)</span> has its values coupled with <span class="math notranslate nohighlight">\(x_{2}\)</span> and its volatility coupled with <span class="math notranslate nohighlight">\(x_{3}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+x_1^{(k)}          \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{1} x_2^{(k)}, \exp(\kappa_1 x_3^{(k)} + \omega_1)) \\
+x_2^{(k)}          \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2)) \\
+x_3^{(k)}          \sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\omega_3)) \\
+\end{split}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">alpha_1</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">kappa_1</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_3</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">12.0</span>
+<span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span><span class="p">,</span> <span class="n">mu_3</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x_2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x_3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># two-level hierarchical gaussian random walk</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    
+    <span class="c1"># x3</span>
+    <span class="n">pi_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_3</span><span class="p">)</span>
+    <span class="n">mu_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_3</span><span class="p">,</span> <span class="n">pi_3</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_3</span><span class="p">)</span>
+
+    <span class="c1"># x2</span>
+    <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
+    <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_2</span><span class="p">)</span>
+
+    <span class="c1"># x1</span>
+    <span class="n">pi_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">kappa_1</span> <span class="o">*</span> <span class="n">mu_3</span> <span class="o">+</span> <span class="n">omega_1</span><span class="p">)</span>
+    <span class="n">mu_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_1</span> <span class="o">+</span> <span class="p">(</span><span class="n">alpha_1</span> <span class="o">*</span> <span class="n">mu_2</span><span class="p">),</span> <span class="n">pi_1</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_1</span><span class="p">)</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_3</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;volatility coupling&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_2</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;indianred&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;value coupling&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time step (k)&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/70c6fd99e3b7eb7213f4c7823189b36e1ae417f689619b6f52b56f8dde397f80.png" src="_images/70c6fd99e3b7eb7213f4c7823189b36e1ae417f689619b6f52b56f8dde397f80.png" />
+</div>
+</div>
+<p>Based on these principles, any given state in the world can be modelled as having a volatility parent state, a value parent state, both, or none. When the node is orpean, it evolves as a Gaussian random walk around its previous value with fixed step size. Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
 <p>:::{figure-md} fig1
 <img src="./images/genmod.svg" alt="fishy" class="bg-primary mb-1"></p>
 <p>An example of a generative model of sensory inputs with six hidden states. Volatility coupling is depicted with dashed lines, value coupling with straight lines.
@@ -456,7 +598,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, f(x_3^{(k)})),
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align}
-u^{(k)} &amp;\sim \mathcal{N}(u^{(k)} | x_1^{(k)}, \, \sigma_u) \\
+u^{(k)}             &amp;\sim \mathcal{N}(u^{(k)} | x_1^{(k)}, \, \sigma_u) \\
 x_1^{(k)}           &amp;\sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{2,1} x_2^{(k)}, \, \exp(\kappa_1 \check{x}_1^{(k)} + \omega_1)) \\
 \check{x}_1^{(k)}   &amp;\sim \mathcal{N}(\check{x}_1^{(k)} | \check{x}_1^{(k-1)} + \alpha_{3,\check{1}} x_3^{(k)}, \, \exp(\omega_{\check{1}})) \\
 x_2^{(k)}           &amp;\sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\kappa_2 \check{x}_2^{(k)} + \omega_2)) \\
@@ -466,6 +608,7 @@ x_3^{(k)}           &amp;\sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\kapp
 \end{align}
 \end{split}\]</div>
 <p>Note that in this example, all states that are value parents of other states (or outcomes) have their own volatility parent, while states that are volatility parents to other nodes either have a value parent (as state <span class="math notranslate nohighlight">\(\check{x}_1\)</span>), or no parents (as states <span class="math notranslate nohighlight">\(\check{x}_2\)</span> and <span class="math notranslate nohighlight">\(\check{x}_3\)</span>). This is deliberately so, and we will see these two motifs - every state of a hierarchy has its own volatility estimation, and volatility states only have value parents - reappear in the following chapters.</p>
+</section>
 </section>
 <section id="belief-updates-in-the-hgf-computations-of-nodes">
 <h2>Belief updates in the HGF: Computations of nodes<a class="headerlink" href="#belief-updates-in-the-hgf-computations-of-nodes" title="Permalink to this heading">#</a></h2>
@@ -717,11 +860,18 @@ $<span class="math notranslate nohighlight">\(
   <a class="reference internal nav-link" href="#the-generative-model-of-the-hgf">
    The generative model of the HGF
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#volatility-vs-value-coupling">
-   Volatility vs. value coupling
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#volatility-coupling">
+     Volatility coupling
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#value-coupling">
+     Value coupling
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#belief-updates-in-the-hgf-computations-of-nodes">

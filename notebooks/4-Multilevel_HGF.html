@@ -46,6 +46,8 @@
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/4-Multilevel_HGF';</script>
     <link rel="shortcut icon" href="../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -407,31 +409,42 @@
 </div>
 </div>
 </div>
-<p>In the previous tutorials, we interoduced the binary and continuous Hierarchical Gaussian Filters (HGF) with 2 or 3 levels of volatility. Those models are operating at the agent level (i.e. the observations and the parameters being estimated are the observations and the parameters of one agent operating in the environment). However, mode concret use cases of the HGF could require to make inference at the group-level (e.g. comparing the hyper-parameters of different group of participants undergoing the same task). Such example are standard practice in Bayesian cognitive modelling <span id="id1">[<a class="reference internal" href="../references.html#id8" title="Michael D. Lee and Eric-Jan Wagenmakers. Bayesian Cognitive Modeling. Cambridge University Press, April 2014. URL: https://doi.org/10.1017/cbo9781139087759, doi:10.1017/cbo9781139087759.">Lee and Wagenmakers, 2014</a>]</span> and require to embede the fitting of HGF model in a Bayesian networks. This is partially what we have been doing in the previous tutorials when we estimated the model’s parameters using MCMC sampling. Here, we are going to extend this principle and and fit many models (i.e. many participant) at a time and estimate both parameters and hyper-parameters posterior densities.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Automatic broadcasting of model parameters
-Estimating group-level parameters in the context of a graphical probabilistic model require to fit multiple models at the same time, either on different input data, or on the same data with different parameters, or on different datasets with different parameters. This steps is handled natively both by the <code class="docutils literal notranslate"><span class="pre">:py:class:ghgf.distribution.hgf_logp</span></code> class and the <code class="docutils literal notranslate"><span class="pre">:py:class:ghgf.distribution.HGFDistribution</span></code> class through an automated <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a> approach. When a list of <em>n</em> input time series is provided, the function will automatically apply <em>n</em> models using the provided parameters. If for some parameters an array of length <em>n</em> is provided, each model will use the n-th value as parameter.</p>
+<p>In the previous tutorials, we discussed the use of binary and continuous Hierarchical Gaussian Filters (HGF) with 2 or 3 levels of volatility. The way we presented those models was by operating at the agent level (i.e. the observations were made by one agent, and we estimated the posterior density distribution of parameters for that agent). However, many situations in computational psychiatry and cognitive modelling will require making inferences at the population level, therefore fitting many models at the same time and estimating the density distribution of hyper-priors (see for example case studies from <span id="id1">[<a class="reference internal" href="../references.html#id8" title="Michael D. Lee and Eric-Jan Wagenmakers. Bayesian Cognitive Modeling. Cambridge University Press, April 2014. URL: https://doi.org/10.1017/cbo9781139087759, doi:10.1017/cbo9781139087759.">Lee and Wagenmakers, 2014</a>]</span>).</p>
+<p>Luckily, we already have all the components in place to do that. We have already embedded the HGF model in a Bayesian network, where prior distributions were set over some parameters of interest. We just need to extend this approach a bit, and explicitly state that we want to fit many models (participants) at the same time, and draw their parameter values from a hyper-prior (i.e. the group-level distribution).</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Using automatic broadcasting
+To estimate group-level parameters, we will have to fit multiple models at the same time, either on different input data, or on the same data with different parameters, or on different datasets with different parameters. This steps is handled natively both by the <a class="reference internal" href="../generated/ghgf.distribution/ghgf.distribution.hgf_logp.html#ghgf.distribution.hgf_logp" title="ghgf.distribution.hgf_logp"><span class="xref myst py py-func">log probability function</span></a> and the <a class="reference internal" href="../generated/ghgf.distribution/ghgf.distribution.HGFDistribution.html#ghgf.distribution.HGFDistribution" title="ghgf.distribution.HGFDistribution"><span class="xref myst py py-class">HGFDistribution class</span></a> using a pseudo <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a> approach. When a list of <em>n</em> input time series is provided, the function will automatically apply <em>n</em> models using the provided parameters. If for some parameters an array of length <em>n</em> is provided, each model will use the n-th value as parameter. Here, we are going to rely on this feature to compute the log probability of <em>n</em> model, using <em>n</em> time series as input and <em>n</em> different parameters to test.</p>
 </div>
-<section id="continuous-hgf">
-<h2>Continuous HGF<a class="headerlink" href="#continuous-hgf" title="Permalink to this heading">#</a></h2>
+<section id="a-multilevel-continuous-hgf">
+<h2>A multilevel continuous HGF<a class="headerlink" href="#a-multilevel-continuous-hgf" title="Permalink to this heading">#</a></h2>
 <section id="simulate-a-dataset">
 <h3>Simulate a dataset<a class="headerlink" href="#simulate-a-dataset" title="Permalink to this heading">#</a></h3>
+<p>Using the example of a hierarchical Gaussian Random Walk that we depicted in the <a class="reference internal" href="../theory.html#theory"><span class="std std-ref">The Hierarchical Gaussian Filter</span></a> section, we are going to us this generative model to simulate 8 random walks using known parameters and infer afterhand the group-level value of <span class="math notranslate nohighlight">\(\omega_1\)</span> from this dataset. The generative model is given by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\omega_1, \omega_2 = -10.0  \\
+\mu_1, \mu_2 = 0.0  \\
+u^{(k)} \sim \mathcal{N}(x_1^{(k)} , 1e-4) \\
+x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \exp(\kappa_1 x_2^{(k)} + \omega_1)) \\
+x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \exp(\omega_2)) \\
+\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here we are usig a noisy input node.</p>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_data</span> <span class="o">=</span> <span class="mi">6</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">n_data</span> <span class="o">=</span> <span class="mi">8</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">participant</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_data</span><span class="p">):</span>
     <span class="n">input_data</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">kappa_1</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">omega_1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.0</span>
-    <span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.0</span>
-    <span class="n">mu_1</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">pi_1</span> <span class="o">=</span> <span class="mf">1e4</span>
-    <span class="n">pi_2</span> <span class="o">=</span> <span class="mf">1e1</span>
+    <span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span>
+    <span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
         
         <span class="c1"># x2</span>
         <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
@@ -452,20 +465,33 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">rw</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rw</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">rw</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+    <span class="n">axs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b34fb353486c8f1fad1024834ef8d847cc4e03447ce92ca46e2e27c20eb32e48.png" src="../_images/b34fb353486c8f1fad1024834ef8d847cc4e03447ce92ca46e2e27c20eb32e48.png" />
+<img alt="../_images/794dd47fa13e89a6d67def47a3abf198688b836d6bdc8193bf953565f44f688f.png" src="../_images/794dd47fa13e89a6d67def47a3abf198688b836d6bdc8193bf953565f44f688f.png" />
 </div>
 </div>
 </section>
-</section>
-<section id="embedding-a-serie-of-hgfs-in-a-graphical-model">
-<h2>Embedding a serie of HGFs in a graphical model<a class="headerlink" href="#embedding-a-serie-of-hgfs-in-a-graphical-model" title="Permalink to this heading">#</a></h2>
-<p>Here, we are goingin to estimate the group-level value of the <code class="docutils literal notranslate"><span class="pre">omega_1</span></code> parameter. The dataset consist in 3 time series derived from the classic USD-SWF conversion rate example. Every time series will be fitted to an HGF model where the <code class="docutils literal notranslate"><span class="pre">omega_1</span></code> parameter has to be estimated and the other parameters are fixed.</p>
+<section id="model">
+<h3>Model<a class="headerlink" href="#model" title="Permalink to this heading">#</a></h3>
+<p>Here, we want to estimate the group-level value of <span class="math notranslate nohighlight">\(\omega_1\)</span> parameter. For each <em>participant</em>, the value will be drawn from a hyper-prior using this structure:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mu_1 \sim \mathcal{N}(\mu=0.0, \sigma=10.0)  \\
+\sigma_1 \sim \mathcal{HalfCauchy}(\beta=2.0)  \\
+\lambda \sim \mathcal{N}(\mu=0.0, \sigma=1.0) \\
+\omega_i = \mu_1 + \sigma_1 * \lambda  \\
+u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
+\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(i \in {1,...,8}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We are using a non-centered parametriztion to avoid invalid samples caused by <a class="reference external" href="https://num.pyro.ai/en/stable/examples/funnel.html">Neal’s funnel</a> <span id="id2">[<a class="reference internal" href="../references.html#id9" title="Radford M. Neal. Slice sampling. The Annals of Statistics, June 2003. URL: https://doi.org/10.1214/aos/1056562461, doi:10.1214/aos/1056562461.">Neal, 2003</a>]</span>.</p>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
@@ -483,16 +509,13 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
     
     <span class="c1"># Hypterpriors</span>
     <span class="c1">#-------------</span>
-    <span class="c1">#mu_omega_1 = pm.Normal(&quot;mu_omega_1&quot;, mu=.0, sigma=1.0)</span>
-    <span class="c1">#sigma_omega_1 = pm.Uniform(&quot;sigma_omega_1&quot;, .5, 10)</span>
+    <span class="n">mu_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+    <span class="n">sigma_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfCauchy</span><span class="p">(</span><span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     
     <span class="c1"># Priors</span>
     <span class="c1">#-------</span>
-    <span class="c1">#normal_dist = pm.Normal.dist(mu=-5, sigma=2, shape=n_data)</span>
-    <span class="c1">#omega_2 = pm.Censored(&quot;omega_2&quot;, normal_dist, lower=-20.0, upper=0.0, shape=n_data)</span>
-    <span class="c1">#omega_1 = pm.Normal(&quot;omega_1&quot;, mu=mu_omega_1, sigma=sigma_omega_1, shape=n_data)</span>
-    <span class="n">omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
-    <span class="c1">#omega_1 = pm.Deterministic(&quot;omega_1&quot;, norm * sigma_omega_1 + mu_omega_1)</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
+    <span class="n">omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
 
     <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
         <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
@@ -526,7 +549,7 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/909bea096e2275da3653d1d9b70947dcaa3bd2055b24a44908b1e2336302abc2.svg" src="../_images/909bea096e2275da3653d1d9b70947dcaa3bd2055b24a44908b1e2336302abc2.svg" /></div>
+<img alt="../_images/325361e8c1f4a5a7988e670b05c1b99b51a718797e5734a1d0713a442d19b6f2.svg" src="../_images/325361e8c1f4a5a7988e670b05c1b99b51a718797e5734a1d0713a442d19b6f2.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -545,7 +568,7 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 4 jobs)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_1]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
 </pre></div>
 </div>
 <div class="output text_html">
@@ -567,158 +590,46 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div><div class="output text_html">
     <div>
       <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:35&lt;00:00 Sampling 4 chains, 0 divergences]
+      100.00% [8000/8000 02:32&lt;00:00 Sampling 4 chains, 4 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 36 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 152 seconds.
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">idata</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/03b4a7ac543d75b30499436905f08a33029e3f73457d1865627181ce61921a8b.png" src="../_images/03b4a7ac543d75b30499436905f08a33029e3f73457d1865627181ce61921a8b.png" />
+<img alt="../_images/046f424b05425d81edf18cfcee36dfd7e918627049751bc2bbcde54755e82acc.png" src="../_images/046f424b05425d81edf18cfcee36dfd7e918627049751bc2bbcde54755e82acc.png" />
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">idata</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>mean</th>
-      <th>sd</th>
-      <th>hdi_3%</th>
-      <th>hdi_97%</th>
-      <th>mcse_mean</th>
-      <th>mcse_sd</th>
-      <th>ess_bulk</th>
-      <th>ess_tail</th>
-      <th>r_hat</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>omega_1[0]</th>
-      <td>-8.164</td>
-      <td>0.915</td>
-      <td>-9.607</td>
-      <td>-6.516</td>
-      <td>0.029</td>
-      <td>0.020</td>
-      <td>1722.0</td>
-      <td>889.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[1]</th>
-      <td>-8.706</td>
-      <td>2.072</td>
-      <td>-10.945</td>
-      <td>-5.057</td>
-      <td>0.112</td>
-      <td>0.079</td>
-      <td>958.0</td>
-      <td>298.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[2]</th>
-      <td>-9.442</td>
-      <td>0.514</td>
-      <td>-10.374</td>
-      <td>-8.437</td>
-      <td>0.010</td>
-      <td>0.007</td>
-      <td>2849.0</td>
-      <td>1998.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[3]</th>
-      <td>-8.636</td>
-      <td>0.675</td>
-      <td>-9.814</td>
-      <td>-7.388</td>
-      <td>0.015</td>
-      <td>0.010</td>
-      <td>2574.0</td>
-      <td>1586.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[4]</th>
-      <td>-9.814</td>
-      <td>0.491</td>
-      <td>-10.697</td>
-      <td>-8.874</td>
-      <td>0.009</td>
-      <td>0.007</td>
-      <td>2844.0</td>
-      <td>1941.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[5]</th>
-      <td>-10.401</td>
-      <td>0.387</td>
-      <td>-11.074</td>
-      <td>-9.638</td>
-      <td>0.007</td>
-      <td>0.005</td>
-      <td>2937.0</td>
-      <td>2142.0</td>
-      <td>1.0</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
+<p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
 </section>
-<section id="binary-hgf">
-<h2>Binary HGF<a class="headerlink" href="#binary-hgf" title="Permalink to this heading">#</a></h2>
-<section id="id2">
-<h3>Simulate a dataset<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="a-multilevel-binary-hgf">
+<h2>A multilevel binary HGF<a class="headerlink" href="#a-multilevel-binary-hgf" title="Permalink to this heading">#</a></h2>
+<section id="id3">
+<h3>Simulate a dataset<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_data</span> <span class="o">=</span> <span class="mi">10</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">n_data</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">participant</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_data</span><span class="p">):</span>
     <span class="n">input_data</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
-    <span class="n">mu_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span>
+    <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
         
         <span class="c1"># x2</span>
         <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
         <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">mu_2</span><span class="o">%</span><span class="k">100</span> == 0:
-            <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">mu_2</span><span class="o">/</span><span class="mi">100</span><span class="o">%</span><span class="k">2</span> else -1.0
 
         <span class="c1"># x1</span>
         <span class="n">s2</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mu_2</span><span class="p">))</span>  <span class="c1"># sigmoid function</span>
@@ -747,9 +658,19 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymc.math</span> <span class="kn">import</span> <span class="n">clip</span>
 
-    <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
+    
+    <span class="c1"># Hypterpriors</span>
+    <span class="c1">#-------------</span>
+    <span class="n">mu_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sigma_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfCauchy</span><span class="p">(</span><span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    
+    <span class="c1"># Priors</span>
+    <span class="c1">#-------</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
+    <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
 
     <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
         <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
@@ -785,7 +706,7 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/bfabb4ac5999587ede50e844a515172a793c3968b3af3e1988eeeb3bf44bd920.svg" src="../_images/bfabb4ac5999587ede50e844a515172a793c3968b3af3e1988eeeb3bf44bd920.svg" /></div>
+<img alt="../_images/0f59649ca67c2c30e1842eca2a7541ad7beaefd68f99f4a70e1ca351f2855b18.svg" src="../_images/0f59649ca67c2c30e1842eca2a7541ad7beaefd68f99f4a70e1ca351f2855b18.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -807,7 +728,7 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (4 chains in 1 job)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_2]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
 </pre></div>
 </div>
 <div class="output text_html">
@@ -829,7 +750,7 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:58&lt;00:00 Sampling chain 0, 9 divergences]
+      100.00% [2000/2000 00:25&lt;00:00 Sampling chain 0, 33 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -850,7 +771,7 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:53&lt;00:00 Sampling chain 1, 12 divergences]
+      100.00% [2000/2000 00:21&lt;00:00 Sampling chain 1, 51 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -871,7 +792,7 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:56&lt;00:00 Sampling chain 2, 6 divergences]
+      100.00% [2000/2000 00:21&lt;00:00 Sampling chain 2, 73 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -892,9 +813,9 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:49&lt;00:00 Sampling chain 3, 9 divergences]
+      100.00% [2000/2000 00:20&lt;00:00 Sampling chain 3, 53 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 218 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 89 seconds.
 </pre></div>
 </div>
 </div>
@@ -907,270 +828,7 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c51acae577b5fd69276345d3b2912f14afddad81116984447624bd21bbd4dcfe.png" src="../_images/c51acae577b5fd69276345d3b2912f14afddad81116984447624bd21bbd4dcfe.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>mean</th>
-      <th>sd</th>
-      <th>hdi_3%</th>
-      <th>hdi_97%</th>
-      <th>mcse_mean</th>
-      <th>mcse_sd</th>
-      <th>ess_bulk</th>
-      <th>ess_tail</th>
-      <th>r_hat</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>omega_2[0]</th>
-      <td>-2.137</td>
-      <td>0.314</td>
-      <td>-2.789</td>
-      <td>-1.664</td>
-      <td>0.008</td>
-      <td>0.005</td>
-      <td>2419.0</td>
-      <td>2102.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_2[1]</th>
-      <td>-1.306</td>
-      <td>0.291</td>
-      <td>-1.824</td>
-      <td>-0.787</td>
-      <td>0.005</td>
-      <td>0.004</td>
-      <td>3379.0</td>
-      <td>2482.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_2[2]</th>
-      <td>-3.005</td>
-      <td>0.142</td>
-      <td>-3.265</td>
-      <td>-2.754</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>3036.0</td>
-      <td>1991.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_2[3]</th>
-      <td>-2.648</td>
-      <td>0.252</td>
-      <td>-3.113</td>
-      <td>-2.229</td>
-      <td>0.005</td>
-      <td>0.004</td>
-      <td>2667.0</td>
-      <td>2273.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_2[4]</th>
-      <td>-2.375</td>
-      <td>0.188</td>
-      <td>-2.742</td>
-      <td>-2.026</td>
-      <td>0.005</td>
-      <td>0.004</td>
-      <td>1975.0</td>
-      <td>1005.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_2[5]</th>
-      <td>-2.199</td>
-      <td>0.252</td>
-      <td>-2.652</td>
-      <td>-1.759</td>
-      <td>0.005</td>
-      <td>0.003</td>
-      <td>3019.0</td>
-      <td>2405.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_2[6]</th>
-      <td>-2.901</td>
-      <td>0.224</td>
-      <td>-3.325</td>
-      <td>-2.566</td>
-      <td>0.006</td>
-      <td>0.004</td>
-      <td>1863.0</td>
-      <td>2133.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_2[7]</th>
-      <td>-2.021</td>
-      <td>0.153</td>
-      <td>-2.301</td>
-      <td>-1.764</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>3117.0</td>
-      <td>2613.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_2[8]</th>
-      <td>-3.177</td>
-      <td>0.120</td>
-      <td>-3.420</td>
-      <td>-2.984</td>
-      <td>0.002</td>
-      <td>0.002</td>
-      <td>3720.0</td>
-      <td>2104.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_2[9]</th>
-      <td>-2.821</td>
-      <td>0.142</td>
-      <td>-3.077</td>
-      <td>-2.567</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>2415.0</td>
-      <td>1468.0</td>
-      <td>1.0</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-</section>
-</section>
-<section id="with-hyper-priors">
-<h3>With hyper-priors<a class="headerlink" href="#with-hyper-priors" title="Permalink to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
-    <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-    <span class="n">response_function</span><span class="o">=</span><span class="n">binary_surprise</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-<span class="ne">----&gt; </span><span class="mi">4</span>     <span class="n">input_data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">response_function</span><span class="o">=</span><span class="n">binary_surprise</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;data&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
-
-    <span class="c1"># hyper-parameters</span>
-    <span class="n">mu_omega</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;mu_omega&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-    <span class="n">sigma_omega</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;sigma_omega&quot;</span><span class="p">,</span> <span class="mf">.2</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
-    
-    <span class="c1"># parameters</span>
-    <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="n">mu_omega</span><span class="p">,</span> <span class="n">sigma_omega</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
-
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
-        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
-        <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
-            <span class="n">omega_input</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
-            <span class="n">mu_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">bias</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">omega_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">pi_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">mu_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">kappa_2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<section id="id3">
-<h4>Visualizing the model<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">two_levels_binary_hgf</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="id4">
-<h4>Sampling<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
-    <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">);</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">)</span>
-</pre></div>
-</div>
+<img alt="../_images/27276cc308668e30f98816d08a271cf39a62ce3a99252bca6e1cca81a38e7eda.png" src="../_images/27276cc308668e30f98816d08a271cf39a62ce3a99252bca6e1cca81a38e7eda.png" />
 </div>
 </div>
 </section>
@@ -1203,8 +861,8 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#continuous-hgf">
-   Continuous HGF
+  <a class="reference internal nav-link" href="#a-multilevel-continuous-hgf">
+   A multilevel continuous HGF
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -1212,20 +870,20 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
      Simulate a dataset
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#model">
+     Model
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#embedding-a-serie-of-hgfs-in-a-graphical-model">
-   Embedding a serie of HGFs in a graphical model
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#binary-hgf">
-   Binary HGF
+  <a class="reference internal nav-link" href="#a-multilevel-binary-hgf">
+   A multilevel binary HGF
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id2">
+    <a class="reference internal nav-link" href="#id3">
      Simulate a dataset
     </a>
    </li>
@@ -1241,23 +899,6 @@ Estimating group-level parameters in the context of a graphical probabilistic mo
      </li>
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#sampling">
-       Sampling
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#with-hyper-priors">
-     With hyper-priors
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#id3">
-       Visualizing the model
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#id4">
        Sampling
       </a>
      </li>
