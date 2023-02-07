@@ -1,0 +1,60 @@
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/asyncio/base_events.py", line 647, in run_until_complete
+    return future.result()
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+with two_levels_binary_hgf:
+    two_level_hgf_idata = pm.sample(chains=4)
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mSamplingError[0m                             Traceback (most recent call last)
+Cell [0;32mIn[14], line 2[0m
+[1;32m      1[0m [38;5;28;01mwith[39;00m two_levels_binary_hgf:
+[0;32m----> 2[0m     two_level_hgf_idata [38;5;241m=[39m [43mpm[49m[38;5;241;43m.[39;49m[43msample[49m[43m([49m[43mchains[49m[38;5;241;43m=[39;49m[38;5;241;43m4[39;49m[43m)[49m
+
+File [0;32m/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/sampling/mcmc.py:486[0m, in [0;36msample[0;34m(draws, step, init, n_init, initvals, trace, chains, cores, tune, progressbar, model, random_seed, discard_tuned_samples, compute_convergence_checks, callback, jitter_max_retries, return_inferencedata, keep_warning_stat, idata_kwargs, mp_ctx, **kwargs)[0m
+[1;32m    484[0m [38;5;66;03m# One final check that shapes and logps at the starting points are okay.[39;00m
+[1;32m    485[0m [38;5;28;01mfor[39;00m ip [38;5;129;01min[39;00m initial_points:
+[0;32m--> 486[0m     [43mmodel[49m[38;5;241;43m.[39;49m[43mcheck_start_vals[49m[43m([49m[43mip[49m[43m)[49m
+[1;32m    487[0m     _check_start_shape(model, ip)
+[1;32m    489[0m [38;5;66;03m# Create trace backends for each chain[39;00m
+
+File [0;32m/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/model.py:1768[0m, in [0;36mModel.check_start_vals[0;34m(self, start)[0m
+[1;32m   1765[0m initial_eval [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mpoint_logps(point[38;5;241m=[39melem)
+[1;32m   1767[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m [38;5;28mall[39m(np[38;5;241m.[39misfinite(v) [38;5;28;01mfor[39;00m v [38;5;129;01min[39;00m initial_eval[38;5;241m.[39mvalues()):
+[0;32m-> 1768[0m     [38;5;28;01mraise[39;00m SamplingError(
+[1;32m   1769[0m         [38;5;124m"[39m[38;5;124mInitial evaluation of model at starting point failed![39m[38;5;130;01m\n[39;00m[38;5;124m"[39m
+[1;32m   1770[0m         [38;5;124mf[39m[38;5;124m"[39m[38;5;124mStarting values:[39m[38;5;130;01m\n[39;00m[38;5;132;01m{[39;00melem[38;5;132;01m}[39;00m[38;5;130;01m\n[39;00m[38;5;130;01m\n[39;00m[38;5;124m"[39m
+[1;32m   1771[0m         [38;5;124mf[39m[38;5;124m"[39m[38;5;124mInitial evaluation results:[39m[38;5;130;01m\n[39;00m[38;5;132;01m{[39;00minitial_eval[38;5;132;01m}[39;00m[38;5;124m"[39m
+[1;32m   1772[0m     )
+
+[0;31mSamplingError[0m: Initial evaluation of model at starting point failed!
+Starting values:
+{'omega_2_interval__': array([-0.17651061,  0.92226073,  0.82046895,  0.74845547,  0.76470697,
+        0.21019271,  0.35875114, -0.79189116,  0.11356985, -0.3328845 ])}
+
+Initial evaluation results:
+{'omega_2': -14.75, 'hgf_loglike': -inf}
+SamplingError: Initial evaluation of model at starting point failed!
+Starting values:
+{'omega_2_interval__': array([-0.17651061,  0.92226073,  0.82046895,  0.74845547,  0.76470697,
+        0.21019271,  0.35875114, -0.79189116,  0.11356985, -0.3328845 ])}
+
+Initial evaluation results:
+{'omega_2': -14.75, 'hgf_loglike': -inf}
+
