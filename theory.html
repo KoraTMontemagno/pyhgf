@@ -448,7 +448,12 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \, f(x_2^{(k)}))
 x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 \]</div>
 <p>The model described above can be implemented in Python as the following:</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 <span class="n">kappa_1</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -483,6 +488,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <img alt="_images/935a31ccc3bb28a2f60457a1120efb80391e7678a7b5bde7529d119acd4aaa07.png" src="_images/935a31ccc3bb28a2f60457a1120efb80391e7678a7b5bde7529d119acd4aaa07.png" />
 </div>
@@ -498,7 +504,12 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
     x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 \end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is the value coupling between the two nodes.</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 <span class="n">alpha_1</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -530,6 +541,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <img alt="_images/f7d4b43a6f10c4dc2448089594abc11924180796b6417c03e0a518ccc8f713aa.png" src="_images/f7d4b43a6f10c4dc2448089594abc11924180796b6417c03e0a518ccc8f713aa.png" />
 </div>
@@ -541,7 +553,12 @@ x_1^{(k)}          \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{1} x_2^{(k
 x_2^{(k)}          \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2)) \\
 x_3^{(k)}          \sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\omega_3)) \\
 \end{split}\]</div>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 <span class="n">alpha_1</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -584,16 +601,16 @@ x_3^{(k)}          \sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\omega_3)) 
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
 <img alt="_images/70c6fd99e3b7eb7213f4c7823189b36e1ae417f689619b6f52b56f8dde397f80.png" src="_images/70c6fd99e3b7eb7213f4c7823189b36e1ae417f689619b6f52b56f8dde397f80.png" />
 </div>
 </div>
 <p>Based on these principles, any given state in the world can be modelled as having a volatility parent state, a value parent state, both, or none. When the node is orpean, it evolves as a Gaussian random walk around its previous value with fixed step size. Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
 <p>:::{figure-md} fig1
-<img src="./images/genmod.svg" alt="fishy" class="bg-primary mb-1"></p>
-<p>An example of a generative model of sensory inputs with six hidden states. Volatility coupling is depicted with dashed lines, value coupling with straight lines.
+<img src="./images/hgf.png" alt="hgf" class="bg-primary mb-1"></p>
+<p>An example of standard Hierarchical Gaussian Filters as described in <span id="id3">[]</span>. Volatility coupling is depicted with dashed lines, value coupling with straight lines.
 :::</p>
-<p>In <span class="xref myst"></span> we have drawn an example setup with six different environmental states and one outcome. Here, we have denoted states that function as value parents for other states as <span class="math notranslate nohighlight">\(x_i\)</span>, and states that function as volatility parents as <span class="math notranslate nohighlight">\(\check{x}_i\)</span>. Volatility coupling is depicted by curvy arrows, value coupling by straight arrows, and observable outcomes are linked to their hidden states via double arrows.</p>
 <p>For the example illustrated in <span class="xref myst"></span> the following equations describe the generative model:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -612,7 +629,7 @@ x_3^{(k)}           &amp;\sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\kapp
 </section>
 <section id="belief-updates-in-the-hgf-computations-of-nodes">
 <h2>Belief updates in the HGF: Computations of nodes<a class="headerlink" href="#belief-updates-in-the-hgf-computations-of-nodes" title="Permalink to this heading">#</a></h2>
-<p>In the approximate inversion of the generative model presented above, <span id="id3">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> derived a set of simple, one-step update equations that represent changes in beliefs about the hidden states specified in the generative model. For each state, a belief is held (and updated for every new input) by the agent and described as a Gaussian distribution, fully characterized by its mean <span class="math notranslate nohighlight">\(\mu_i^{(k)}\)</span> and its inverse variance, or precision, <span class="math notranslate nohighlight">\(\pi_i^{(k)}\)</span> on a given trial <span class="math notranslate nohighlight">\(k\)</span>. We conceptualize each belief as a node in a network, where belief updates involve computations within nodes as well as message passing between nodes. The computations of any node within an experimental trial can be ordered in time as shown in the box:</p>
+<p>In the approximate inversion of the generative model presented above, <span id="id4">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> derived a set of simple, one-step update equations that represent changes in beliefs about the hidden states specified in the generative model. For each state, a belief is held (and updated for every new input) by the agent and described as a Gaussian distribution, fully characterized by its mean <span class="math notranslate nohighlight">\(\mu_i^{(k)}\)</span> and its inverse variance, or precision, <span class="math notranslate nohighlight">\(\pi_i^{(k)}\)</span> on a given trial <span class="math notranslate nohighlight">\(k\)</span>. We conceptualize each belief as a node in a network, where belief updates involve computations within nodes as well as message passing between nodes. The computations of any node within an experimental trial can be ordered in time as shown in the box:</p>
 <blockquote>
 <div><p>Node <em>i</em> at trial <em>k</em></p>
 <p>(compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span>)<br />
@@ -737,8 +754,8 @@ $<span class="math notranslate nohighlight">\(
 \end{equation}
 \]</div>
 <p>which will be computed as part of the <strong>PREDICTION step</strong> and only serves to simplify the equations and the corresponding message passing.</p>
-<section id="id4">
-<h3>Update Step<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<section id="id5">
+<h3>Update Step<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
 <p>If Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility parent of Node <span class="math notranslate nohighlight">\(i-1\)</span>, then the following update equations apply to Node <span class="math notranslate nohighlight">\(i\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -784,8 +801,8 @@ $<span class="math notranslate nohighlight">\(
 <li><p>From level below: <span class="math notranslate nohighlight">\(\Delta_{i-1}^{(k)}\)</span>, <span class="math notranslate nohighlight">\(\gamma_{i-1}^{(k)}\)</span></p></li>
 </ul>
 </section>
-<section id="id5">
-<h3>Prediction Error Step<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
+<section id="id6">
+<h3>Prediction Error Step<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h3>
 <p>The exact computation of the prediction error depends, like the computation of the new prediction, on the nature of the coupling with the parent nodes. We will therefore assume in the following, that Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility child of Node <span class="math notranslate nohighlight">\(i+1\)</span>. Then the following quantities have to be sent up to Node <span class="math notranslate nohighlight">\(i+1\)</span> (see also necessary information from level below in a volatility parent):</p>
 <ul class="simple">
 <li><p>Expected precision: <span class="math notranslate nohighlight">\(\gamma_{i}^{(k)}\)</span></p></li>
@@ -800,8 +817,8 @@ $<span class="math notranslate nohighlight">\(
 \end{align}
 \end{split}\]</div>
 </section>
-<section id="id6">
-<h3>Prediction Step<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h3>
+<section id="id7">
+<h3>Prediction Step<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
 <p>Still assuming that Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility child of Node <span class="math notranslate nohighlight">\(i+1\)</span>, the <strong>PREDICTION step</strong> consists of the following simple computations:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -906,17 +923,17 @@ $<span class="math notranslate nohighlight">\(
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id4">
+    <a class="reference internal nav-link" href="#id5">
      Update Step
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id5">
+    <a class="reference internal nav-link" href="#id6">
      Prediction Error Step
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id6">
+    <a class="reference internal nav-link" href="#id7">
      Prediction Step
     </a>
    </li>
