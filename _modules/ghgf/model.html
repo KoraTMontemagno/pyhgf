@@ -382,20 +382,22 @@
             <article class="bd-article" role="main">
               
   <h1>Source code for ghgf.model</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cfin.au.dk&gt;</span>
+<span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">jax.interpreters.xla</span> <span class="kn">import</span> <span class="n">DeviceArray</span>
 <span class="kn">from</span> <span class="nn">jax.lax</span> <span class="kn">import</span> <span class="n">scan</span>
 
 <span class="kn">from</span> <span class="nn">ghgf.binary</span> <span class="kn">import</span> <span class="n">loop_binary_inputs</span>
-<span class="kn">from</span> <span class="nn">ghgf.continuous</span> <span class="kn">import</span> <span class="n">loop_continuous_inputs</span>
+<span class="kn">from</span> <span class="nn">ghgf.continuous</span> <span class="kn">import</span> <span class="n">gaussian_surprise</span><span class="p">,</span> <span class="n">loop_continuous_inputs</span>
 <span class="kn">from</span> <span class="nn">ghgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_trajectories</span>
-<span class="kn">from</span> <span class="nn">ghgf.response</span> <span class="kn">import</span> <span class="n">binary_surprise</span><span class="p">,</span> <span class="n">gaussian_surprise</span>
+<span class="kn">from</span> <span class="nn">ghgf.response</span> <span class="kn">import</span> <span class="n">total_binary_surprise</span><span class="p">,</span> <span class="n">total_gaussian_surprise</span>
+<span class="kn">from</span> <span class="nn">ghgf.structure</span> <span class="kn">import</span> <span class="n">structure_as_dict</span>
 <span class="kn">from</span> <span class="nn">ghgf.typing</span> <span class="kn">import</span> <span class="n">ParametersType</span>
 
 
@@ -407,20 +409,24 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    verbose : bool</span>
-<span class="sd">        Verbosity level.</span>
-<span class="sd">    n_levels : int</span>
-<span class="sd">        The number of hierarchies in the model, including the input vector. Cannot be</span>
-<span class="sd">        less than 2.</span>
-<span class="sd">    model_type : str</span>
-<span class="sd">        The model implemented (can be `&quot;continous&quot;` or `&quot;binary&quot;`).</span>
-<span class="sd">    nodes : tuple</span>
-<span class="sd">        A tuple of tuples representing the nodes hierarchy.</span>
+<span class="sd">    bias : float</span>
+<span class="sd">        Input bias (only relevant if `model_type=&quot;continuous&quot;`).</span>
 <span class="sd">    hgf_results : dict</span>
 <span class="sd">        After oberving the data using the `input_data` method, the output of the model</span>
 <span class="sd">        are stored in the `hgf_results` dictionary.</span>
-<span class="sd">    bias : float</span>
-<span class="sd">        Input bias (only relevant if `model_type=&quot;continuous&quot;`).</span>
+<span class="sd">    model_type : str</span>
+<span class="sd">        The model implemented (can be `&quot;continous&quot;` or `&quot;binary&quot;`).</span>
+<span class="sd">    n_levels : int</span>
+<span class="sd">        The number of hierarchies in the model, including the input vector. Cannot be</span>
+<span class="sd">        less than 2.</span>
+<span class="sd">    node_structure : tuple</span>
+<span class="sd">        A tuple of tuples representing the nodes hierarchy.</span>
+<span class="sd">    node_trajectories : tuples</span>
+<span class="sd">        The node structure updated at each new observation.</span>
+<span class="sd">    results :</span>
+<span class="sd">        Time, values inputs and overall surprise of the model.</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        Verbosity level.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -449,7 +455,7 @@
 <span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward</span>
 <span class="sd">            using `add_nodes()`. Defaults to `2` for a 2-level HGF.</span>
 <span class="sd">        model_type : str</span>
-<span class="sd">            The model type to use (can be `&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
+<span class="sd">            The model type to use (can be `&quot;continuous&quot;`, `&quot;binary&quot;` or `&quot;custom&quot;`).</span>
 <span class="sd">        initial_mu : dict</span>
 <span class="sd">            Dictionary containing the initial values for the :math:`\\mu` parameter at</span>
 <span class="sd">            different levels of the hierarchy. Defaults set to `{&quot;1&quot;: 0.0, &quot;2&quot;: 0.0}`</span>
@@ -499,7 +505,7 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            If `model_type` is not `&quot;continuous&quot;` or `&quot;binary&quot;`.</span>
+<span class="sd">            If `model_type` is not `&quot;continuous&quot;`, `&quot;binary&quot;` or `&quot;custom&quot;`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">=</span> <span class="n">model_type</span>
@@ -507,100 +513,111 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">=</span> <span class="n">n_levels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">bias</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Creating a </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model_type</span><span class="si">}</span><span class="s2"> Hierarchical Gaussian Filter &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span><span class="si">}</span><span class="s2"> levels.&quot;</span>
-                <span class="p">)</span>
+        <span class="k">if</span> <span class="n">model_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="s2">&quot;custom&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid model type. Should be continuous, binary or custom,&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-
-            <span class="c1"># Second level</span>
-            <span class="n">x2_parameters</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-            <span class="p">}</span>
-            <span class="n">x2</span> <span class="o">=</span> <span class="p">((</span><span class="n">x2_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
-
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-
-            <span class="c1"># Third level</span>
-            <span class="n">x3_parameters</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-            <span class="p">}</span>
-            <span class="n">x3</span> <span class="o">=</span> <span class="p">((</span><span class="n">x3_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
-
-            <span class="c1"># Second level</span>
-            <span class="n">x2_parameters</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">kappas</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],),</span>  <span class="c1"># type: ignore</span>
-                <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-            <span class="p">}</span>
-            <span class="n">x2</span> <span class="o">=</span> <span class="p">((</span><span class="n">x2_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x3</span><span class="p">),)</span>
-
-        <span class="n">x1_parameters</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">kappas</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],),</span>
-            <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-
-            <span class="c1"># First level (continuous node)</span>
-            <span class="n">x1</span> <span class="o">=</span> <span class="p">((</span><span class="n">x1_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x2</span><span class="p">),)</span>
-
-            <span class="c1"># Input node</span>
-            <span class="n">input_node_parameters</span><span class="p">:</span> <span class="n">ParametersType</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega_input</span><span class="p">,</span>
-                <span class="s2">&quot;bias&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span>
-            <span class="p">}</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="kc">None</span>
-
-        <span class="k">elif</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-
-            <span class="c1"># First level (binary node)</span>
-            <span class="n">x1</span> <span class="o">=</span> <span class="p">((</span><span class="n">x1_parameters</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
-
-            <span class="n">input_node_parameters</span><span class="p">:</span> <span class="n">ParametersType</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pihat</span><span class="p">,</span>
-                <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="n">eta0</span><span class="p">,</span>
-                <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="n">eta1</span><span class="p">,</span>
-            <span class="p">}</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="kc">None</span>
-
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;custom&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;Initializing a Hierarchical Gaussian Filter&quot;</span>
+                        <span class="s2">&quot; using a custom node structure&quot;</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;model_type should be &#39;continuous&#39; or &#39;binary&#39;&quot;</span><span class="p">)</span></div>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Creating a </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model_type</span><span class="si">}</span><span class="s2"> Hierarchical Gaussian Filter &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span><span class="si">}</span><span class="s2"> levels.&quot;</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+                <span class="c1"># Second level</span>
+                <span class="n">x2_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                <span class="p">}</span>
+                <span class="n">x2</span> <span class="o">=</span> <span class="p">((</span><span class="n">x2_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+
+                <span class="c1"># Third level</span>
+                <span class="n">x3_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                <span class="p">}</span>
+                <span class="n">x3</span> <span class="o">=</span> <span class="p">((</span><span class="n">x3_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+
+                <span class="c1"># Second level</span>
+                <span class="n">x2_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">kappas</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],),</span>  <span class="c1"># type: ignore</span>
+                    <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                <span class="p">}</span>
+                <span class="n">x2</span> <span class="o">=</span> <span class="p">((</span><span class="n">x2_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x3</span><span class="p">),)</span>
+
+            <span class="n">x1_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">kappas</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],),</span>
+                <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;psis&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
+
+                <span class="c1"># First level (continuous node)</span>
+                <span class="n">x1</span> <span class="o">=</span> <span class="p">((</span><span class="n">x1_parameters</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x2</span><span class="p">),)</span>
+
+                <span class="c1"># Input node</span>
+                <span class="n">input_node_parameters</span><span class="p">:</span> <span class="n">ParametersType</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega_input</span><span class="p">,</span>
+                    <span class="s2">&quot;bias&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span>
+                <span class="p">}</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="kc">None</span>
+
+            <span class="k">elif</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
+
+                <span class="c1"># First level (binary node)</span>
+                <span class="n">x1</span> <span class="o">=</span> <span class="p">((</span><span class="n">x1_parameters</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+
+                <span class="n">input_node_parameters</span><span class="p">:</span> <span class="n">ParametersType</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pihat</span><span class="p">,</span>
+                    <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="n">eta0</span><span class="p">,</span>
+                    <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="n">eta1</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="nf">add_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a custom node structure.</span>
@@ -612,7 +629,7 @@
 <span class="sd">            model fit.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span> <span class="o">=</span> <span class="n">nodes</span>  <span class="c1"># type: ignore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">=</span> <span class="n">nodes</span>  <span class="c1"># type: ignore</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">input_data</span><span class="p">(</span>
@@ -643,7 +660,7 @@
 
         <span class="c1"># Initialise the first values</span>
         <span class="n">res_init</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">,</span>
             <span class="p">{</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">input_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span>
@@ -651,22 +668,21 @@
             <span class="p">},</span>
         <span class="p">)</span>
 
-        <span class="c1"># create the main data array (data, time)</span>
+        <span class="c1"># create the input array (data, time)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 
-        <span class="c1"># This is where the HGF functions are used to scan the input time series</span>
+        <span class="c1"># this is where the model loop over the input time series</span>
+        <span class="c1"># at each input the node structure is traversed and beliefs are updated</span>
+        <span class="c1"># using precision-weighted prediction errors</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-            <span class="n">last</span><span class="p">,</span> <span class="n">final</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_continuous_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">scan_updates</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_continuous_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-            <span class="n">last</span><span class="p">,</span> <span class="n">final</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_binary_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">scan_updates</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_binary_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
 
-        <span class="c1"># Save results in the HGF dictionary</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;last&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">last</span>  <span class="c1"># The last tuple returned</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">[</span>
-            <span class="s2">&quot;final&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="n">final</span>  <span class="c1"># The commulative update of the nodes and results</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_data</span>  <span class="c1"># type: ignore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan_updates</span><span class="p">[</span>
+            <span class="mi">0</span>
+        <span class="p">]</span>  <span class="c1"># the node structure at each value update</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">scan_updates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># time, values and surprise</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 
@@ -705,15 +721,50 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">response_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">response_function</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">gaussian_surprise</span>
+                <span class="n">total_gaussian_surprise</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span>
-                <span class="k">else</span> <span class="n">binary_surprise</span>
+                <span class="k">else</span> <span class="n">total_binary_surprise</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">response_function</span><span class="p">(</span>
-            <span class="n">hgf_results</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hgf_results</span><span class="p">,</span>
+            <span class="n">hgf</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">structure_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export the node structure to a dictionary of nodes.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">structure_as_dict</span><span class="p">(</span><span class="n">node_structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export the nodes trajectories and surprise as a Pandas data frame.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        structure_df : pd.DataFrame</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_to_dict</span><span class="p">()</span>
+        <span class="n">structure_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="c1"># loop over nodes and store sufficient statistics with surprise</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">node_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
+            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+            <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">node_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
+                <span class="n">muhat</span><span class="o">=</span><span class="n">node_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">pihat</span><span class="o">=</span><span class="n">node_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">surprise</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">structure_df</span></div>
 </pre></div>
 
             </article>

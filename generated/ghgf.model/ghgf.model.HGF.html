@@ -53,7 +53,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="ghgf.plots.plot_trajectories" href="../ghgf.plots/ghgf.plots.plot_trajectories.html" />
-    <link rel="prev" title="ghgf.continuous.loop_continuous_inputs" href="../ghgf.continuous/ghgf.continuous.loop_continuous_inputs.html" />
+    <link rel="prev" title="ghgf.distribution.HGFDistribution" href="../ghgf.distribution/ghgf.distribution.HGFDistribution.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -382,24 +382,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../ghgf.continuous/ghgf.continuous.gaussian_surprise.html">ghgf.continuous.gaussian_surprise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ghgf.continuous/ghgf.continuous.loop_continuous_inputs.html">ghgf.continuous.loop_continuous_inputs</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ghgf.distribution/ghgf.distribution.hgf_logp.html">ghgf.distribution.hgf_logp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ghgf.distribution/ghgf.distribution.HGFLogpGradOp.html">ghgf.distribution.HGFLogpGradOp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ghgf.distribution/ghgf.distribution.HGFDistribution.html">ghgf.distribution.HGFDistribution</a></li>
+</ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">ghgf.model.HGF</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../ghgf.plots/ghgf.plots.plot_trajectories.html">ghgf.plots.plot_trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ghgf.plots/ghgf.plots.plot_correlations.html">ghgf.plots.plot_correlations</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ghgf.distribution/ghgf.distribution.hgf_logp.html">ghgf.distribution.hgf_logp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ghgf.distribution/ghgf.distribution.HGFLogpGradOp.html">ghgf.distribution.HGFLogpGradOp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ghgf.distribution/ghgf.distribution.HGFDistribution.html">ghgf.distribution.HGFDistribution</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ghgf.response/ghgf.response.gaussian_surprise.html">ghgf.response.gaussian_surprise</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ghgf.response/ghgf.response.binary_surprise.html">ghgf.response.binary_surprise</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ghgf.typing/ghgf.typing.node_validation.html">ghgf.typing.node_validation</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../ghgf.python/ghgf.python.Model.html">ghgf.python.Model</a></li>
@@ -417,6 +410,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../ghgf.python/ghgf.python.gaussian.html">ghgf.python.gaussian</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ghgf.python/ghgf.python.gaussian_surprise.html">ghgf.python.gaussian_surprise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ghgf.python/ghgf.python.binary_surprise.html">ghgf.python.binary_surprise</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ghgf.response/ghgf.response.total_gaussian_surprise.html">ghgf.response.total_gaussian_surprise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ghgf.response/ghgf.response.total_binary_surprise.html">ghgf.response.total_binary_surprise</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ghgf.structure/ghgf.structure.structure_as_dict.html">ghgf.structure.structure_as_dict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ghgf.structure/ghgf.structure.structure_validation.html">ghgf.structure.structure_validation</a></li>
 </ul>
 
   </div>
@@ -459,19 +460,23 @@ HGF. The inputs can be continuous or binary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Verbosity level.</p>
-</dd>
-<dt><strong>n_levels</strong><span class="classifier">int</span></dt><dd><p>The number of hierarchies in the model, including the input vector. Cannot be
-less than 2.</p>
-</dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model implemented (can be <cite>“continous”</cite> or <cite>“binary”</cite>).</p>
-</dd>
-<dt><strong>nodes</strong><span class="classifier">tuple</span></dt><dd><p>A tuple of tuples representing the nodes hierarchy.</p>
+<dt><strong>bias</strong><span class="classifier">float</span></dt><dd><p>Input bias (only relevant if <cite>model_type=”continuous”</cite>).</p>
 </dd>
 <dt><strong>hgf_results</strong><span class="classifier">dict</span></dt><dd><p>After oberving the data using the <cite>input_data</cite> method, the output of the model
 are stored in the <cite>hgf_results</cite> dictionary.</p>
 </dd>
-<dt><strong>bias</strong><span class="classifier">float</span></dt><dd><p>Input bias (only relevant if <cite>model_type=”continuous”</cite>).</p>
+<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model implemented (can be <cite>“continous”</cite> or <cite>“binary”</cite>).</p>
+</dd>
+<dt><strong>n_levels</strong><span class="classifier">int</span></dt><dd><p>The number of hierarchies in the model, including the input vector. Cannot be
+less than 2.</p>
+</dd>
+<dt><strong>node_structure</strong><span class="classifier">tuple</span></dt><dd><p>A tuple of tuples representing the nodes hierarchy.</p>
+</dd>
+<dt><strong>node_trajectories</strong><span class="classifier">tuples</span></dt><dd><p>The node structure updated at each new observation.</p>
+</dd>
+<dt><strong>results</strong></dt><dd><p>Time, values inputs and overall surprise of the model.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Verbosity level.</p>
 </dd>
 </dl>
 </dd>
@@ -487,7 +492,7 @@ are stored in the <cite>hgf_results</cite> dictionary.</p>
 <cite>None</cite>, the nodes hierarchy is not created and might be provided afterward
 using <cite>add_nodes()</cite>. Defaults to <cite>2</cite> for a 2-level HGF.</p>
 </dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be <cite>“continuous”</cite> or <cite>“binary”</cite>).</p>
+<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be <cite>“continuous”</cite>, <cite>“binary”</cite> or <cite>“custom”</cite>).</p>
 </dd>
 <dt><strong>initial_mu</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\mu\)</span> parameter at
 different levels of the hierarchy. Defaults set to <cite>{“1”: 0.0, “2”: 0.0}</cite>
@@ -538,7 +543,7 @@ added to the input time serie before model fitting.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>ValueError</dt><dd><p>If <cite>model_type</cite> is not <cite>“continuous”</cite> or <cite>“binary”</cite>.</p>
+<dt>ValueError</dt><dd><p>If <cite>model_type</cite> is not <cite>“continuous”</cite>, <cite>“binary”</cite> or <cite>“custom”</cite>.</p>
 </dd>
 </dl>
 </dd>
@@ -563,8 +568,14 @@ added to the input time serie before model fitting.</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_trajectories</span></code>(**kwargs)</p></td>
 <td><p>Plot the parameters trajectories.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">surprise</span></code>([response_function, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure_to_dict</span></code>()</p></td>
+<td><p>Export the node structure to a dictionary of nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">surprise</span></code>([response_function, ...])</p></td>
 <td><p>Surprise (negative log probability) under new observations.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_pandas</span></code>()</p></td>
+<td><p>Export the nodes trajectories and surprise as a Pandas data frame.</p></td>
 </tr>
 </tbody>
 </table>
@@ -580,11 +591,11 @@ added to the input time serie before model fitting.</p>
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="../ghgf.continuous/ghgf.continuous.loop_continuous_inputs.html" title="previous page">
+  <a class='left-prev' id="prev-link" href="../ghgf.distribution/ghgf.distribution.HGFDistribution.html" title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">ghgf.continuous.loop_continuous_inputs</p>
+          <p class="prev-next-title">ghgf.distribution.HGFDistribution</p>
       </div>
   </a>
   <a class='right-next' id="next-link" href="../ghgf.plots/ghgf.plots.plot_trajectories.html" title="next page">

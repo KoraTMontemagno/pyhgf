@@ -382,25 +382,28 @@
             <article class="bd-article" role="main">
               
   <h1>Source code for ghgf.response</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cfin.au.dk&gt;</span>
+<span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ghgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 
-<div class="viewcode-block" id="gaussian_surprise"><a class="viewcode-back" href="../../generated/ghgf.response/ghgf.response.gaussian_surprise.html#ghgf.response.gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">gaussian_surprise</span><span class="p">(</span><span class="n">hgf_results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="p">):</span>
+
+<div class="viewcode-block" id="total_gaussian_surprise"><a class="viewcode-back" href="../../generated/ghgf.response/ghgf.response.total_gaussian_surprise.html#ghgf.response.total_gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">total_gaussian_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of the gaussian surprise along the time series (continuous HGF).</span>
 
 <span class="sd">    .. note::</span>
-<span class="sd">      The Gaussian Surprise is the default method to compute surprise when</span>
+<span class="sd">      The Gaussian surprise is the default method to compute surprise when</span>
 <span class="sd">      `model_type==&quot;continuous&quot;`, therefore this method will only return the sum of</span>
 <span class="sd">      valid time points, and `jnp.inf` if the model could not fit.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    hgf_results : dict</span>
-<span class="sd">        Dictionary containing the HGF results.</span>
+<span class="sd">    hgf : :py:class`ghgf.model.HGF`</span>
+<span class="sd">        Instance of the HGF model.</span>
 <span class="sd">    response_function_parameters : None</span>
 <span class="sd">        No additional parameters are required.</span>
 
@@ -410,11 +413,11 @@
 <span class="sd">        The model surprise given the input data.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]</span>
-
     <span class="c1"># Fill surprises with zeros if invalid input</span>
     <span class="n">this_surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">jnp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">]</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span>
     <span class="p">)</span>
 
     <span class="c1"># Return an infinite surprise if the model cannot fit</span>
@@ -426,18 +429,18 @@
     <span class="k">return</span> <span class="n">surprise</span></div>
 
 
-<div class="viewcode-block" id="binary_surprise"><a class="viewcode-back" href="../../generated/ghgf.response/ghgf.response.binary_surprise.html#ghgf.response.binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">binary_surprise</span><span class="p">(</span><span class="n">hgf_results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="total_binary_surprise"><a class="viewcode-back" href="../../generated/ghgf.response/ghgf.response.total_binary_surprise.html#ghgf.response.total_binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">total_binary_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of the binary surprise along the time series (binary HGF).</span>
 
 <span class="sd">    .. note::</span>
-<span class="sd">      The Gaussian Surprise is the default method to compute surprise when</span>
-<span class="sd">      `model_type==&quot;continuous&quot;`, therefore this method will only return the sum of</span>
+<span class="sd">      The binary surprise is the default method to compute surprise when</span>
+<span class="sd">      `model_type==&quot;binary&quot;`, therefore this method will only return the sum of</span>
 <span class="sd">      valid time points, and `jnp.inf` if the model could not fit.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    hgf_results : dict</span>
-<span class="sd">        Dictionary containing the HGF results.</span>
+<span class="sd">    hgf : :py:class`ghgf.model.HGF`</span>
+<span class="sd">        Instance of the HGF model.</span>
 <span class="sd">    response_function_parameters : None</span>
 <span class="sd">        No additional parameters are required.</span>
 
@@ -447,11 +450,11 @@
 <span class="sd">        The model surprise given the input data.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]</span>
-
     <span class="c1"># Fill surprises with zeros if invalid input</span>
     <span class="n">this_surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">jnp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf_results</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">]</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span>
     <span class="p">)</span>
 
     <span class="c1"># Return an infinite surprise if the model cannot fit</span>

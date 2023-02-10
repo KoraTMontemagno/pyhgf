@@ -407,6 +407,18 @@
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">ghgf.distribution</span> <span class="kn">import</span> <span class="n">hgf_logp</span><span class="p">,</span> <span class="n">HGFDistribution</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">ghgf</span> <span class="kn">import</span> <span class="n">load_data</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">ghgf.response</span> <span class="kn">import</span> <span class="n">binary_surprise</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="ne">ImportError</span>: cannot import name &#39;binary_surprise&#39; from &#39;ghgf.response&#39; (/home/runner/work/ghgf/ghgf/ghgf/response.py)
+</pre></div>
+</div>
 </div>
 </div>
 <p>In this tutorial, we are going to demonstrate some forms of parameters recovery, prior predictive and posterior predictive sampling that can be a way to assess the strength of the model fitting.</p>
@@ -454,9 +466,6 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rw</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/a086a1b50f1c77ede1a2ad559e0afd3d559d3864c0114f87b7aa5cace8af1345.png" src="../_images/a086a1b50f1c77ede1a2ad559e0afd3d559d3864c0114f87b7aa5cace8af1345.png" />
 </div>
 </div>
 </section>
@@ -514,51 +523,11 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../_images/909bea096e2275da3653d1d9b70947dcaa3bd2055b24a44908b1e2336302abc2.svg" src="../_images/909bea096e2275da3653d1d9b70947dcaa3bd2055b24a44908b1e2336302abc2.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
     <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tune</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 4 jobs)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_1]
-</pre></div>
-</div>
-<div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:56&lt;00:00 Sampling 4 chains, 0 divergences]
-    </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 56 seconds.
 </pre></div>
 </div>
 </div>
@@ -570,9 +539,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../_images/dc569d3c92dd44689c1da6f94d056d5298b30e1c3f205668fa673f6f0d0fa895.png" src="../_images/dc569d3c92dd44689c1da6f94d056d5298b30e1c3f205668fa673f6f0d0fa895.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -580,112 +546,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>mean</th>
-      <th>sd</th>
-      <th>hdi_3%</th>
-      <th>hdi_97%</th>
-      <th>mcse_mean</th>
-      <th>mcse_sd</th>
-      <th>ess_bulk</th>
-      <th>ess_tail</th>
-      <th>r_hat</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>omega_1[0]</th>
-      <td>-10.315</td>
-      <td>0.215</td>
-      <td>-10.702</td>
-      <td>-9.899</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>5134.0</td>
-      <td>3580.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[1]</th>
-      <td>-9.807</td>
-      <td>0.221</td>
-      <td>-10.224</td>
-      <td>-9.386</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>5739.0</td>
-      <td>3220.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[2]</th>
-      <td>-8.960</td>
-      <td>0.294</td>
-      <td>-9.504</td>
-      <td>-8.396</td>
-      <td>0.004</td>
-      <td>0.003</td>
-      <td>5361.0</td>
-      <td>3206.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[3]</th>
-      <td>-10.571</td>
-      <td>0.173</td>
-      <td>-10.890</td>
-      <td>-10.236</td>
-      <td>0.002</td>
-      <td>0.001</td>
-      <td>6993.0</td>
-      <td>3407.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[4]</th>
-      <td>-10.045</td>
-      <td>0.212</td>
-      <td>-10.431</td>
-      <td>-9.630</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>6056.0</td>
-      <td>3309.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>omega_1[5]</th>
-      <td>-10.241</td>
-      <td>0.201</td>
-      <td>-10.616</td>
-      <td>-9.880</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>5540.0</td>
-      <td>3116.0</td>
-      <td>1.0</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 </section>
 <section id="binary-hgf">
@@ -771,8 +631,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../_images/bfabb4ac5999587ede50e844a515172a793c3968b3af3e1988eeeb3bf44bd920.svg" src="../_images/bfabb4ac5999587ede50e844a515172a793c3968b3af3e1988eeeb3bf44bd920.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -781,45 +639,6 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
     <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">SamplingError</span><span class="g g-Whitespace">                             </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/sampling/mcmc.py:486,</span> in <span class="ni">sample</span><span class="nt">(draws, step, init, n_init, initvals, trace, chains, cores, tune, progressbar, model, random_seed, discard_tuned_samples, compute_convergence_checks, callback, jitter_max_retries, return_inferencedata, keep_warning_stat, idata_kwargs, mp_ctx, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">484</span> <span class="c1"># One final check that shapes and logps at the starting points are okay.</span>
-<span class="g g-Whitespace">    </span><span class="mi">485</span> <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">initial_points</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">486</span>     <span class="n">model</span><span class="o">.</span><span class="n">check_start_vals</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">487</span>     <span class="n">_check_start_shape</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ip</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">489</span> <span class="c1"># Create trace backends for each chain</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/pymc/model.py:1768,</span> in <span class="ni">Model.check_start_vals</span><span class="nt">(self, start)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1765</span> <span class="n">initial_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_logps</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">elem</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1767</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">initial_eval</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-<span class="ne">-&gt; </span><span class="mi">1768</span>     <span class="k">raise</span> <span class="n">SamplingError</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1769</span>         <span class="s2">&quot;Initial evaluation of model at starting point failed!</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1770</span>         <span class="sa">f</span><span class="s2">&quot;Starting values:</span><span class="se">\n</span><span class="si">{</span><span class="n">elem</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1771</span>         <span class="sa">f</span><span class="s2">&quot;Initial evaluation results:</span><span class="se">\n</span><span class="si">{</span><span class="n">initial_eval</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1772</span>     <span class="p">)</span>
-
-<span class="ne">SamplingError</span>: Initial evaluation of model at starting point failed!
-<span class="n">Starting</span> <span class="n">values</span><span class="p">:</span>
-<span class="p">{</span><span class="s1">&#39;omega_2_interval__&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.44211327</span><span class="p">,</span>  <span class="mf">0.35078611</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.35721929</span><span class="p">,</span>  <span class="mf">0.20388159</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.28347913</span><span class="p">,</span>
-<span class="g g-Whitespace">        </span><span class="mi">0</span><span class="mf">.80131172</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.90893842</span><span class="p">,</span>  <span class="mf">0.54200104</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.14663561</span><span class="p">,</span>  <span class="mf">0.39120301</span><span class="p">])}</span>
-
-<span class="n">Initial</span> <span class="n">evaluation</span> <span class="n">results</span><span class="p">:</span>
-<span class="p">{</span><span class="s1">&#39;omega_2&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">14.48</span><span class="p">,</span> <span class="s1">&#39;hgf_loglike&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">inf</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
