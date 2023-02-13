@@ -667,10 +667,6 @@
     <span class="c1"># Time interval</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">new_time</span><span class="p">,</span> <span class="n">old_time</span><span class="p">)</span>
 
-    <span class="c1"># Add a bias to the input value</span>
-    <span class="k">if</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;bias&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;bias&quot;</span><span class="p">])</span>
-
     <span class="n">lognoise</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

@@ -462,7 +462,7 @@ one or many parameter-s probability density with MCMC sampling.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ghgf</span> <span class="kn">import</span> <span class="n">load_data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ghgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ghgf.response</span> <span class="kn">import</span> <span class="n">gaussian_surprise</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ghgf.response</span> <span class="kn">import</span> <span class="n">total_gaussian_surprise</span>
 </pre></div>
 </div>
 <p>Create the data (value and time vectors)
@@ -472,7 +472,7 @@ function we want to use (i.e simple gaussian surprise).
 &gt;&gt;&gt; hgf_logp_op = HGFDistribution(
 &gt;&gt;&gt;     n_levels=2,
 &gt;&gt;&gt;     input_data=timeserie,
-&gt;&gt;&gt;     response_function=gaussian_surprise,
+&gt;&gt;&gt;     response_function=total_gaussian_surprise,
 &gt;&gt;&gt; )</p>
 <p>Create the PyMC model
 Here we are fixing all the paramters to arbitrary values and sampling the
@@ -493,7 +493,6 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <span class="gp">&gt;&gt;&gt; </span>            <span class="n">mu_1</span><span class="o">=</span><span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
 <span class="gp">&gt;&gt;&gt; </span>            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">bias</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="p">),</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="p">)</span>
 </pre></div>
