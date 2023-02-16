@@ -67,13 +67,13 @@ File [0;32m/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/I
 [1;32m    363[0m [38;5;66;03m# We need to detect at runtime whether show() is called by the user.[39;00m
 [1;32m    364[0m [38;5;66;03m# For this, we wrap it into a decorator which adds a 'called' flag.[39;00m
 
-File [0;32m/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/matplotlib/pyplot.py:265[0m, in [0;36mswitch_backend[0;34m(newbackend)[0m
-[1;32m    262[0m         rcParamsOrig[[38;5;124m"[39m[38;5;124mbackend[39m[38;5;124m"[39m] [38;5;241m=[39m [38;5;124m"[39m[38;5;124magg[39m[38;5;124m"[39m
-[1;32m    263[0m         [38;5;28;01mreturn[39;00m
-[0;32m--> 265[0m backend_mod [38;5;241m=[39m [43mimportlib[49m[38;5;241;43m.[39;49m[43mimport_module[49m[43m([49m
-[1;32m    266[0m [43m    [49m[43mcbook[49m[38;5;241;43m.[39;49m[43m_backend_module_name[49m[43m([49m[43mnewbackend[49m[43m)[49m[43m)[49m
-[1;32m    268[0m required_framework [38;5;241m=[39m _get_required_interactive_framework(backend_mod)
-[1;32m    269[0m [38;5;28;01mif[39;00m required_framework [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+File [0;32m/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/matplotlib/pyplot.py:271[0m, in [0;36mswitch_backend[0;34m(newbackend)[0m
+[1;32m    268[0m [38;5;66;03m# have to escape the switch on access logic[39;00m
+[1;32m    269[0m old_backend [38;5;241m=[39m [38;5;28mdict[39m[38;5;241m.[39m[38;5;21m__getitem__[39m(rcParams, [38;5;124m'[39m[38;5;124mbackend[39m[38;5;124m'[39m)
+[0;32m--> 271[0m backend_mod [38;5;241m=[39m [43mimportlib[49m[38;5;241;43m.[39;49m[43mimport_module[49m[43m([49m
+[1;32m    272[0m [43m    [49m[43mcbook[49m[38;5;241;43m.[39;49m[43m_backend_module_name[49m[43m([49m[43mnewbackend[49m[43m)[49m[43m)[49m
+[1;32m    274[0m required_framework [38;5;241m=[39m _get_required_interactive_framework(backend_mod)
+[1;32m    275[0m [38;5;28;01mif[39;00m required_framework [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
 
 File [0;32m/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/importlib/__init__.py:127[0m, in [0;36mimport_module[0;34m(name, package)[0m
 [1;32m    125[0m             [38;5;28;01mbreak[39;00m

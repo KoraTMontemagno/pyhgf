@@ -384,6 +384,7 @@
   <h1>Source code for ghgf.plots</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
+<span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -399,114 +400,221 @@
 <div class="viewcode-block" id="plot_trajectories"><a class="viewcode-back" href="../../generated/ghgf.plots/ghgf.plots.plot_trajectories.html#ghgf.plots.plot_trajectories">[docs]</a><span class="k">def</span> <span class="nf">plot_trajectories</span><span class="p">(</span>
     <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span>
     <span class="n">ci</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">surprise</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span>
     <span class="n">axs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Axes</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot perceptual HGF parameters trajectores.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plot the trajectories of the nodes&#39; sufficient statistics and surprise.</span>
+
+<span class="sd">    This function will plot :math:`\\mu`, :math:`\\pi` (converted into standard</span>
+<span class="sd">    deviation) and the surprise at each level of the node structure.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    hgf : :py:class`ghgf.model.HGF`</span>
+<span class="sd">    hgf : class:`ghgf.model.HGF`</span>
 <span class="sd">        Instance of the HGF model.</span>
 <span class="sd">    ci : bool</span>
 <span class="sd">        Show the uncertainty aroud the values estimates (standard deviation).</span>
+<span class="sd">    surprise : bool</span>
+<span class="sd">        If `True` plot each node&#39;s surprise together witt the sufficient statistics.</span>
+<span class="sd">        If `False`, only the input node&#39;s surprise is depicted.</span>
 <span class="sd">    figsize : tuple</span>
 <span class="sd">        The width and height of the figure. Defaults to `(18, 9)` for a 2-levels model,</span>
 <span class="sd">        or to `(18, 12)` for a 3-levels model.</span>
-<span class="sd">    axs : :class:`matplotlib.axes.Axes` list or None</span>
-<span class="sd">        Where to draw the plot. Default is `None` (create a new figure).</span>
+<span class="sd">    axs : :class:`matplotlib.axes.Axes` | list | None</span>
+<span class="sd">        A list of Matplotlib axes instance where to draw the trajectories. This should</span>
+<span class="sd">        correspond to the number of nodes in the structure. Default is `None` (create a</span>
+<span class="sd">        new figure).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    axs : :class:`matplotlib.axes.Axes`</span>
-<span class="sd">        The Matplotlib axis instance plotting the parameters trajectories.</span>
+<span class="sd">        The Matplotlib axes instances where to plot the trajectories.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The node structure can be a standard continuous or binary HGF, of a custom</span>
+<span class="sd">    structure. The nodes are traversed and plotted from bottom to top using</span>
+<span class="sd">    :py:func:`ghgf.structure.structure_as_dict`.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Visualization of nodes&#39; trajectories from a three-level continuous HGF model.</span>
+
+<span class="sd">    .. plot::</span>
+
+<span class="sd">        from ghgf import load_data</span>
+<span class="sd">        from ghgf.model import HGF</span>
+
+<span class="sd">        # Set up standard 3-level HGF for continuous inputs</span>
+<span class="sd">        hgf = HGF(</span>
+<span class="sd">            n_levels=3,</span>
+<span class="sd">            model_type=&quot;continuous&quot;,</span>
+<span class="sd">            initial_mu={&quot;1&quot;: 1.04, &quot;2&quot;: 1.0, &quot;3&quot;: 1.0},</span>
+<span class="sd">            initial_pi={&quot;1&quot;: 1e4, &quot;2&quot;: 1e1, &quot;3&quot;: 1e1},</span>
+<span class="sd">            omega={&quot;1&quot;: -13.0, &quot;2&quot;: -2.0, &quot;3&quot;: -2.0},</span>
+<span class="sd">            rho={&quot;1&quot;: 0.0, &quot;2&quot;: 0.0, &quot;3&quot;: 0.0},</span>
+<span class="sd">            kappas={&quot;1&quot;: 1.0, &quot;2&quot;: 1.0},</span>
+<span class="sd">        )</span>
+
+<span class="sd">        # Read USD-CHF data</span>
+<span class="sd">        timeserie = load_data(&quot;continuous&quot;)</span>
+
+<span class="sd">        # Feed input</span>
+<span class="sd">        hgf.input_data(input_data=timeserie)</span>
+
+<span class="sd">        # Plot</span>
+<span class="sd">        hgf.plot_trajectories()</span>
+
+<span class="sd">    Visualization of nodes&#39; trajectories from a three-level binary HGF model.</span>
+
+<span class="sd">    .. plot::</span>
+
+<span class="sd">        from ghgf import load_data</span>
+<span class="sd">        from ghgf.model import HGF</span>
+
+<span class="sd">        # Read binary input</span>
+<span class="sd">        timeserie = load_data(&quot;binary&quot;)</span>
+
+<span class="sd">        three_levels_hgf = HGF(</span>
+<span class="sd">            n_levels=3,</span>
+<span class="sd">            model_type=&quot;binary&quot;,</span>
+<span class="sd">            initial_mu={&quot;1&quot;: .0, &quot;2&quot;: .5, &quot;3&quot;: 0.},</span>
+<span class="sd">            initial_pi={&quot;1&quot;: .0, &quot;2&quot;: 1e4, &quot;3&quot;: 1e1},</span>
+<span class="sd">            omega={&quot;1&quot;: None, &quot;2&quot;: -6.0, &quot;3&quot;: -2.0},</span>
+<span class="sd">            rho={&quot;1&quot;: None, &quot;2&quot;: 0.0, &quot;3&quot;: 0.0},</span>
+<span class="sd">            kappas={&quot;1&quot;: None, &quot;2&quot;: 1.0},</span>
+<span class="sd">            eta0=0.0,</span>
+<span class="sd">            eta1=1.0,</span>
+<span class="sd">            pihat = jnp.inf,</span>
+<span class="sd">        )</span>
+
+<span class="sd">        # Feed input</span>
+<span class="sd">        three_levels_hgf = three_levels_hgf.input_data(timeserie)</span>
+
+<span class="sd">        # Plot</span>
+<span class="sd">        three_levels_hgf.plot_trajectories()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">nrows</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+    <span class="c1"># get the sufficient statistics and surprise for each node in the structure</span>
+    <span class="c1"># we get a ValueError if the model cannot fit using the parameters</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">trajectories_df</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">n_nodes</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;_muhat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">palette</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="n">axs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">n_nodes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="c1"># Level 3</span>
-    <span class="c1">#########</span>
-    <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-            <span class="n">mu</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-            <span class="n">mu</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\mu_3$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#55a868&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">ci</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-                <span class="n">pi</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-                <span class="n">pi</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-            <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
-            <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">y1</span><span class="o">=</span><span class="n">mu</span> <span class="o">-</span> <span class="n">sd</span><span class="p">,</span> <span class="n">y2</span><span class="o">=</span><span class="n">mu</span> <span class="o">+</span> <span class="n">sd</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#55a868&quot;</span>
-            <span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-
-    <span class="c1"># Level 2</span>
-    <span class="c1">#########</span>
+    <span class="c1"># input node</span>
+    <span class="c1"># ----------</span>
     <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-        <span class="n">mu</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-        <span class="n">mu</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-
-    <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\mu_2$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#c44e52&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ci</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-            <span class="n">pi</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-            <span class="n">pi</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-        <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
-            <span class="n">x</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">y1</span><span class="o">=</span><span class="n">mu</span> <span class="o">-</span> <span class="n">sd</span><span class="p">,</span> <span class="n">y2</span><span class="o">=</span><span class="n">mu</span> <span class="o">+</span> <span class="n">sd</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#c44e52&quot;</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">n_nodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+            <span class="n">trajectories_df</span><span class="o">.</span><span class="n">observation</span><span class="p">,</span>
+            <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Input&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a2a2a&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-
-    <span class="c1"># Level 1</span>
-    <span class="c1">#########</span>
-    <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-        <span class="n">mu</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\mu_1$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#55a868&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">ci</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">pi</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-            <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
-            <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">y1</span><span class="o">=</span><span class="n">mu</span> <span class="o">-</span> <span class="n">sd</span><span class="p">,</span> <span class="n">y2</span><span class="o">=</span><span class="n">mu</span> <span class="o">+</span> <span class="n">sd</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#55a868&quot;</span>
-            <span class="p">)</span>
-
-            <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                <span class="n">time</span><span class="p">,</span>
-                <span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-                <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">,</span>
-                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Input&quot;</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4c72b0&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
     <span class="k">elif</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-        <span class="n">mu</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\mu_1$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#55a868&quot;</span><span class="p">)</span>
-
-        <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-            <span class="n">time</span><span class="p">,</span>
-            <span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">n_nodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">observation</span><span class="p">,</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Input&quot;</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4c72b0&quot;</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
             <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
-    <span class="c1"># Surprise</span>
-    <span class="c1">##########</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="n">time</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surprise&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#7f7f7f&quot;</span>
+    <span class="c1"># loop over the node idexes</span>
+    <span class="c1"># -------------------------</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_nodes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># use different colors for each nodes</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">palette</span><span class="p">)</span>
+
+        <span class="c1"># which ax instance to use</span>
+        <span class="n">ax_i</span> <span class="o">=</span> <span class="n">n_nodes</span> <span class="o">-</span> <span class="n">i</span>
+
+        <span class="c1"># extract the sufficient statistics from the data frame</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span>
+        <span class="n">pi</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span>
+
+        <span class="c1"># plotting mean</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">ax_i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+            <span class="n">mu</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\hat{\mu}$&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># plotting standard deviation</span>
+        <span class="k">if</span> <span class="n">ci</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+
+            <span class="c1"># if this is the first level of a binary model do not show CI</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
+                <span class="n">axs</span><span class="p">[</span><span class="n">ax_i</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                    <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">sd</span><span class="p">,</span>
+                    <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sd</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                    <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="c1"># plotting surprise</span>
+        <span class="k">if</span> <span class="n">surprise</span><span class="p">:</span>
+            <span class="n">surprise_ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">ax_i</span><span class="p">]</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+            <span class="n">surprise_ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a2a2a&quot;</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+                <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surprise&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">surprise_ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">],</span>
+                <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#7f7f7f&quot;</span><span class="p">,</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">surprise_ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Surprise&quot;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">ax_i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">ax_i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;$\mu_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+
+    <span class="c1"># global surprise</span>
+    <span class="c1"># ---------------</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">n_nodes</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+        <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">surprise</span><span class="p">,</span>
+        <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">surprise</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surprise&quot;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#7f7f7f&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">n_levels</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">n_nodes</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+        <span class="n">trajectories_df</span><span class="o">.</span><span class="n">surprise</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a2a2a&quot;</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surprise&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">n_nodes</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Surprise&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">n_nodes</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">axs</span></div>
 
@@ -563,10 +671,10 @@
             <span class="sa">r</span><span class="s2">&quot;$\pi_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">pi_1</span><span class="p">,</span>
             <span class="sa">r</span><span class="s2">&quot;$\mu_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">mu_2</span><span class="p">,</span>
             <span class="sa">r</span><span class="s2">&quot;$\pi_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">pi_2</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{mu}</span><span class="s2">_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">muhat_1</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{pi}</span><span class="s2">_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">pihat_1</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{mu}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">muhat_2</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{pi}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">pihat_2</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;$\hat{\mu}_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">muhat_1</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;$\hat{\pi}_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">pihat_1</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;$\hat{\mu}_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">muhat_2</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;$\hat{\pi}_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">:</span> <span class="n">pihat_2</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
@@ -574,13 +682,13 @@
         <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
             <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\mu_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
             <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\pi_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-            <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{mu}</span><span class="s2">_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
-            <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{pi}</span><span class="s2">_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+            <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\hat{\mu}_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+            <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\hat{\pi}_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
             <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\mu_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
             <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\pi_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-            <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{mu}</span><span class="s2">_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
-            <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\hat</span><span class="si">{pi}</span><span class="s2">_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+            <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\hat{\mu}_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+            <span class="n">df</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\hat{\pi}_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
 
     <span class="n">correlation_mat</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
