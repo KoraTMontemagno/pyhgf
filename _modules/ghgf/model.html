@@ -423,6 +423,9 @@
 <span class="sd">        The node structure updated at each new observation.</span>
 <span class="sd">    results :</span>
 <span class="sd">        Time, values inputs and overall surprise of the model.</span>
+<span class="sd">    structure_dict : dict</span>
+<span class="sd">        The node structure as a dictionary,</span>
+<span class="sd">        retrieved using :py:fun:`ghgf.structure.structure_as_dict`</span>
 <span class="sd">    verbose : bool</span>
 <span class="sd">        Verbosity level.</span>
 
@@ -505,6 +508,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">=</span> <span class="n">model_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">=</span> <span class="n">n_levels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structure_dict</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">model_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="s2">&quot;custom&quot;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -670,21 +674,23 @@
             <span class="n">_</span><span class="p">,</span> <span class="n">scan_updates</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_continuous_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">scan_updates</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_binary_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;This method only works with binary or continuous models&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan_updates</span><span class="p">[</span>
-            <span class="mi">0</span>
-        <span class="p">]</span>  <span class="c1"># the node structure at each value update</span>
+        <span class="c1"># the node structure at each value update</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan_updates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">scan_updates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># time, values and surprise</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">plot_trajectories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot the parameters trajectories.&quot;&quot;&quot;</span>
-        <span class="n">plot_trajectories</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plot_trajectories</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">plot_correlations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot the heatmap of cross-trajectories correlation.&quot;&quot;&quot;</span>
-        <span class="n">plot_correlations</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plot_correlations</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">surprise</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -723,9 +729,24 @@
             <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">structure_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export the node structure to a dictionary of nodes.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">structure_as_dict</span><span class="p">(</span><span class="n">node_structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">structure_as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export the node structure to a dictionary of nodes.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        structure_dict : dict</span>
+<span class="sd">            The node structure as a dictionary, each node is a key in the dictionary,</span>
+<span class="sd">            from 1 (lower node) to **n**.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">structure_dict</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">structure_dict</span> <span class="o">=</span> <span class="n">structure_as_dict</span><span class="p">(</span>
+                <span class="n">node_structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">,</span>
+                <span class="n">node_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">structure_dict</span><span class="o">=</span><span class="n">structure_dict</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_dict</span>
 
     <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Export the nodes trajectories and surprise as a Pandas data frame.</span>
@@ -733,9 +754,11 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        structure_df : pd.DataFrame</span>
+<span class="sd">            Pandas data frame with the time series of the sufficient statistics and</span>
+<span class="sd">            surprise of each node in the structure.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">node_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_to_dict</span><span class="p">()</span>
+        <span class="n">node_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_as_dict</span><span class="p">()</span>
         <span class="n">structure_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="p">{</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>

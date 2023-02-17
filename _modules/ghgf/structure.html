@@ -405,7 +405,9 @@
                 <span class="n">structure_validation</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">i</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="structure_as_dict"><a class="viewcode-back" href="../../generated/ghgf.structure/ghgf.structure.structure_as_dict.html#ghgf.structure.structure_as_dict">[docs]</a><span class="k">def</span> <span class="nf">structure_as_dict</span><span class="p">(</span><span class="n">node_structure</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">structure_dict</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}):</span>
+<div class="viewcode-block" id="structure_as_dict"><a class="viewcode-back" href="../../generated/ghgf.structure/ghgf.structure.structure_as_dict.html#ghgf.structure.structure_as_dict">[docs]</a><span class="k">def</span> <span class="nf">structure_as_dict</span><span class="p">(</span>
+    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">structure_dict</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform a HGF node structure into a dictionary of nodes for analysis.</span>
 
 <span class="sd">    Parameters</span>
@@ -431,7 +433,9 @@
         <span class="k">if</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># for each parent</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                <span class="n">structure_dict</span> <span class="o">=</span> <span class="n">structure_as_dict</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">structure_dict</span><span class="p">)</span>
+                <span class="n">structure_dict</span> <span class="o">=</span> <span class="n">structure_as_dict</span><span class="p">(</span>
+                    <span class="n">node_structure</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">node_id</span><span class="o">=</span><span class="n">node_id</span><span class="p">,</span> <span class="n">structure_dict</span><span class="o">=</span><span class="n">structure_dict</span>
+                <span class="p">)</span>
     <span class="k">return</span> <span class="n">structure_dict</span></div>
 </pre></div>
 
