@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>The continuous Hierarchical Gaussian Filter &#8212; ghgf 0.0.1dev documentation</title>
+    <title>The continuous Hierarchical Gaussian Filter &#8212; pyhgf 0.0.1dev documentation</title>
   
   
   
@@ -195,7 +195,7 @@
           
           
           
-          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
@@ -217,7 +217,7 @@
           
           
           
-          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
             <label class="sr-only">Pypi</label></a>
         </li>
       </ul>
@@ -327,7 +327,7 @@
           
           
           
-          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
@@ -349,7 +349,7 @@
           
           
           
-          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
             <label class="sr-only">Pypi</label></a>
         </li>
       </ul>
@@ -390,8 +390,8 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">ghgf</span> <span class="kn">import</span> <span class="n">load_data</span>
-<span class="kn">from</span> <span class="nn">ghgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+<span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
+<span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
 </pre></div>
@@ -426,7 +426,7 @@
 <h4>Create the model<a class="headerlink" href="#create-the-model" title="Permalink to this heading">#</a></h4>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The response function used is the <a class="reference internal" href="../generated/ghgf.response/ghgf.response.total_gaussian_surprise.html#ghgf.response.total_gaussian_surprise" title="ghgf.response.total_gaussian_surprise"><span class="xref myst py py-func">sum of the Guassian surprise</span></a>. In other words, at each time point the model try to update its hierarchy to minimize the discrepancy between the expected and real next observation in the continuous domain. See also <span class="xref myst">this tutorial on how to customise a response function</span>.</p>
+<p>The response function used is the <a class="reference internal" href="../generated/pyhgf.response/pyhgf.response.total_gaussian_surprise.html#pyhgf.response.total_gaussian_surprise" title="pyhgf.response.total_gaussian_surprise"><span class="xref myst py py-func">sum of the Guassian surprise</span></a>. In other words, at each time point the model try to update its hierarchy to minimize the discrepancy between the expected and real next observation in the continuous domain. See also <span class="xref myst">this tutorial on how to customise a response function</span>.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -498,7 +498,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The surprise of a model under the observation of new data directly depends on the response function that was used. New response functions can be added and provided using different <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code> and <code class="docutils literal notranslate"><span class="pre">response_function</span></code> in the py:func:<code class="docutils literal notranslate"><span class="pre">ghgf.model.HGF.surprise</span></code> method. The surprise is then defined as the negative log probability of new observations:</p>
+<p>The surprise of a model under the observation of new data directly depends on the response function that was used. New response functions can be added and provided using different <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code> and <code class="docutils literal notranslate"><span class="pre">response_function</span></code> in the py:func:<code class="docutils literal notranslate"><span class="pre">pyhgf.model.HGF.surprise</span></code> method. The surprise is then defined as the negative log probability of new observations:</p>
 <div class="math notranslate nohighlight">
 \[surprise = -log(p)\]</div>
 </div>
@@ -525,7 +525,7 @@
 <h3>The 3-levels continuous Hierarchical Gaussian Filter<a class="headerlink" href="#the-3-levels-continuous-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h3>
 <section id="id1">
 <h4>Create the model<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
-<p>Here, we create a new :py:<code class="docutils literal notranslate"><span class="pre">ghgf.model.HGF</span></code> instance, setting the number of levels to <code class="docutils literal notranslate"><span class="pre">3</span></code>. Note that we are extending the size of the dictionaries accordingly.</p>
+<p>Here, we create a new :py:<code class="docutils literal notranslate"><span class="pre">pyhgf.model.HGF</span></code> instance, setting the number of levels to <code class="docutils literal notranslate"><span class="pre">3</span></code>. Note that we are extending the size of the dictionaries accordingly.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_continuous_hgf</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
@@ -652,12 +652,12 @@ Add 614 new continuous observations.
 <section id="learning-parameters-with-mcmc-sampling">
 <h2>Learning parameters with MCMC sampling<a class="headerlink" href="#learning-parameters-with-mcmc-sampling" title="Permalink to this heading">#</a></h2>
 <p>In the previous section, we assumed we knew the parameters of the HGF models that were used to filter the input data. This can give us information on how an agent using these values would behave when presented with these inputs. We can also adopt a different perspective and consider that we want to learn these parameters from the data. Here, we are going to set some of the parameters free and use Hamiltonian Monte Carlo methods (NUTS) to sample their probability density.</p>
-<p>Because the HGF classes are built on the top of <a class="reference external" href="https://github.com/google/jax">JAX</a>, they are natively differentiable and compatible with optimisation libraries or can be embedded as regular distributions in the context of a Bayesian network. Here, we are using this approach, and we are going to use <a class="reference external" href="https://www.pymc.io/welcome.html">PyMC</a> to perform this step. PyMC can use any log probability function (here the negative surprise of the model) as a building block for a new distribution by wrapping it in its underlying tensor library <a class="reference external" href="https://aesara.readthedocs.io/en/latest/">Aesara</a>, now forked as <a class="reference external" href="https://pytensor.readthedocs.io/en/latest/">PyTensor</a>. This PyMC-compatible distribution can be found in the :py:<code class="docutils literal notranslate"><span class="pre">ghgf.distribution</span></code> sub-module.</p>
+<p>Because the HGF classes are built on the top of <a class="reference external" href="https://github.com/google/jax">JAX</a>, they are natively differentiable and compatible with optimisation libraries or can be embedded as regular distributions in the context of a Bayesian network. Here, we are using this approach, and we are going to use <a class="reference external" href="https://www.pymc.io/welcome.html">PyMC</a> to perform this step. PyMC can use any log probability function (here the negative surprise of the model) as a building block for a new distribution by wrapping it in its underlying tensor library <a class="reference external" href="https://aesara.readthedocs.io/en/latest/">Aesara</a>, now forked as <a class="reference external" href="https://pytensor.readthedocs.io/en/latest/">PyTensor</a>. This PyMC-compatible distribution can be found in the :py:<code class="docutils literal notranslate"><span class="pre">pyhgf.distribution</span></code> sub-module.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
 <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
-<span class="kn">from</span> <span class="nn">ghgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
+<span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
 </pre></div>
 </div>
 </div>
@@ -668,7 +668,7 @@ Add 614 new continuous observations.
 <h4>Creating the model<a class="headerlink" href="#creating-the-model" title="Permalink to this heading">#</a></h4>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <a class="reference internal" href="../generated/ghgf.distribution/ghgf.distribution.HGFDistribution.html#ghgf.distribution.HGFDistribution" title="ghgf.distribution.HGFDistribution"><span class="xref myst py py-class">HGF distribution class</span></a> use the <a class="reference internal" href="../generated/ghgf.response/ghgf.response.total_gaussian_surprise.html#ghgf.response.total_gaussian_surprise" title="ghgf.response.total_gaussian_surprise"><span class="xref myst py py-func">toatal Gaussian surprise</span></a> as a default response function, so adding this argument here is optional but is passed here for clarity.</p>
+<p>The <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.HGFDistribution.html#pyhgf.distribution.HGFDistribution" title="pyhgf.distribution.HGFDistribution"><span class="xref myst py py-class">HGF distribution class</span></a> use the <a class="reference internal" href="../generated/pyhgf.response/pyhgf.response.total_gaussian_surprise.html#pyhgf.response.total_gaussian_surprise" title="pyhgf.response.total_gaussian_surprise"><span class="xref myst py py-func">toatal Gaussian surprise</span></a> as a default response function, so adding this argument here is optional but is passed here for clarity.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -938,7 +938,7 @@ Add 614 new continuous observations.
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
-<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -p ghgf,jax,jaxlib
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -p pyhgf,jax,jaxlib
 </pre></div>
 </div>
 </div>

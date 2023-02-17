@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Multilevel embeding of Hierarchical Gaussian Filters &#8212; ghgf 0.0.1dev documentation</title>
+    <title>Multilevel embeding of Hierarchical Gaussian Filters &#8212; pyhgf 0.0.1dev documentation</title>
   
   
   
@@ -195,7 +195,7 @@
           
           
           
-          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
@@ -217,7 +217,7 @@
           
           
           
-          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
             <label class="sr-only">Pypi</label></a>
         </li>
       </ul>
@@ -327,7 +327,7 @@
           
           
           
-          <a href="https://github.com/ilabcode/ghgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
@@ -349,7 +349,7 @@
           
           
           
-          <a href="https://pypi.org/project/ghgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-solid fa-box"></i></span>
             <label class="sr-only">Pypi</label></a>
         </li>
       </ul>
@@ -390,9 +390,9 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">ghgf.distribution</span> <span class="kn">import</span> <span class="n">hgf_logp</span><span class="p">,</span> <span class="n">HGFDistribution</span>
-<span class="kn">from</span> <span class="nn">ghgf</span> <span class="kn">import</span> <span class="n">load_data</span>
-<span class="kn">from</span> <span class="nn">ghgf.response</span> <span class="kn">import</span> <span class="n">total_binary_surprise</span>
+<span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">hgf_logp</span><span class="p">,</span> <span class="n">HGFDistribution</span>
+<span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
+<span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">total_binary_surprise</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
@@ -414,7 +414,7 @@
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Using automatic broadcasting
-To estimate group-level parameters, we will have to fit multiple models at the same time, either on different input data, or on the same data with different parameters, or on different datasets with different parameters. This steps is handled natively both by the <a class="reference internal" href="../generated/ghgf.distribution/ghgf.distribution.hgf_logp.html#ghgf.distribution.hgf_logp" title="ghgf.distribution.hgf_logp"><span class="xref myst py py-func">log probability function</span></a> and the <a class="reference internal" href="../generated/ghgf.distribution/ghgf.distribution.HGFDistribution.html#ghgf.distribution.HGFDistribution" title="ghgf.distribution.HGFDistribution"><span class="xref myst py py-class">HGFDistribution class</span></a> using a pseudo <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a> approach. When a list of <em>n</em> input time series is provided, the function will automatically apply <em>n</em> models using the provided parameters. If for some parameters an array of length <em>n</em> is provided, each model will use the n-th value as parameter. Here, we are going to rely on this feature to compute the log probability of <em>n</em> model, using <em>n</em> time series as input and <em>n</em> different parameters to test.</p>
+To estimate group-level parameters, we will have to fit multiple models at the same time, either on different input data, or on the same data with different parameters, or on different datasets with different parameters. This steps is handled natively both by the <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.hgf_logp.html#pyhgf.distribution.hgf_logp" title="pyhgf.distribution.hgf_logp"><span class="xref myst py py-func">log probability function</span></a> and the <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.HGFDistribution.html#pyhgf.distribution.HGFDistribution" title="pyhgf.distribution.HGFDistribution"><span class="xref myst py py-class">HGFDistribution class</span></a> using a pseudo <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a> approach. When a list of <em>n</em> input time series is provided, the function will automatically apply <em>n</em> models using the provided parameters. If for some parameters an array of length <em>n</em> is provided, each model will use the n-th value as parameter. Here, we are going to rely on this feature to compute the log probability of <em>n</em> model, using <em>n</em> time series as input and <em>n</em> different parameters to test.</p>
 </div>
 <section id="a-multilevel-continuous-hgf">
 <h2>A multilevel continuous HGF<a class="headerlink" href="#a-multilevel-continuous-hgf" title="Permalink to this heading">#</a></h2>
@@ -589,9 +589,9 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 03:08&lt;00:00 Sampling 4 chains, 1 divergences]
+      100.00% [8000/8000 02:37&lt;00:00 Sampling 4 chains, 2 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 188 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 157 seconds.
 </pre></div>
 </div>
 </div>
@@ -604,7 +604,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/aa7fa625cff6faa8890e8532556b2259c3f92a1a2e72d17444a4b6a21554e0f6.png" src="../_images/aa7fa625cff6faa8890e8532556b2259c3f92a1a2e72d17444a4b6a21554e0f6.png" />
+<img alt="../_images/38753af94aeb2fce9bafbf74e24454ba737e669d092e15ceb7890940e651888d.png" src="../_images/38753af94aeb2fce9bafbf74e24454ba737e669d092e15ceb7890940e651888d.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -748,7 +748,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:27&lt;00:00 Sampling chain 0, 51 divergences]
+      100.00% [2000/2000 00:26&lt;00:00 Sampling chain 0, 45 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -769,7 +769,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:22&lt;00:00 Sampling chain 1, 16 divergences]
+      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 1, 68 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -790,7 +790,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:21&lt;00:00 Sampling chain 2, 45 divergences]
+      100.00% [2000/2000 00:22&lt;00:00 Sampling chain 2, 68 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -811,9 +811,9 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:23&lt;00:00 Sampling chain 3, 25 divergences]
+      100.00% [2000/2000 00:20&lt;00:00 Sampling chain 3, 67 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 94 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 95 seconds.
 </pre></div>
 </div>
 </div>
@@ -826,7 +826,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4d1302c61d392ee44f058f4cf73f2a103b7a793d8e0846c267cdeaf872de3108.png" src="../_images/4d1302c61d392ee44f058f4cf73f2a103b7a793d8e0846c267cdeaf872de3108.png" />
+<img alt="../_images/52d19ff463907334e9b54f6e38b602b6edd373a547e76e940977ef022f50c8ac.png" src="../_images/52d19ff463907334e9b54f6e38b602b6edd373a547e76e940977ef022f50c8ac.png" />
 </div>
 </div>
 </section>
