@@ -72,10 +72,10 @@ File [0;32m~/work/pyhgf/pyhgf/pyhgf/distribution.py:201[0m, in [0;36mhgf_logp
 [1;32m    220[0m     )
 [1;32m    222[0m [38;5;66;03m# Return the sum of the log probabilities (negative surprise)[39;00m
 
-File [0;32m~/work/pyhgf/pyhgf/pyhgf/model.py:292[0m, in [0;36mHGF.input_data[0;34m(self, input_data, time)[0m
-[1;32m    291[0m [38;5;28;01melif[39;00m [38;5;28mself[39m[38;5;241m.[39mmodel_type [38;5;241m==[39m [38;5;124m"[39m[38;5;124mbinary[39m[38;5;124m"[39m:
-[0;32m--> 292[0m     _, scan_updates [38;5;241m=[39m [43mscan[49m[43m([49m[43mloop_binary_inputs[49m[43m,[49m[43m [49m[43mres_init[49m[43m,[49m[43m [49m[43mdata[49m[43m[[49m[38;5;241;43m1[39;49m[43m:[49m[43m,[49m[43m [49m[43m:[49m[43m][49m[43m)[49m
-[1;32m    293[0m [38;5;28;01melse[39;00m:
+File [0;32m~/work/pyhgf/pyhgf/pyhgf/model.py:288[0m, in [0;36mHGF.input_data[0;34m(self, input_data, time)[0m
+[1;32m    287[0m [38;5;28;01melif[39;00m [38;5;28mself[39m[38;5;241m.[39mmodel_type [38;5;241m==[39m [38;5;124m"[39m[38;5;124mbinary[39m[38;5;124m"[39m:
+[0;32m--> 288[0m     _, scan_updates [38;5;241m=[39m [43mscan[49m[43m([49m[43mloop_binary_inputs[49m[43m,[49m[43m [49m[43mres_init[49m[43m,[49m[43m [49m[43mdata[49m[43m[[49m[38;5;241;43m1[39;49m[43m:[49m[43m,[49m[43m [49m[43m:[49m[43m][49m[43m)[49m
+[1;32m    289[0m [38;5;28;01melse[39;00m:
 
     [0;31m[... skipping hidden 2 frame][0m
 
@@ -247,12 +247,12 @@ File [0;32m~/work/pyhgf/pyhgf/pyhgf/distribution.py:201[0m, in [0;36mhgf_logp
 [1;32m    222[0m [38;5;66;03m# Return the sum of the log probabilities (negative surprise)[39;00m
 [1;32m    223[0m [38;5;28;01mreturn[39;00m [38;5;241m-[39msurprise
 
-File [0;32m~/work/pyhgf/pyhgf/pyhgf/model.py:292[0m, in [0;36mHGF.input_data[0;34m(self, input_data, time)[0m
-[1;32m    290[0m     _, scan_updates [38;5;241m=[39m scan(loop_continuous_inputs, res_init, data[[38;5;241m1[39m:, :])
-[1;32m    291[0m [38;5;28;01melif[39;00m [38;5;28mself[39m[38;5;241m.[39mmodel_type [38;5;241m==[39m [38;5;124m"[39m[38;5;124mbinary[39m[38;5;124m"[39m:
-[0;32m--> 292[0m     _, scan_updates [38;5;241m=[39m [43mscan[49m[43m([49m[43mloop_binary_inputs[49m[43m,[49m[43m [49m[43mres_init[49m[43m,[49m[43m [49m[43mdata[49m[43m[[49m[38;5;241;43m1[39;49m[43m:[49m[43m,[49m[43m [49m[43m:[49m[43m][49m[43m)[49m
-[1;32m    293[0m [38;5;28;01melse[39;00m:
-[1;32m    294[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124m"[39m[38;5;124mThis method only works with binary or continuous models[39m[38;5;124m"[39m)
+File [0;32m~/work/pyhgf/pyhgf/pyhgf/model.py:288[0m, in [0;36mHGF.input_data[0;34m(self, input_data, time)[0m
+[1;32m    286[0m     _, scan_updates [38;5;241m=[39m scan(loop_continuous_inputs, res_init, data[[38;5;241m1[39m:, :])
+[1;32m    287[0m [38;5;28;01melif[39;00m [38;5;28mself[39m[38;5;241m.[39mmodel_type [38;5;241m==[39m [38;5;124m"[39m[38;5;124mbinary[39m[38;5;124m"[39m:
+[0;32m--> 288[0m     _, scan_updates [38;5;241m=[39m [43mscan[49m[43m([49m[43mloop_binary_inputs[49m[43m,[49m[43m [49m[43mres_init[49m[43m,[49m[43m [49m[43mdata[49m[43m[[49m[38;5;241;43m1[39;49m[43m:[49m[43m,[49m[43m [49m[43m:[49m[43m][49m[43m)[49m
+[1;32m    289[0m [38;5;28;01melse[39;00m:
+[1;32m    290[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124m"[39m[38;5;124mThis method only works with binary or continuous models[39m[38;5;124m"[39m)
 
     [0;31m[... skipping hidden 2 frame][0m
 
@@ -283,7 +283,7 @@ Backtrace when the node is created (use PyTensor flag traceback__limit=N to make
     if await self.run_code(code, result, async_=asy):
   File "/opt/hostedtoolcache/Python/3.10.9/x64/lib/python3.10/site-packages/IPython/core/interactiveshell.py", line 3460, in run_code
     exec(code_obj, self.user_global_ns, self.user_ns)
-  File "/tmp/ipykernel_2486/2414223990.py", line 7, in <module>
+  File "/tmp/ipykernel_2426/2414223990.py", line 7, in <module>
     hgf_logp_op(
   File "/opt/hostedtoolcache/Python/3.10.9/x64/lib/python3.10/site-packages/pytensor/graph/op.py", line 296, in __call__
     node = self.make_node(*inputs, **kwargs)
@@ -312,7 +312,7 @@ Backtrace when the node is created (use PyTensor flag traceback__limit=N to make
     if await self.run_code(code, result, async_=asy):
   File "/opt/hostedtoolcache/Python/3.10.9/x64/lib/python3.10/site-packages/IPython/core/interactiveshell.py", line 3460, in run_code
     exec(code_obj, self.user_global_ns, self.user_ns)
-  File "/tmp/ipykernel_2486/2414223990.py", line 7, in <module>
+  File "/tmp/ipykernel_2426/2414223990.py", line 7, in <module>
     hgf_logp_op(
   File "/opt/hostedtoolcache/Python/3.10.9/x64/lib/python3.10/site-packages/pytensor/graph/op.py", line 296, in __call__
     node = self.make_node(*inputs, **kwargs)
