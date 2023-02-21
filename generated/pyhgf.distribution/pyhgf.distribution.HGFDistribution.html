@@ -466,15 +466,19 @@ one or many parameter-s probability density with MCMC sampling.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">total_gaussian_surprise</span>
 </pre></div>
 </div>
-<p>Create the data (value and time vectors)
-&gt;&gt;&gt; timeserie = load_data(“continuous”)</p>
+<p>Create the data (value and time vectors)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">timeserie</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>We create the PyMC distribution here, specifying the type of model and response
-function we want to use (i.e simple gaussian surprise).
-&gt;&gt;&gt; hgf_logp_op = HGFDistribution(
-&gt;&gt;&gt;     n_levels=2,
-&gt;&gt;&gt;     input_data=timeserie,
-&gt;&gt;&gt;     response_function=total_gaussian_surprise,
-&gt;&gt;&gt; )</p>
+function we want to use (i.e simple gaussian surprise).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">response_function</span><span class="o">=</span><span class="n">total_gaussian_surprise</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Create the PyMC model
 Here we are fixing all the paramters to arbitrary values and sampling the
 posterior probability density of Omega in the second level, using a normal
@@ -498,14 +502,18 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="p">)</span>
 </pre></div>
 </div>
-<p>Sample the model - Using 4 chain, 4 cores and 1000 warmups.
-&gt;&gt;&gt; with model:
-&gt;&gt;&gt;     hgf_samples = pm.sample(chains=4, cores=4, tune=1000)</p>
-<p>Print a summary of the results using Arviz
-&gt;&gt;&gt; az.summary(hgf_samples, var_names=”ω_2”)
-===  =======  =====  =======  =======  =====  =====  ====  ====  =
-ω_2  -12.846  1.305  -15.466  -10.675  0.038  0.027  1254  1726  1
-===  =======  =====  =======  =======  =====  =====  ====  ====  =</p>
+<p>Sample the model - Using 4 chain, 4 cores and 1000 warmups.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">hgf_samples</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tune</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Print a summary of the results using Arviz</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">hgf_samples</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="s2">&quot;ω_2&quot;</span><span class="p">)</span>
+<span class="go">===  =======  =====  =======  =======  =====  =====  ====  ====  =</span>
+<span class="go">ω_2  -12.846  1.305  -15.466  -10.675  0.038  0.027  1254  1726  1</span>
+<span class="go">===  =======  =====  =======  =======  =====  =====  ====  ====  =</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyhgf.distribution.HGFDistribution.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'continuous'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_levels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_function_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyhgf/distribution.html#HGFDistribution.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.distribution.HGFDistribution.__init__" title="Permalink to this definition">#</a></dt>

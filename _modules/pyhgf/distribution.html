@@ -423,57 +423,58 @@
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Log probability from HGF model(s) given input data and parameter(s).</span>
 
 <span class="sd">    This function support broadcasting along the first axis:</span>
-<span class="sd">    * If the input data contains many time series, the function will automatically</span>
+
+<span class="sd">    - If the input data contains many time series, the function will automatically</span>
 <span class="sd">    create the corresponding number of HGF models and fit them separately.</span>
-<span class="sd">    * If a single input data is provided but some parameters have array-like inputs, the</span>
+<span class="sd">    - If a single input data is provided but some parameters have array-like inputs, the</span>
 <span class="sd">    number of HGF models will match the length of the arrays, using the value *i*</span>
-<span class="sd">    for the *i*th model. When floats are provided for some parameters, the same value</span>
+<span class="sd">    for the *i* th model. When floats are provided for some parameters, the same value</span>
 <span class="sd">    will be used for all HGF models.</span>
-<span class="sd">    * If multiple input data are provided with array-like inputs for some parameter, the</span>
+<span class="sd">    - If multiple input data are provided with array-like inputs for some parameter, the</span>
 <span class="sd">    function will create and fit the models separately using the value *i* for the</span>
-<span class="sd">    *i*th model.</span>
+<span class="sd">    *i* th model.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    omega_1 : float</span>
-<span class="sd">        The :math:`\\omega` parameter, or *evolution rate*, at the first level of the</span>
+<span class="sd">        The :math:`\omega` parameter, or *evolution rate*, at the first level of the</span>
 <span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
 <span class="sd">        not inherited from parents nodes).</span>
 <span class="sd">    omega_2 : float</span>
-<span class="sd">        The :math:`\\omega` parameter, or *evolution rate*, at the second level of the</span>
+<span class="sd">        The :math:`\omega` parameter, or *evolution rate*, at the second level of the</span>
 <span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
 <span class="sd">        not inherited from parents nodes).</span>
 <span class="sd">    omega_3 : float</span>
-<span class="sd">        The :math:`\\omega` parameter, or *evolution rate*, at the third level of the</span>
+<span class="sd">        The :math:`\omega` parameter, or *evolution rate*, at the third level of the</span>
 <span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
 <span class="sd">        not inherited from parents nodes). The value of this parameter will be ignored</span>
 <span class="sd">        when using a 2-levels HGF (`n_levels=2`).</span>
 <span class="sd">    omega_input : float</span>
 <span class="sd">        Represent the noise associated with the input observation.</span>
 <span class="sd">    rho_1 : float</span>
-<span class="sd">        The :math:`\\rho` parameter at the first level of the HGF. This parameter</span>
+<span class="sd">        The :math:`\rho` parameter at the first level of the HGF. This parameter</span>
 <span class="sd">        represents the drift of the random walk.</span>
 <span class="sd">    rho_2 : float</span>
-<span class="sd">        The :math:`\\rho` parameter at the second level of the HGF. This parameter</span>
+<span class="sd">        The :math:`\rho` parameter at the second level of the HGF. This parameter</span>
 <span class="sd">        represents the drift of the random walk.</span>
 <span class="sd">    rho_3 : float</span>
-<span class="sd">        The :math:`\\rho` parameter at the first level of the HGF. This parameter</span>
+<span class="sd">        The :math:`\rho` parameter at the first level of the HGF. This parameter</span>
 <span class="sd">        represents the drift of the random walk. The value of this parameter will be</span>
 <span class="sd">        ignored when using a 2-levels HGF (`n_levels=2`).</span>
 <span class="sd">    pi_1 : float</span>
-<span class="sd">        The :math:`\\pi` parameter, or *precision*, at the first level of the HGF.</span>
+<span class="sd">        The :math:`\pi` parameter, or *precision*, at the first level of the HGF.</span>
 <span class="sd">    pi_2 : float</span>
-<span class="sd">        The :math:`\\pi` parameter, or *precision*, at the second level of the HGF.</span>
+<span class="sd">        The :math:`\pi` parameter, or *precision*, at the second level of the HGF.</span>
 <span class="sd">    pi_3 : float</span>
-<span class="sd">        The :math:`\\pi` parameter, or *precision*, at the third level of the HGF. The</span>
+<span class="sd">        The :math:`\pi` parameter, or *precision*, at the third level of the HGF. The</span>
 <span class="sd">        value of this parameter will be ignored when using a 2-levels HGF</span>
 <span class="sd">        (`n_levels=2`).</span>
 <span class="sd">    mu_1 : float</span>
-<span class="sd">        The :math:`\\mu` parameter, or *mean*, at the first level of the HGF.</span>
+<span class="sd">        The :math:`\mu` parameter, or *mean*, at the first level of the HGF.</span>
 <span class="sd">    mu_2 : float</span>
-<span class="sd">        The :math:`\\mu` parameter, or *mean*, at the second level of the HGF.</span>
+<span class="sd">        The :math:`\mu` parameter, or *mean*, at the second level of the HGF.</span>
 <span class="sd">    mu_3 : float</span>
-<span class="sd">        The :math:`\\mu` parameter, or *mean*, at the third level of the HGF. The value</span>
+<span class="sd">        The :math:`\mu` parameter, or *mean*, at the third level of the HGF. The value</span>
 <span class="sd">        of this parameter will be ignored when using a 2-levels HGF (`n_levels=2`).</span>
 <span class="sd">    kappa_1 : float</span>
 <span class="sd">        The value of the :math:`\\kappa` parameter at the first level of the HGF. Kappa</span>
@@ -497,7 +498,7 @@
 <span class="sd">    n_levels : int</span>
 <span class="sd">        The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
 <span class="sd">        `None`, the nodes hierarchy is not created and might be provided afterward</span>
-<span class="sd">        using `add_nodes()`.</span>
+<span class="sd">        using :py:meth:`pyhgf.model.HGF.add_nodes`.</span>
 <span class="sd">    response_function_parameters : tuple</span>
 <span class="sd">        Additional parameters to the response function.</span>
 <span class="sd">    time : list | optional</span>
@@ -758,10 +759,12 @@
 <span class="sd">    &gt;&gt;&gt; from pyhgf.response import total_gaussian_surprise</span>
 
 <span class="sd">    Create the data (value and time vectors)</span>
+
 <span class="sd">    &gt;&gt;&gt; timeserie = load_data(&quot;continuous&quot;)</span>
 
 <span class="sd">    We create the PyMC distribution here, specifying the type of model and response</span>
 <span class="sd">    function we want to use (i.e simple gaussian surprise).</span>
+
 <span class="sd">    &gt;&gt;&gt; hgf_logp_op = HGFDistribution(</span>
 <span class="sd">    &gt;&gt;&gt;     n_levels=2,</span>
 <span class="sd">    &gt;&gt;&gt;     input_data=timeserie,</span>
@@ -792,10 +795,12 @@
 <span class="sd">    &gt;&gt;&gt;     )</span>
 
 <span class="sd">    Sample the model - Using 4 chain, 4 cores and 1000 warmups.</span>
+
 <span class="sd">    &gt;&gt;&gt; with model:</span>
 <span class="sd">    &gt;&gt;&gt;     hgf_samples = pm.sample(chains=4, cores=4, tune=1000)</span>
 
 <span class="sd">    Print a summary of the results using Arviz</span>
+
 <span class="sd">    &gt;&gt;&gt; az.summary(hgf_samples, var_names=&quot;ω_2&quot;)</span>
 <span class="sd">    ===  =======  =====  =======  =======  =====  =====  ====  ====  =</span>
 <span class="sd">    ω_2  -12.846  1.305  -15.466  -10.675  0.038  0.027  1254  1726  1</span>
