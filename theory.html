@@ -31,6 +31,7 @@
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -388,10 +389,10 @@
               
   <section class="tex2jax_ignore mathjax_ignore" id="the-hierarchical-gaussian-filter">
 <span id="theory"></span><h1>The Hierarchical Gaussian Filter<a class="headerlink" href="#the-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
-<p>In this notebook, we are going to introduce some of the oncepts on which the Hierarchical Gaussian Filter (HGF) is based. We describe the main equations and illustrate the examples with Python code. We start with the generative model of the HGF, which can be seen as the structurekd process generating the sensory inputs that the agent tries to use to produce behaviours. Next, we show how this model can be “inverted” and used by an agent to infer parameter values that generated the sensory inputs. From there, we discuss the notion of prediction error and how derivations of the model can be used to infer probability densities given observed behavioural outcomes.</p>
-<section id="the-generative-model-of-the-hgf">
-<h2>The generative model of the HGF<a class="headerlink" href="#the-generative-model-of-the-hgf" title="Permalink to this heading">#</a></h2>
-<p>In this section we are using the two-level HGF as example (see also the tutorial <a class="reference internal" href="notebooks/2-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">The continuous Hierarchical Gaussian Filter</span></a>). The generative model that underpine the continuous HGF is a generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Random_walk#Gaussian_random_walk">Gaussian Random Walk</a> (GRW). A GRW generate a new observation <span class="math notranslate nohighlight">\(x_1^{(k)}\)</span> at each time step <span class="math notranslate nohighlight">\(k\)</span> from a normal distribution and using the previous observation <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span> such as:</p>
+<p>In this notebook, we introduce the main oncepts on which the Hierarchical Gaussian Filter (HGF) is based. We describe the main equations and illustrate the examples with Python code. We start with the generative model of the HGF, which describes how the model assume that the data is being generated. This generative structure is then used to filter the observation (i.e. the sensory part of the model), which is then used by the agent to produce behaviors (i.e. the action part of the model). Next, we show how this model can be “inverted” and used by an agent to infer parameter values that generated the sensory inputs. From there, we discuss the notion of prediction error and how derivations of the model can be used to infer probability densities given observed behavioural outcomes.</p>
+<section id="the-generative-model">
+<h2>The generative model<a class="headerlink" href="#the-generative-model" title="Permalink to this heading">#</a></h2>
+<p>To illustrate the generative model on which the HGF is based, we will start with a simple  two-level continuous HGF (see also the tutorial <a class="reference internal" href="notebooks/2-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">The continuous Hierarchical Gaussian Filter</span></a>). The generative model that underpine the continuous HGF is a generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Random_walk#Gaussian_random_walk">Gaussian Random Walk</a> (GRW). A GRW generate a new observation <span class="math notranslate nohighlight">\(x_1^{(k)}\)</span> at each time step <span class="math notranslate nohighlight">\(k\)</span> from a normal distribution and using the previous observation <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span> such as:</p>
 <div class="math notranslate nohighlight">
 \[
 x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
@@ -607,11 +608,17 @@ x_3^{(k)}          \sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\omega_3)) 
 </div>
 </div>
 <p>Based on these principles, any given state in the world can be modelled as having a volatility parent state, a value parent state, both, or none. When the node is orpean, it evolves as a Gaussian random walk around its previous value with fixed step size. Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
-<p>:::{figure-md} fig1
-<img src="./images/hgf.png" alt="hgf" class="bg-primary mb-1"></p>
-<p>An example of standard Hierarchical Gaussian Filters as described in <span id="id3">[]</span>. Volatility coupling is depicted with dashed lines, value coupling with straight lines.
-:::</p>
-<p>For the example illustrated in <span class="xref myst"></span> the following equations describe the generative model:</p>
+<figure class="align-default" id="hgf-fig">
+<img alt="_images/hgf.png" src="_images/hgf.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">The two-level and three-level Hierarchical Gaussian Filters for binary or continuous inputs, as described in <span id="id3">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>, <a class="reference internal" href="references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span>. The binary HGF has the particularity that it uses a sigmoid transform in the input node to convert continuous values into binary probabilities. For both models, volatility coupling is depicted with dashed lines, and value coupling with straight lines. The three-level HGF has one volatility layer more than the two-level HGF.</span><a class="headerlink" href="#hgf-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>A one-level HGF for continuous input is a <a class="reference external" href="https://en.wikipedia.org/wiki/Kalman_filter">Kalman Filter</a>.</p>
+</div>
+<p>For example, the three-level continuous HGF that is illustrated <a class="reference internal" href="#hgf-fig"><span class="std std-ref">above</span></a> is built on top of the following generative model:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align}
@@ -627,35 +634,69 @@ x_3^{(k)}           &amp;\sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\kapp
 <p>Note that in this example, all states that are value parents of other states (or outcomes) have their own volatility parent, while states that are volatility parents to other nodes either have a value parent (as state <span class="math notranslate nohighlight">\(\check{x}_1\)</span>), or no parents (as states <span class="math notranslate nohighlight">\(\check{x}_2\)</span> and <span class="math notranslate nohighlight">\(\check{x}_3\)</span>). This is deliberately so, and we will see these two motifs - every state of a hierarchy has its own volatility estimation, and volatility states only have value parents - reappear in the following chapters.</p>
 </section>
 </section>
+<section id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this heading">#</a></h2>
+<dl class="simple glossary">
+<dt id="term-Node">Node<a class="headerlink" href="#term-Node" title="Permalink to this term">#</a></dt><dd><p>HGF models are defined as networks of probabilistic nodes. A node can inherit values or volatility from parents node, and pass value or volatility to children nodes. Programmatically, a node is a tuple that contains 3 variable:</p>
+<ol class="arabic simple">
+<li><p>A dictionary of parameters</p></li>
+<li><p>A tuple of value parents (optional)</p></li>
+<li><p>A tuple of volatility parents (optional)</p></li>
+</ol>
+</dd>
+<dt id="term-Prediction">Prediction<a class="headerlink" href="#term-Prediction" title="Permalink to this term">#</a></dt><dd><p>At every time <span class="math notranslate nohighlight">\(k\)</span>, a continuous node <span class="math notranslate nohighlight">\(i\)</span> is defined by its sufficient statistics, the mean <span class="math notranslate nohighlight">\(\mu_i^{(k)}\)</span> and its inverse variance, or precision, <span class="math notranslate nohighlight">\(\pi_i^{(k)}\)</span>, and hold predictions about the next observed values, denoted <span class="math notranslate nohighlight">\(\hat{\mu}_i^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\hat{\pi}_i^{(k)}\)</span>.</p>
+</dd>
+<dt id="term-Prediction-error">Prediction error<a class="headerlink" href="#term-Prediction-error" title="Permalink to this term">#</a></dt><dd><p>Difference between the top-down predictions at node <span class="math notranslate nohighlight">\(i\)</span> that is inherited from parents, and the bottom-up incoming observatrion passed by children nodes.</p>
+</dd>
+<dt id="term-Update">Update<a class="headerlink" href="#term-Update" title="Permalink to this term">#</a></dt><dd><p>At each time <span class="math notranslate nohighlight">\(k\)</span>, a new value is observed at the input node and the sufficient statistics of the nodes (i.e. beliefs) are updated accordingly from the lower part to the upper part of the structure.</p>
+</dd>
+<dt id="term-VAPE">VAPE<a class="headerlink" href="#term-VAPE" title="Permalink to this term">#</a></dt><dd><p>Value prediction error. The error of top-down prediction concerning the node’s value (<span class="math notranslate nohighlight">\(\mu_i\)</span>).</p>
+</dd>
+<dt id="term-VOPE">VOPE<a class="headerlink" href="#term-VOPE" title="Permalink to this term">#</a></dt><dd><p>Volatility prediction error. The error of top-down prediction concerning the node’s volatility (<span class="math notranslate nohighlight">\(\pi_i\)</span>).</p>
+</dd>
+</dl>
+</section>
 <section id="belief-updates-in-the-hgf-computations-of-nodes">
 <h2>Belief updates in the HGF: Computations of nodes<a class="headerlink" href="#belief-updates-in-the-hgf-computations-of-nodes" title="Permalink to this heading">#</a></h2>
-<p>In the approximate inversion of the generative model presented above, <span id="id4">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> derived a set of simple, one-step update equations that represent changes in beliefs about the hidden states specified in the generative model. For each state, a belief is held (and updated for every new input) by the agent and described as a Gaussian distribution, fully characterized by its mean <span class="math notranslate nohighlight">\(\mu_i^{(k)}\)</span> and its inverse variance, or precision, <span class="math notranslate nohighlight">\(\pi_i^{(k)}\)</span> on a given trial <span class="math notranslate nohighlight">\(k\)</span>. We conceptualize each belief as a node in a network, where belief updates involve computations within nodes as well as message passing between nodes. The computations of any node within an experimental trial can be ordered in time as shown in the box:</p>
-<blockquote>
-<div><p>Node <em>i</em> at trial <em>k</em></p>
-<p>(compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span>)<br />
-← receive <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_{i-1}\)</span> from <span class="math notranslate nohighlight">\(\mathrm{node}_{i-1}\)</span></p>
-<p>UPDATE step<br />
+<p>The coding examples introduced above illustrated generative models that can simulate data forward from a given volatility structure, with key parameters stochastically fluctuating. HGFs use this as a model of the environment to make sense of new observation, also refered as the sensory part of the HGF, or the filtering part. In this situation, new observation are coming in and the model has to update the volatility structure accordingly (from bottom to top nodes).</p>
+<p>In its first description, <span id="id4">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> derived a set of simple, one-step update equations that represent changes in beliefs about the hidden states (i.e. the sufficient statistics of the nodes) specified in the generative model. For each state, a belief is held (and updated for every new input) by the agent and described as a Gaussian distribution, fully characterized by its mean <span class="math notranslate nohighlight">\(\mu_i^{(k)}\)</span> and its inverse variance, or precision, <span class="math notranslate nohighlight">\(\pi_i^{(k)}\)</span> on a given trial <span class="math notranslate nohighlight">\(k\)</span> (this is the notation we have been using in the previous examples). We conceptualize each belief as a node in a network, where belief updates involve computations within nodes as well as message passing between nodes. The computations of any observation at each time point <span class="math notranslate nohighlight">\(k\)</span> can be ordered in time as shown in the <a class="reference internal" href="#belief-update">Algorithm 1</a>:</p>
+<div class="proof algorithm admonition" id="belief-update">
+<p class="admonition-title"><span class="caption-number">Algorithm 1 </span> (Belief update)</p>
+<section class="algorithm-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(i\)</span> a <a class="reference internal" href="#term-Node"><span class="xref std std-term">node</span></a> in a probabilistic network at time <span class="math notranslate nohighlight">\(k\)</span>, with children at <span class="math notranslate nohighlight">\(i-1\)</span> and parent at <span class="math notranslate nohighlight">\(i+1\)</span></p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a>
+Compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span>
+← receive <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_{i-1}\)</span> from <span class="math notranslate nohighlight">\(\mathrm{node}_{i-1}\)</span></p></li>
+<li><p>Update<br />
 compute <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span><br />
-<em>given:</em> <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_{i-1}\)</span> and <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span><br />
-→ send <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span> to <span class="math notranslate nohighlight">\(\mathrm{node}_{i-1}\)</span></p>
-<p>PE step<br />
+<strong>given</strong> <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_{i-1}\)</span> and <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span><br />
+→ send <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span> to <span class="math notranslate nohighlight">\(\mathrm{node}_{i-1}\)</span></p></li>
+<li><p><a class="reference internal" href="#term-Prediction-error"><span class="xref std std-term">prediction error</span></a>
 compute <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_i\)</span><br />
-<em>given:</em> <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span> and <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span><br />
+<strong>given</strong> <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span> and <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span><br />
 → send <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_i\)</span> to <span class="math notranslate nohighlight">\(\mathrm{node}_{i+1}\)</span><br />
-← receive <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_{i+1}\)</span> from <span class="math notranslate nohighlight">\(\mathrm{node}_{i+1}\)</span></p>
-<p>PREDICTION step<br />
+← receive <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_{i+1}\)</span> from <span class="math notranslate nohighlight">\(\mathrm{node}_{i+1}\)</span></p></li>
+<li><p><a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a><br />
 compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}_i\)</span><br />
-<em>given:</em> <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span> and <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_{i+1}\)</span></p>
-</div></blockquote>
-<p>The exact computations in each step depend on the nature of the coupling (via <strong>VAPE</strong>s vs. <strong>VOPE</strong>s) with the parent and children nodes and will be outlined in the following two chapters.</p>
-<p>Note that we have placed the <strong>PREDICTION</strong> step in the end of a trial. This is because usually, we think about the beginning of a trial as starting with receiving a new input, and of a prediction as being present before that input is received. However, in some variants of the HGF the prediction also depends on the time that has passed in between trials, which is something that can only be evaluated once the new input arrives - hence the additional computation of the (current) prediction in the beginning of the trial. Conceptually, it makes most sense to think of the prediction as happening continuously between trials. For implementational purposes, it is however most convenient to only compute the prediction once the new input (and with it its arrival time) enters. This ensures both that the posterior means of parent nodes have had enough time to be sent back to their children for preparation for the new input, and that the arrival time of the new input can be taken into account appropriately.</p>
+<strong>given</strong> <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span> and <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_{i+1}\)</span></p></li>
+</ol>
+</section>
+</div><p>The exact computations in each step depend on the nature of the coupling (via <a class="reference internal" href="#term-VAPE"><span class="xref std std-term">VAPE</span></a>s vs. <a class="reference internal" href="#term-VOPE"><span class="xref std std-term">VOPE</span></a>s) between the parent and children nodes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We have placed the <a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a> step in the end of the update loop. This is because usually, we think about the beginning of a timepoint trial as starting with receiving a new input, and of a prediction as being present before that input is received (this is especially relevant to model time points as trial in an experiemnts). However, in some variants of the HGF the prediction also depends on the time that has passed in between trials, which is something that can only be evaluated once the new input arrives - hence the additional computation of the (current) prediction in the beginning of the trial. Conceptually, it makes most sense to think of the prediction as happening continuously between trials. For implementational purposes, it is however most convenient to only compute the prediction once the new input (and with it its arrival time) enters. This ensures both that the posterior means of parent nodes have had enough time to be sent back to their children for preparation for the new input, and that the arrival time of the new input can be taken into account appropriately.</p>
+</div>
 </section>
 <section id="computations-for-vape-coupling">
 <h2>Computations for VAPE coupling<a class="headerlink" href="#computations-for-vape-coupling" title="Permalink to this heading">#</a></h2>
-<p>The exact computations of the <strong>UPDATE</strong> depend on the nature of the coupling with the child node(s), while both the <strong>PE step</strong> and the <strong>PREDICTION step</strong> depend on the coupling with the parent node(s).</p>
+<p>The exact computations of the <a class="reference internal" href="#term-Update"><span class="xref std std-term">Update</span></a> depend on the nature of the coupling with the child node(s), while both the <a class="reference internal" href="#term-Prediction-error"><span class="xref std std-term">Prediction error</span></a> and the <a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a> step depend on the coupling with the parent node(s).</p>
 <section id="update-step">
 <h3>Update Step<a class="headerlink" href="#update-step" title="Permalink to this heading">#</a></h3>
-<p>If Node~<span class="math notranslate nohighlight">\(i\)</span> is the value parent of Node <span class="math notranslate nohighlight">\(i-1\)</span>, then the following update equations apply to Node~<span class="math notranslate nohighlight">\(i\)</span>:</p>
+<div class="proof definition admonition" id="vape-update">
+<p class="admonition-title"><span class="caption-number">Definition 1 </span></p>
+<section class="definition-content" id="proof-content">
+<p>If Node <span class="math notranslate nohighlight">\(i\)</span> is the value parent of Node <span class="math notranslate nohighlight">\(i-1\)</span>, then the following update equations apply to Node <span class="math notranslate nohighlight">\(i\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align}
@@ -671,7 +712,8 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 \mu_i^{(k)} &amp;= \hat{\mu}_i^{(k)} + \frac{\alpha_{i-1,i}^2 \hat{\pi}_{i-1}^{(k)}} {\pi_i^{(k)}} \delta_{i-1}^{(k)}
 \end{align}
 \end{split}\]</div>
-<p>In sum, at the time of the update, Node~<span class="math notranslate nohighlight">\(i\)</span> needs to have access to the following quantities:</p>
+</section>
+</div><p>In sum, at the time of the update, Node~<span class="math notranslate nohighlight">\(i\)</span> needs to have access to the following quantities:</p>
 <ul class="simple">
 <li><p>Its own predictions: <span class="math notranslate nohighlight">\(\hat{\mu}_i^{(k)}\)</span>, <span class="math notranslate nohighlight">\(\hat{\pi}_i^{(k)}\)</span></p></li>
 <li><p>Coupling strength: <span class="math notranslate nohighlight">\(\alpha_{i-1,i}\)</span></p></li>
@@ -681,51 +723,58 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 </section>
 <section id="prediction-error-step">
 <h3>Prediction Error Step<a class="headerlink" href="#prediction-error-step" title="Permalink to this heading">#</a></h3>
+<div class="proof definition admonition" id="vape-pe">
+<p class="admonition-title"><span class="caption-number">Definition 2 </span></p>
+<section class="definition-content" id="proof-content">
 <p>We will assume in the following, that Node~<span class="math notranslate nohighlight">\(i\)</span> is the value child of Node <span class="math notranslate nohighlight">\(i+1\)</span>. Then the following quantities have to be sent up to Node <span class="math notranslate nohighlight">\(i+1\)</span> (cf. necessary information from level below in a value parent):</p>
 <ul class="simple">
 <li><p>Predicted precision: <span class="math notranslate nohighlight">\(\hat{\pi}_{i}^{(k)}\)</span></p></li>
 <li><p>Prediction error: <span class="math notranslate nohighlight">\(\delta_{i}^{(k)}\)</span></p></li>
 </ul>
-<p>Node~<span class="math notranslate nohighlight">\(i\)</span> has already performed the <strong>PREDICTION step</strong> on the previous trial, so it has already computed the predicted precision of the current trial,~<span class="math notranslate nohighlight">\(\hat{\pi}_{i}^{(k)}\)</span>. Hence, in the <strong>PE step</strong>, it needs to perform only the following calculation:
+<p>Node <span class="math notranslate nohighlight">\(i\)</span> has already performed the <strong>PREDICTION step</strong> on the previous trial, so it has already computed the predicted precision of the current trial, <span class="math notranslate nohighlight">\(\hat{\pi}_{i}^{(k)}\)</span>. Hence, in the <strong>PE step</strong>, it needs to perform only the following calculation:
 $<span class="math notranslate nohighlight">\(
 \begin{equation}
 \delta_i^{(k)} = \mu_i^{(k)} - \hat{\mu}_i^{(k)}
 \end{equation}
 \)</span>$</p>
-</section>
-<section id="prediction-step">
-<h3>Prediction Step<a class="headerlink" href="#prediction-step" title="Permalink to this heading">#</a></h3>
-<p>Still assuming that Node~<span class="math notranslate nohighlight">\(i\)</span> is the value child of Node <span class="math notranslate nohighlight">\(i+1\)</span>, the <strong>PREDICTION step</strong> consists of the following computations:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+### Prediction Step
+
+````{prf:definition}
+:label: vape-prediction
+
+Still assuming that Node~$i$ is the value child of Node $i+1$, the **PREDICTION step** consists of the following computations:
+
+$$
 \begin{align}
 \hat{\mu}_i^{(k+1)} &amp;= \mu_i^{(k)} + \alpha_{i,i+1} \mu_{i+1}^{(k)}\\
 \hat{\pi}_i^{(k+1)} &amp;= \frac{1}{\frac{1}{\pi_i^{(k)}} + \nu_i^{(k+1)} }
 \end{align}
-\end{split}\]</div>
-<p>with</p>
-<div class="math notranslate nohighlight">
-\[
+$$
+
+with
+
+$$
 \begin{equation}
 \nu_i^{(k+1)} = \exp(\omega_i).
 \end{equation}
-\]</div>
-<p>Note that if Node~<span class="math notranslate nohighlight">\(i\)</span> additionally has a <strong>VOPE</strong> parent node, the estimated volatility <span class="math notranslate nohighlight">\(\nu_i^{(k+1)}\)</span> that enters the precision update would also depend on the posterior mean of that volatility parent (cf. <strong>PREDICTION step</strong> for <strong>VOPE</strong> coupling).</p>
-<p>In general, the prediction of the mean will depend only on whether Node~<span class="math notranslate nohighlight">\(i\)</span> has a value parent or not, whereas the prediction of the precision only depends on whether Node~<span class="math notranslate nohighlight">\(i\)</span> has a volatility parent or not.</p>
-<p>Thus, the <strong>PREDICTION step</strong> only depends on knowing the node’s own posteriors and receiving the value parent’s posterior in time before the new input arrives.</p>
-</section>
-</section>
-<section id="computations-for-vope-coupling">
-<h2>Computations for VOPE coupling<a class="headerlink" href="#computations-for-vope-coupling" title="Permalink to this heading">#</a></h2>
-<p>As in the case of <strong>VAPE</strong> coupling, the exact computations of the <strong>UPDATE step</strong> depend on the nature of the coupling with the child node(s), while both the <strong>PE step</strong> and the <strong>PREDICTION step</strong> depend on the coupling with the parent node(s).</p>
-<p>To describe the computations entailed by <strong>VOPE</strong> coupling, we will introduce two changes to the notation. First of all, we will express the volatility PE, or <strong>VOPE</strong>, as a function of the previously defined value PE, or <strong>VAPE</strong>. That means from now on, we will use the character <span class="math notranslate nohighlight">\(\delta_i\)</span> only for <strong>VAPE</strong>s:</p>
+$$
+
+</pre></div>
+</div>
+<p>Note that if Node~<span class="math notranslate nohighlight">\(i\)</span> additionally has a <a class="reference internal" href="#term-VOPE"><span class="xref std std-term">VOPE</span></a> parent node, the estimated volatility <span class="math notranslate nohighlight">\(\nu_i^{(k+1)}\)</span> that enters the precision update would also depend on the posterior mean of that volatility parent (cf. <a class="reference internal" href="#vope-prediction">Definition 4</a>).</p>
+<p>In general, the prediction of the mean will depend only on whether Node <span class="math notranslate nohighlight">\(i\)</span> has a value parent or not, whereas the prediction of the precision only depends on whether Node <span class="math notranslate nohighlight">\(i\)</span> has a volatility parent or not.</p>
+<p>Thus, the <code class="xref prf prf-ref docutils literal notranslate"><span class="pre">vape-prediction</span></code> only depends on knowing the node’s own posteriors and receiving the value parent’s posterior in time before the new input arrives.</p>
+<p class="rubric">Computations for VOPE coupling</p>
+<p>As in the case of <a class="reference internal" href="#term-VAPE"><span class="xref std std-term">VAPE</span></a> coupling, the exact computations of the <a class="reference internal" href="#vope-update">Definition 3</a>  depend on the nature of the coupling with the child node(s), while both the <code class="xref prf prf-ref docutils literal notranslate"><span class="pre">vope-pe</span></code> and the <a class="reference internal" href="#vope-prediction">Definition 4</a> depend on the coupling with the parent node(s).</p>
+<p>To describe the computations entailed by <a class="reference internal" href="#term-VOPE"><span class="xref std std-term">VOPE</span></a> coupling, we will introduce two changes to the notation. First of all, we will express the volatility prediction error (<a class="reference internal" href="#term-VOPE"><span class="xref std std-term">VOPE</span></a>) as a function of the previously defined value prediction error (<a class="reference internal" href="#term-VAPE"><span class="xref std std-term">VAPE</span></a>). That means from now on, we will use the character <span class="math notranslate nohighlight">\(\delta_i\)</span> only for <a class="reference internal" href="#term-VAPE"><span class="xref std std-term">VAPE</span></a>.</p>
 <div class="math notranslate nohighlight">
 \[
 \begin{equation}
 \delta_i^{(k)} \equiv \delta_i^{(k, VAPE)} = \mu_i^{(k)} - \hat{\mu}_i^{(k)},
 \end{equation}
 \]</div>
-<p>and introduce a new character <span class="math notranslate nohighlight">\(\Delta_i\)</span> for <strong>VOPE</strong>s, which we define as</p>
+<p>and introduce a new character <span class="math notranslate nohighlight">\(\Delta_i\)</span> for <a class="reference internal" href="#term-VOPE"><span class="xref std std-term">VOPE</span></a>, which we define as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{equation}
@@ -753,9 +802,11 @@ $<span class="math notranslate nohighlight">\(
 \gamma_i^{(k)} = \nu_i^{(k)} \hat{\pi}_i^{(k)},
 \end{equation}
 \]</div>
-<p>which will be computed as part of the <strong>PREDICTION step</strong> and only serves to simplify the equations and the corresponding message passing.</p>
-<section id="id5">
-<h3>Update Step<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
+<p>which will be computed as part of the <a class="reference internal" href="#vope-prediction">Definition 4</a> and only serves to simplify the equations and the corresponding message passing.</p>
+<p class="rubric">Update</p>
+<div class="proof definition admonition" id="vope-update">
+<p class="admonition-title"><span class="caption-number">Definition 3 </span></p>
+<section class="definition-content" id="proof-content">
 <p>If Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility parent of Node <span class="math notranslate nohighlight">\(i-1\)</span>, then the following update equations apply to Node <span class="math notranslate nohighlight">\(i\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -794,32 +845,38 @@ $<span class="math notranslate nohighlight">\(
 + \frac{1}{2} \frac{\kappa_{i,i-1} \gamma_{i-1}^{(k)}}{\pi_i^{(k)}} \Delta_{i-1}^{(k)}
 \end{align}
 \end{split}\]</div>
-<p>Therefore, at the time of the update, Node <span class="math notranslate nohighlight">\(i\)</span> needs to have access to the following quantities:</p>
-<ul class="simple">
-<li><p>Its own predictions: <span class="math notranslate nohighlight">\(\hat{\mu}_i^{(k)}\)</span>, <span class="math notranslate nohighlight">\(\hat{\pi}_i^{(k)}\)</span></p></li>
-<li><p>Coupling strength: <span class="math notranslate nohighlight">\(\kappa_{i,i-1}\)</span></p></li>
-<li><p>From level below: <span class="math notranslate nohighlight">\(\Delta_{i-1}^{(k)}\)</span>, <span class="math notranslate nohighlight">\(\gamma_{i-1}^{(k)}\)</span></p></li>
-</ul>
-</section>
-<section id="id6">
-<h3>Prediction Error Step<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h3>
-<p>The exact computation of the prediction error depends, like the computation of the new prediction, on the nature of the coupling with the parent nodes. We will therefore assume in the following, that Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility child of Node <span class="math notranslate nohighlight">\(i+1\)</span>. Then the following quantities have to be sent up to Node <span class="math notranslate nohighlight">\(i+1\)</span> (see also necessary information from level below in a volatility parent):</p>
-<ul class="simple">
-<li><p>Expected precision: <span class="math notranslate nohighlight">\(\gamma_{i}^{(k)}\)</span></p></li>
-<li><p>Prediction error: <span class="math notranslate nohighlight">\(\Delta_{i}^{(k)}\)</span></p></li>
-</ul>
-<p>Node <span class="math notranslate nohighlight">\(i\)</span> has already performed the \textsf{PREDICTION step} on the previous trial, so it has already computed the predicted precision, <span class="math notranslate nohighlight">\(\hat{\pi}_{i}^{(k)}\)</span>, and the volatiliy estimate, <span class="math notranslate nohighlight">\(\nu_i^{(k)}\)</span>, and out of these the expected precision, <span class="math notranslate nohighlight">\(\gamma_{i}^{(k)}\)</span>, for the current trial. Hence, in the <strong>PE step</strong>, it needs to perform only the following calculations:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+Therefore, at the time of the update, Node $i$ needs to have access to the following quantities:
+
+* Its own predictions: $\hat{\mu}_i^{(k)}$, $\hat{\pi}_i^{(k)}$
+* Coupling strength: $\kappa_{i,i-1}$
+* From level below: $\Delta_{i-1}^{(k)}$, $\gamma_{i-1}^{(k)}$
+
+### Prediction Error
+
+The exact computation of the prediction error depends, like the computation of the new prediction, on the nature of the coupling with the parent nodes. We will therefore assume in the following, that Node $i$ is the volatility child of Node $i+1$. Then the following quantities have to be sent up to Node $i+1$ (see also necessary information from level below in a volatility parent):
+
+* Expected precision: $\gamma_{i}^{(k)}$
+* Prediction error: $\Delta_{i}^{(k)}$
+
+````{prf:definition}
+:label: vope-pe
+
+Node $i$ has already performed the {prf:ref}`vope-prediction` on the previous trial, so it has already computed the predicted precision, $\hat{\pi}_{i}^{(k)}$, and the volatiliy estimate, $\nu_i^{(k)}$, and out of these the expected precision, $\gamma_{i}^{(k)}$, for the current trial. Hence, in the **PE step**, it needs to perform only the following calculations:
+
+$$
 \begin{align}
 \delta_i^{(k)} &amp;= \mu_i^{(k)} - \hat{\mu}_i^{(k)}\\
 \Delta_i^{(k)} &amp;= \frac{\hat{\pi}_i^{(k)}}{\pi_{i}^{(k)}} + \hat{\pi}_i^{(k)} (\delta_i^{(k)})^2 - 1.
 \end{align}
-\end{split}\]</div>
-</section>
-<section id="id7">
-<h3>Prediction Step<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
-<p>Still assuming that Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility child of Node <span class="math notranslate nohighlight">\(i+1\)</span>, the <strong>PREDICTION step</strong> consists of the following simple computations:</p>
+$$
+</pre></div>
+</div>
+<p class="rubric">Prediction</p>
+<div class="proof definition admonition" id="vope-prediction">
+<p class="admonition-title"><span class="caption-number">Definition 4 </span></p>
+<section class="definition-content" id="proof-content">
+<p>Still assuming that Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility child of Node <span class="math notranslate nohighlight">\(i+1\)</span>, the prediction consists of the following simple computations:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align}
@@ -829,9 +886,19 @@ $<span class="math notranslate nohighlight">\(
 \gamma_i^{(k+1)} &amp;= \nu_i^{(k+1)} \hat{\pi}_i^{(k+1)}
 \end{align}
 \end{split}\]</div>
-<p>Thus, the prediction for trial <span class="math notranslate nohighlight">\(k+1\)</span> depends again only on receiving the posterior mean of Node <span class="math notranslate nohighlight">\(i+1\)</span> on trial <span class="math notranslate nohighlight">\(k\)</span>, and knowing the Node’s own posteriors.</p>
-<p>Note that if Node~<span class="math notranslate nohighlight">\(i\)</span> additionally has a <strong>VAPE</strong> parent node, the prediction of the new mean, <span class="math notranslate nohighlight">\(\hat{\mu}_i^{k+1}\)</span> would also depend on the posterior mean of that value parent (cf. <strong>PREDICTION step</strong> for <strong>VAPE</strong> coupling).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+Thus, the prediction for trial $k+1$ depends again only on receiving the posterior mean of Node $i+1$ on trial $k$, and knowing the Node&#39;s own posteriors.
+
+Note that if Node~$i$ additionally has a {term}`VAPE` parent node, the prediction of the new mean, $\hat{\mu}_i^{k+1}$ would also depend on the posterior mean of that value parent (cf. {prf:ref}`vape-prediction`).
+
+```{code-cell} ipython3
+
+</pre></div>
+</div>
 </section>
+</div></section>
+</div></section>
+</div></section>
 </section>
 </section>
 
@@ -874,8 +941,8 @@ $<span class="math notranslate nohighlight">\(
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#the-generative-model-of-the-hgf">
-   The generative model of the HGF
+  <a class="reference internal nav-link" href="#the-generative-model">
+   The generative model
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -889,6 +956,11 @@ $<span class="math notranslate nohighlight">\(
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#glossary">
+   Glossary
+  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#belief-updates-in-the-hgf-computations-of-nodes">
@@ -908,33 +980,6 @@ $<span class="math notranslate nohighlight">\(
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#prediction-error-step">
      Prediction Error Step
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#prediction-step">
-     Prediction Step
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#computations-for-vope-coupling">
-   Computations for VOPE coupling
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id5">
-     Update Step
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id6">
-     Prediction Error Step
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id7">
-     Prediction Step
     </a>
    </li>
   </ul>

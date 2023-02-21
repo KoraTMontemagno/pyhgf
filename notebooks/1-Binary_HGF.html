@@ -31,6 +31,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -404,7 +405,8 @@
 </div>
 <p>In this notebook, we demonstrate how to create and fit the standard 2-levels and 3-level Hierarchical Gaussian Filters (HGF) for binary inputs. This class share a lot of similarities with its continuous counterpart described in the <a class="reference internal" href="2-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">next tutorial</span></a>. Here, the difference is that the input node accepts binary data. Binary responses are widely used in decision-making neuroscience, and standard reinforcement learning algorithms like Rescorla-Wagner are tailored to learn outcomes probability under such configuration. Here, by using a Hierarchical Gaussian Filter, we want to be able to learn from the evolution of higher-level volatility, and the parameters that are influencing the strength of the coupling between lower-level nodes with their parents (i.e. <span class="math notranslate nohighlight">\(\omega\)</span>, or the <code class="docutils literal notranslate"><span class="pre">evolution</span> <span class="pre">rate</span></code> of the 1rst and 2nd levels nodes). The binary version of the Hierarchical Gaussian Filter can take the following structures:</p>
 <figure class="align-default" id="id1">
-<img alt="../_images/binary.svg" src="../_images/binary.svg" /><figcaption>
+<img alt="../_images/binary.png" src="../_images/binary.png" />
+<figcaption>
 <p><span class="caption-text">The 2-levels and 3-level Hierarchical Gaussian Filter for binary inputs. Note that the first level <span class="math notranslate nohighlight">\(X_{1}\)</span> is a value parent for the binary input node <span class="math notranslate nohighlight">\(\mathcal{B}\)</span>, and has itself a value parent <span class="math notranslate nohighlight">\(X_{2}\)</span>. A volatility parent is only used in the context of a 3-level HGF. This is a specificity of the binary model.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
@@ -651,7 +653,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" src="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" /></div>
+<img alt="../_images/0d547960d6c0cacb00155a6e657ec6784e1521e51a5fa0e376d8929e28e74702.svg" src="../_images/0d547960d6c0cacb00155a6e657ec6784e1521e51a5fa0e376d8929e28e74702.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -695,7 +697,7 @@
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -716,7 +718,7 @@
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -737,7 +739,7 @@
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -758,9 +760,9 @@
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 21 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 14 seconds.
 </pre></div>
 </div>
 </div>
@@ -773,7 +775,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0cdbf386191713dcc6d0e9b01fa0d1426e6c1f4eb4c018246c178b2290bb16f0.png" src="../_images/0cdbf386191713dcc6d0e9b01fa0d1426e6c1f4eb4c018246c178b2290bb16f0.png" />
+<img alt="../_images/32dc7761733441ef4eb713e593e2abb4b1c8d569e292acbc5c7febf22f4aa83d.png" src="../_images/32dc7761733441ef4eb713e593e2abb4b1c8d569e292acbc5c7febf22f4aa83d.png" />
 </div>
 </div>
 </section>
@@ -822,7 +824,7 @@ Add 320 new binary observations.
        &lt;Axes: xlabel=&#39;Time&#39;, ylabel=&#39;Surprise&#39;&gt;], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/7a9962f539739ee4efecb18fa6478336d9bae38bfbd6c135cfcc6648da916347.png" src="../_images/7a9962f539739ee4efecb18fa6478336d9bae38bfbd6c135cfcc6648da916347.png" />
+<img alt="../_images/f1eb3d49539a39ba9a1a282a4445c791738cc833c2b24186e29b6c393f07b1c1.png" src="../_images/f1eb3d49539a39ba9a1a282a4445c791738cc833c2b24186e29b6c393f07b1c1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -832,7 +834,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.64723, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.65015, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -899,7 +901,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/36555b6eaa4872ede7c225f6980dcdc89fb6d582368efea24e3d521dc8c7b9c4.svg" src="../_images/36555b6eaa4872ede7c225f6980dcdc89fb6d582368efea24e3d521dc8c7b9c4.svg" /></div>
+<img alt="../_images/7eb1e41dc318b3ca61b0f6019fa3d82a77fa4385d81d79444babb1fe950e1347.svg" src="../_images/7eb1e41dc318b3ca61b0f6019fa3d82a77fa4385d81d79444babb1fe950e1347.svg" /></div>
 </div>
 </section>
 <section id="id9">
@@ -943,7 +945,7 @@ Add 320 new binary observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:09&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -964,7 +966,7 @@ Add 320 new binary observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -985,7 +987,7 @@ Add 320 new binary observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1006,9 +1008,9 @@ Add 320 new binary observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 33 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 21 seconds.
 </pre></div>
 </div>
 </div>
@@ -1021,7 +1023,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a8485a6c091568228847b2ed45a58edc2ba61062921f2a67d5df0c2528679592.png" src="../_images/a8485a6c091568228847b2ed45a58edc2ba61062921f2a67d5df0c2528679592.png" />
+<img alt="../_images/7ec0db0e04f1f56c02bfcda6f58dfbe2382d16c6d82ce79fd9545b0bfc8d96a0.png" src="../_images/7ec0db0e04f1f56c02bfcda6f58dfbe2382d16c6d82ce79fd9545b0bfc8d96a0.png" />
 </div>
 </div>
 </section>
@@ -1072,7 +1074,7 @@ Add 320 new binary observations.
        &lt;Axes: xlabel=&#39;Time&#39;, ylabel=&#39;Surprise&#39;&gt;], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/f08d12a30535ae9995dea08b0bc3d793e6733cd67ee2ee62586aedce34836f30.png" src="../_images/f08d12a30535ae9995dea08b0bc3d793e6733cd67ee2ee62586aedce34836f30.png" />
+<img alt="../_images/443d771fbbe9653824d33dbf41f016e7518d9578b6d1f04f1dfffe4290064382.png" src="../_images/443d771fbbe9653824d33dbf41f016e7518d9578b6d1f04f1dfffe4290064382.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1082,7 +1084,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.6542, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.65445, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1100,7 +1102,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Feb 19 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Feb 21 2023
 
 Python implementation: CPython
 Python version       : 3.10.10
@@ -1111,10 +1113,10 @@ jax   : 0.4.1
 jaxlib: 0.4.1
 
 seaborn   : 0.12.2
+arviz     : 0.15.0
+jax       : 0.4.1
 matplotlib: 3.7.0
 pymc      : 5.0.2
-jax       : 0.4.1
-arviz     : 0.15.0
 
 Watermark: 2.3.1
 </pre></div>

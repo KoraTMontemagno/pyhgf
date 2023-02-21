@@ -31,6 +31,7 @@
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -387,7 +388,7 @@
 <p><a class="reference external" href="https://github.com/pre-commit/pre-commit"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" /></a> <a class="reference external" href="https://github.com/ilabcode/pyhgf/blob/master/LICENSE"><img alt="license" src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" /></a> <a class="reference external" href="https://codecov.io/gh/ilabcode/pyhgf"><img alt="codecov" src="https://codecov.io/gh/ilabcode/pyhgf/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://github.com/psf/black"><img alt="black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a> <a class="reference external" href="http://mypy-lang.org/"><img alt="mypy" src="http://www.mypy-lang.org/static/mypy_badge.svg" /></a> <a class="reference external" href="https://pycqa.github.io/isort/"><img alt="Imports: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336" /></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding">
 <h1>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding<a class="headerlink" href="#the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding" title="Permalink to this heading">#</a></h1>
-<p>pyhgf is a Python library for generalized and nodalized Hierarchical Gaussian Filters for predictive coding written on top of <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax.html">JAX</a>. The library consists in a set of function to create graphs of interconnected nodes and recursively update them from precision-weighted prediction errors under new observations. The codebase interface natively with other libraries in the JAX ecosystem or  probabilistic programming tools for Bayesian inference.</p>
+<p>pyhgf is a Python library for generalized and nodalized Hierarchical Gaussian Filters for predictive coding <span id="id1">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>, <a class="reference internal" href="references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span> written on top of <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax.html">JAX</a>. The library consists in a set of function to create graphs of interconnected nodes and recursively update them from precision-weighted prediction errors under new observations. The codebase interface natively with other libraries in the JAX ecosystem or  probabilistic programming tools for Bayesian inference.</p>
 <ul class="simple">
 <li><p>🎓 <a class="reference external" href="https://ilabcode.github.io/pyhgf/theory.html">What is a Hierarchical Gaussian Filter?</a></p></li>
 <li><p>📖 <a class="reference external" href="https://ilabcode.github.io/pyhgf/">API Documentation</a></p></li>
@@ -398,9 +399,13 @@
 <section id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h3>
 <p>The last official release can be download from PIP:</p>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyhgf</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pyhgf
+</pre></div>
+</div>
 <p>The current version under development can be installed from the master branch of the GitHub folder:</p>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">“git+https://github.com/ilabcode/pyhgf.git”</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>“git+https://github.com/ilabcode/pyhgf.git”
+</pre></div>
+</div>
 </section>
 <section id="how-does-it-works">
 <h3>How does it works?<a class="headerlink" href="#how-does-it-works" title="Permalink to this heading">#</a></h3>
@@ -415,13 +420,13 @@
 </section>
 <section id="the-hierarchical-gaussian-filter">
 <h3>The Hierarchical Gaussian Filter<a class="headerlink" href="#the-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h3>
-<p>The Hierarchical Gaussian Filter for binary and continuous inputs as it was described in <span id="id1">[]</span>, and later implemented in the Matlab Tapas toolbox <span id="id2">[<a class="reference internal" href="references.html#id10" title="Stefan Frässle, Eduardo A. Aponte, Saskia Bollmann, Kay H. Brodersen, Cao T. Do, Olivia K. Harrison, Samuel J. Harrison, Jakob Heinzle, Sandra Iglesias, Lars Kasper, Ekaterina I. Lomakina, Christoph Mathys, Matthias Müller-Schrader, Inês Pereira, Frederike H. Petzschner, Sudhir Raman, Dario Schöbi, Birte Toussaint, Lilian A. Weber, Yu Yao, and Klaas E. Stephan. TAPAS: an open-source software package for translational neuromodeling and computational psychiatry. Frontiers in Psychiatry, June 2021. URL: https://doi.org/10.3389/fpsyt.2021.680811, doi:10.3389/fpsyt.2021.680811.">Frässle <em>et al.</em>, 2021</a>]</span>, can be seen as a special case of this node structure such as:</p>
-<p><img alt="Figure2" src="docs/source/images/hgf.png" /></p>
+<p>The Hierarchical Gaussian Filter for binary and continuous inputs as it was described in <span id="id2">[<a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>, <a class="reference internal" href="references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span>, and later implemented in the Matlab Tapas toolbox <span id="id3">[<a class="reference internal" href="references.html#id10" title="Stefan Frässle, Eduardo A. Aponte, Saskia Bollmann, Kay H. Brodersen, Cao T. Do, Olivia K. Harrison, Samuel J. Harrison, Jakob Heinzle, Sandra Iglesias, Lars Kasper, Ekaterina I. Lomakina, Christoph Mathys, Matthias Müller-Schrader, Inês Pereira, Frederike H. Petzschner, Sudhir Raman, Dario Schöbi, Birte Toussaint, Lilian A. Weber, Yu Yao, and Klaas E. Stephan. TAPAS: an open-source software package for translational neuromodeling and computational psychiatry. Frontiers in Psychiatry, June 2021. URL: https://doi.org/10.3389/fpsyt.2021.680811, doi:10.3389/fpsyt.2021.680811.">Frässle <em>et al.</em>, 2021</a>]</span>, can be seen as a special case of this node structure such as:</p>
+<p><img alt="Figure2" src="_images/hgf.png" /></p>
 <p>The pyhgf package includes pre-implemented standard HGF models that can be used together with other neural network libraries of Bayesian inference tools. It is also possible for the user to build custom network structures that would match specific needs.</p>
 </section>
 <section id="model-fitting">
 <h3>Model fitting<a class="headerlink" href="#model-fitting" title="Permalink to this heading">#</a></h3>
-<p>Here we demonstrate how to fit a two-level binary Hierarchical Gaussian filter. The input time series are binary outcome from <span id="id3">[]</span>.</p>
+<p>Here we demonstrate how to fit a two-level binary Hierarchical Gaussian filter. The input time series are binary outcome from <span id="id4">[]</span>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 <span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
 
