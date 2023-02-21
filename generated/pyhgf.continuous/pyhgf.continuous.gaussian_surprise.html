@@ -47,6 +47,8 @@
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generated/pyhgf.continuous/pyhgf.continuous.gaussian_surprise';</script>
     <link rel="shortcut icon" href="../../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -454,6 +456,36 @@
 <dt class="sig sig-object py" id="pyhgf.continuous.gaussian_surprise">
 <span class="sig-prename descclassname"><span class="pre">pyhgf.continuous.</span></span><span class="sig-name descname"><span class="pre">gaussian_surprise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DeviceArrayBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muhat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DeviceArrayBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pihat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DeviceArrayBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DeviceArrayBase</span></span></span><a class="reference internal" href="../../_modules/pyhgf/continuous.html#gaussian_surprise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.continuous.gaussian_surprise" title="Permalink to this definition">#</a></dt>
 <dd><p>Surprise at an outcome under a Gaussian prediction.</p>
+<p>The surprise ellicited by an observation <span class="math notranslate nohighlight">\(x\)</span> under a Gaussian distribution
+with expected mean <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> and expected precision <span class="math notranslate nohighlight">\(\hat{\pi}\)</span> is
+given by:</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \log(2 \pi) - \log(\hat{\pi}) + \hat{\pi}\sqrt{x - \hat{\mu}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\pi\)</span> is the mathematical constant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">jnp.DeviceArray</span></dt><dd><p>The outcome.</p>
+</dd>
+<dt><strong>muhat</strong><span class="classifier">jnp.DeviceArray</span></dt><dd><p>The expected mean of the Gaussian distribution.</p>
+</dd>
+<dt><strong>pihat</strong><span class="classifier">jnp.DeviceArray</span></dt><dd><p>The expected precision of the Gaussian distribution.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>surprise</strong><span class="classifier">jnp.DeviceArray</span></dt><dd><p>The Gaussian surprise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyhgf.continuous</span> <span class="kn">import</span> <span class="n">gaussian_surprise</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gaussian_surprise</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">muhat</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pihat</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="go">`Array(2.9189386, dtype=float32, weak_type=True)`</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>

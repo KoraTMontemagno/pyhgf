@@ -711,8 +711,18 @@
     <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span> <span class="o">+</span> <span class="n">lower_bound</span></div>
 
 
-<div class="viewcode-block" id="binary_surprise"><a class="viewcode-back" href="../../generated/pyhgf.binary/pyhgf.binary.binary_surprise.html#pyhgf.binary.binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">binary_surprise</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span> <span class="n">muhat</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surprise at a binary outcome.</span>
+<div class="viewcode-block" id="binary_surprise"><a class="viewcode-back" href="../../generated/pyhgf.binary/pyhgf.binary.binary_surprise.html#pyhgf.binary.binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">binary_surprise</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span> <span class="n">muhat</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Surprise at a binary outcome.</span>
+
+<span class="sd">    The surprise ellicited by a binary observation :math:`x` mean :math:`\hat{\mu}`</span>
+<span class="sd">    and expected probability :math:`\hat{\pi}` is given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">       \begin{cases}</span>
+<span class="sd">            -\log(\hat{\mu}),&amp; \text{if } x=1\\</span>
+<span class="sd">            -\log(1 - \hat{\mu}), &amp; \text{if } x=0\\</span>
+<span class="sd">        \end{cases}</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -724,7 +734,14 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    surprise : jnp.DeviceArray</span>
-<span class="sd">        The surprise.</span>
+<span class="sd">        The binary surprise.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from pyhgf.binary import binary_surprise</span>
+<span class="sd">    &gt;&gt;&gt; binary_surprise(x=1.0, muhat=0.7)</span>
+<span class="sd">    `Array(0.35667497, dtype=float32, weak_type=True)`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">muhat</span><span class="p">),</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">-</span> <span class="n">muhat</span><span class="p">))</span></div>
