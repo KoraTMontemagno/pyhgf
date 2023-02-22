@@ -395,9 +395,8 @@
 <li><p><a class="reference internal" href="#distribution" id="id4">Distribution</a></p></li>
 <li><p><a class="reference internal" href="#model" id="id5">Model</a></p></li>
 <li><p><a class="reference internal" href="#plots" id="id6">Plots</a></p></li>
-<li><p><a class="reference internal" href="#python" id="id7">Python</a></p></li>
-<li><p><a class="reference internal" href="#response" id="id8">Response</a></p></li>
-<li><p><a class="reference internal" href="#structure" id="id9">Structure</a></p></li>
+<li><p><a class="reference internal" href="#response" id="id7">Response</a></p></li>
+<li><p><a class="reference internal" href="#structure" id="id8">Structure</a></p></li>
 </ul>
 </li>
 </ul>
@@ -496,64 +495,8 @@ observing new data.</p>
 </tbody>
 </table>
 </section>
-<section id="python">
-<h2><a class="toc-backref" href="#id7" role="doc-backlink">Python</a><a class="headerlink" href="#python" title="Permalink to this heading">#</a></h2>
-<p>The pure Python implementation of the Hierarchical Gaussian Filter for binary or
-continuous inputs, with two or three levels. This implementation is functionnally
-independent from the JAX implementation and is not required to run the code. It is
-currently used for testing. Will be depreciated in v0.0.2.</p>
-<table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.Model.html#pyhgf.python.Model" title="pyhgf.python.Model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Model</span></code></a>()</p></td>
-<td><p>Generic HGF model.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.StandardHGF.html#pyhgf.python.StandardHGF" title="pyhgf.python.StandardHGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StandardHGF</span></code></a>([n_levels, process_type, ...])</p></td>
-<td><p>The standard n-level HGF for continuous inputs.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.StandardBinaryHGF.html#pyhgf.python.StandardBinaryHGF" title="pyhgf.python.StandardBinaryHGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StandardBinaryHGF</span></code></a>(*, initial_mu2, ...[, ...])</p></td>
-<td><p>The standard 3-level HGF for binary inputs.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.StateNode.html#pyhgf.python.StateNode" title="pyhgf.python.StateNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StateNode</span></code></a>(*, initial_mu, initial_pi[, rho, ...])</p></td>
-<td><p>HGF continuous state node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.BinaryNode.html#pyhgf.python.BinaryNode" title="pyhgf.python.BinaryNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinaryNode</span></code></a>()</p></td>
-<td><p>HGF binary state node.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.InputNode.html#pyhgf.python.InputNode" title="pyhgf.python.InputNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InputNode</span></code></a>(*, omega)</p></td>
-<td><p>An HGF node that receives input on a continuous scale.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.BinaryInputNode.html#pyhgf.python.BinaryInputNode" title="pyhgf.python.BinaryInputNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinaryInputNode</span></code></a>(*[, pihat, eta0, eta1])</p></td>
-<td><p>An HGF node that receives binary input.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.Parameter.html#pyhgf.python.Parameter" title="pyhgf.python.Parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Parameter</span></code></a>(*[, space, lower_bound, ...])</p></td>
-<td><p>Parameters of nodes.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.exp_shift_mirror.html#pyhgf.python.exp_shift_mirror" title="pyhgf.python.exp_shift_mirror"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exp_shift_mirror</span></code></a>(x, *[, lower_bound, ...])</p></td>
-<td><p>Exponential function (shifted and mirrored).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.log_shift_mirror.html#pyhgf.python.log_shift_mirror" title="pyhgf.python.log_shift_mirror"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_shift_mirror</span></code></a>(x, *[, lower_bound, ...])</p></td>
-<td><p>Natural logarithm (shifted and mirrored).</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.sgm.html#pyhgf.python.sgm" title="pyhgf.python.sgm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgm</span></code></a>(x, *[, lower_bound, upper_bound])</p></td>
-<td><p>Logistic sigmoid function.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.logit.html#pyhgf.python.logit" title="pyhgf.python.logit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logit</span></code></a>(x, *[, lower_bound, upper_bound])</p></td>
-<td><p>Logistic function.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.gaussian.html#pyhgf.python.gaussian" title="pyhgf.python.gaussian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian</span></code></a>(x, mu, pi)</p></td>
-<td><p>Gaussian density as defined by mean and precision.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.gaussian_surprise.html#pyhgf.python.gaussian_surprise" title="pyhgf.python.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(x, muhat, pihat)</p></td>
-<td><p>Surprise at an outcome under a Gaussian prediction.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.python/pyhgf.python.binary_surprise.html#pyhgf.python.binary_surprise" title="pyhgf.python.binary_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_surprise</span></code></a>(x, muhat)</p></td>
-<td><p>Surprise at a binary outcome.</p></td>
-</tr>
-</tbody>
-</table>
-</section>
 <section id="response">
-<h2><a class="toc-backref" href="#id8" role="doc-backlink">Response</a><a class="headerlink" href="#response" title="Permalink to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Response</a><a class="headerlink" href="#response" title="Permalink to this heading">#</a></h2>
 <p>A collection of responses functions. A response function is simply a callable taking at
 least the HGF instance as input after observation and returning surprise.</p>
 <table class="autosummary longtable table autosummary">
@@ -568,7 +511,7 @@ least the HGF instance as input after observation and returning surprise.</p>
 </table>
 </section>
 <section id="structure">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink">Structure</a><a class="headerlink" href="#structure" title="Permalink to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Structure</a><a class="headerlink" href="#structure" title="Permalink to this heading">#</a></h2>
 <p>Utilities for testing and manipulating node structures.</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
@@ -644,11 +587,6 @@ least the HGF instance as input after observation and returning surprise.</p>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#plots">
    Plots
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#python">
-   Python
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
