@@ -1,0 +1,78 @@
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Provide new observations
+two_levels_continuous_hgf = two_levels_continuous_hgf.input_data(input_data=timeserie)
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[5], line 2[0m
+[1;32m      1[0m [38;5;66;03m# Provide new observations[39;00m
+[0;32m----> 2[0m two_levels_continuous_hgf [38;5;241m=[39m [43mtwo_levels_continuous_hgf[49m[38;5;241;43m.[39;49m[43minput_data[49m[43m([49m[43minput_data[49m[38;5;241;43m=[39;49m[43mtimeserie[49m[43m)[49m
+
+File [0;32m~/work/pyhgf/pyhgf/pyhgf/model.py:290[0m, in [0;36mHGF.input_data[0;34m(self, input_data, time)[0m
+[1;32m    286[0m [38;5;66;03m# this is where the model loop over the input time series[39;00m
+[1;32m    287[0m [38;5;66;03m# at each input the node structure is traversed and beliefs are updated[39;00m
+[1;32m    288[0m [38;5;66;03m# using precision-weighted prediction errors[39;00m
+[1;32m    289[0m [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mmodel_type [38;5;241m==[39m [38;5;124m"[39m[38;5;124mcontinuous[39m[38;5;124m"[39m:
+[0;32m--> 290[0m     _, scan_updates [38;5;241m=[39m [43mscan[49m[43m([49m[43mloop_continuous_inputs[49m[43m,[49m[43m [49m[43mres_init[49m[43m,[49m[43m [49m[43mdata[49m[43m[[49m[38;5;241;43m1[39;49m[43m:[49m[43m,[49m[43m [49m[43m:[49m[43m][49m[43m)[49m
+[1;32m    291[0m [38;5;28;01melif[39;00m [38;5;28mself[39m[38;5;241m.[39mmodel_type [38;5;241m==[39m [38;5;124m"[39m[38;5;124mbinary[39m[38;5;124m"[39m:
+[1;32m    292[0m     _, scan_updates [38;5;241m=[39m scan(loop_binary_inputs, res_init, data[[38;5;241m1[39m:, :])
+
+    [0;31m[... skipping hidden 14 frame][0m
+
+File [0;32m~/work/pyhgf/pyhgf/pyhgf/continuous.py:487[0m, in [0;36mloop_continuous_inputs[0;34m(res, el)[0m
+[1;32m    484[0m node_structure, results [38;5;241m=[39m res
+[1;32m    486[0m [38;5;66;03m# Fit the model with the current time and value variables, given model structure[39;00m
+[0;32m--> 487[0m surprise, new_node_structure [38;5;241m=[39m [43mcontinuous_input_update[49m[43m([49m[43m  [49m[38;5;66;43;03m# type:ignore[39;49;00m
+[1;32m    488[0m [43m    [49m[43minput_node[49m[38;5;241;43m=[39;49m[43mnode_structure[49m[43m,[49m
+[1;32m    489[0m [43m    [49m[43mvalue[49m[38;5;241;43m=[39;49m[43mvalue[49m[43m,[49m
+[1;32m    490[0m [43m    [49m[43mold_time[49m[38;5;241;43m=[39;49m[43mresults[49m[43m[[49m[38;5;124;43m"[39;49m[38;5;124;43mtime[39;49m[38;5;124;43m"[39;49m[43m][49m[43m,[49m
+[1;32m    491[0m [43m    [49m[43mnew_time[49m[38;5;241;43m=[39;49m[43mnew_time[49m[43m,[49m
+[1;32m    492[0m [43m[49m[43m)[49m
+[1;32m    494[0m [38;5;66;03m# the model structure is packed with current time point[39;00m
+[1;32m    495[0m [38;5;66;03m# surprise is accumulated separately[39;00m
+[1;32m    496[0m res [38;5;241m=[39m new_node_structure, {[38;5;124m"[39m[38;5;124mtime[39m[38;5;124m"[39m: new_time, [38;5;124m"[39m[38;5;124mvalue[39m[38;5;124m"[39m: value, [38;5;124m"[39m[38;5;124msurprise[39m[38;5;124m"[39m: surprise}
+
+File [0;32m~/work/pyhgf/pyhgf/pyhgf/continuous.py:306[0m, in [0;36mcontinuous_input_update[0;34m(input_node, value, new_time, old_time)[0m
+[1;32m    299[0m     va_pa_node_parameters[[38;5;124m"[39m[38;5;124mnu[39m[38;5;124m"[39m] [38;5;241m=[39m nu_va_pa
+[1;32m    301[0m     [38;5;66;03m# Update node's parents recursively[39;00m
+[1;32m    302[0m     (
+[1;32m    303[0m         new_va_pa_node_parameters,
+[1;32m    304[0m         new_va_pa_value_parents,
+[1;32m    305[0m         new_va_pa_volatility_parents,
+[0;32m--> 306[0m     ) [38;5;241m=[39m [43mcontinuous_node_update[49m[43m([49m
+[1;32m    307[0m [43m        [49m[43mnode_parameters[49m[38;5;241;43m=[39;49m[43mva_pa_node_parameters[49m[43m,[49m
+[1;32m    308[0m [43m        [49m[43mvalue_parents[49m[38;5;241;43m=[39;49m[43mva_pa_value_parents[49m[43m,[49m
+[1;32m    309[0m [43m        [49m[43mvolatility_parents[49m[38;5;241;43m=[39;49m[43mva_pa_volatility_parents[49m[43m,[49m
+[1;32m    310[0m [43m        [49m[43mold_time[49m[38;5;241;43m=[39;49m[43mold_time[49m[43m,[49m
+[1;32m    311[0m [43m        [49m[43mnew_time[49m[38;5;241;43m=[39;49m[43mnew_time[49m[43m,[49m
+[1;32m    312[0m [43m    [49m[43m)[49m
+[1;32m    314[0m     new_value_parents [38;5;241m=[39m (
+[1;32m    315[0m         (
+[1;32m    316[0m             new_va_pa_node_parameters,
+[0;32m   (...)[0m
+[1;32m    319[0m         ),
+[1;32m    320[0m     )
+[1;32m    322[0m [38;5;28;01melse[39;00m:
+
+[0;31mTypeError[0m: continuous_node_update() got an unexpected keyword argument 'node_parameters'
+TypeError: continuous_node_update() got an unexpected keyword argument 'node_parameters'
+
