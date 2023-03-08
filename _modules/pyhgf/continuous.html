@@ -442,19 +442,24 @@ document.write(`
   <h1>Source code for pyhgf.continuous</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
 <span class="kn">from</span> <span class="nn">jax.interpreters.xla</span> <span class="kn">import</span> <span class="n">DeviceArray</span>
 
-<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">NodeStructure</span><span class="p">,</span> <span class="n">NodeType</span>
+<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">NodeStructure</span>
 
 
-<div class="viewcode-block" id="continuous_node_update"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.continuous_node_update.html#pyhgf.continuous.continuous_node_update">[docs]</a><span class="k">def</span> <span class="nf">continuous_node_update</span><span class="p">(</span>
+<div class="viewcode-block" id="continuous_node_update"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.continuous_node_update.html#pyhgf.continuous.continuous_node_update">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">continuous_node_update</span><span class="p">(</span>
     <span class="n">node_structure</span><span class="p">:</span> <span class="n">NodeStructure</span><span class="p">,</span>
-    <span class="n">node_idx</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">value_parents_idx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">volatility_parents_idx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeStructure</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the value and volatility parents of a continuous node.</span>
 
@@ -476,10 +481,16 @@ document.write(`
 <span class="sd">        .. note::</span>
 <span class="sd">           `&quot;psis&quot;` is a tuple with same length than the value parents&#39; pointers.</span>
 <span class="sd">           `&quot;kappas&quot;` is a tuple with same length than volatility parents&#39; pointers.</span>
-<span class="sd">    node_idx :</span>
-<span class="sd">        Pointer to the node that need to be updated.</span>
 <span class="sd">    time_step :</span>
 <span class="sd">        Interval between the previous time point and the current time point.</span>
+<span class="sd">    node_idx :</span>
+<span class="sd">        Pointer to the node that need to be updated.</span>
+<span class="sd">    value_parents_idx :</span>
+<span class="sd">        Index to the value parents.</span>
+<span class="sd">    volatility_parents_idx :</span>
+<span class="sd">        Index to the volatility parents.</span>
+<span class="sd">    value :</span>
+<span class="sd">        Input value (not required).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -493,8 +504,6 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># using the current node index, unwrap parameters and parents</span>
     <span class="n">node_parameters</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span>
-    <span class="n">value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;value_parents&quot;</span><span class="p">]</span>
-    <span class="n">volatility_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;volatility_parents&quot;</span><span class="p">]</span>
 
     <span class="c1"># return here if no parents node are provided</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">value_parents_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">volatility_parents_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
@@ -555,11 +564,6 @@ document.write(`
             <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_pa</span>
             <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_pa</span>
             <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_pa</span>
-
-            <span class="c1"># if this parent has parent, update them recursively</span>
-            <span class="n">node_structure</span> <span class="o">=</span> <span class="n">continuous_node_update</span><span class="p">(</span>
-                <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span> <span class="n">node_idx</span><span class="o">=</span><span class="n">va_pa_idx</span><span class="p">,</span> <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span>
-            <span class="p">)</span>
 
     <span class="c1">#############################</span>
     <span class="c1"># Update volatility parents #</span>
@@ -622,20 +626,18 @@ document.write(`
             <span class="n">node_structure</span><span class="p">[</span><span class="n">vo_pa_idx</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_pa</span>
             <span class="n">node_structure</span><span class="p">[</span><span class="n">vo_pa_idx</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_pa</span>
 
-            <span class="c1"># if this parent has parent, update them recursively</span>
-            <span class="n">node_structure</span> <span class="o">=</span> <span class="n">continuous_node_update</span><span class="p">(</span>
-                <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span> <span class="n">node_idx</span><span class="o">=</span><span class="n">vo_pa_idx</span><span class="p">,</span> <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span>
-            <span class="p">)</span>
-
     <span class="k">return</span> <span class="n">node_structure</span></div>
 
 
+<span class="c1"># @partial(jit, static_argnums=(3, 4, 5))</span>
 <div class="viewcode-block" id="continuous_input_update"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.continuous_input_update.html#pyhgf.continuous.continuous_input_update">[docs]</a><span class="k">def</span> <span class="nf">continuous_input_update</span><span class="p">(</span>
-    <span class="n">input_node</span><span class="p">:</span> <span class="n">NodeType</span><span class="p">,</span>
-    <span class="n">value</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span>
-    <span class="n">new_time</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span>
-    <span class="n">old_time</span><span class="p">:</span> <span class="n">DeviceArray</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">DeviceArray</span><span class="p">,</span> <span class="n">NodeType</span><span class="p">]]:</span>
+    <span class="n">node_structure</span><span class="p">:</span> <span class="n">NodeStructure</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">value_parents_idx</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">volatility_parents_idx</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeStructure</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure.</span>
 
 <span class="sd">    This function is the entry level of the model fitting. It update the partents of</span>
@@ -644,43 +646,47 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    input_node : tuple</span>
-<span class="sd">        The parameter, value parent and volatility parent of the input node. The</span>
-<span class="sd">        volatility and value parents contain their own value and volatility parents,</span>
-<span class="sd">        this structure being nested up to the higher level of the hierarchy.</span>
-<span class="sd">    value : DeviceArray</span>
-<span class="sd">        The new input value that is observed by the model at time t=`new_time`.</span>
-<span class="sd">    new_time : DeviceArray</span>
-<span class="sd">        The current time point.</span>
-<span class="sd">    old_time : DeviceArray</span>
-<span class="sd">        The time point of the previous observed value.</span>
+<span class="sd">    node_structure :</span>
+<span class="sd">        The node structure is a dictionary containing nodes. Each node has the following</span>
+<span class="sd">        parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` as well as</span>
+<span class="sd">        lists of pointers to value parents and volatility parents.</span>
+<span class="sd">        .. note::</span>
+<span class="sd">           `&quot;psis&quot;` is a tuple with same length than the value parents&#39; pointers.</span>
+<span class="sd">           `&quot;kappas&quot;` is a tuple with same length than volatility parents&#39; pointers.</span>
+<span class="sd">    value :</span>
+<span class="sd">        The new observation.</span>
+<span class="sd">    time_step :</span>
+<span class="sd">        Interval between the previous time point and the current time point.</span>
+<span class="sd">    node_idx :</span>
+<span class="sd">        Pointer to the input node that is receiving the value. Defaults to `0`.</span>
+<span class="sd">    value_parents_idx :</span>
+<span class="sd">        Index to the value parents.</span>
+<span class="sd">    volatility_parents_idx :</span>
+<span class="sd">        Index to the volatility parents.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    surprise : jnp.DeviceArray</span>
-<span class="sd">        The gaussian surprise given the value(s) presented at t=`new_time`.</span>
-<span class="sd">    new_input_node : tuple</span>
-<span class="sd">        The input node structure after recursively updating all the nodes.</span>
+<span class="sd">    node_structure :</span>
+<span class="sd">        The updated node structure.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
 <span class="sd">    continuous_node_update, update_binary_input_parents</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">input_node_parameters</span><span class="p">,</span> <span class="n">value_parents</span><span class="p">,</span> <span class="n">volatility_parents</span> <span class="o">=</span> <span class="n">input_node</span>
+    <span class="c1"># using the current node index, unwrap parameters and parents</span>
+    <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">value_parents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">volatility_parents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># return here if no parents node are provided</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">value_parents_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">volatility_parents_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">None</span>
-
-    <span class="c1"># Time interval</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">new_time</span><span class="p">,</span> <span class="n">old_time</span><span class="p">)</span>
 
     <span class="n">lognoise</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">lognoise</span> <span class="o">+=</span> <span class="p">(</span>  <span class="c1"># type:ignore</span>
+        <span class="n">lognoise</span> <span class="o">+=</span> <span class="p">(</span>
             <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span>
-            <span class="o">*</span> <span class="n">volatility_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>  <span class="c1"># type:ignore</span>
+            <span class="o">*</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
         <span class="p">)</span>
 
     <span class="n">pihat</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">lognoise</span><span class="p">)</span>
@@ -688,14 +694,14 @@ document.write(`
     <span class="c1">########################</span>
     <span class="c1"># Update value parents #</span>
     <span class="c1">########################</span>
-    <span class="k">if</span> <span class="n">value_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
-        <span class="c1"># Unpack this node&#39;s parameters, value and volatility parents</span>
-        <span class="p">(</span>
-            <span class="n">va_pa_node_parameters</span><span class="p">,</span>
-            <span class="n">va_pa_value_parents</span><span class="p">,</span>
-            <span class="n">va_pa_volatility_parents</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="n">value_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># unpack the current parent&#39;s parameters with value and volatility parents</span>
+        <span class="n">va_pa_node_parameters</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span>
+        <span class="n">va_pa_value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;value_parents&quot;</span><span class="p">]</span>
+        <span class="n">va_pa_volatility_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span>
+            <span class="s2">&quot;volatility_parents&quot;</span>
+        <span class="p">]</span>
 
         <span class="n">vape</span> <span class="o">=</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
 
@@ -704,14 +710,14 @@ document.write(`
 
         <span class="c1"># Look at the (optional) va_pa&#39;s volatility parents</span>
         <span class="c1"># and update logvol accordingly</span>
-        <span class="k">if</span> <span class="n">va_pa_volatility_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">va_pa_volatility_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">va_pa_vo_pa</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                <span class="n">va_pa_volatility_parents</span><span class="p">,</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span>
+                <span class="n">va_pa_volatility_parents_idx</span><span class="p">,</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span>
             <span class="p">):</span>
-                <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">va_pa_vo_pa</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_vo_pa</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
         <span class="c1"># Estimate new_nu</span>
-        <span class="n">nu</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
         <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
         <span class="n">pihat_va_pa</span><span class="p">,</span> <span class="n">nu_va_pa</span> <span class="o">=</span> <span class="p">[</span>
@@ -725,56 +731,37 @@ document.write(`
 
         <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
         <span class="c1"># and update driftrate accordingly</span>
-        <span class="k">if</span> <span class="n">va_pa_value_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">va_pa_va_pa</span> <span class="ow">in</span> <span class="n">va_pa_value_parents</span><span class="p">:</span>
-                <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;psi&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">va_pa_va_pa</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">va_pa_value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">va_pa_va_pa</span> <span class="ow">in</span> <span class="n">va_pa_value_parents_idx</span><span class="p">:</span>
+                <span class="n">driftrate</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;psis&quot;</span><span class="p">]</span>
+                    <span class="o">*</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_va_pa</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
 
-        <span class="n">muhat_va_pa</span> <span class="o">=</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">driftrate</span>
+        <span class="n">muhat_va_pa</span> <span class="o">=</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
         <span class="n">vape</span> <span class="o">=</span> <span class="n">value</span> <span class="o">-</span> <span class="n">muhat_va_pa</span>
         <span class="n">mu_va_pa</span> <span class="o">=</span> <span class="n">muhat_va_pa</span> <span class="o">+</span> <span class="n">pihat</span> <span class="o">/</span> <span class="n">pi_va_pa</span> <span class="o">*</span> <span class="n">vape</span>
 
-        <span class="c1"># Update value parent&#39;s parameters</span>
-        <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_va_pa</span>
-        <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_va_pa</span>
-        <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_va_pa</span>
-        <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_va_pa</span>
-        <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_va_pa</span>
-
-        <span class="c1"># Update node&#39;s parents recursively</span>
-        <span class="p">(</span>
-            <span class="n">new_va_pa_node_parameters</span><span class="p">,</span>
-            <span class="n">new_va_pa_value_parents</span><span class="p">,</span>
-            <span class="n">new_va_pa_volatility_parents</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="n">continuous_node_update</span><span class="p">(</span>
-            <span class="n">node_parameters</span><span class="o">=</span><span class="n">va_pa_node_parameters</span><span class="p">,</span>
-            <span class="n">value_parents</span><span class="o">=</span><span class="n">va_pa_value_parents</span><span class="p">,</span>
-            <span class="n">volatility_parents</span><span class="o">=</span><span class="n">va_pa_volatility_parents</span><span class="p">,</span>
-            <span class="n">old_time</span><span class="o">=</span><span class="n">old_time</span><span class="p">,</span>
-            <span class="n">new_time</span><span class="o">=</span><span class="n">new_time</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">new_value_parents</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">(</span>
-                <span class="n">new_va_pa_node_parameters</span><span class="p">,</span>
-                <span class="n">new_va_pa_value_parents</span><span class="p">,</span>
-                <span class="n">new_va_pa_volatility_parents</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">new_value_parents</span> <span class="o">=</span> <span class="n">value_parents</span>  <span class="c1"># type:ignore</span>
+        <span class="c1"># update input node&#39;s parameters</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_va_pa</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_va_pa</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_va_pa</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_va_pa</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_va_pa</span>
 
     <span class="c1">#############################</span>
     <span class="c1"># Update volatility parents #</span>
     <span class="c1">#############################</span>
-    <span class="k">if</span> <span class="n">volatility_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">volatility_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
-        <span class="c1"># Unpack this node&#39;s parameters, value and volatility parents</span>
-        <span class="p">(</span>
-            <span class="n">vo_pa_node_parameters</span><span class="p">,</span>
-            <span class="n">vo_pa_value_parents</span><span class="p">,</span>
-            <span class="n">vo_pa_volatility_parents</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="n">volatility_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># unpack the current parent&#39;s parameters with value and volatility parents</span>
+        <span class="n">vo_pa_node_parameters</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span>
+        <span class="n">vo_pa_value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span>
+            <span class="s2">&quot;value_parents&quot;</span>
+        <span class="p">]</span>
+        <span class="n">vo_pa_volatility_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span>
+            <span class="s2">&quot;volatility_parents&quot;</span>
+        <span class="p">]</span>
 
         <span class="n">vope</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi_va_pa</span> <span class="o">+</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">mu_va_pa</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">pihat</span> <span class="o">-</span> <span class="mi">1</span>
 
@@ -785,13 +772,13 @@ document.write(`
 
         <span class="c1"># Look at the (optional) vo_pa&#39;s volatility parents</span>
         <span class="c1"># and update logvol accordingly</span>
-        <span class="k">if</span> <span class="n">vo_pa_volatility_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">vo_pa_vo_pa</span> <span class="ow">in</span> <span class="n">vo_pa_volatility_parents</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">vo_pa_volatility_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">vo_pa_vo_pa</span> <span class="ow">in</span> <span class="n">vo_pa_volatility_parents_idx</span><span class="p">:</span>
                 <span class="n">kappa</span> <span class="o">=</span> <span class="n">vo_pa_vo_pa</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span>
-                <span class="n">logvol</span> <span class="o">+=</span> <span class="n">kappa</span> <span class="o">*</span> <span class="n">vo_pa_vo_pa</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                <span class="n">logvol</span> <span class="o">+=</span> <span class="n">kappa</span> <span class="o">*</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">vo_pa_vo_pa</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
         <span class="c1"># Estimate new_nu</span>
-        <span class="n">nu</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
         <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
         <span class="n">pihat_vo_pa</span><span class="p">,</span> <span class="n">nu_vo_pa</span> <span class="o">=</span> <span class="p">[</span>
@@ -809,53 +796,33 @@ document.write(`
 
         <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
         <span class="c1"># and update driftrate accordingly</span>
-        <span class="k">if</span> <span class="n">vo_pa_value_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">vo_pa_value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">vo_pa_va_pa</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                <span class="n">vo_pa_value_parents</span><span class="p">,</span> <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;psis&quot;</span><span class="p">]</span>
+                <span class="n">vo_pa_value_parents_idx</span><span class="p">,</span> <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;psis&quot;</span><span class="p">]</span>
             <span class="p">):</span>
-                <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">p</span> <span class="o">*</span> <span class="n">vo_pa_va_pa</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">p</span> <span class="o">*</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">vo_pa_va_pa</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
-        <span class="n">muhat_vo_pa</span> <span class="o">=</span> <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">driftrate</span>
+        <span class="n">muhat_vo_pa</span> <span class="o">=</span> <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
         <span class="n">mu_vo_pa</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">muhat_vo_pa</span>
             <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">input_node_parameters</span><span class="p">[</span><span class="s2">&quot;kappas&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">pi_vo_pa</span> <span class="o">*</span> <span class="n">vope</span>
         <span class="p">)</span>
 
-        <span class="c1"># Update node&#39;s parameters</span>
-        <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_vo_pa</span>
-        <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_vo_pa</span>
-        <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_vo_pa</span>
-        <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_vo_pa</span>
-        <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_vo_pa</span>
+        <span class="c1"># Update this parent&#39;s parameters</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_vo_pa</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_vo_pa</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_vo_pa</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_vo_pa</span>
+        <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_vo_pa</span>
 
-        <span class="c1"># Update node&#39;s parents recursively</span>
-        <span class="p">(</span>
-            <span class="n">new_vo_pa_node_parameters</span><span class="p">,</span>
-            <span class="n">new_vo_pa_value_parents</span><span class="p">,</span>
-            <span class="n">new_vo_pa_volatility_parents</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="n">continuous_node_update</span><span class="p">(</span>
-            <span class="n">node_parameters</span><span class="o">=</span><span class="n">vo_pa_node_parameters</span><span class="p">,</span>
-            <span class="n">value_parents</span><span class="o">=</span><span class="n">vo_pa_value_parents</span><span class="p">,</span>
-            <span class="n">volatility_parents</span><span class="o">=</span><span class="n">vo_pa_volatility_parents</span><span class="p">,</span>
-            <span class="n">old_time</span><span class="o">=</span><span class="n">old_time</span><span class="p">,</span>
-            <span class="n">new_time</span><span class="o">=</span><span class="n">new_time</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="c1"># store input surprise, value and timestep in the node&#39;s parameters</span>
+    <span class="n">node_structure</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">muhat</span><span class="o">=</span><span class="n">muhat_va_pa</span><span class="p">,</span> <span class="n">pihat</span><span class="o">=</span><span class="n">pihat</span>
+    <span class="p">)</span>
+    <span class="n">node_structure</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_step</span>
+    <span class="n">node_structure</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="n">new_volatility_parents</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">(</span>
-                <span class="n">new_vo_pa_node_parameters</span><span class="p">,</span>
-                <span class="n">new_vo_pa_value_parents</span><span class="p">,</span>
-                <span class="n">new_vo_pa_volatility_parents</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">new_volatility_parents</span> <span class="o">=</span> <span class="n">volatility_parents</span>  <span class="c1"># type:ignore</span>
-
-    <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">muhat</span><span class="o">=</span><span class="n">muhat_va_pa</span><span class="p">,</span> <span class="n">pihat</span><span class="o">=</span><span class="n">pihat</span><span class="p">)</span>
-    <span class="n">input_node</span> <span class="o">=</span> <span class="n">input_node_parameters</span><span class="p">,</span> <span class="n">new_value_parents</span><span class="p">,</span> <span class="n">new_volatility_parents</span>
-
-    <span class="k">return</span> <span class="n">surprise</span><span class="p">,</span> <span class="n">input_node</span></div>
+    <span class="k">return</span> <span class="n">node_structure</span></div>
 
 
 <div class="viewcode-block" id="gaussian_surprise"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.gaussian_surprise.html#pyhgf.continuous.gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">gaussian_surprise</span><span class="p">(</span>
@@ -875,16 +842,16 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    x : jnp.DeviceArray</span>
+<span class="sd">    x :</span>
 <span class="sd">        The outcome.</span>
-<span class="sd">    muhat : jnp.DeviceArray</span>
+<span class="sd">    muhat :</span>
 <span class="sd">        The expected mean of the Gaussian distribution.</span>
-<span class="sd">    pihat : jnp.DeviceArray</span>
+<span class="sd">    pihat :</span>
 <span class="sd">        The expected precision of the Gaussian distribution.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    surprise : jnp.DeviceArray</span>
+<span class="sd">    surprise :</span>
 <span class="sd">        The Gaussian surprise.</span>
 
 <span class="sd">    Examples</span>
@@ -899,45 +866,6 @@ document.write(`
         <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pihat</span><span class="p">)</span>
         <span class="o">+</span> <span class="n">pihat</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">muhat</span><span class="p">))</span>
     <span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="loop_continuous_inputs"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.loop_continuous_inputs.html#pyhgf.continuous.loop_continuous_inputs">[docs]</a><span class="nd">@jit</span>
-<span class="k">def</span> <span class="nf">loop_continuous_inputs</span><span class="p">(</span><span class="n">res</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">el</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the node structure after observing one new data point.</span>
-
-<span class="sd">    One time step updating node structure and returning the new node structure with</span>
-<span class="sd">    time, value and surprise.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    res : tuple</span>
-<span class="sd">        Result from the previous iteration. The node structure and results from the</span>
-<span class="sd">        previous iteration as a tuple in the form:</span>
-<span class="sd">        `(node_structure, {&quot;time&quot;: time, &quot;value&quot;: value, &quot;surprise&quot;: surprise})`.</span>
-<span class="sd">    el : tuple</span>
-<span class="sd">        The current array element. Scan will iterate over a n x 2 DeviceArray with time</span>
-<span class="sd">        and values (i.e. the input time series).</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Extract the current iteration variables values and time</span>
-    <span class="n">value</span><span class="p">,</span> <span class="n">new_time</span> <span class="o">=</span> <span class="n">el</span>
-
-    <span class="c1"># Extract model previous structure and results {time, value, surprise}</span>
-    <span class="n">node_structure</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">res</span>
-
-    <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
-    <span class="n">surprise</span><span class="p">,</span> <span class="n">new_node_structure</span> <span class="o">=</span> <span class="n">continuous_input_update</span><span class="p">(</span>  <span class="c1"># type:ignore</span>
-        <span class="n">input_node</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
-        <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-        <span class="n">old_time</span><span class="o">=</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>
-        <span class="n">new_time</span><span class="o">=</span><span class="n">new_time</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="c1"># the model structure is packed with current time point</span>
-    <span class="c1"># surprise is accumulated separately</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">new_node_structure</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">new_time</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="n">surprise</span><span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">res</span><span class="p">,</span> <span class="n">res</span>  <span class="c1"># (&quot;carryover&quot;, &quot;accumulated&quot;)</span></div>
 </pre></div>
 
                 </article>
@@ -995,7 +923,7 @@ document.write(`
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.1.
 </p></div>
       
     </div>

@@ -551,72 +551,45 @@ if &#39;google.colab&#39; in sys.modules:
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Provide new observations</span>
 <span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">two_levels_hgf</span> <span class="o">=</span> <span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span><span class="p">)</span>
 
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/model.py:292,</span> in <span class="ni">HGF.input_data</span><span class="nt">(self, input_data, time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">290</span>     <span class="n">_</span><span class="p">,</span> <span class="n">scan_updates</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_continuous_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
-<span class="g g-Whitespace">    </span><span class="mi">291</span> <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">292</span>     <span class="n">_</span><span class="p">,</span> <span class="n">scan_updates</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">loop_binary_inputs</span><span class="p">,</span> <span class="n">res_init</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">294</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;This method only works with binary or continuous models&quot;</span><span class="p">)</span>
+<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/model.py:231,</span> in <span class="ni">HGF.input_data</span><span class="nt">(self, input_data, time)</span>
+<span class="g g-Whitespace">    </span><span class="mi">225</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="g g-Whitespace">    </span><span class="mi">227</span> <span class="c1"># Run the entire for loop</span>
+<span class="g g-Whitespace">    </span><span class="mi">228</span> <span class="c1"># this is where the model loop over the input time series</span>
+<span class="g g-Whitespace">    </span><span class="mi">229</span> <span class="c1"># at each input the node structure is traversed and beliefs are updated</span>
+<span class="g g-Whitespace">    </span><span class="mi">230</span> <span class="c1"># using precision-weighted prediction errors</span>
+<span class="ne">--&gt; </span><span class="mi">231</span> <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="c1"># the node structure at each value update</span>
+<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">node_trajectories</span>
 
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">14</span> <span class="n">frame</span><span class="p">]</span>
+    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">9</span> <span class="n">frame</span><span class="p">]</span>
 
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/binary.py:394,</span> in <span class="ni">loop_binary_inputs</span><span class="nt">(res, el)</span>
-<span class="g g-Whitespace">    </span><span class="mi">391</span> <span class="n">node_structure</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">res</span>
-<span class="g g-Whitespace">    </span><span class="mi">393</span> <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
-<span class="ne">--&gt; </span><span class="mi">394</span> <span class="n">surprise</span><span class="p">,</span> <span class="n">new_node_structure</span> <span class="o">=</span> <span class="n">binary_input_update</span><span class="p">(</span>  <span class="c1"># type:ignore</span>
-<span class="g g-Whitespace">    </span><span class="mi">395</span>     <span class="n">input_node</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">396</span>     <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">397</span>     <span class="n">old_time</span><span class="o">=</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">398</span>     <span class="n">new_time</span><span class="o">=</span><span class="n">new_time</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">399</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">401</span> <span class="c1"># the model structure is packed with current time point</span>
-<span class="g g-Whitespace">    </span><span class="mi">402</span> <span class="c1"># surprise is accumulated separately</span>
-<span class="g g-Whitespace">    </span><span class="mi">403</span> <span class="n">res</span> <span class="o">=</span> <span class="n">new_node_structure</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">new_time</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="n">surprise</span><span class="p">}</span>
+<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:34,</span> in <span class="ni">loop_inputs</span><span class="nt">(update_sequence, node_structure, data)</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="n">value</span><span class="p">,</span> <span class="n">time_step</span> <span class="o">=</span> <span class="n">data</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
+<span class="ne">---&gt; </span><span class="mi">34</span> <span class="n">new_node_structure</span> <span class="o">=</span> <span class="n">apply_sequence</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span>     <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span>     <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">37</span>     <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span>     <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">39</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="k">return</span> <span class="n">new_node_structure</span><span class="p">,</span> <span class="n">new_node_structure</span>
 
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/binary.py:287,</span> in <span class="ni">binary_input_update</span><span class="nt">(input_node, value, new_time, old_time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">280</span>     <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_va_pa</span>
-<span class="g g-Whitespace">    </span><span class="mi">282</span>     <span class="c1"># 4. Update the binary node parent</span>
-<span class="g g-Whitespace">    </span><span class="mi">283</span>     <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">284</span>         <span class="n">new_va_pa_node_parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">285</span>         <span class="n">new_va_pa_value_parents</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">286</span>         <span class="n">new_va_pa_volatility_parents</span><span class="p">,</span>
-<span class="ne">--&gt; </span><span class="mi">287</span>     <span class="p">)</span> <span class="o">=</span> <span class="n">binary_node_update</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">288</span>         <span class="n">node_parameters</span><span class="o">=</span><span class="n">va_pa_node_parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">289</span>         <span class="n">value_parents</span><span class="o">=</span><span class="n">va_pa_value_parents</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">290</span>         <span class="n">volatility_parents</span><span class="o">=</span><span class="n">va_pa_volatility_parents</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">291</span>         <span class="n">old_time</span><span class="o">=</span><span class="n">old_time</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">292</span>         <span class="n">new_time</span><span class="o">=</span><span class="n">new_time</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">295</span>     <span class="n">new_value_parents</span><span class="p">:</span> <span class="n">ParentsType</span> <span class="o">=</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">296</span>         <span class="n">new_va_pa_node_parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">297</span>         <span class="n">new_va_pa_value_parents</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">298</span>         <span class="n">new_va_pa_volatility_parents</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">299</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="k">else</span><span class="p">:</span>
+    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">5</span> <span class="n">frame</span><span class="p">]</span>
 
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/binary.py:144,</span> in <span class="ni">binary_node_update</span><span class="nt">(node_parameters, value_parents, volatility_parents, old_time, new_time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">137</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_pa</span>
-<span class="g g-Whitespace">    </span><span class="mi">138</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_pa</span>
-<span class="g g-Whitespace">    </span><span class="mi">140</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">141</span>     <span class="n">new_va_pa_node_parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">142</span>     <span class="n">new_va_pa_value_parents</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">143</span>     <span class="n">new_va_pa_volatility_parents</span><span class="p">,</span>
-<span class="ne">--&gt; </span><span class="mi">144</span> <span class="p">)</span> <span class="o">=</span> <span class="n">continuous_node_update</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">145</span>     <span class="n">node_parameters</span><span class="o">=</span><span class="n">va_pa_node_parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">146</span>     <span class="n">value_parents</span><span class="o">=</span><span class="n">va_pa_value_parents</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">147</span>     <span class="n">volatility_parents</span><span class="o">=</span><span class="n">va_pa_volatility_parents</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">148</span>     <span class="n">old_time</span><span class="o">=</span><span class="n">old_time</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">149</span>     <span class="n">new_time</span><span class="o">=</span><span class="n">new_time</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">150</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">152</span> <span class="n">new_value_parents</span> <span class="o">=</span> <span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">153</span> <span class="n">new_value_parents</span> <span class="o">+=</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">154</span>     <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">155</span>         <span class="n">new_va_pa_node_parameters</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">158</span>     <span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">159</span> <span class="p">)</span>
+<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:54,</span> in <span class="ni">apply_sequence</span><span class="nt">(node_structure, update_sequence, time_step, value)</span>
+<span class="g g-Whitespace">     </span><span class="mi">52</span> <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">update_sequence</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="n">node_idx</span><span class="p">,</span> <span class="n">value_parents_idx</span><span class="p">,</span> <span class="n">volatility_parents_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
+<span class="ne">---&gt; </span><span class="mi">54</span>     <span class="n">node_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">55</span>         <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span>         <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span>         <span class="n">value_parents_idx</span><span class="o">=</span><span class="n">value_parents_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">58</span>         <span class="n">volatility_parents_idx</span><span class="o">=</span><span class="n">volatility_parents_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">59</span>         <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">60</span>         <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">61</span>     <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span> <span class="k">return</span> <span class="n">node_structure</span>
 
-<span class="ne">TypeError</span>: continuous_node_update() got an unexpected keyword argument &#39;node_parameters&#39;
+<span class="ne">TypeError</span>: binary_input_update() got an unexpected keyword argument &#39;node_structure&#39;
 </pre></div>
 </div>
 </div>
@@ -1089,7 +1062,7 @@ if &#39;google.colab&#39; in sys.modules:
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.1.
 </p></div>
       
     </div>
