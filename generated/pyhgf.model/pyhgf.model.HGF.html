@@ -493,25 +493,33 @@ document.write(`
 <dd><p>The two-level and three-level Hierarchical Gaussian Filters (HGF).</p>
 <p>This class use pre-made nodes structures that corresponds to the most widely used
 HGF. The inputs can be continuous or binary.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>hgf_results</strong><span class="classifier">dict</span></dt><dd><p>After oberving the data using the <cite>input_data</cite> method, the output of the model
+<dd class="field-odd"><dl>
+<dt><strong>hgf_results</strong></dt><dd><p>After oberving the data using the <cite>input_data</cite> method, the output of the model
 are stored in the <cite>hgf_results</cite> dictionary.</p>
 </dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model implemented (can be <cite>“continuous”</cite>, <cite>“binary”</cite> or <cite>“custom”</cite>).</p>
+<dt><strong>model_type</strong></dt><dd><p>The model implemented (can be <cite>“continuous”</cite>, <cite>“binary”</cite> or <cite>“custom”</cite>).</p>
 </dd>
-<dt><strong>n_levels</strong><span class="classifier">int</span></dt><dd><p>The number of hierarchies in the model, including the input vector. Cannot be
+<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the model, including the input vector. Cannot be
 less than 2.</p>
 </dd>
-<dt><strong>node_structure</strong><span class="classifier">tuple</span></dt><dd><p>A tuple of tuples representing the nodes hierarchy.</p>
+<dt><strong>node_structure</strong></dt><dd><p>A tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code> representing the nodes hierarchy.</p>
 </dd>
-<dt><strong>node_trajectories</strong><span class="classifier">tuples</span></dt><dd><p>The node structure updated at each new observation.</p>
+<dt><strong>node_trajectories</strong></dt><dd><p>The node structure updated at each new observation.</p>
+</dd>
+<dt><strong>parameters_structure</strong></dt><dd><p>The structure of nodes’ parameters. Each parameter is a dictionary with the
+following parameters: <cite>“pihat”, “pi”, “muhat”, “mu”, “nu”, “psis”, “omega”</cite> for
+continuous nodes.
+.. note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`&quot;psis&quot;` is the value coupling strength. It should have same length than the
+volatility parents&#39; indexes.
+`&quot;kappas&quot;` is the volatility coupling strength. It should have same length
+than the volatility parents&#39; indexes.
+</pre></div>
+</div>
 </dd>
 <dt><strong>results</strong></dt><dd><p>Time, values inputs and overall surprise of the model.</p>
-</dd>
-<dt><strong>structure_dict</strong><span class="classifier">dict</span></dt><dd><p>The node structure as a dictionary,
-retrieved using <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.structure.structure_as_dict()</span></code></p>
 </dd>
 <dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Verbosity level.</p>
 </dd>
@@ -525,11 +533,11 @@ retrieved using <code class="xref py py-func docutils literal notranslate"><span
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
-<cite>None</cite>, the nodes hierarchy is not created and might be provided afterward
-using <cite>add_nodes()</cite>. Defaults to <cite>2</cite> for a 2-level HGF.</p>
+<dt><strong>eta0</strong></dt><dd><p>The first categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
+relevant if <cite>model_type=”binary”</cite>.</p>
 </dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be <cite>“continuous”</cite> or <cite>“binary”</cite>).</p>
+<dt><strong>eta1</strong></dt><dd><p>The second categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
+relevant if <cite>model_type=”binary”</cite>.</p>
 </dd>
 <dt><strong>initial_mu</strong></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\mu\)</span> parameter at
 different levels of the hierarchy. Defaults set to <cite>0.0</cite> at all levels.</p>
@@ -537,6 +545,18 @@ different levels of the hierarchy. Defaults set to <cite>0.0</cite> at all level
 <dt><strong>initial_pi</strong></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\pi\)</span> parameter at
 different levels of the hierarchy. Pis values encode the precision of the
 values at each level (Var = 1/pi) Defaults set to <cite>1.0</cite> at all levels.</p>
+</dd>
+<dt><strong>kappas</strong></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\kappa\)</span> parameter
+at different levels of the hierarchy. Kappa represents the phasic part of
+the variance (the part that is affected by the parents nodes) and will
+defines the strenght of the connection between the node and the parent
+node. Often fixed to <cite>1</cite>. Defaults set to <cite>1</cite> at all levels.</p>
+</dd>
+<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be <cite>“continuous”</cite> or <cite>“binary”</cite>).</p>
+</dd>
+<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
+<cite>None</cite>, the nodes hierarchy is not created and might be provided afterward
+using <cite>add_nodes()</cite>. Defaults to <cite>2</cite> for a 2-level HGF.</p>
 </dd>
 <dt><strong>omega</strong></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\omega\)</span> parameter
 at different levels of the hierarchy. <span class="math notranslate nohighlight">\(\\omega\)</span> represents the tonic
@@ -547,25 +567,13 @@ Gaussian Random Walk nodes.</p>
 <dt><strong>omega_input</strong></dt><dd><p>Default value sets to <cite>log(1e-4)</cite>. Represents the noise associated with
 the input.</p>
 </dd>
+<dt><strong>pihat</strong></dt><dd><p>The precision of the binary input node. Default to <cite>jnp.inf</cite>. Only relevant
+if <cite>model_type=”binary”</cite>.</p>
+</dd>
 <dt><strong>rho</strong></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\rho\)</span> parameter at
 different levels of the hierarchy. Rho represents the drift of the random
 walk. This parameter is only required for Gaussian Random Walk nodes.
 Defaults set all entries to <cite>0</cite> according to the number of required levels.</p>
-</dd>
-<dt><strong>kappas</strong></dt><dd><p>Dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\kappa\)</span> parameter
-at different levels of the hierarchy. Kappa represents the phasic part of
-the variance (the part that is affected by the parents nodes) and will
-defines the strenght of the connection between the node and the parent
-node. Often fixed to <cite>1</cite>. Defaults set to <cite>1</cite> at all levels.</p>
-</dd>
-<dt><strong>eta0</strong></dt><dd><p>The first categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
-relevant if <cite>model_type=”binary”</cite>.</p>
-</dd>
-<dt><strong>eta1</strong></dt><dd><p>The second categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
-relevant if <cite>model_type=”binary”</cite>.</p>
-</dd>
-<dt><strong>pihat</strong></dt><dd><p>The precision of the binary input node. Default to <cite>jnp.inf</cite>. Only relevant
-if <cite>model_type=”binary”</cite>.</p>
 </dd>
 <dt><strong>verbose</strong></dt><dd><p>Verbosity of the methods for model creation and fitting. Defaults to <cite>True</cite>.</p>
 </dd>
@@ -583,14 +591,14 @@ if <cite>model_type=”binary”</cite>.</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_input_node</span></code>(kind[, omega_input, pihat, ...])</p></td>
 <td><p>Create an input node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_value_parent</span></code>(children_idxs, value_coupling)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_value_parent</span></code>(children_idxs[, ...])</p></td>
 <td><p>Add a value parent to node.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_volatility_parent</span></code>(children_idxs, ...[, ...])</p></td>
 <td><p>Add a volatility parent to node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_update_sequence</span></code>([node_idx, update_sequence])</p></td>
-<td><p>Get update sequence from structure.</p></td>
+<td><p>Get update sequence from the nodes' connections structure.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_data</span></code>(input_data[, time])</p></td>
 <td><p>Add new observations.</p></td>

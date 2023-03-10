@@ -596,8 +596,8 @@ document.write(`
         <span class="n">ax_i</span> <span class="o">=</span> <span class="n">n_nodes</span> <span class="o">-</span> <span class="n">i</span>
 
         <span class="c1"># extract the sufficient statistics from the data frame</span>
-        <span class="n">mu</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span>
-        <span class="n">pi</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span>
+        <span class="n">pi</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span>
 
         <span class="c1"># plotting mean</span>
         <span class="n">axs</span><span class="p">[</span><span class="n">ax_i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
@@ -617,8 +617,8 @@ document.write(`
                 <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
                 <span class="n">axs</span><span class="p">[</span><span class="n">ax_i</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
                     <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                    <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">sd</span><span class="p">,</span>
-                    <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sd</span><span class="p">,</span>
+                    <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">sd</span><span class="p">,</span>
+                    <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sd</span><span class="p">,</span>
                     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
                     <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
                     <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -629,7 +629,7 @@ document.write(`
             <span class="n">surprise_ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">ax_i</span><span class="p">]</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
             <span class="n">surprise_ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                 <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">],</span>
+                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">],</span>
                 <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a2a2a&quot;</span><span class="p">,</span>
                 <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                 <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
@@ -638,8 +638,8 @@ document.write(`
             <span class="p">)</span>
             <span class="n">surprise_ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
                 <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">],</span>
-                <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;node_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">],</span>
+                <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
                 <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#7f7f7f&quot;</span><span class="p">,</span>
                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
                 <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>

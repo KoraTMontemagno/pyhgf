@@ -471,15 +471,12 @@ document.write(`
 <span class="sd">        The model surprise given the input data.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Fill surprises with zeros if invalid input</span>
-    <span class="n">this_surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">jnp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-        <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span>
-    <span class="p">)</span>
-
     <span class="c1"># Return an infinite surprise if the model cannot fit</span>
-    <span class="n">this_surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">this_surprise</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">this_surprise</span><span class="p">)</span>
+    <span class="n">this_surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]),</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+        <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
 
     <span class="c1"># Sum the surprise for this model</span>
     <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">this_surprise</span><span class="p">)</span>
@@ -508,15 +505,12 @@ document.write(`
 <span class="sd">        The model surprise given the input data.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Fill surprises with zeros if invalid input</span>
-    <span class="n">this_surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">jnp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-        <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">hgf</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span>
-    <span class="p">)</span>
-
     <span class="c1"># Return an infinite surprise if the model cannot fit</span>
-    <span class="n">this_surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">this_surprise</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">this_surprise</span><span class="p">)</span>
+    <span class="n">this_surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]),</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+        <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
 
     <span class="c1"># Sum the surprise for this model</span>
     <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">this_surprise</span><span class="p">)</span>

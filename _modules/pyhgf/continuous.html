@@ -449,7 +449,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
 
 
-<div class="viewcode-block" id="continuous_node_update"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.continuous_node_update.html#pyhgf.continuous.continuous_node_update">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<div class="viewcode-block" id="continuous_node_update"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.continuous_node_update.html#pyhgf.continuous.continuous_node_update">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;node_structure&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">continuous_node_update</span><span class="p">(</span>
     <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -505,7 +505,7 @@ document.write(`
 
     <span class="c1"># return here if no parents node are provided</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">value_parents_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">volatility_parents_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">node_structure</span>
+        <span class="k">return</span> <span class="n">parameters_structure</span>
 
     <span class="n">pihat</span> <span class="o">=</span> <span class="n">node_parameters</span><span class="p">[</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
 
@@ -623,13 +623,13 @@ document.write(`
     <span class="k">return</span> <span class="n">parameters_structure</span></div>
 
 
-<div class="viewcode-block" id="continuous_input_update"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.continuous_input_update.html#pyhgf.continuous.continuous_input_update">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<div class="viewcode-block" id="continuous_input_update"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.continuous_input_update.html#pyhgf.continuous.continuous_input_update">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;node_structure&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">continuous_input_update</span><span class="p">(</span>
-    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
-    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure.</span>
 
@@ -758,8 +758,6 @@ document.write(`
         <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
 
         <span class="n">vope</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi_va_pa</span> <span class="o">+</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">mu_va_pa</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">pihat</span> <span class="o">-</span> <span class="mi">1</span>
-
-        <span class="n">nu</span> <span class="o">=</span> <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span>
 
         <span class="c1"># Compute new value for nu and pihat</span>
         <span class="n">logvol</span> <span class="o">=</span> <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>

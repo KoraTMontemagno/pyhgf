@@ -623,12 +623,198 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f3bf1cb946508851082e6902e95d3e7a64b78a2657fb238a01eb680169bfeea3.svg" src="../_images/f3bf1cb946508851082e6902e95d3e7a64b78a2657fb238a01eb680169bfeea3.svg" /></div>
+<img alt="../_images/a4f4c3719b3a47753d4fbbd4562f9d18ca6061379c049ebc2f0bbeac02223dca.svg" src="../_images/a4f4c3719b3a47753d4fbbd4562f9d18ca6061379c049ebc2f0bbeac02223dca.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
     <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tune</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 4 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
+</pre></div>
+</div>
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [8000/8000 03:04&lt;00:00 Sampling 4 chains, 1 divergences]
+    </div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 185 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 1 divergences after tuning. Increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(0)
+Coordinates:
+    chain    int64 0 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(1)
+Coordinates:
+    chain    int64 1 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(2)
+Coordinates:
+    chain    int64 2 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(3)
+Coordinates:
+    chain    int64 3 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/553ad09f073fc737cc89f9ccccea2e9064ef779644308f8342ccce296531d124.png" src="../_images/553ad09f073fc737cc89f9ccccea2e9064ef779644308f8342ccce296531d124.png" />
+</div>
+</div>
+<p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
+</section>
+</section>
+<section id="a-multilevel-binary-hgf">
+<h2>A multilevel binary HGF<a class="headerlink" href="#a-multilevel-binary-hgf" title="Permalink to this heading">#</a></h2>
+<section id="id3">
+<h3>Simulate a dataset<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">n_data</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">participant</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_data</span><span class="p">):</span>
+    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span>
+    <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
+        
+        <span class="c1"># x2</span>
+        <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
+        <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+
+        <span class="c1"># x1</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mu_2</span><span class="p">))</span>  <span class="c1"># sigmoid function</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">s2</span><span class="p">)</span>       
+        <span class="n">input_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+
+    <span class="n">dataset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="without-hyper-priors">
+<h3>Without hyper-priors<a class="headerlink" href="#without-hyper-priors" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
+    <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+    <span class="n">response_function</span><span class="o">=</span><span class="n">total_binary_surprise</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymc.math</span> <span class="kn">import</span> <span class="n">clip</span>
+
+<span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
+    
+    <span class="c1"># Hypterpriors</span>
+    <span class="c1">#-------------</span>
+    <span class="n">mu_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sigma_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfCauchy</span><span class="p">(</span><span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    
+    <span class="c1"># Priors</span>
+    <span class="c1">#-------</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
+    <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
+
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
+        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
+        <span class="n">hgf_logp_op</span><span class="p">(</span>
+            <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
+            <span class="n">omega_input</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
+            <span class="n">mu_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">omega_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">rho_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">pi_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">mu_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">kappa_2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="visualizing-the-model">
+<h4>Visualizing the model<a class="headerlink" href="#visualizing-the-model" title="Permalink to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">two_levels_binary_hgf</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7b5db6257c010bc3da9eaa5364c5acfa8559cb53db529119eb7333fe81354c1a.svg" src="../_images/7b5db6257c010bc3da9eaa5364c5acfa8559cb53db529119eb7333fe81354c1a.svg" /></div>
+</div>
+</section>
+<section id="sampling">
+<h4>Sampling<a class="headerlink" href="#sampling" title="Permalink to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
+    <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -690,34 +876,51 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 <span class="g g-Whitespace">    </span><span class="mi">221</span>     <span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">223</span> <span class="c1"># Return the sum of the log probabilities (negative surprise)</span>
 
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/model.py:231,</span> in <span class="ni">HGF.input_data</span><span class="nt">(self, input_data, time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">227</span> <span class="c1"># Run the entire for loop</span>
-<span class="g g-Whitespace">    </span><span class="mi">228</span> <span class="c1"># this is where the model loop over the input time series</span>
-<span class="g g-Whitespace">    </span><span class="mi">229</span> <span class="c1"># at each input the node structure is traversed and beliefs are updated</span>
-<span class="g g-Whitespace">    </span><span class="mi">230</span> <span class="c1"># using precision-weighted prediction errors</span>
-<span class="ne">--&gt; </span><span class="mi">231</span> <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="c1"># the node structure at each value update</span>
+<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/model.py:236,</span> in <span class="ni">HGF.input_data</span><span class="nt">(self, input_data, time)</span>
+<span class="g g-Whitespace">    </span><span class="mi">232</span> <span class="c1"># Run the entire for loop</span>
+<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="c1"># this is where the model loop over the input time series</span>
+<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="c1"># at each input the node structure is traversed and beliefs are updated</span>
+<span class="g g-Whitespace">    </span><span class="mi">235</span> <span class="c1"># using precision-weighted prediction errors</span>
+<span class="ne">--&gt; </span><span class="mi">236</span> <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">238</span> <span class="c1"># the node structure at each value update</span>
 
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">8</span> <span class="n">frame</span><span class="p">]</span>
+    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">9</span> <span class="n">frame</span><span class="p">]</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/jax/linear_util.py:167,</span> in <span class="ni">WrappedFun.call_wrapped</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">166</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">167</span>   <span class="n">ans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
-<span class="g g-Whitespace">    </span><span class="mi">168</span> <span class="k">except</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">169</span>   <span class="c1"># Some transformations yield from inside context managers, so we have to</span>
-<span class="g g-Whitespace">    </span><span class="mi">170</span>   <span class="c1"># interrupt them before reraising the exception. Otherwise they will only</span>
-<span class="g g-Whitespace">    </span><span class="mi">171</span>   <span class="c1"># get garbage-collected at some later time, running their cleanup tasks</span>
-<span class="g g-Whitespace">    </span><span class="mi">172</span>   <span class="c1"># only after this exception is handled, which can corrupt the global</span>
-<span class="g g-Whitespace">    </span><span class="mi">173</span>   <span class="c1"># state.</span>
+<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:44,</span> in <span class="ni">loop_inputs</span><span class="nt">(parameters_structure, data, update_sequence, node_structure)</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
+<span class="ne">---&gt; </span><span class="mi">44</span> <span class="n">new_parameters_structure</span> <span class="o">=</span> <span class="n">apply_sequence</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span>     <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span>     <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">47</span>     <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">48</span>     <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">49</span>     <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">50</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">52</span> <span class="k">return</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">54</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="p">)</span>
 
-<span class="ne">TypeError</span>: loop_inputs() missing 1 required positional argument: &#39;node_structure&#39;
+    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">5</span> <span class="n">frame</span><span class="p">]</span>
+
+<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:69,</span> in <span class="ni">apply_sequence</span><span class="nt">(value, time_step, parameters_structure, node_structure, update_sequence)</span>
+<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
+<span class="ne">---&gt; </span><span class="mi">69</span>     <span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span>         <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span>         <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span>         <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span>         <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span>         <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="k">return</span> <span class="n">parameters_structure</span>
+
+<span class="ne">TypeError</span>: binary_input_update() got an unexpected keyword argument &#39;parameters_structure&#39;
 
 <span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
 
 <span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">model</span><span class="p">:</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tune</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
+<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pymc/sampling/mcmc.py:582,</span> in <span class="ni">sample</span><span class="nt">(draws, tune, chains, cores, random_seed, progressbar, step, nuts_sampler, initvals, init, jitter_max_retries, n_init, trace, discard_tuned_samples, compute_convergence_checks, keep_warning_stat, return_inferencedata, idata_kwargs, callback, mp_ctx, model, **kwargs)</span>
 <span class="g g-Whitespace">    </span><span class="mi">580</span>         <span class="p">[</span><span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">nuts_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
@@ -872,37 +1075,54 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 <span class="g g-Whitespace">    </span><span class="mi">223</span> <span class="c1"># Return the sum of the log probabilities (negative surprise)</span>
 <span class="g g-Whitespace">    </span><span class="mi">224</span> <span class="k">return</span> <span class="o">-</span><span class="n">surprise</span>
 
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/model.py:231,</span> in <span class="ni">HGF.input_data</span><span class="nt">(self, input_data, time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">225</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-<span class="g g-Whitespace">    </span><span class="mi">227</span> <span class="c1"># Run the entire for loop</span>
-<span class="g g-Whitespace">    </span><span class="mi">228</span> <span class="c1"># this is where the model loop over the input time series</span>
-<span class="g g-Whitespace">    </span><span class="mi">229</span> <span class="c1"># at each input the node structure is traversed and beliefs are updated</span>
-<span class="g g-Whitespace">    </span><span class="mi">230</span> <span class="c1"># using precision-weighted prediction errors</span>
-<span class="ne">--&gt; </span><span class="mi">231</span> <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="c1"># the node structure at each value update</span>
-<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">node_trajectories</span>
+<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/model.py:236,</span> in <span class="ni">HGF.input_data</span><span class="nt">(self, input_data, time)</span>
+<span class="g g-Whitespace">    </span><span class="mi">230</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="g g-Whitespace">    </span><span class="mi">232</span> <span class="c1"># Run the entire for loop</span>
+<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="c1"># this is where the model loop over the input time series</span>
+<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="c1"># at each input the node structure is traversed and beliefs are updated</span>
+<span class="g g-Whitespace">    </span><span class="mi">235</span> <span class="c1"># using precision-weighted prediction errors</span>
+<span class="ne">--&gt; </span><span class="mi">236</span> <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">238</span> <span class="c1"># the node structure at each value update</span>
+<span class="g g-Whitespace">    </span><span class="mi">239</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">node_trajectories</span>
 
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">8</span> <span class="n">frame</span><span class="p">]</span>
+    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">9</span> <span class="n">frame</span><span class="p">]</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/jax/linear_util.py:167,</span> in <span class="ni">WrappedFun.call_wrapped</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">164</span> <span class="n">gen</span> <span class="o">=</span> <span class="n">gen_static_args</span> <span class="o">=</span> <span class="n">out_store</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">166</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">167</span>   <span class="n">ans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
-<span class="g g-Whitespace">    </span><span class="mi">168</span> <span class="k">except</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">169</span>   <span class="c1"># Some transformations yield from inside context managers, so we have to</span>
-<span class="g g-Whitespace">    </span><span class="mi">170</span>   <span class="c1"># interrupt them before reraising the exception. Otherwise they will only</span>
-<span class="g g-Whitespace">    </span><span class="mi">171</span>   <span class="c1"># get garbage-collected at some later time, running their cleanup tasks</span>
-<span class="g g-Whitespace">    </span><span class="mi">172</span>   <span class="c1"># only after this exception is handled, which can corrupt the global</span>
-<span class="g g-Whitespace">    </span><span class="mi">173</span>   <span class="c1"># state.</span>
-<span class="g g-Whitespace">    </span><span class="mi">174</span>   <span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:44,</span> in <span class="ni">loop_inputs</span><span class="nt">(parameters_structure, data, update_sequence, node_structure)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="n">value</span><span class="p">,</span> <span class="n">time_step</span> <span class="o">=</span> <span class="n">data</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
+<span class="ne">---&gt; </span><span class="mi">44</span> <span class="n">new_parameters_structure</span> <span class="o">=</span> <span class="n">apply_sequence</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span>     <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span>     <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">47</span>     <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">48</span>     <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">49</span>     <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">50</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">52</span> <span class="k">return</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">54</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="p">)</span>
 
-<span class="ne">TypeError</span>: loop_inputs() missing 1 required positional argument: &#39;node_structure&#39;
-<span class="n">Apply</span> <span class="n">node</span> <span class="n">that</span> <span class="n">caused</span> <span class="n">the</span> <span class="n">error</span><span class="p">:</span> <span class="n">HGFDistribution</span><span class="p">(</span><span class="n">omega_1</span><span class="p">,</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="o">-</span><span class="mf">10.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="o">-</span><span class="mf">9.210340371976184</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">10000.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">10.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">1.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">})</span>
-<span class="n">Toposort</span> <span class="n">index</span><span class="p">:</span> <span class="mi">7</span>
-<span class="n">Inputs</span> <span class="n">types</span><span class="p">:</span> <span class="p">[</span><span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">(</span><span class="mi">8</span><span class="p">,)),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">())]</span>
-<span class="n">Inputs</span> <span class="n">shapes</span><span class="p">:</span> <span class="p">[(</span><span class="mi">8</span><span class="p">,),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">()]</span>
-<span class="n">Inputs</span> <span class="n">strides</span><span class="p">:</span> <span class="p">[(</span><span class="mi">8</span><span class="p">,),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">()]</span>
-<span class="n">Inputs</span> <span class="n">values</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;not shown&#39;</span><span class="p">,</span> <span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">10.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">9.21034037</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">10000.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">)]</span>
+    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">5</span> <span class="n">frame</span><span class="p">]</span>
+
+<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:69,</span> in <span class="ni">apply_sequence</span><span class="nt">(value, time_step, parameters_structure, node_structure, update_sequence)</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">update_sequence</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
+<span class="ne">---&gt; </span><span class="mi">69</span>     <span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span>         <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span>         <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span>         <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span>         <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span>         <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="k">return</span> <span class="n">parameters_structure</span>
+
+<span class="ne">TypeError</span>: binary_input_update() got an unexpected keyword argument &#39;parameters_structure&#39;
+<span class="n">Apply</span> <span class="n">node</span> <span class="n">that</span> <span class="n">caused</span> <span class="n">the</span> <span class="n">error</span><span class="p">:</span> <span class="n">HGFDistribution</span><span class="p">(</span><span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">10000.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">1.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">})</span>
+<span class="n">Toposort</span> <span class="n">index</span><span class="p">:</span> <span class="mi">8</span>
+<span class="n">Inputs</span> <span class="n">types</span><span class="p">:</span> <span class="p">[</span><span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,)),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">())]</span>
+<span class="n">Inputs</span> <span class="n">shapes</span><span class="p">:</span> <span class="p">[(),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">()]</span>
+<span class="n">Inputs</span> <span class="n">strides</span><span class="p">:</span> <span class="p">[(),</span> <span class="p">(</span><span class="mi">8</span><span class="p">,),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">()]</span>
+<span class="n">Inputs</span> <span class="n">values</span><span class="p">:</span> <span class="p">[</span><span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.12614371</span><span class="p">,</span>  <span class="mf">0.67328561</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62927064</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.51939146</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.88606344</span><span class="p">]),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">10000.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">)]</span>
 <span class="n">Outputs</span> <span class="n">clients</span><span class="p">:</span> <span class="p">[[</span><span class="s1">&#39;output&#39;</span><span class="p">]]</span>
 
 <span class="n">Backtrace</span> <span class="n">when</span> <span class="n">the</span> <span class="n">node</span> <span class="ow">is</span> <span class="n">created</span> <span class="p">(</span><span class="n">use</span> <span class="n">PyTensor</span> <span class="n">flag</span> <span class="n">traceback__limit</span><span class="o">=</span><span class="n">N</span> <span class="n">to</span> <span class="n">make</span> <span class="n">it</span> <span class="n">longer</span><span class="p">):</span>
@@ -916,7 +1136,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
     <span class="k">if</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_code</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">async_</span><span class="o">=</span><span class="n">asy</span><span class="p">):</span>
   <span class="n">File</span> <span class="s2">&quot;/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/IPython/core/interactiveshell.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">3460</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run_code</span>
     <span class="n">exec</span><span class="p">(</span><span class="n">code_obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_global_ns</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_ns</span><span class="p">)</span>
-  <span class="n">File</span> <span class="s2">&quot;/tmp/ipykernel_2374/1227072147.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">15</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+  <span class="n">File</span> <span class="s2">&quot;/tmp/ipykernel_2674/1039366711.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">17</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
     <span class="n">hgf_logp_op</span><span class="p">(</span>
   <span class="n">File</span> <span class="s2">&quot;/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pytensor/graph/op.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">295</span><span class="p">,</span> <span class="ow">in</span> <span class="fm">__call__</span>
     <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_node</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -924,122 +1144,6 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
     <span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt</span><span class="o">.</span><span class="n">dscalar</span><span class="p">()]</span>
 
 <span class="ne">HINT</span>: Use the PyTensor flag `exception_verbosity=high` for a debug print-out and storage map footprint of this Apply node.
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
-</section>
-</section>
-<section id="a-multilevel-binary-hgf">
-<h2>A multilevel binary HGF<a class="headerlink" href="#a-multilevel-binary-hgf" title="Permalink to this heading">#</a></h2>
-<section id="id3">
-<h3>Simulate a dataset<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
-<span class="n">n_data</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">participant</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_data</span><span class="p">):</span>
-    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span>
-    <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
-        
-        <span class="c1"># x2</span>
-        <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
-        <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
-
-        <span class="c1"># x1</span>
-        <span class="n">s2</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mu_2</span><span class="p">))</span>  <span class="c1"># sigmoid function</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">s2</span><span class="p">)</span>       
-        <span class="n">input_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
-
-    <span class="n">dataset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="without-hyper-priors">
-<h3>Without hyper-priors<a class="headerlink" href="#without-hyper-priors" title="Permalink to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
-    <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-    <span class="n">response_function</span><span class="o">=</span><span class="n">total_binary_surprise</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymc.math</span> <span class="kn">import</span> <span class="n">clip</span>
-
-<span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
-    
-    <span class="c1"># Hypterpriors</span>
-    <span class="c1">#-------------</span>
-    <span class="n">mu_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">sigma_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfCauchy</span><span class="p">(</span><span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    
-    <span class="c1"># Priors</span>
-    <span class="c1">#-------</span>
-    <span class="n">offset</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
-    <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
-
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
-        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
-        <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
-            <span class="n">omega_input</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
-            <span class="n">mu_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">omega_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">pi_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">mu_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">kappa_2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<section id="visualizing-the-model">
-<h4>Visualizing the model<a class="headerlink" href="#visualizing-the-model" title="Permalink to this heading">#</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">two_levels_binary_hgf</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="sampling">
-<h4>Sampling<a class="headerlink" href="#sampling" title="Permalink to this heading">#</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
-    <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
