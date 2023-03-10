@@ -623,7 +623,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/325361e8c1f4a5a7988e670b05c1b99b51a718797e5734a1d0713a442d19b6f2.svg" src="../_images/325361e8c1f4a5a7988e670b05c1b99b51a718797e5734a1d0713a442d19b6f2.svg" /></div>
+<img alt="../_images/ac0a8d75b052a36a0e575650c48dd79598445ba8d3abad7e91219d2577690c81.svg" src="../_images/ac0a8d75b052a36a0e575650c48dd79598445ba8d3abad7e91219d2577690c81.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -664,12 +664,12 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 04:14&lt;00:00 Sampling 4 chains, 2 divergences]
+      100.00% [8000/8000 02:20&lt;00:00 Sampling 4 chains, 4 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 255 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 141 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 2 divergences after tuning. Increase `target_accept` or reparameterize.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 4 divergences after tuning. Increase `target_accept` or reparameterize.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
@@ -706,7 +706,7 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3815230cc2ddbb7888a2ef71c0ff7d6086eb12d1e48b8befcb038e132fd44b75.png" src="../_images/3815230cc2ddbb7888a2ef71c0ff7d6086eb12d1e48b8befcb038e132fd44b75.png" />
+<img alt="../_images/30d36e097f8cef320dff80ebaff7d6fd2a409fc3e26cefa6a72aba611063809a.png" src="../_images/30d36e097f8cef320dff80ebaff7d6fd2a409fc3e26cefa6a72aba611063809a.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -806,7 +806,7 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0f59649ca67c2c30e1842eca2a7541ad7beaefd68f99f4a70e1ca351f2855b18.svg" src="../_images/0f59649ca67c2c30e1842eca2a7541ad7beaefd68f99f4a70e1ca351f2855b18.svg" /></div>
+<img alt="../_images/0b0122ec9ca8ffbbb4e21bf4efce0232cf589b924c0bbb20789cb15a3c08faad.svg" src="../_images/0b0122ec9ca8ffbbb4e21bf4efce0232cf589b924c0bbb20789cb15a3c08faad.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -825,325 +825,124 @@ Coordinates:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
 </pre></div>
 </div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pytensor/compile/function/types.py:970,</span> in <span class="ni">Function.__call__</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">968</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">outputs</span> <span class="o">=</span> <span class="p">(</span>
-<span class="ne">--&gt; </span><span class="mi">970</span>         <span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">971</span>         <span class="k">if</span> <span class="n">output_subset</span> <span class="ow">is</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">972</span>         <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="p">(</span><span class="n">output_subset</span><span class="o">=</span><span class="n">output_subset</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">973</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">974</span> <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pytensor/graph/op.py:543,</span> in <span class="ni">Op.make_py_thunk.&lt;locals&gt;.rval</span><span class="nt">(p, i, o, n, params)</span>
-<span class="g g-Whitespace">    </span><span class="mi">539</span> <span class="nd">@is_thunk_type</span>
-<span class="g g-Whitespace">    </span><span class="mi">540</span> <span class="k">def</span> <span class="nf">rval</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">541</span>     <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">node_input_storage</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">node_output_storage</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">node</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">542</span> <span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">543</span>     <span class="n">r</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i</span><span class="p">],</span> <span class="n">o</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">544</span>     <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/distribution.py:525,</span> in <span class="ni">HGFDistribution.perform</span><span class="nt">(self, node, inputs, outputs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">524</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;Run the function forward.&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">525</span> <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hgf_logp</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">526</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">12</span> <span class="n">frame</span><span class="p">]</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/distribution.py:202,</span> in <span class="ni">hgf_logp</span><span class="nt">(omega_1, omega_2, omega_3, omega_input, rho_1, rho_2, rho_3, pi_1, pi_2, pi_3, mu_1, mu_2, mu_3, kappa_1, kappa_2, input_data, response_function, model_type, n_levels, response_function_parameters, time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>     <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">kappa_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">kappa_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span>     <span class="n">surprise</span> <span class="o">=</span> <span class="n">surprise</span> <span class="o">+</span> <span class="p">(</span>
-<span class="ne">--&gt; </span><span class="mi">202</span>         <span class="n">HGF</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">203</span>             <span class="n">initial_mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span>             <span class="n">initial_pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">205</span>             <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span>             <span class="n">omega_input</span><span class="o">=</span><span class="n">omega_input</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">207</span>             <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">208</span>             <span class="n">kappas</span><span class="o">=</span><span class="n">kappas</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span>             <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span>             <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">211</span>             <span class="n">eta0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">212</span>             <span class="n">eta1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span>             <span class="n">pihat</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>             <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">215</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>         <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="o">.</span><span class="n">surprise</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>             <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">219</span>             <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">220</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">221</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">223</span> <span class="c1"># Return the sum of the log probabilities (negative surprise)</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/model.py:236,</span> in <span class="ni">HGF.input_data</span><span class="nt">(self, input_data, time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">232</span> <span class="c1"># Run the entire for loop</span>
-<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="c1"># this is where the model loop over the input time series</span>
-<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="c1"># at each input the node structure is traversed and beliefs are updated</span>
-<span class="g g-Whitespace">    </span><span class="mi">235</span> <span class="c1"># using precision-weighted prediction errors</span>
-<span class="ne">--&gt; </span><span class="mi">236</span> <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">238</span> <span class="c1"># the node structure at each value update</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">9</span> <span class="n">frame</span><span class="p">]</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:44,</span> in <span class="ni">loop_inputs</span><span class="nt">(parameters_structure, data, update_sequence, node_structure)</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
-<span class="ne">---&gt; </span><span class="mi">44</span> <span class="n">new_parameters_structure</span> <span class="o">=</span> <span class="n">apply_sequence</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span>     <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">46</span>     <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">47</span>     <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">48</span>     <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">49</span>     <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span> <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">52</span> <span class="k">return</span> <span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="p">)</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">5</span> <span class="n">frame</span><span class="p">]</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:69,</span> in <span class="ni">apply_sequence</span><span class="nt">(value, time_step, parameters_structure, node_structure, update_sequence)</span>
-<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
-<span class="ne">---&gt; </span><span class="mi">69</span>     <span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">70</span>         <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">71</span>         <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">72</span>         <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">73</span>         <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">74</span>         <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="k">return</span> <span class="n">parameters_structure</span>
-
-<span class="ne">TypeError</span>: binary_input_update() got an unexpected keyword argument &#39;parameters_structure&#39;
-
-<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
-
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pymc/sampling/mcmc.py:582,</span> in <span class="ni">sample</span><span class="nt">(draws, tune, chains, cores, random_seed, progressbar, step, nuts_sampler, initvals, init, jitter_max_retries, n_init, trace, discard_tuned_samples, compute_convergence_checks, keep_warning_stat, return_inferencedata, idata_kwargs, callback, mp_ctx, model, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">580</span>         <span class="p">[</span><span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">nuts_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
-<span class="g g-Whitespace">    </span><span class="mi">581</span>     <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Auto-assigning NUTS sampler...&quot;</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">582</span>     <span class="n">initial_points</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="n">init_nuts</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">583</span>         <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">584</span>         <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">585</span>         <span class="n">n_init</span><span class="o">=</span><span class="n">n_init</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">586</span>         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">587</span>         <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed_list</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">588</span>         <span class="n">progressbar</span><span class="o">=</span><span class="n">progressbar</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">589</span>         <span class="n">jitter_max_retries</span><span class="o">=</span><span class="n">jitter_max_retries</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">590</span>         <span class="n">tune</span><span class="o">=</span><span class="n">tune</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">591</span>         <span class="n">initvals</span><span class="o">=</span><span class="n">initvals</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">592</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">593</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">595</span> <span class="k">if</span> <span class="n">initial_points</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">596</span>     <span class="c1"># Time to draw/evaluate numeric start points for each chain.</span>
-<span class="g g-Whitespace">    </span><span class="mi">597</span>     <span class="n">ipfns</span> <span class="o">=</span> <span class="n">make_initial_point_fns_per_chain</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">598</span>         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">599</span>         <span class="n">overrides</span><span class="o">=</span><span class="n">initvals</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">600</span>         <span class="n">jitter_rvs</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span>
-<span class="g g-Whitespace">    </span><span class="mi">601</span>         <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">602</span>     <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pymc/sampling/mcmc.py:1227,</span> in <span class="ni">init_nuts</span><span class="nt">(init, chains, n_init, model, random_seed, progressbar, jitter_max_retries, tune, initvals, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1220</span> <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing NUTS using </span><span class="si">{</span><span class="n">init</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1222</span> <span class="n">cb</span> <span class="o">=</span> <span class="p">[</span>
-<span class="g g-Whitespace">   </span><span class="mi">1223</span>     <span class="n">pm</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">CheckParametersConvergence</span><span class="p">(</span><span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">diff</span><span class="o">=</span><span class="s2">&quot;absolute&quot;</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1224</span>     <span class="n">pm</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">CheckParametersConvergence</span><span class="p">(</span><span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">diff</span><span class="o">=</span><span class="s2">&quot;relative&quot;</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1225</span> <span class="p">]</span>
-<span class="ne">-&gt; </span><span class="mi">1227</span> <span class="n">initial_points</span> <span class="o">=</span> <span class="n">_init_jitter</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1228</span>     <span class="n">model</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1229</span>     <span class="n">initvals</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1230</span>     <span class="n">seeds</span><span class="o">=</span><span class="n">random_seed_list</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1231</span>     <span class="n">jitter</span><span class="o">=</span><span class="s2">&quot;jitter&quot;</span> <span class="ow">in</span> <span class="n">init</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1232</span>     <span class="n">jitter_max_retries</span><span class="o">=</span><span class="n">jitter_max_retries</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1233</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1235</span> <span class="n">apoints</span> <span class="o">=</span> <span class="p">[</span><span class="n">DictToArrayBijection</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">initial_points</span><span class="p">]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1236</span> <span class="n">apoints_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">apoint</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">apoint</span> <span class="ow">in</span> <span class="n">apoints</span><span class="p">]</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pymc/sampling/mcmc.py:1121,</span> in <span class="ni">_init_jitter</span><span class="nt">(model, initvals, seeds, jitter, jitter_max_retries)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">jitter_max_retries</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1121</span>         <span class="n">model</span><span class="o">.</span><span class="n">check_start_vals</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1122</span>     <span class="k">except</span> <span class="n">SamplingError</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1123</span>         <span class="c1"># Retry with a new seed</span>
-<span class="g g-Whitespace">   </span><span class="mi">1124</span>         <span class="n">seed</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">30</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pymc/model.py:1776,</span> in <span class="ni">Model.check_start_vals</span><span class="nt">(self, start)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1770</span>     <span class="n">valid_keys</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">value_names_set</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1771</span>     <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1772</span>         <span class="s2">&quot;Some start parameters do not appear in the model!</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1773</span>         <span class="sa">f</span><span class="s2">&quot;Valid keys are: </span><span class="si">{</span><span class="n">valid_keys</span><span class="si">}</span><span class="s2">, but </span><span class="si">{</span><span class="n">extra_keys</span><span class="si">}</span><span class="s2"> was supplied&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1774</span>     <span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1776</span> <span class="n">initial_eval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_logps</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">elem</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1778</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">initial_eval</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1779</span>     <span class="k">raise</span> <span class="n">SamplingError</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1780</span>         <span class="s2">&quot;Initial evaluation of model at starting point failed!</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1781</span>         <span class="sa">f</span><span class="s2">&quot;Starting values:</span><span class="se">\n</span><span class="si">{</span><span class="n">elem</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1782</span>         <span class="sa">f</span><span class="s2">&quot;Initial evaluation results:</span><span class="se">\n</span><span class="si">{</span><span class="n">initial_eval</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1783</span>     <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pymc/model.py:1810,</span> in <span class="ni">Model.point_logps</span><span class="nt">(self, point, round_vals)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1804</span> <span class="n">factors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basic_RVs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">potentials</span>
-<span class="g g-Whitespace">   </span><span class="mi">1805</span> <span class="n">factor_logps_fn</span> <span class="o">=</span> <span class="p">[</span><span class="n">at</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span> <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">logp</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="nb">sum</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1806</span> <span class="k">return</span> <span class="p">{</span>
-<span class="g g-Whitespace">   </span><span class="mi">1807</span>     <span class="n">factor</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">factor_logp</span><span class="p">),</span> <span class="n">round_vals</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1808</span>     <span class="k">for</span> <span class="n">factor</span><span class="p">,</span> <span class="n">factor_logp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1809</span>         <span class="n">factors</span><span class="p">,</span>
-<span class="ne">-&gt; </span><span class="mi">1810</span>         <span class="bp">self</span><span class="o">.</span><span class="n">compile_fn</span><span class="p">(</span><span class="n">factor_logps_fn</span><span class="p">)(</span><span class="n">point</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1811</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1812</span> <span class="p">}</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pymc/pytensorf.py:764,</span> in <span class="ni">PointFunc.__call__</span><span class="nt">(self, state)</span>
-<span class="g g-Whitespace">    </span><span class="mi">763</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">764</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="o">**</span><span class="n">state</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pytensor/compile/function/types.py:983,</span> in <span class="ni">Function.__call__</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">981</span>     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="p">,</span> <span class="s2">&quot;thunks&quot;</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">982</span>         <span class="n">thunk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">thunks</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">position_of_error</span><span class="p">]</span>
-<span class="ne">--&gt; </span><span class="mi">983</span>     <span class="n">raise_with_op</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">984</span>         <span class="bp">self</span><span class="o">.</span><span class="n">maker</span><span class="o">.</span><span class="n">fgraph</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">985</span>         <span class="n">node</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">position_of_error</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">986</span>         <span class="n">thunk</span><span class="o">=</span><span class="n">thunk</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">987</span>         <span class="n">storage_map</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="p">,</span> <span class="s2">&quot;storage_map&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">988</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">989</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">990</span>     <span class="c1"># old-style linkers raise their own exceptions</span>
-<span class="g g-Whitespace">    </span><span class="mi">991</span>     <span class="k">raise</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pytensor/link/utils.py:535,</span> in <span class="ni">raise_with_op</span><span class="nt">(fgraph, node, thunk, exc_info, storage_map)</span>
-<span class="g g-Whitespace">    </span><span class="mi">530</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">531</span>         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exc_type</span><span class="si">}</span><span class="s2"> error does not allow us to add an extra error message&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">532</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">533</span>     <span class="c1"># Some exception need extra parameter in inputs. So forget the</span>
-<span class="g g-Whitespace">    </span><span class="mi">534</span>     <span class="c1"># extra long error message in that case.</span>
-<span class="ne">--&gt; </span><span class="mi">535</span> <span class="k">raise</span> <span class="n">exc_value</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">exc_trace</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pytensor/compile/function/types.py:970,</span> in <span class="ni">Function.__call__</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">967</span> <span class="n">t0_fn</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">968</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">outputs</span> <span class="o">=</span> <span class="p">(</span>
-<span class="ne">--&gt; </span><span class="mi">970</span>         <span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">971</span>         <span class="k">if</span> <span class="n">output_subset</span> <span class="ow">is</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">972</span>         <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">vm</span><span class="p">(</span><span class="n">output_subset</span><span class="o">=</span><span class="n">output_subset</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">973</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">974</span> <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">975</span>     <span class="n">restore_defaults</span><span class="p">()</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pytensor/graph/op.py:543,</span> in <span class="ni">Op.make_py_thunk.&lt;locals&gt;.rval</span><span class="nt">(p, i, o, n, params)</span>
-<span class="g g-Whitespace">    </span><span class="mi">539</span> <span class="nd">@is_thunk_type</span>
-<span class="g g-Whitespace">    </span><span class="mi">540</span> <span class="k">def</span> <span class="nf">rval</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">541</span>     <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">node_input_storage</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">node_output_storage</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">node</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">542</span> <span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">543</span>     <span class="n">r</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i</span><span class="p">],</span> <span class="n">o</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">544</span>     <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">545</span>         <span class="n">compute_map</span><span class="p">[</span><span class="n">o</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/distribution.py:525,</span> in <span class="ni">HGFDistribution.perform</span><span class="nt">(self, node, inputs, outputs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">523</span> <span class="k">def</span> <span class="nf">perform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">524</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Run the function forward.&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">525</span>     <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hgf_logp</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">526</span>     <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">12</span> <span class="n">frame</span><span class="p">]</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/distribution.py:202,</span> in <span class="ni">hgf_logp</span><span class="nt">(omega_1, omega_2, omega_3, omega_input, rho_1, rho_2, rho_3, pi_1, pi_2, pi_3, mu_1, mu_2, mu_3, kappa_1, kappa_2, input_data, response_function, model_type, n_levels, response_function_parameters, time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span>     <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">rho_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">rho_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">rho_3</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>     <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">kappa_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">kappa_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span>     <span class="n">surprise</span> <span class="o">=</span> <span class="n">surprise</span> <span class="o">+</span> <span class="p">(</span>
-<span class="ne">--&gt; </span><span class="mi">202</span>         <span class="n">HGF</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">203</span>             <span class="n">initial_mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span>             <span class="n">initial_pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">205</span>             <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span>             <span class="n">omega_input</span><span class="o">=</span><span class="n">omega_input</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">207</span>             <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">208</span>             <span class="n">kappas</span><span class="o">=</span><span class="n">kappas</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span>             <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span>             <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">211</span>             <span class="n">eta0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">212</span>             <span class="n">eta1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span>             <span class="n">pihat</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>             <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">215</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>         <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="o">.</span><span class="n">surprise</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>             <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">219</span>             <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">220</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">221</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">223</span> <span class="c1"># Return the sum of the log probabilities (negative surprise)</span>
-<span class="g g-Whitespace">    </span><span class="mi">224</span> <span class="k">return</span> <span class="o">-</span><span class="n">surprise</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/model.py:236,</span> in <span class="ni">HGF.input_data</span><span class="nt">(self, input_data, time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">230</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-<span class="g g-Whitespace">    </span><span class="mi">232</span> <span class="c1"># Run the entire for loop</span>
-<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="c1"># this is where the model loop over the input time series</span>
-<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="c1"># at each input the node structure is traversed and beliefs are updated</span>
-<span class="g g-Whitespace">    </span><span class="mi">235</span> <span class="c1"># using precision-weighted prediction errors</span>
-<span class="ne">--&gt; </span><span class="mi">236</span> <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">238</span> <span class="c1"># the node structure at each value update</span>
-<span class="g g-Whitespace">    </span><span class="mi">239</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">node_trajectories</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">9</span> <span class="n">frame</span><span class="p">]</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:44,</span> in <span class="ni">loop_inputs</span><span class="nt">(parameters_structure, data, update_sequence, node_structure)</span>
-<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="n">value</span><span class="p">,</span> <span class="n">time_step</span> <span class="o">=</span> <span class="n">data</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
-<span class="ne">---&gt; </span><span class="mi">44</span> <span class="n">new_parameters_structure</span> <span class="o">=</span> <span class="n">apply_sequence</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span>     <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">46</span>     <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">47</span>     <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">48</span>     <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">49</span>     <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span> <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">52</span> <span class="k">return</span> <span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="p">)</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">5</span> <span class="n">frame</span><span class="p">]</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:69,</span> in <span class="ni">apply_sequence</span><span class="nt">(value, time_step, parameters_structure, node_structure, update_sequence)</span>
-<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">update_sequence</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
-<span class="ne">---&gt; </span><span class="mi">69</span>     <span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">70</span>         <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">71</span>         <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">72</span>         <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">73</span>         <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">74</span>         <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="k">return</span> <span class="n">parameters_structure</span>
-
-<span class="ne">TypeError</span>: binary_input_update() got an unexpected keyword argument &#39;parameters_structure&#39;
-<span class="n">Apply</span> <span class="n">node</span> <span class="n">that</span> <span class="n">caused</span> <span class="n">the</span> <span class="n">error</span><span class="p">:</span> <span class="n">HGFDistribution</span><span class="p">(</span><span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">10000.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">0.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="mf">1.0</span><span class="p">},</span> <span class="n">TensorConstant</span><span class="p">{</span><span class="n">nan</span><span class="p">})</span>
-<span class="n">Toposort</span> <span class="n">index</span><span class="p">:</span> <span class="mi">8</span>
-<span class="n">Inputs</span> <span class="n">types</span><span class="p">:</span> <span class="p">[</span><span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,)),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span> <span class="p">()),</span> <span class="n">TensorType</span><span class="p">(</span><span class="n">float64</span><span class="p">,</span> <span class="p">())]</span>
-<span class="n">Inputs</span> <span class="n">shapes</span><span class="p">:</span> <span class="p">[(),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">()]</span>
-<span class="n">Inputs</span> <span class="n">strides</span><span class="p">:</span> <span class="p">[(),</span> <span class="p">(</span><span class="mi">8</span><span class="p">,),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">(),</span> <span class="p">()]</span>
-<span class="n">Inputs</span> <span class="n">values</span><span class="p">:</span> <span class="p">[</span><span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">5.27522154</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.04399591</span><span class="p">,</span>  <span class="mf">0.38099553</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.80525311</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.17058056</span><span class="p">]),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">10000.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">nan</span><span class="p">)]</span>
-<span class="n">Outputs</span> <span class="n">clients</span><span class="p">:</span> <span class="p">[[</span><span class="s1">&#39;output&#39;</span><span class="p">]]</span>
-
-<span class="n">Backtrace</span> <span class="n">when</span> <span class="n">the</span> <span class="n">node</span> <span class="ow">is</span> <span class="n">created</span> <span class="p">(</span><span class="n">use</span> <span class="n">PyTensor</span> <span class="n">flag</span> <span class="n">traceback__limit</span><span class="o">=</span><span class="n">N</span> <span class="n">to</span> <span class="n">make</span> <span class="n">it</span> <span class="n">longer</span><span class="p">):</span>
-  <span class="n">File</span> <span class="s2">&quot;/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/IPython/core/interactiveshell.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">3016</span><span class="p">,</span> <span class="ow">in</span> <span class="n">_run_cell</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span>
-  <span class="n">File</span> <span class="s2">&quot;/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/IPython/core/async_helpers.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">129</span><span class="p">,</span> <span class="ow">in</span> <span class="n">_pseudo_sync_runner</span>
-    <span class="n">coro</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-  <span class="n">File</span> <span class="s2">&quot;/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/IPython/core/interactiveshell.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">3221</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run_cell_async</span>
-    <span class="n">has_raised</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_ast_nodes</span><span class="p">(</span><span class="n">code_ast</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">cell_name</span><span class="p">,</span>
-  <span class="n">File</span> <span class="s2">&quot;/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/IPython/core/interactiveshell.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">3400</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run_ast_nodes</span>
-    <span class="k">if</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_code</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">async_</span><span class="o">=</span><span class="n">asy</span><span class="p">):</span>
-  <span class="n">File</span> <span class="s2">&quot;/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/IPython/core/interactiveshell.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">3460</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run_code</span>
-    <span class="n">exec</span><span class="p">(</span><span class="n">code_obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_global_ns</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_ns</span><span class="p">)</span>
-  <span class="n">File</span> <span class="s2">&quot;/tmp/ipykernel_2753/1039366711.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">17</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-    <span class="n">hgf_logp_op</span><span class="p">(</span>
-  <span class="n">File</span> <span class="s2">&quot;/opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/pytensor/graph/op.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">295</span><span class="p">,</span> <span class="ow">in</span> <span class="fm">__call__</span>
-    <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_node</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-  <span class="n">File</span> <span class="s2">&quot;/home/runner/work/pyhgf/pyhgf/pyhgf/distribution.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">520</span><span class="p">,</span> <span class="ow">in</span> <span class="n">make_node</span>
-    <span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt</span><span class="o">.</span><span class="n">dscalar</span><span class="p">()]</span>
-
-<span class="ne">HINT</span>: Use the PyTensor flag `exception_verbosity=high` for a debug print-out and storage map footprint of this Apply node.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (4 chains in 1 job)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
+</pre></div>
+</div>
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:25&lt;00:00 Sampling chain 0, 60 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:22&lt;00:00 Sampling chain 1, 62 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:22&lt;00:00 Sampling chain 2, 25 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 3, 25 divergences]
+    </div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 94 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 173 divergences after tuning. Increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(0)
+Coordinates:
+    chain    int64 0 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(1)
+Coordinates:
+    chain    int64 1 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(2)
+Coordinates:
+    chain    int64 2 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(3)
+Coordinates:
+    chain    int64 3 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
 </pre></div>
 </div>
 </div>
@@ -1154,6 +953,9 @@ Coordinates:
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c6511130c9d8372b96b7f1dd2390985b11b2b24f60e442bd707fa686060b974a.png" src="../_images/c6511130c9d8372b96b7f1dd2390985b11b2b24f60e442bd707fa686060b974a.png" />
 </div>
 </div>
 </section>

@@ -55,7 +55,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyhgf.continuous.continuous_input_update" href="pyhgf.continuous.continuous_input_update.html" />
-    <link rel="prev" title="pyhgf.binary.loop_binary_inputs" href="../pyhgf.binary/pyhgf.binary.loop_binary_inputs.html" />
+    <link rel="prev" title="pyhgf.binary.binary_surprise" href="../pyhgf.binary/pyhgf.binary.binary_surprise.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -404,7 +404,6 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.binary/pyhgf.binary.gaussian_density.html">pyhgf.binary.gaussian_density</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.binary/pyhgf.binary.sgm.html">pyhgf.binary.sgm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.binary/pyhgf.binary.binary_surprise.html">pyhgf.binary.binary_surprise</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.binary/pyhgf.binary.loop_binary_inputs.html">pyhgf.binary.loop_binary_inputs</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">pyhgf.continuous.continuous_node_update</a></li>
@@ -426,6 +425,10 @@ document.write(`
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.response/pyhgf.response.total_gaussian_surprise.html">pyhgf.response.total_gaussian_surprise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.response/pyhgf.response.total_binary_surprise.html">pyhgf.response.total_binary_surprise</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.structure/pyhgf.structure.loop_inputs.html">pyhgf.structure.loop_inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.structure/pyhgf.structure.apply_sequence.html">pyhgf.structure.apply_sequence</a></li>
 </ul>
 </div>
 </nav></div>
@@ -491,13 +494,9 @@ document.write(`
 <dd><p>Update the value and volatility parents of a continuous node.</p>
 <p>If the parents have value and/or volatility parents, they will be updated
 recursively.</p>
-<dl class="simple">
-<dt>Updating the node’s parents is a two step process:</dt><dd><ol class="arabic simple">
-<li><p>Update value parent(s) and their parents (if provided).</p></li>
-<li><p>Update volatility parent(s) and their parents (if provided).</p></li>
-</ol>
-</dd>
-</dl>
+<p>Updating the node’s parents is a two step process:
+1. Update value parent(s) and their parents (if provided).
+2. Update volatility parent(s) and their parents (if provided).</p>
 <p>Then returns the new node structure.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -507,9 +506,8 @@ following parameters: <cite>“pihat”, “pi”, “muhat”, “mu”, “nu�
 continuous nodes.
 .. note:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`&quot;psis&quot;` is the value coupling strength. It should have same length than the
-volatility parents&#39; indexes.
-`&quot;kappas&quot;` is the volatility coupling strength. It should have same length
-than the volatility parents&#39; indexes.
+volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.
+It should have same length than the volatility parents&#39; indexes.
 </pre></div>
 </div>
 </dd>
@@ -549,12 +547,12 @@ For each node, the index list value and volatility parents.</p>
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../pyhgf.binary/pyhgf.binary.loop_binary_inputs.html"
+       href="../pyhgf.binary/pyhgf.binary.binary_surprise.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">pyhgf.binary.loop_binary_inputs</p>
+        <p class="prev-next-title">pyhgf.binary.binary_surprise</p>
       </div>
     </a>
     <a class="right-next"

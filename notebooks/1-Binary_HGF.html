@@ -545,56 +545,6 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Add 320 new binary observations.
 </pre></div>
 </div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Provide new observations</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">two_levels_hgf</span> <span class="o">=</span> <span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span><span class="p">)</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/model.py:236,</span> in <span class="ni">HGF.input_data</span><span class="nt">(self, input_data, time)</span>
-<span class="g g-Whitespace">    </span><span class="mi">230</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-<span class="g g-Whitespace">    </span><span class="mi">232</span> <span class="c1"># Run the entire for loop</span>
-<span class="g g-Whitespace">    </span><span class="mi">233</span> <span class="c1"># this is where the model loop over the input time series</span>
-<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="c1"># at each input the node structure is traversed and beliefs are updated</span>
-<span class="g g-Whitespace">    </span><span class="mi">235</span> <span class="c1"># using precision-weighted prediction errors</span>
-<span class="ne">--&gt; </span><span class="mi">236</span> <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">238</span> <span class="c1"># the node structure at each value update</span>
-<span class="g g-Whitespace">    </span><span class="mi">239</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">node_trajectories</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">9</span> <span class="n">frame</span><span class="p">]</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:44,</span> in <span class="ni">loop_inputs</span><span class="nt">(parameters_structure, data, update_sequence, node_structure)</span>
-<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="n">value</span><span class="p">,</span> <span class="n">time_step</span> <span class="o">=</span> <span class="n">data</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
-<span class="ne">---&gt; </span><span class="mi">44</span> <span class="n">new_parameters_structure</span> <span class="o">=</span> <span class="n">apply_sequence</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span>     <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">46</span>     <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">47</span>     <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">48</span>     <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">49</span>     <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span> <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">52</span> <span class="k">return</span> <span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span>     <span class="n">new_parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="p">)</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">5</span> <span class="n">frame</span><span class="p">]</span>
-
-<span class="nn">File ~/work/pyhgf/pyhgf/pyhgf/structure.py:69,</span> in <span class="ni">apply_sequence</span><span class="nt">(value, time_step, parameters_structure, node_structure, update_sequence)</span>
-<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">update_sequence</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
-<span class="ne">---&gt; </span><span class="mi">69</span>     <span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">70</span>         <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">71</span>         <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">72</span>         <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">73</span>         <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">74</span>         <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="k">return</span> <span class="n">parameters_structure</span>
-
-<span class="ne">TypeError</span>: binary_input_update() got an unexpected keyword argument &#39;parameters_structure&#39;
-</pre></div>
-</div>
 </div>
 </div>
 </section>
@@ -607,6 +557,13 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: ylabel=&#39;$\\mu_2$&#39;&gt;, &lt;Axes: ylabel=&#39;$\\mu_1$&#39;&gt;,
+       &lt;Axes: xlabel=&#39;Time&#39;, ylabel=&#39;Surprise&#39;&gt;], dtype=object)
+</pre></div>
+</div>
+<img alt="../_images/9e220f0057c04c1d3b267da08ec810e264213f9b5e68159cb8f6fcd3b3159a91.png" src="../_images/9e220f0057c04c1d3b267da08ec810e264213f9b5e68159cb8f6fcd3b3159a91.png" />
+</div>
 </div>
 </section>
 <section id="surprise">
@@ -615,6 +572,11 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">surprise</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.63953, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -649,6 +611,11 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a binary Hierarchical Gaussian Filter with 3 levels.
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="id4">
@@ -656,6 +623,11 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_hgf</span> <span class="o">=</span> <span class="n">three_levels_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Add 320 new binary observations.
 </pre></div>
 </div>
 </div>
@@ -668,6 +640,14 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: ylabel=&#39;$\\mu_3$&#39;&gt;, &lt;Axes: ylabel=&#39;$\\mu_2$&#39;&gt;,
+       &lt;Axes: ylabel=&#39;$\\mu_1$&#39;&gt;,
+       &lt;Axes: xlabel=&#39;Time&#39;, ylabel=&#39;Surprise&#39;&gt;], dtype=object)
+</pre></div>
+</div>
+<img alt="../_images/eb0561c363c04d464a2a30b96cba8a012d8367c673812a01210b91a39b4082d3.png" src="../_images/eb0561c363c04d464a2a30b96cba8a012d8367c673812a01210b91a39b4082d3.png" />
 </div>
 </div>
 </section>
@@ -746,6 +726,8 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" src="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -757,6 +739,131 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (4 chains in 1 job)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_2]
+</pre></div>
+</div>
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 0, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 3, 0 divergences]
+    </div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 13 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(0)
+Coordinates:
+    chain    int64 0 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(1)
+Coordinates:
+    chain    int64 1 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(2)
+Coordinates:
+    chain    int64 2 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(3)
+Coordinates:
+    chain    int64 3 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -764,6 +871,9 @@ if &#39;google.colab&#39; in sys.modules:
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6e83ebd6c7b60c12f267961ebf45c1ca005a00e38be045d8498646601edd706e.png" src="../_images/6e83ebd6c7b60c12f267961ebf45c1ca005a00e38be045d8498646601edd706e.png" />
 </div>
 </div>
 </section>
@@ -794,6 +904,12 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a binary Hierarchical Gaussian Filter with 2 levels.
+Add 320 new binary observations.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -801,10 +917,22 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: ylabel=&#39;$\\mu_2$&#39;&gt;, &lt;Axes: ylabel=&#39;$\\mu_1$&#39;&gt;,
+       &lt;Axes: xlabel=&#39;Time&#39;, ylabel=&#39;Surprise&#39;&gt;], dtype=object)
+</pre></div>
+</div>
+<img alt="../_images/0dba9b7a2d064e78016d86d546ee623f4f6b3ebf05c512c2bc38e6797d118af9.png" src="../_images/0dba9b7a2d064e78016d86d546ee623f4f6b3ebf05c512c2bc38e6797d118af9.png" />
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">surprise</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.99728, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -870,6 +998,8 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="../_images/3bfcdb1c8c20d77b0010d8b201cbc79873c153a68dd33301d3dc02c10761a048.svg" src="../_images/3bfcdb1c8c20d77b0010d8b201cbc79873c153a68dd33301d3dc02c10761a048.svg" /></div>
 </div>
 </section>
 <section id="id9">
@@ -881,6 +1011,131 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (4 chains in 1 job)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_2, omega_3]
+</pre></div>
+</div>
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 0, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 2, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 3, 0 divergences]
+    </div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 18 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(0)
+Coordinates:
+    chain    int64 0 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(1)
+Coordinates:
+    chain    int64 1 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(2)
+Coordinates:
+    chain    int64 2 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Chain &lt;xarray.DataArray &#39;chain&#39; ()&gt;
+array(3)
+Coordinates:
+    chain    int64 3 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -888,6 +1143,9 @@ if &#39;google.colab&#39; in sys.modules:
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/947151ea98acc6cd4b91579e15c8ab619e0fd94b8ef44b98aa7e9c78e0493f7c.png" src="../_images/947151ea98acc6cd4b91579e15c8ab619e0fd94b8ef44b98aa7e9c78e0493f7c.png" />
 </div>
 </div>
 </section>
@@ -919,6 +1177,12 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a binary Hierarchical Gaussian Filter with 3 levels.
+Add 320 new binary observations.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -926,10 +1190,23 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: ylabel=&#39;$\\mu_3$&#39;&gt;, &lt;Axes: ylabel=&#39;$\\mu_2$&#39;&gt;,
+       &lt;Axes: ylabel=&#39;$\\mu_1$&#39;&gt;,
+       &lt;Axes: xlabel=&#39;Time&#39;, ylabel=&#39;Surprise&#39;&gt;], dtype=object)
+</pre></div>
+</div>
+<img alt="../_images/3df37a2612d6c7233a5eb579fa3b618895680deb40cdb6d7f71854aaa8619be6.png" src="../_images/3df37a2612d6c7233a5eb579fa3b618895680deb40cdb6d7f71854aaa8619be6.png" />
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">surprise</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.99892, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -943,6 +1220,28 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
 <span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -p pyhgf,jax,jaxlib
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 10 2023
+
+Python implementation: CPython
+Python version       : 3.10.10
+IPython version      : 8.11.0
+
+pyhgf : 0.0.1
+jax   : 0.4.1
+jaxlib: 0.4.1
+
+jax       : 0.4.1
+pymc      : 5.1.1
+arviz     : 0.15.1
+matplotlib: 3.7.1
+seaborn   : 0.12.2
+sys       : 3.10.10 (main, Feb  8 2023, 07:22:37) [GCC 11.3.0]
+
+Watermark: 2.3.1
 </pre></div>
 </div>
 </div>

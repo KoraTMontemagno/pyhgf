@@ -404,7 +404,6 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="pyhgf.binary.gaussian_density.html">pyhgf.binary.gaussian_density</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyhgf.binary.sgm.html">pyhgf.binary.sgm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyhgf.binary.binary_surprise.html">pyhgf.binary.binary_surprise</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyhgf.binary.loop_binary_inputs.html">pyhgf.binary.loop_binary_inputs</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.continuous/pyhgf.continuous.continuous_node_update.html">pyhgf.continuous.continuous_node_update</a></li>
@@ -426,6 +425,10 @@ document.write(`
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.response/pyhgf.response.total_gaussian_surprise.html">pyhgf.response.total_gaussian_surprise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.response/pyhgf.response.total_binary_surprise.html">pyhgf.response.total_binary_surprise</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.structure/pyhgf.structure.loop_inputs.html">pyhgf.structure.loop_inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.structure/pyhgf.structure.apply_sequence.html">pyhgf.structure.apply_sequence</a></li>
 </ul>
 </div>
 </nav></div>
@@ -487,31 +490,39 @@ document.write(`
 <h1>pyhgf.binary.binary_input_update<a class="headerlink" href="#pyhgf-binary-binary-input-update" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyhgf.binary.binary_input_update">
-<span class="sig-prename descclassname"><span class="pre">pyhgf.binary.</span></span><span class="sig-name descname"><span class="pre">binary_input_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DeviceArrayBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DeviceArrayBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DeviceArrayBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DeviceArrayBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DeviceArrayBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DeviceArrayBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DeviceArrayBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DeviceArrayBase</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/pyhgf/binary.html#binary_input_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.binary.binary_input_update" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyhgf.binary.</span></span><span class="sig-name descname"><span class="pre">binary_input_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../../_modules/pyhgf/binary.html#binary_input_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.binary.binary_input_update" title="Permalink to this definition">#</a></dt>
 <dd><p>Update the input node structure given one observation.</p>
 <p>This function is the entry level of the model fitting. It update the partents of
 the input node and then call <a class="reference internal" href="pyhgf.binary.binary_node_update.html#pyhgf.binary.binary_node_update" title="pyhgf.binary.binary_node_update"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.binary.binary_node_update()</span></code></a> to update
 the rest of the node structure.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>input_node</strong><span class="classifier">NodeType</span></dt><dd><p>The parameter, value parent and volatility parent of the input node. The
-volatility and value parents contain their own value and volatility parents,
-this structure being nested up to the higher level of the hierarchy.</p>
+<dd class="field-odd"><dl>
+<dt><strong>value</strong></dt><dd><p>The new observed value.</p>
 </dd>
-<dt><strong>value</strong><span class="classifier">DeviceArray</span></dt><dd><p>The new input value that is observed by the model at time t=`new_time`.</p>
+<dt><strong>time_step</strong></dt><dd><p>Interval between the previous time point and the current time point.</p>
 </dd>
-<dt><strong>new_time</strong><span class="classifier">DeviceArray</span></dt><dd><p>The current time point.</p>
+<dt><strong>parameters_structure</strong></dt><dd><p>The structure of nodes’ parameters. Each parameter is a dictionary with the
+following parameters: <cite>“pihat”, “pi”, “muhat”, “mu”, “nu”, “psis”, “omega”</cite> for
+continuous nodes.
+.. note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`&quot;psis&quot;` is the value coupling strength. It should have same length than the
+volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.
+It should have same length than the volatility parents&#39; indexes.
+</pre></div>
+</div>
 </dd>
-<dt><strong>old_time</strong><span class="classifier">DeviceArray</span></dt><dd><p>The time point of the previous observed value.</p>
+<dt><strong>node_structure</strong></dt><dd><p>Tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code> with same length than number of node.
+For each node, the index list value and volatility parents.</p>
+</dd>
+<dt><strong>node_idx</strong></dt><dd><p>Pointer to the node that need to be updated. After continuous update, the
+parameters of value and volatility parents (if any) will be different.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>surprise</strong><span class="classifier">jnp.DeviceArray</span></dt><dd><p>The gaussian surprise given the value(s) presented at t=`new_time`.</p>
-</dd>
-<dt><strong>new_input_node</strong><span class="classifier">tuple</span></dt><dd><p>The input node structure after recursively updating all the nodes.</p>
+<dt>parameters_structure</dt><dd><p>The updated parameters structure.</p>
 </dd>
 </dl>
 </dd>
