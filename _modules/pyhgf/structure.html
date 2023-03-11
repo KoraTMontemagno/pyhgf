@@ -504,7 +504,28 @@ document.write(`
     <span class="n">node_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">update_sequence</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a predefinded update sequence to a node structure.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a predefinded update sequence to a node structure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value :</span>
+<span class="sd">        The new observation.</span>
+<span class="sd">    time_step :</span>
+<span class="sd">        The time interval between the new observation and the previous one.</span>
+<span class="sd">    parameters_structure :</span>
+<span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
+<span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
+<span class="sd">        continuous nodes.</span>
+<span class="sd">        .. note::</span>
+<span class="sd">           `&quot;psis&quot;` is the value coupling strength. It should have same length than the</span>
+<span class="sd">           volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
+<span class="sd">           It should have same length than the volatility parents&#39; indexes.</span>
+<span class="sd">    node_structure :</span>
+<span class="sd">        The node structure with the update sequence.</span>
+<span class="sd">    update_sequence :</span>
+<span class="sd">        The sequence of updates that will be applied to the node structure.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">update_sequence</span><span class="p">:</span>
         <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
         <span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>

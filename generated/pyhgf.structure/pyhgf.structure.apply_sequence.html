@@ -492,6 +492,30 @@ document.write(`
 <dt class="sig sig-object py" id="pyhgf.structure.apply_sequence">
 <span class="sig-prename descclassname"><span class="pre">pyhgf.structure.</span></span><span class="sig-name descname"><span class="pre">apply_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../../_modules/pyhgf/structure.html#apply_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.structure.apply_sequence" title="Permalink to this definition">#</a></dt>
 <dd><p>Apply a predefinded update sequence to a node structure.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>value</strong></dt><dd><p>The new observation.</p>
+</dd>
+<dt><strong>time_step</strong></dt><dd><p>The time interval between the new observation and the previous one.</p>
+</dd>
+<dt><strong>parameters_structure</strong></dt><dd><p>The structure of nodes’ parameters. Each parameter is a dictionary with the
+following parameters: <cite>“pihat”, “pi”, “muhat”, “mu”, “nu”, “psis”, “omega”</cite> for
+continuous nodes.
+.. note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`&quot;psis&quot;` is the value coupling strength. It should have same length than the
+volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.
+It should have same length than the volatility parents&#39; indexes.
+</pre></div>
+</div>
+</dd>
+<dt><strong>node_structure</strong></dt><dd><p>The node structure with the update sequence.</p>
+</dd>
+<dt><strong>update_sequence</strong></dt><dd><p>The sequence of updates that will be applied to the node structure.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

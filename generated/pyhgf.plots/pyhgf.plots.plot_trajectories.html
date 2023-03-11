@@ -496,36 +496,32 @@ document.write(`
 <dd><p>Plot the trajectories of the nodes’ sufficient statistics and surprise.</p>
 <p>This function will plot <span class="math notranslate nohighlight">\(\hat{mu}\)</span>, <span class="math notranslate nohighlight">\(\¨hat{pi}\)</span> (converted into standard
 deviation) and the surprise at each level of the node structure.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>hgf</strong><span class="classifier"><a class="reference internal" href="../pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.model.HGF</span></code></a></span></dt><dd><p>Instance of the HGF model.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>hgf</strong></dt><dd><p>Instance of the HGF model.</p>
 </dd>
-<dt><strong>ci</strong><span class="classifier">bool</span></dt><dd><p>Show the uncertainty aroud the values estimates (standard deviation).</p>
+<dt><strong>ci</strong></dt><dd><p>Show the uncertainty aroud the values estimates (standard deviation).</p>
 </dd>
-<dt><strong>surprise</strong><span class="classifier">bool</span></dt><dd><p>If <cite>True</cite> plot each node’s surprise together witt the sufficient statistics.
+<dt><strong>surprise</strong></dt><dd><p>If <cite>True</cite> plot each node’s surprise together witt the sufficient statistics.
 If <cite>False</cite>, only the input node’s surprise is depicted.</p>
 </dd>
-<dt><strong>figsize</strong><span class="classifier">tuple</span></dt><dd><p>The width and height of the figure. Defaults to <cite>(18, 9)</cite> for a 2-levels model,
+<dt><strong>figsize</strong></dt><dd><p>The width and height of the figure. Defaults to <cite>(18, 9)</cite> for a 2-levels model,
 or to <cite>(18, 12)</cite> for a 3-levels model.</p>
 </dd>
-<dt><strong>axs</strong><span class="classifier"><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> | list | None</span></dt><dd><p>A list of Matplotlib axes instance where to draw the trajectories. This should
+<dt><strong>axs</strong></dt><dd><p>A list of Matplotlib axes instance where to draw the trajectories. This should
 correspond to the number of nodes in the structure. Default is <cite>None</cite> (create a
 new figure).</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl>
-<dt><strong>axs</strong><span class="classifier"><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a></span></dt><dd><p>The Matplotlib axes instances where to plot the trajectories.</p>
+<dd class="field-even"><dl class="simple">
+<dt>axs</dt><dd><p>The Matplotlib axes instances where to plot the trajectories.</p>
 </dd>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The node structure can be a standard continuous or binary HGF, of a custom
-structure. The nodes are traversed and plotted from bottom to top using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.structure.structure_as_dict()</span></code>.</p>
 <p class="rubric">Examples</p>
 <p>Visualization of nodes’ trajectories from a three-level continuous HGF model.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>

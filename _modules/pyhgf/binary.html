@@ -443,11 +443,13 @@ document.write(`
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">jit</span>
 <span class="kn">from</span> <span class="nn">jax.lax</span> <span class="kn">import</span> <span class="n">cond</span>
+
+<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">NodeStructure</span>
 
 
 <div class="viewcode-block" id="binary_node_update"><a class="viewcode-back" href="../../generated/pyhgf.binary/pyhgf.binary.binary_node_update.html#pyhgf.binary.binary_node_update">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;node_structure&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
@@ -455,7 +457,7 @@ document.write(`
     <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">node_structure</span><span class="p">:</span> <span class="n">NodeStructure</span><span class="p">,</span>
     <span class="o">**</span><span class="n">args</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the value and volatility parents of a binary node.</span>
@@ -551,11 +553,11 @@ document.write(`
         <span class="c1"># 3.2 Look at the (optional) va_pa&#39;s value parents</span>
         <span class="c1"># and update driftrate accordingly</span>
         <span class="c1"># if va_pa_value_parents is not None:</span>
-        <span class="c1">#     psi: DeviceArray</span>
+        <span class="c1">#     psi</span>
         <span class="c1">#     for va_pa_va_pa, psi in zip(</span>
         <span class="c1">#         va_pa_value_parents, va_pa_node_parameters[&quot;psis&quot;]</span>
         <span class="c1">#     ):</span>
-        <span class="c1">#         _mu: DeviceArray = va_pa_va_pa[0][&quot;mu&quot;]</span>
+        <span class="c1">#         _mu = va_pa_va_pa[0][&quot;mu&quot;]</span>
         <span class="c1">#         driftrate += psi * _mu</span>
         <span class="c1"># 3.3</span>
         <span class="n">muhat_pa</span> <span class="o">=</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
@@ -578,7 +580,7 @@ document.write(`
     <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">node_structure</span><span class="p">:</span> <span class="n">NodeStructure</span><span class="p">,</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure given one observation.</span>
@@ -655,8 +657,8 @@ document.write(`
         <span class="c1"># if va_pa_value_parents[0][1] is not None:</span>
         <span class="c1">#     for va_pa_va_pa in va_pa_value_parents[0][1]:</span>
         <span class="c1">#         # For each x2&#39;s value parents (optional)</span>
-        <span class="c1">#         _psi: DeviceArray = va_pa_value_parents[0][0][&quot;psis&quot;]</span>
-        <span class="c1">#         _mu: DeviceArray = va_pa_va_pa[0][&quot;mu&quot;]</span>
+        <span class="c1">#         _psi = va_pa_value_parents[0][0][&quot;psis&quot;]</span>
+        <span class="c1">#         _mu = va_pa_va_pa[0][&quot;mu&quot;]</span>
         <span class="c1">#         driftrate += _psi * _mu</span>
 
         <span class="c1"># 1.1.3 compute new_muhat</span>
@@ -693,7 +695,9 @@ document.write(`
     <span class="k">return</span> <span class="n">parameters_structure</span></div>
 
 
-<div class="viewcode-block" id="gaussian_density"><a class="viewcode-back" href="../../generated/pyhgf.binary/pyhgf.binary.gaussian_density.html#pyhgf.binary.gaussian_density">[docs]</a><span class="k">def</span> <span class="nf">gaussian_density</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pi</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
+<div class="viewcode-block" id="gaussian_density"><a class="viewcode-back" href="../../generated/pyhgf.binary/pyhgf.binary.gaussian_density.html#pyhgf.binary.gaussian_density">[docs]</a><span class="k">def</span> <span class="nf">gaussian_density</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">pi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Array</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gaussian density as defined by mean and precision.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">pi</span>
@@ -711,7 +715,7 @@ document.write(`
     <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span> <span class="o">+</span> <span class="n">lower_bound</span></div>
 
 
-<div class="viewcode-block" id="binary_surprise"><a class="viewcode-back" href="../../generated/pyhgf.binary/pyhgf.binary.binary_surprise.html#pyhgf.binary.binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">binary_surprise</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">muhat</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
+<div class="viewcode-block" id="binary_surprise"><a class="viewcode-back" href="../../generated/pyhgf.binary/pyhgf.binary.binary_surprise.html#pyhgf.binary.binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">binary_surprise</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">muhat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Array</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Surprise at a binary outcome.</span>
 
 <span class="sd">    The surprise ellicited by a binary observation :math:`x` mean :math:`\hat{\mu}`</span>
@@ -726,14 +730,14 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    x : jnp.DeviceArray</span>
+<span class="sd">    x :</span>
 <span class="sd">        The outcome.</span>
-<span class="sd">    muhat : jnp.DeviceArray</span>
+<span class="sd">    muhat :</span>
 <span class="sd">        The mean of the Bernouilli distribution.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    surprise : jnp.DeviceArray</span>
+<span class="sd">    surprise :</span>
 <span class="sd">        The binary surprise.</span>
 
 

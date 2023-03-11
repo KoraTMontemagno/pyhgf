@@ -443,10 +443,12 @@ document.write(`
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">jit</span>
+
+<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">NodeStructure</span>
 
 
 <div class="viewcode-block" id="continuous_node_update"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.continuous_node_update.html#pyhgf.continuous.continuous_node_update">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;node_structure&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
@@ -454,7 +456,7 @@ document.write(`
     <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">node_structure</span><span class="p">:</span> <span class="n">NodeStructure</span><span class="p">,</span>
     <span class="o">**</span><span class="n">args</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the value and volatility parents of a continuous node.</span>
@@ -627,7 +629,7 @@ document.write(`
     <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">node_structure</span><span class="p">:</span> <span class="n">NodeStructure</span><span class="p">,</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure.</span>
@@ -815,7 +817,9 @@ document.write(`
     <span class="k">return</span> <span class="n">parameters_structure</span></div>
 
 
-<div class="viewcode-block" id="gaussian_surprise"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.gaussian_surprise.html#pyhgf.continuous.gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">gaussian_surprise</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">muhat</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pihat</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
+<div class="viewcode-block" id="gaussian_surprise"><a class="viewcode-back" href="../../generated/pyhgf.continuous/pyhgf.continuous.gaussian_surprise.html#pyhgf.continuous.gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">gaussian_surprise</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">muhat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">pihat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Array</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Surprise at an outcome under a Gaussian prediction.</span>
 
 <span class="sd">    The surprise ellicited by an observation :math:`x` under a Gaussian distribution</span>
