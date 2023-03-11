@@ -455,28 +455,28 @@ document.write(`
 
 
 <div class="viewcode-block" id="hgf_logp"><a class="viewcode-back" href="../../generated/pyhgf.distribution/pyhgf.distribution.hgf_logp.html#pyhgf.distribution.hgf_logp">[docs]</a><span class="k">def</span> <span class="nf">hgf_logp</span><span class="p">(</span>
-    <span class="n">omega_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">omega_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">omega_3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">omega_input</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">rho_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">rho_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">rho_3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">pi_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">pi_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">pi_3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">mu_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">mu_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">mu_3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">kappa_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">kappa_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">omega_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">omega_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">omega_3</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">omega_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">rho_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">rho_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">rho_3</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">pi_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">pi_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">pi_3</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">mu_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">mu_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">mu_3</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">kappa_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">kappa_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="n">response_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
     <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">DeviceArray</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Log probability from HGF model(s) given input data and parameter(s).</span>
 
 <span class="sd">    This function support broadcasting along the first axis:</span>
@@ -493,79 +493,79 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    omega_1 : float</span>
+<span class="sd">    omega_1 :</span>
 <span class="sd">        The :math:`\omega` parameter, or *evolution rate*, at the first level of the</span>
 <span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
 <span class="sd">        not inherited from parents nodes).</span>
-<span class="sd">    omega_2 : float</span>
+<span class="sd">    omega_2 :</span>
 <span class="sd">        The :math:`\omega` parameter, or *evolution rate*, at the second level of the</span>
 <span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
 <span class="sd">        not inherited from parents nodes).</span>
-<span class="sd">    omega_3 : float</span>
+<span class="sd">    omega_3 :</span>
 <span class="sd">        The :math:`\omega` parameter, or *evolution rate*, at the third level of the</span>
 <span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
 <span class="sd">        not inherited from parents nodes). The value of this parameter will be ignored</span>
 <span class="sd">        when using a 2-levels HGF (`n_levels=2`).</span>
-<span class="sd">    omega_input : float</span>
+<span class="sd">    omega_input :</span>
 <span class="sd">        Represent the noise associated with the input observation.</span>
-<span class="sd">    rho_1 : float</span>
+<span class="sd">    rho_1 :</span>
 <span class="sd">        The :math:`\rho` parameter at the first level of the HGF. This parameter</span>
 <span class="sd">        represents the drift of the random walk.</span>
-<span class="sd">    rho_2 : float</span>
+<span class="sd">    rho_2 :</span>
 <span class="sd">        The :math:`\rho` parameter at the second level of the HGF. This parameter</span>
 <span class="sd">        represents the drift of the random walk.</span>
-<span class="sd">    rho_3 : float</span>
+<span class="sd">    rho_3 :</span>
 <span class="sd">        The :math:`\rho` parameter at the first level of the HGF. This parameter</span>
 <span class="sd">        represents the drift of the random walk. The value of this parameter will be</span>
 <span class="sd">        ignored when using a 2-levels HGF (`n_levels=2`).</span>
-<span class="sd">    pi_1 : float</span>
+<span class="sd">    pi_1 :</span>
 <span class="sd">        The :math:`\pi` parameter, or *precision*, at the first level of the HGF.</span>
-<span class="sd">    pi_2 : float</span>
+<span class="sd">    pi_2 :</span>
 <span class="sd">        The :math:`\pi` parameter, or *precision*, at the second level of the HGF.</span>
-<span class="sd">    pi_3 : float</span>
+<span class="sd">    pi_3 :</span>
 <span class="sd">        The :math:`\pi` parameter, or *precision*, at the third level of the HGF. The</span>
 <span class="sd">        value of this parameter will be ignored when using a 2-levels HGF</span>
 <span class="sd">        (`n_levels=2`).</span>
-<span class="sd">    mu_1 : float</span>
+<span class="sd">    mu_1 :</span>
 <span class="sd">        The :math:`\mu` parameter, or *mean*, at the first level of the HGF.</span>
-<span class="sd">    mu_2 : float</span>
+<span class="sd">    mu_2 :</span>
 <span class="sd">        The :math:`\mu` parameter, or *mean*, at the second level of the HGF.</span>
-<span class="sd">    mu_3 : float</span>
+<span class="sd">    mu_3 :</span>
 <span class="sd">        The :math:`\mu` parameter, or *mean*, at the third level of the HGF. The value</span>
 <span class="sd">        of this parameter will be ignored when using a 2-levels HGF (`n_levels=2`).</span>
-<span class="sd">    kappa_1 : float</span>
+<span class="sd">    kappa_1 :</span>
 <span class="sd">        The value of the :math:`\\kappa` parameter at the first level of the HGF. Kappa</span>
 <span class="sd">        represents the phasic part of the variance (the part that is affected by the</span>
 <span class="sd">        parents nodes) and will defines the strenght of the connection between the node</span>
 <span class="sd">        and the parent node. Often fixed to `1`.</span>
-<span class="sd">    kappa_2 : float</span>
+<span class="sd">    kappa_2 :</span>
 <span class="sd">        The value of the :math:`\\kappa` parameter at the second level of the HGF. Kappa</span>
 <span class="sd">        represents the phasic part of the variance (the part that is affected by the</span>
 <span class="sd">        parents nodes) and will defines the strenght of the connection between the node</span>
 <span class="sd">        and the parent node. Often fixed to `1`. The value of this parameter will be</span>
 <span class="sd">        ignored when using a 2-levels HGF (`n_levels=2`).</span>
-<span class="sd">    input_data : list</span>
+<span class="sd">    input_data :</span>
 <span class="sd">        List of input data. When `n` models should be fitted, the list contains `n` 1d</span>
 <span class="sd">        Numpy arrays. By default, the associated time vector is the integers vector</span>
 <span class="sd">        starting at `0`. A different time vector can be passed to the `time` argument.</span>
-<span class="sd">    response_function : callable</span>
+<span class="sd">    response_function :</span>
 <span class="sd">        The response function to use to compute the model surprise.</span>
-<span class="sd">    model_type : str</span>
+<span class="sd">    model_type :</span>
 <span class="sd">        The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
-<span class="sd">    n_levels : int</span>
+<span class="sd">    n_levels :</span>
 <span class="sd">        The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
 <span class="sd">        `None`, the nodes hierarchy is not created and might be provided afterward</span>
 <span class="sd">        using :py:meth:`pyhgf.model.HGF.add_nodes`.</span>
-<span class="sd">    response_function_parameters : tuple</span>
+<span class="sd">    response_function_parameters :</span>
 <span class="sd">        Additional parameters to the response function.</span>
-<span class="sd">    time : list | optional</span>
+<span class="sd">    time :</span>
 <span class="sd">        List of 1d Numpy arrays containing the time vectors for each input time series.</span>
 <span class="sd">        If one of the list item is `None`, or if `None` is provided instead, the time</span>
 <span class="sd">        vector will defaults to integers vector starting at 0.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    log_prob : DeviceArray</span>
+<span class="sd">    log_prob :</span>
 <span class="sd">        The sum of the log-probabilities (or negative surprise).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -622,23 +622,23 @@ document.write(`
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
 
         <span class="c1"># Format HGF parameters</span>
-        <span class="n">initial_mu</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">initial_mu</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">mu_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">mu_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">mu_3</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
         <span class="p">}</span>
-        <span class="n">initial_pi</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">initial_pi</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">pi_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">pi_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">pi_3</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
         <span class="p">}</span>
-        <span class="n">omega</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">omega</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">omega_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">omega_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">omega_3</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
         <span class="p">}</span>
-        <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">rho_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">rho_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">rho_3</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
-        <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">kappa_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">kappa_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+        <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">rho_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">rho_2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">rho_3</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
+        <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">kappa_1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">kappa_2</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span>
 
         <span class="n">surprise</span> <span class="o">=</span> <span class="n">surprise</span> <span class="o">+</span> <span class="p">(</span>
             <span class="n">HGF</span><span class="p">(</span>
@@ -682,24 +682,24 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        input_data : list</span>
+<span class="sd">        input_data :</span>
 <span class="sd">            List of input data. When `n` models should be fitted, the list contains `n`</span>
 <span class="sd">            1d Numpy arrays. By default, the associated time vector is the integers</span>
 <span class="sd">            vector starting at `0`. A different time vector can be passed to the `time`</span>
 <span class="sd">            argument.</span>
-<span class="sd">        time : list | optional</span>
+<span class="sd">        time :</span>
 <span class="sd">            List of 1d Numpy arrays containing the time vectors for each input time</span>
 <span class="sd">            series. If one of the list item is `None`, or if `None` is provided instead,</span>
 <span class="sd">            the time vector will defaults to integers vector starting at 0.</span>
-<span class="sd">        model_type : str</span>
+<span class="sd">        model_type :</span>
 <span class="sd">            The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
-<span class="sd">        n_levels : int</span>
+<span class="sd">        n_levels :</span>
 <span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
 <span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward</span>
 <span class="sd">            using `add_nodes()`.</span>
-<span class="sd">        response_function : callable</span>
+<span class="sd">        response_function :</span>
 <span class="sd">            The response function to use to compute the model surprise.</span>
-<span class="sd">        response_function_parameters : tuple</span>
+<span class="sd">        response_function_parameters :</span>
 <span class="sd">            Additional parameters to the response function.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -867,7 +867,7 @@ document.write(`
 
 <div class="viewcode-block" id="HGFDistribution.__init__"><a class="viewcode-back" href="../../generated/pyhgf.distribution/pyhgf.distribution.HGFDistribution.html#pyhgf.distribution.HGFDistribution.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
         <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
@@ -878,24 +878,24 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        input_data : list</span>
+<span class="sd">        input_data :</span>
 <span class="sd">            List of input data. When `n` models should be fitted, the list contains `n`</span>
 <span class="sd">            1d Numpy arrays. By default, the associated time vector is the integers</span>
 <span class="sd">            vector starting at `0`. A different time vector can be passed to the `time`</span>
 <span class="sd">            argument.</span>
-<span class="sd">        time : list | optional</span>
+<span class="sd">        time :</span>
 <span class="sd">            List of 1d Numpy arrays containing the time vectors for each input time</span>
 <span class="sd">            series. If one of the list item is `None`, or if `None` is provided instead,</span>
 <span class="sd">            the time vector will defaults to integers vector starting at 0.</span>
-<span class="sd">        model_type : str</span>
+<span class="sd">        model_type :</span>
 <span class="sd">            The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
-<span class="sd">        n_levels : int</span>
+<span class="sd">        n_levels :</span>
 <span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
 <span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward</span>
 <span class="sd">            using `add_nodes()`.</span>
-<span class="sd">        response_function : callable</span>
+<span class="sd">        response_function :</span>
 <span class="sd">            The response function to use to compute the model surprise.</span>
-<span class="sd">        response_function_parameters : tuple</span>
+<span class="sd">        response_function_parameters :</span>
 <span class="sd">            Additional parameters to the response function.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
