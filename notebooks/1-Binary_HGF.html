@@ -455,7 +455,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
 import sys
 if &#39;google.colab&#39; in sys.modules:
-    ! pip install pyhgf
+    ! pip install pyhgf2
 </pre></div>
 </div>
 </div>
@@ -525,7 +525,16 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 </div>
-<p>This function create an instance of a HGF model automatically parametrized for a 2-levels binary structure, so we do not have to worry about creating the nodes structure ourself. This class also embed function to add new observations and plots results that we are going to use below.</p>
+<p>This function create an instance of a HGF model automatically parametrized for a 2-levels binary structure, so we do not have to worry about creating the nodes structure ourself. This class also embed function to add new observations and plots results that we are going to use below. We can have a look at the node structure itself using the <span class="xref std std-ref">pyhgf.plots.plot_network</span> function. This function will automatically dray the provided node structure using <a class="reference external" href="https://github.com/xflr6/graphviz">Graphviz</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c1af7bb29fc4ca634f94e365d804b80af670fe74c553369590ee326d0c6dd388.svg" src="../_images/c1af7bb29fc4ca634f94e365d804b80af670fe74c553369590ee326d0c6dd388.svg" /></div>
+</div>
 </section>
 <section id="add-data">
 <h4>Add data<a class="headerlink" href="#add-data" title="Permalink to this heading">#</a></h4>
@@ -614,6 +623,16 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+</div>
+<p>The node structure now includes a volatility parent at the third level.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/21135fb7db32fd29d461a5a24bdae4b46e713ef98ed939349f964ff34dc49d07.svg" src="../_images/21135fb7db32fd29d461a5a24bdae4b46e713ef98ed939349f964ff34dc49d07.svg" /></div>
 </div>
 </section>
 <section id="id4">
@@ -811,7 +830,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -871,7 +890,7 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/13b9e346bb6a4d9ec24ea14dbbb525eaa08f3a1bea853d1a02e368b05494188e.png" src="../_images/13b9e346bb6a4d9ec24ea14dbbb525eaa08f3a1bea853d1a02e368b05494188e.png" />
+<img alt="../_images/f7f2007af2bfd4ff22a24596b45f218a5e5fd21b4026ff35dc89175cad633206.png" src="../_images/f7f2007af2bfd4ff22a24596b45f218a5e5fd21b4026ff35dc89175cad633206.png" />
 </div>
 </div>
 </section>
@@ -920,7 +939,7 @@ Add 320 new binary observations.
        &lt;Axes: xlabel=&#39;Time&#39;, ylabel=&#39;Surprise&#39;&gt;], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/7c3f785fdf0e4feae26b059205e8ced8cf3005ce4ce606f4f0cbcaf9e96048ae.png" src="../_images/7c3f785fdf0e4feae26b059205e8ced8cf3005ce4ce606f4f0cbcaf9e96048ae.png" />
+<img alt="../_images/861c7a05ae051704782ff31ae9db9749e31c94627004cf8c4f900bae6a3cef76.png" src="../_images/861c7a05ae051704782ff31ae9db9749e31c94627004cf8c4f900bae6a3cef76.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -930,7 +949,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.99677, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.99121, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1143,7 +1162,7 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/48fdaf29da3542063519c297068f2e92cfe6ea2fc61b43b1be4d80ba905e781c.png" src="../_images/48fdaf29da3542063519c297068f2e92cfe6ea2fc61b43b1be4d80ba905e781c.png" />
+<img alt="../_images/8e6f37f0cbc253b1d4a2fd56c567f2570ff4afd92bc1f138d2080be955c42687.png" src="../_images/8e6f37f0cbc253b1d4a2fd56c567f2570ff4afd92bc1f138d2080be955c42687.png" />
 </div>
 </div>
 </section>
@@ -1194,7 +1213,7 @@ Add 320 new binary observations.
        &lt;Axes: xlabel=&#39;Time&#39;, ylabel=&#39;Surprise&#39;&gt;], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/c2da00495038b73f5b039d9cce8ac1a0306f0c70bee9a39e196e9540f8037cd5.png" src="../_images/c2da00495038b73f5b039d9cce8ac1a0306f0c70bee9a39e196e9540f8037cd5.png" />
+<img alt="../_images/fb3425ad820df2e56aa8b99676fe20c74d625355f9aca09458f1f04d3be39ed8.png" src="../_images/fb3425ad820df2e56aa8b99676fe20c74d625355f9aca09458f1f04d3be39ed8.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1204,7 +1223,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.00464, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.00305, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1232,11 +1251,11 @@ pyhgf : 0.0.2
 jax   : 0.4.6
 jaxlib: 0.4.6
 
-seaborn   : 0.12.2
-arviz     : 0.15.1
 jax       : 0.4.6
 pymc      : 5.1.1
 matplotlib: 3.7.1
+seaborn   : 0.12.2
+arviz     : 0.15.1
 sys       : 3.10.10 (main, Feb  8 2023, 07:22:37) [GCC 11.3.0]
 
 Watermark: 2.3.1

@@ -458,7 +458,7 @@ document.write(`
     <span class="n">continuous_node_update</span><span class="p">,</span>
     <span class="n">gaussian_surprise</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pyhgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_trajectories</span>
+<span class="kn">from</span> <span class="nn">pyhgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_trajectories</span><span class="p">,</span> <span class="n">plot_network</span>
 <span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">total_binary_surprise</span><span class="p">,</span> <span class="n">total_gaussian_surprise</span>
 <span class="kn">from</span> <span class="nn">pyhgf.structure</span> <span class="kn">import</span> <span class="n">loop_inputs</span>
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span><span class="p">,</span> <span class="n">NodeStructure</span>
@@ -699,6 +699,9 @@ document.write(`
     <span class="k">def</span> <span class="nf">plot_correlations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot the heatmap of cross-trajectories correlation.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">plot_correlations</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">plot_network</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">plot_network</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">surprise</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
