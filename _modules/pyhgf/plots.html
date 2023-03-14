@@ -444,6 +444,7 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -452,6 +453,7 @@ document.write(`
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">graphviz.sources</span> <span class="kn">import</span> <span class="n">Source</span>
+
     <span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 
 
@@ -728,7 +730,7 @@ document.write(`
 <span class="sd">    -----</span>
 <span class="sd">    This function requires [Graphviz](https://github.com/xflr6/graphviz) to be</span>
 <span class="sd">    installed to work correctly.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">graphviz</span>
@@ -737,12 +739,12 @@ document.write(`
             <span class="p">(</span>
                 <span class="s2">&quot;Graphviz is required to plot the nodes structure. &quot;</span>
                 <span class="s2">&quot;See https://pypi.org/project/graphviz/&quot;</span>
-                <span class="p">)</span>
             <span class="p">)</span>
+        <span class="p">)</span>
 
-    <span class="n">graphviz_structure</span> <span class="o">=</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">Digraph</span><span class="p">(</span><span class="s1">&#39;hgf-nodes&#39;</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;Nodes structure&#39;</span><span class="p">)</span>
+    <span class="n">graphviz_structure</span> <span class="o">=</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">Digraph</span><span class="p">(</span><span class="s2">&quot;hgf-nodes&quot;</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;Nodes structure&quot;</span><span class="p">)</span>
 
-    <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;node&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;circle&#39;</span><span class="p">)</span>
+    <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s2">&quot;node&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
 
     <span class="c1"># create nodes</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">)):</span>
@@ -750,38 +752,42 @@ document.write(`
             <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
                 <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Binary input&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;filled&quot;</span>
-                    <span class="p">)</span>
+                <span class="p">)</span>
             <span class="k">elif</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
                 <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Continuous input&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;filled&quot;</span>
-                    <span class="p">)</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
                     <span class="s2">&quot;x_</span><span class="si">{i}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Input&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;filled&quot;</span>
-                    <span class="p">)</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 
     <span class="c1"># connect value parents</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">):</span>
         <span class="n">value_parents</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">idx</span>
-        
+
         <span class="k">if</span> <span class="n">value_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">value_parents_idx</span> <span class="ow">in</span> <span class="n">value_parents</span><span class="p">:</span>
                 <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">value_parents_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">value_parents_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
 
     <span class="c1"># connect volatility parents</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">):</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">volatility_parents</span> <span class="o">=</span> <span class="n">idx</span>
-        
+
         <span class="k">if</span> <span class="n">volatility_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">volatility_parents_idx</span> <span class="ow">in</span> <span class="n">volatility_parents</span><span class="p">:</span>
                 <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">volatility_parents_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span>
-                    <span class="p">)</span>
-    
+                    <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">volatility_parents_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+                    <span class="n">style</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
     <span class="c1"># unflat the structure to better handle large/uneven networks</span>
     <span class="n">graphviz_structure</span> <span class="o">=</span> <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">stagger</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
