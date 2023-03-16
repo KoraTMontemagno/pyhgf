@@ -515,12 +515,10 @@ document.write(`
     <span class="c1"># Update the continuous value parents #</span>
     <span class="c1">#######################################</span>
     <span class="k">if</span> <span class="n">value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
         <span class="n">vape</span> <span class="o">=</span> <span class="n">node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">node_parameters</span><span class="p">[</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
         <span class="n">psis</span> <span class="o">=</span> <span class="n">node_parameters</span><span class="p">[</span><span class="s2">&quot;psis&quot;</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">va_pa_idx</span><span class="p">,</span> <span class="n">psi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">value_parents_idx</span><span class="p">,</span> <span class="n">psis</span><span class="p">):</span>
-
             <span class="c1"># unpack the current parent&#39;s parameters with value and volatility parents</span>
             <span class="n">va_pa_node_parameters</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">]</span>
             <span class="n">va_pa_value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
@@ -567,7 +565,6 @@ document.write(`
     <span class="c1"># Update volatility parents #</span>
     <span class="c1">#############################</span>
     <span class="k">if</span> <span class="n">volatility_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
         <span class="n">nu</span> <span class="o">=</span> <span class="n">node_parameters</span><span class="p">[</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span>
         <span class="n">kappas</span> <span class="o">=</span> <span class="n">node_parameters</span><span class="p">[</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span>
         <span class="n">vope</span> <span class="o">=</span> <span class="p">(</span>
@@ -576,7 +573,6 @@ document.write(`
         <span class="p">)</span> <span class="o">*</span> <span class="n">node_parameters</span><span class="p">[</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
 
         <span class="k">for</span> <span class="n">vo_pa_idx</span><span class="p">,</span> <span class="n">kappa</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">volatility_parents_idx</span><span class="p">,</span> <span class="n">kappas</span><span class="p">):</span>
-
             <span class="c1"># unpack the current parent&#39;s parameters with value and volatility parents</span>
             <span class="n">vo_pa_node_parameters</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">vo_pa_idx</span><span class="p">]</span>
             <span class="n">vo_pa_value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">vo_pa_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
@@ -690,7 +686,6 @@ document.write(`
     <span class="c1"># Update value parents #</span>
     <span class="c1">########################</span>
     <span class="k">if</span> <span class="n">value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
         <span class="c1"># unpack the current parent&#39;s parameters with value and volatility parents</span>
         <span class="n">va_pa_node_parameters</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="n">va_pa_value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">value_parents</span>
@@ -748,7 +743,6 @@ document.write(`
     <span class="c1"># Update volatility parents #</span>
     <span class="c1">#############################</span>
     <span class="k">if</span> <span class="n">volatility_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
         <span class="c1"># unpack the current parent&#39;s parameters with value and volatility parents</span>
         <span class="n">vo_pa_node_parameters</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="n">vo_pa_value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
