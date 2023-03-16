@@ -500,6 +500,9 @@ HGF. The inputs can be continuous or binary.</p>
 <dl class="field-list">
 <dt class="field-odd">Attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
+<dt><strong>input_nodes_idx</strong></dt><dd><p>Indexes of the input nodes. Defaults to <cite>(0,)</cite> if the network only has one input
+node.</p>
+</dd>
 <dt><strong>model_type</strong></dt><dd><p>The model implemented (can be <cite>“continuous”</cite>, <cite>“binary”</cite> or <cite>“custom”</cite>).</p>
 </dd>
 <dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the model, including the input vector. Cannot be
@@ -507,7 +510,8 @@ less than 2.</p>
 </dd>
 <dt><strong>node_structure</strong></dt><dd><p>A tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code> representing the nodes hierarchy.</p>
 </dd>
-<dt><strong>node_trajectories</strong></dt><dd><p>The node structure updated at each new observation.</p>
+<dt><strong>node_trajectories</strong></dt><dd><p>The parameter structure that incluse the consecutive updates at each new
+observation.</p>
 </dd>
 <dt><strong>parameters_structure</strong></dt><dd><p>The structure of nodes’ parameters. Each parameter is a dictionary with the
 following parameters: <cite>“pihat”, “pi”, “muhat”, “mu”, “nu”, “psis”, “omega”</cite> for
@@ -587,13 +591,13 @@ Defaults set all entries to <cite>0</cite> according to the number of required l
 <tr class="row-odd"><td><p><a class="reference internal" href="#pyhgf.model.HGF.__init__" title="pyhgf.model.HGF.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([n_levels, model_type, initial_mu, ...])</p></td>
 <td><p>Parameterization of the HGF model.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_input_node</span></code>(kind[, omega_input, pihat, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_input_node</span></code>(kind[, input_idx, ...])</p></td>
 <td><p>Create an input node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_value_parent</span></code>(children_idxs[, ...])</p></td>
 <td><p>Add a value parent to node.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_volatility_parent</span></code>(children_idxs, ...[, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_volatility_parent</span></code>(children_idxs[, ...])</p></td>
 <td><p>Add a volatility parent to node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_update_sequence</span></code>([node_idx, update_sequence])</p></td>

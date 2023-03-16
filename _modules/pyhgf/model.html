@@ -461,7 +461,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyhgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_network</span><span class="p">,</span> <span class="n">plot_trajectories</span>
 <span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">total_binary_surprise</span><span class="p">,</span> <span class="n">total_gaussian_surprise</span>
 <span class="kn">from</span> <span class="nn">pyhgf.structure</span> <span class="kn">import</span> <span class="n">loop_inputs</span>
-<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span><span class="p">,</span> <span class="n">NodeStructure</span>
+<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span><span class="p">,</span> <span class="n">InputIndexes</span><span class="p">,</span> <span class="n">NodeStructure</span>
 
 
 <div class="viewcode-block" id="HGF"><a class="viewcode-back" href="../../generated/pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF">[docs]</a><span class="k">class</span> <span class="nc">HGF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -472,6 +472,9 @@ document.write(`
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+<span class="sd">    input_nodes_idx :</span>
+<span class="sd">        Indexes of the input nodes. Defaults to `(0,)` if the network only has one input</span>
+<span class="sd">        node.</span>
 <span class="sd">    model_type :</span>
 <span class="sd">        The model implemented (can be `&quot;continuous&quot;`, `&quot;binary&quot;` or `&quot;custom&quot;`).</span>
 <span class="sd">    n_levels :</span>
@@ -480,7 +483,8 @@ document.write(`
 <span class="sd">    node_structure :</span>
 <span class="sd">        A tuple of :py:class:`pyhgf.typing.Indexes` representing the nodes hierarchy.</span>
 <span class="sd">    node_trajectories :</span>
-<span class="sd">        The node structure updated at each new observation.</span>
+<span class="sd">        The parameter structure that incluse the consecutive updates at each new</span>
+<span class="sd">        observation.</span>
 <span class="sd">    parameters_structure :</span>
 <span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
 <span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
@@ -582,6 +586,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">:</span> <span class="n">NodeStructure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">:</span> <span class="n">Dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">InputIndexes</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">model_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -608,8 +613,8 @@ document.write(`
                 <span class="n">value_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
                 <span class="n">mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
                 <span class="n">pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-                <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-                <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="c1">#########</span>
@@ -779,12 +784,31 @@ document.write(`
     <span class="k">def</span> <span class="nf">add_input_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">input_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">omega_input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">),</span>
         <span class="n">pihat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">eta0</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">eta1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an input node.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an input node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kind :</span>
+<span class="sd">            The kind of input that should be created (can be `&quot;continuous&quot;` or</span>
+<span class="sd">            `&quot;binary&quot;`).</span>
+<span class="sd">        input_idx :</span>
+<span class="sd">            The index of the new input (defaults to `0`).</span>
+<span class="sd">        omega_input :</span>
+<span class="sd">            The input precision (only relevant if `kind=&quot;continuous&quot;`).</span>
+<span class="sd">        pihat :</span>
+<span class="sd">            The input precision (only relevant if `kind=&quot;binary&quot;`).</span>
+<span class="sd">        eta0 :</span>
+<span class="sd">            The lower bound of the binary process (only relevant if `kind=&quot;binary&quot;`).</span>
+<span class="sd">        eta1 :</span>
+<span class="sd">            The lower bound of the binary process (only relevant if `kind=&quot;binary&quot;`).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
             <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
@@ -802,8 +826,16 @@ document.write(`
                 <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">input_node_parameters</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+        <span class="k">if</span> <span class="n">input_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># this is the first node, create the node structure</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span> <span class="o">=</span> <span class="p">{</span><span class="n">input_idx</span><span class="p">:</span> <span class="n">input_node_parameters</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">InputIndexes</span><span class="p">(</span><span class="n">input_idx</span><span class="p">,</span> <span class="n">kind</span><span class="p">),)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># update the node structure</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">input_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_node_parameters</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">+=</span> <span class="p">(</span><span class="n">InputIndexes</span><span class="p">(</span><span class="n">input_idx</span><span class="p">,</span> <span class="n">kind</span><span class="p">),)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">add_value_parent</span><span class="p">(</span>
@@ -904,7 +936,7 @@ document.write(`
     <span class="k">def</span> <span class="nf">add_volatility_parent</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">children_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
-        <span class="n">volatility_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">volatility_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">mu_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
         <span class="n">pi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
