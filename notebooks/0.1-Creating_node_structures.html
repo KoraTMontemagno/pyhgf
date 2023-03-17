@@ -1,0 +1,703 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Creating and manipulating dynamic probabilistic networks &#8212; pyhgf 0.0.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/0.1-Creating_node_structures';</script>
+    <link rel="shortcut icon" href="../_static/logo_small.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_small.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo_small.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">gHGF</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../theory.html">
+                        Theory
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../cite.html">
+                        Cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box"></i></span>
+            <label class="sr-only">Pypi</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../theory.html">
+                        Theory
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../cite.html">
+                        Cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box"></i></span>
+            <label class="sr-only">Pypi</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Creating and manipulating dynamic probabilistic networks</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="creating-and-manipulating-dynamic-probabilistic-networks">
+<span id="probabilistic-networks"></span><h1>Creating and manipulating dynamic probabilistic networks<a class="headerlink" href="#creating-and-manipulating-dynamic-probabilistic-networks" title="Permalink to this heading">#</a></h1>
+<section id="implementation-details">
+<h2>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">#</a></h2>
+<p>Under the hodd, [pyhgf] is a graph neural network library that include specialized variational message passing update methods. The agents and behaviors are built on the top of the probabilistic network structure, and it is inside this structure that most of the computation and updating is happening.</p>
+<p>In pyhgf, a probabilistic network is represented by two variables:</p>
+<ol class="arabic simple">
+<li><p>a <code class="docutils literal notranslate"><span class="pre">parameter</span> <span class="pre">structure</span></code> that store the node’s parameters. This is implemented as a tuple of dictionaries.</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">node</span> <span class="pre">structure</span></code> that represents the <a class="reference external" href="https://en.wikipedia.org/wiki/Adjacency_list">adjacency list</a> that store each node’s value and volatility parents. This is implemented as a tuple of <span class="xref std std-ref">pyhgf.typing.Indexes.</span>.</p></li>
+</ol>
+<p><img alt="png" src="../_images/graph_network.png" /></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+
+<span class="n">parameters_structure</span> <span class="o">=</span> <span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="n">node_structure</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Indexes</span><span class="p">((</span><span class="mi">1</span><span class="p">,),</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,)),</span>
+    <span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The code above illustrate the creation of a probabilistic network of 3 nodes with simple parameters sets <span class="math notranslate nohighlight">\((\mu=0.0, \pi=1.0)\)</span>. Node 2 is the value parent of node 1. Node 3 is the value parent of node 2 and has no parents.</p>
+</section>
+<section id="visualizing-the-node-structure">
+<h2>Visualizing the node structure<a class="headerlink" href="#visualizing-the-node-structure" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+
+<span class="c1"># create a three-level HGF using default parameters</span>
+<span class="n">hgf</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span><span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
+<span class="n">hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a continuous Hierarchical Gaussian Filter with 3 levels.
+</pre></div>
+</div>
+<img alt="../_images/73540c5eadf8f3aba114d867f93a7fb3d84271cb0e7c56f6ae683cba523acc5f.svg" src="../_images/73540c5eadf8f3aba114d867f93a7fb3d84271cb0e7c56f6ae683cba523acc5f.svg" /></div>
+</div>
+</section>
+<section id="building-a-custom-node-structure">
+<h2>Building a custom node structure<a class="headerlink" href="#building-a-custom-node-structure" title="Permalink to this heading">#</a></h2>
+<p>The two and three-level continuous and binary HGF are special cases of probabilistic networks that can be manipulated by pyhgf. We can indeed build probabilistic networks with arbitrary structure. Notably,</p>
+<ul class="simple">
+<li><p>one node can have multiple parents and/or children, both in the value and volatility domains.</p></li>
+<li><p>the network can have multiple input node, binary and/or continuous.</p></li>
+</ul>
+<p>For example, the following network is a valid HGF structure:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">custom_hgf</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="p">)</span>
+<span class="n">custom_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8dc776707f54c3de75e31630661a3820b4629d9424283b43454e7169d1567825.svg" src="../_images/8dc776707f54c3de75e31630661a3820b4629d9424283b43454e7169d1567825.svg" /></div>
+</div>
+<p>It is also possible to work with multiple input:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">custom_hgf</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="p">)</span>
+<span class="n">custom_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/929ea5a563aea962a81d773683beaf9eee242a885c2cc87c8496913769844cc6.svg" src="../_images/929ea5a563aea962a81d773683beaf9eee242a885c2cc87c8496913769844cc6.svg" /></div>
+</div>
+<p>The parameters structure and node structures are embedded in the HGF class anc can be retrieved with:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># paramter values from the first node</span>
+<span class="n">custom_hgf</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;kappas&#39;: (1.0,),
+ &#39;omega&#39;: -9.210340371976182,
+ &#39;surprise&#39;: nan,
+ &#39;time_step&#39;: nan,
+ &#39;value&#39;: nan,
+ &#39;psis&#39;: (1.0,)}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the node structure</span>
+<span class="n">custom_hgf</span><span class="o">.</span><span class="n">node_structure</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Indexes(value_parents=(3,), volatility_parents=(6,)),
+ Indexes(value_parents=(4,), volatility_parents=(6,)),
+ Indexes(value_parents=(5,), volatility_parents=(6,)),
+ Indexes(value_parents=None, volatility_parents=None),
+ Indexes(value_parents=None, volatility_parents=None),
+ Indexes(value_parents=None, volatility_parents=None),
+ Indexes(value_parents=None, volatility_parents=None))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="building-custom-update-functions-and-sequences">
+<h2>Building custom update functions and sequences<a class="headerlink" href="#building-custom-update-functions-and-sequences" title="Permalink to this heading">#</a></h2>
+<p>Models that are created with parameter structures and node structures only represent static configuration of the HGF, they are not yet filtering new observation or acting in response to specific input. To add a dynamic and responsive layer, we need two additional components:</p>
+<ul class="simple">
+<li><p>update functions</p></li>
+<li><p>update sequences</p></li>
+</ul>
+<p>Update functions are the heart of the HGF filtering procedure, these functions implement the message passing and parameters updating steps between node. An update function in its simplier form is a fuction defined as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span><span class="n">node_idx</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">parameters_structure</span><span class="p">,</span> <span class="n">node_structure</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In other words, it is updating the parameters structure by applying certain transformation starting at node <span class="math notranslate nohighlight">\(i\)</span>. The function has acess top the entire parameters and nodes structure, which mean that it can retrive parameters from parents, children, grand-parents etc… Usually, pessage passing updates only use information found in the <a class="reference external" href="https://en.wikipedia.org/wiki/Markov_blanket">Markov blanket</a> of the given node.</p>
+</section>
+<section id="dynamic-manipulation-of-parameters-structures-sequences-and-function-across-time">
+<h2>Dynamic manipulation of parameters, structures, sequences and function across time<a class="headerlink" href="#dynamic-manipulation-of-parameters-structures-sequences-and-function-across-time" title="Permalink to this heading">#</a></h2>
+<p>We have discussed in the previous sections how <a class="reference external" href="https://ilabcode.github.io/pyhgf/index.html">pyhgf</a> implements probabilistic networks that can learn, filter and act while new observations are coming in. These model require the following variables and methods upon initialization:</p>
+<ul class="simple">
+<li><p>the parameters structure</p></li>
+<li><p>the node structure</p></li>
+<li><p>the update function</p></li>
+<li><p>the update sequences</p></li>
+</ul>
+<p>So far, we assumed that these parameters are static and that the agent had no control over them. However, it is also possible to create models that have dynamics parameter set (i.e. where the node structure, update functions and parameters spaces can change across time) using either a deterministic, or a responsive design.</p>
+<section id="updating-node-structure">
+<h3>Updating node structure<a class="headerlink" href="#updating-node-structure" title="Permalink to this heading">#</a></h3>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-details">Implementation details</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-node-structure">Visualizing the node structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-a-custom-node-structure">Building a custom node structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-custom-update-functions-and-sequences">Building custom update functions and sequences</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-manipulation-of-parameters-structures-sequences-and-function-across-time">Dynamic manipulation of parameters, structures, sequences and function across time</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#updating-node-structure">Updating node structure</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/notebooks/0.1-Creating_node_structures.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner"></div>
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022-2023, Nicolas Legrand.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
