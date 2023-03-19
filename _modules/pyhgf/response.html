@@ -446,17 +446,19 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 
+<span class="kn">from</span> <span class="nn">pyhgf.continuous</span> <span class="kn">import</span> <span class="n">gaussian_surprise</span>
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 
 
-<div class="viewcode-block" id="total_gaussian_surprise"><a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.total_gaussian_surprise.html#pyhgf.response.total_gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">total_gaussian_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of the gaussian surprise along the time series (continuous HGF).</span>
+<div class="viewcode-block" id="first_level_gaussian_surprise"><a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.first_level_gaussian_surprise.html#pyhgf.response.first_level_gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">first_level_gaussian_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gaussian surprise at the first level of a probabilistic network.</span>
 
 <span class="sd">    .. note::</span>
-<span class="sd">      The Gaussian surprise is the default method to compute surprise when</span>
-<span class="sd">      `model_type==&quot;continuous&quot;`, therefore this method will only return the sum of</span>
-<span class="sd">      valid time points, and `jnp.inf` if the model could not fit.</span>
+<span class="sd">      The Gaussian surprise at the first level is the default method to compute surprise</span>
+<span class="sd">      for continuous models. The function returns `jnp.inf` if the model could not fit</span>
+<span class="sd">      at a given time point.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -471,20 +473,23 @@ document.write(`
 <span class="sd">        The model surprise given the input data.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Return an infinite surprise if the model cannot fit</span>
-    <span class="n">this_surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]),</span>
-        <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-        <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span>
+    <span class="c1"># compute the sum of Gaussian surprise at the first level</span>
+    <span class="c1"># the input value at time t is compared to the gaussian prediction at t-1</span>
+    <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+        <span class="n">gaussian_surprise</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
+            <span class="n">muhat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">pihat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="c1"># Sum the surprise for this model</span>
-    <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">this_surprise</span><span class="p">)</span>
+    <span class="c1"># Return an infinite surprise if the model could not fit at any point</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">])),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">surprise</span>
+    <span class="p">)</span></div>
 
-    <span class="k">return</span> <span class="n">surprise</span></div>
 
-
-<div class="viewcode-block" id="total_binary_surprise"><a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.total_binary_surprise.html#pyhgf.response.total_binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">total_binary_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="first_level_binary_surprise"><a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.first_level_binary_surprise.html#pyhgf.response.first_level_binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">first_level_binary_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of the binary surprise along the time series (binary HGF).</span>
 
 <span class="sd">    .. note::</span>

@@ -467,7 +467,7 @@ if &#39;google.colab&#39; in sys.modules:
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">hgf_logp</span><span class="p">,</span> <span class="n">HGFDistribution</span>
 <span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
-<span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">total_binary_surprise</span>
+<span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">first_level_binary_surprise</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
@@ -618,7 +618,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c382ecdce0ed9fb9bb487b9290ed271cd14b0eb0e86dcfcf41493b927d96dd2d.svg" src="../_images/c382ecdce0ed9fb9bb487b9290ed271cd14b0eb0e86dcfcf41493b927d96dd2d.svg" /></div>
+<img alt="../_images/325361e8c1f4a5a7988e670b05c1b99b51a718797e5734a1d0713a442d19b6f2.svg" src="../_images/325361e8c1f4a5a7988e670b05c1b99b51a718797e5734a1d0713a442d19b6f2.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -662,12 +662,18 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 02:29&lt;00:00 Sampling 4 chains, 1 divergences]
+      100.00% [8000/8000 02:35&lt;00:00 Sampling 4 chains, 10 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 150 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 155 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 1 divergences after tuning. Increase `target_accept` or reparameterize.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 10 divergences after tuning. Increase `target_accept` or reparameterize.
 </pre></div>
 </div>
 </div>
@@ -680,7 +686,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b451be097235b79a2b3c9b1bef2e22f6651919ae86e818fff6ac2fcf47001bfc.png" src="../_images/b451be097235b79a2b3c9b1bef2e22f6651919ae86e818fff6ac2fcf47001bfc.png" />
+<img alt="../_images/deaaf7378d3e2ea1157b93b041a170c66fa4ba151d1f8416014343613b535383.png" src="../_images/deaaf7378d3e2ea1157b93b041a170c66fa4ba151d1f8416014343613b535383.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -725,7 +731,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
     <span class="n">input_data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-    <span class="n">response_function</span><span class="o">=</span><span class="n">total_binary_surprise</span><span class="p">,</span>
+    <span class="n">response_function</span><span class="o">=</span><span class="n">first_level_binary_surprise</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -780,7 +786,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d45ce48911ec7b6fcf4d1f9cea19dc00b5024ebc8b16ce1b4bc46fe35304366c.svg" src="../_images/d45ce48911ec7b6fcf4d1f9cea19dc00b5024ebc8b16ce1b4bc46fe35304366c.svg" /></div>
+<img alt="../_images/0f59649ca67c2c30e1842eca2a7541ad7beaefd68f99f4a70e1ca351f2855b18.svg" src="../_images/0f59649ca67c2c30e1842eca2a7541ad7beaefd68f99f4a70e1ca351f2855b18.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -824,7 +830,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:30&lt;00:00 Sampling chain 0, 25 divergences]
+      100.00% [2000/2000 00:29&lt;00:00 Sampling chain 0, 14 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -845,7 +851,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:22&lt;00:00 Sampling chain 1, 50 divergences]
+      100.00% [2000/2000 00:25&lt;00:00 Sampling chain 1, 46 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -866,7 +872,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:22&lt;00:00 Sampling chain 2, 62 divergences]
+      100.00% [2000/2000 00:25&lt;00:00 Sampling chain 2, 40 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -887,12 +893,12 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:26&lt;00:00 Sampling chain 3, 23 divergences]
+      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 3, 41 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 102 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 105 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 160 divergences after tuning. Increase `target_accept` or reparameterize.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 141 divergences after tuning. Increase `target_accept` or reparameterize.
 </pre></div>
 </div>
 </div>
@@ -905,7 +911,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a7ffb4ffb00b97f9a1a0b9e58f0c640f793c21e084b5a1ffc8a7cfd3cf93d23b.png" src="../_images/a7ffb4ffb00b97f9a1a0b9e58f0c640f793c21e084b5a1ffc8a7cfd3cf93d23b.png" />
+<img alt="../_images/0146111b2828758c399aa4125190600cbb7e08800bef987ff73ff9c6d5c20413.png" src="../_images/0146111b2828758c399aa4125190600cbb7e08800bef987ff73ff9c6d5c20413.png" />
 </div>
 </div>
 </section>

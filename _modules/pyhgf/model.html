@@ -459,7 +459,7 @@ document.write(`
     <span class="n">gaussian_surprise</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyhgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_network</span><span class="p">,</span> <span class="n">plot_trajectories</span>
-<span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">total_binary_surprise</span><span class="p">,</span> <span class="n">total_gaussian_surprise</span>
+<span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">first_level_binary_surprise</span><span class="p">,</span> <span class="n">first_level_gaussian_surprise</span>
 <span class="kn">from</span> <span class="nn">pyhgf.structure</span> <span class="kn">import</span> <span class="n">loop_inputs</span>
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span><span class="p">,</span> <span class="n">InputIndexes</span><span class="p">,</span> <span class="n">NodeStructure</span>
 
@@ -736,9 +736,9 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">response_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">response_function</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">total_gaussian_surprise</span>
+                <span class="n">first_level_gaussian_surprise</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span>
-                <span class="k">else</span> <span class="n">total_binary_surprise</span>
+                <span class="k">else</span> <span class="n">first_level_binary_surprise</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">response_function</span><span class="p">(</span>
@@ -762,7 +762,6 @@ document.write(`
                 <span class="s2">&quot;time_steps&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;time_step&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]),</span>
                 <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">],</span>
             <span class="p">}</span>
         <span class="p">)</span>
 
@@ -772,12 +771,28 @@ document.write(`
             <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
             <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
             <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
-            <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
-                <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
-                <span class="n">muhat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                <span class="n">pihat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">):</span>
+                <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
+                    <span class="n">muhat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">pihat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
+                    <span class="n">muhat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">pihat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="c1"># fill with nans when the model cannot fit</span>
+            <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">surprise</span>
             <span class="p">)</span>
             <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">surprise</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+        <span class="c1"># compute the global surprise over all node</span>
+        <span class="n">structure_df</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">structure_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span>
+            <span class="p">:,</span> <span class="n">structure_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;_surprise&quot;</span><span class="p">)</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">min_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">structure_df</span>
 
@@ -813,7 +828,6 @@ document.write(`
             <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;kappas&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega_input</span><span class="p">,</span>
-                <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
                 <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="p">}</span>
