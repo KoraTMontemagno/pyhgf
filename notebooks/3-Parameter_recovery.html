@@ -582,7 +582,7 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
-    <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tune</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -596,7 +596,7 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 4 jobs)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_1]
@@ -620,10 +620,13 @@ if &#39;google.colab&#39; in sys.modules:
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:52&lt;00:00 Sampling 4 chains, 0 divergences]
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:23&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 53 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 24 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
 </pre></div>
 </div>
 </div>
@@ -636,7 +639,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/98554af4f35b2b583a419171de7bb665e25ba7036ab46f2535be2aad75df6aed.png" src="../_images/98554af4f35b2b583a419171de7bb665e25ba7036ab46f2535be2aad75df6aed.png" />
+<img alt="../_images/b22931689280671ccfd6246d96f16c0d591a992f01fdd2d4bb2565560ad7bd41.png" src="../_images/b22931689280671ccfd6246d96f16c0d591a992f01fdd2d4bb2565560ad7bd41.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -646,6 +649,9 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>arviz - WARNING - Shape validation failed: input_shape: (1, 1000), minimum_shape: (chains=2, draws=4)
+</pre></div>
+</div>
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -678,75 +684,75 @@ if &#39;google.colab&#39; in sys.modules:
   <tbody>
     <tr>
       <th>omega_1[0]</th>
-      <td>-7.235</td>
-      <td>0.223</td>
-      <td>-7.640</td>
-      <td>-6.807</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>5542.0</td>
-      <td>3306.0</td>
-      <td>1.0</td>
+      <td>-7.230</td>
+      <td>0.222</td>
+      <td>-7.644</td>
+      <td>-6.823</td>
+      <td>0.006</td>
+      <td>0.004</td>
+      <td>1354.0</td>
+      <td>623.0</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[1]</th>
-      <td>-6.937</td>
-      <td>0.223</td>
+      <td>-6.942</td>
+      <td>0.219</td>
       <td>-7.338</td>
-      <td>-6.511</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>6276.0</td>
-      <td>3372.0</td>
-      <td>1.0</td>
+      <td>-6.533</td>
+      <td>0.006</td>
+      <td>0.004</td>
+      <td>1554.0</td>
+      <td>818.0</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[2]</th>
-      <td>-6.639</td>
-      <td>0.224</td>
-      <td>-7.050</td>
-      <td>-6.210</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>5826.0</td>
-      <td>3132.0</td>
-      <td>1.0</td>
+      <td>-6.635</td>
+      <td>0.225</td>
+      <td>-7.117</td>
+      <td>-6.265</td>
+      <td>0.006</td>
+      <td>0.004</td>
+      <td>1336.0</td>
+      <td>838.0</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[3]</th>
-      <td>-7.650</td>
-      <td>0.199</td>
-      <td>-8.025</td>
-      <td>-7.261</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>5709.0</td>
-      <td>2711.0</td>
-      <td>1.0</td>
+      <td>-7.642</td>
+      <td>0.206</td>
+      <td>-8.005</td>
+      <td>-7.227</td>
+      <td>0.006</td>
+      <td>0.004</td>
+      <td>1424.0</td>
+      <td>933.0</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[4]</th>
-      <td>-7.072</td>
-      <td>0.221</td>
-      <td>-7.493</td>
-      <td>-6.684</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>4552.0</td>
-      <td>2995.0</td>
-      <td>1.0</td>
+      <td>-7.069</td>
+      <td>0.233</td>
+      <td>-7.511</td>
+      <td>-6.652</td>
+      <td>0.007</td>
+      <td>0.005</td>
+      <td>1177.0</td>
+      <td>690.0</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[5]</th>
-      <td>-7.101</td>
-      <td>0.224</td>
-      <td>-7.482</td>
-      <td>-6.643</td>
-      <td>0.003</td>
-      <td>0.002</td>
-      <td>4878.0</td>
-      <td>2957.0</td>
-      <td>1.0</td>
+      <td>-7.104</td>
+      <td>0.214</td>
+      <td>-7.534</td>
+      <td>-6.713</td>
+      <td>0.008</td>
+      <td>0.005</td>
+      <td>805.0</td>
+      <td>755.0</td>
+      <td>NaN</td>
     </tr>
   </tbody>
 </table>

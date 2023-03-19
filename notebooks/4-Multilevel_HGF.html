@@ -618,12 +618,12 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ac0a8d75b052a36a0e575650c48dd79598445ba8d3abad7e91219d2577690c81.svg" src="../_images/ac0a8d75b052a36a0e575650c48dd79598445ba8d3abad7e91219d2577690c81.svg" /></div>
+<img alt="../_images/0a7c6bc78198e2b341c94c64c3c769fd1c00b87a580220ac0a7b0a7f0c16479f.svg" src="../_images/0a7c6bc78198e2b341c94c64c3c769fd1c00b87a580220ac0a7b0a7f0c16479f.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
-    <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tune</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -637,7 +637,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 4 jobs)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
@@ -661,19 +661,13 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 02:22&lt;00:00 Sampling 4 chains, 111 divergences]
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 01:05&lt;00:00 Sampling chain 0, 73 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 143 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 65 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 111 divergences after tuning. Increase `target_accept` or reparameterize.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
 </pre></div>
 </div>
 </div>
@@ -686,7 +680,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b04f97d37b1e1457a87952cc528b47236ac9e3d5c09d7ca68c02726f4b85ed10.png" src="../_images/b04f97d37b1e1457a87952cc528b47236ac9e3d5c09d7ca68c02726f4b85ed10.png" />
+<img alt="../_images/981d5c7ebad5e1bc0b450d6a8eb7a1bf2ba24afb68ffca57aa1aafef801451e9.png" src="../_images/981d5c7ebad5e1bc0b450d6a8eb7a1bf2ba24afb68ffca57aa1aafef801451e9.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -786,7 +780,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0b0122ec9ca8ffbbb4e21bf4efce0232cf589b924c0bbb20789cb15a3c08faad.svg" src="../_images/0b0122ec9ca8ffbbb4e21bf4efce0232cf589b924c0bbb20789cb15a3c08faad.svg" /></div>
+<img alt="../_images/59e351e822d6fca76e1a55f47e7b59d8deaea50c4c438918f5ae02be83c7ed0a.svg" src="../_images/59e351e822d6fca76e1a55f47e7b59d8deaea50c4c438918f5ae02be83c7ed0a.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -794,7 +788,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
-    <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -805,7 +799,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (4 chains in 1 job)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
@@ -830,78 +824,12 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:27&lt;00:00 Sampling chain 0, 62 divergences]
+      100.00% [2000/2000 00:28&lt;00:00 Sampling chain 0, 25 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:25&lt;00:00 Sampling chain 1, 32 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:22&lt;00:00 Sampling chain 2, 48 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:22&lt;00:00 Sampling chain 3, 46 divergences]
-    </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 97 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 28 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 188 divergences after tuning. Increase `target_accept` or reparameterize.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
 </pre></div>
 </div>
 </div>
@@ -914,7 +842,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9dbb011ab87ec4745dc6ecd90393c2aa98fe8b6d97d74856ca313e78cac16480.png" src="../_images/9dbb011ab87ec4745dc6ecd90393c2aa98fe8b6d97d74856ca313e78cac16480.png" />
+<img alt="../_images/bb31d5dd7e4d788903d598a1ff482a97e4e7b029625c6c6bf713e137379d29b7.png" src="../_images/bb31d5dd7e4d788903d598a1ff482a97e4e7b029625c6c6bf713e137379d29b7.png" />
 </div>
 </div>
 </section>
