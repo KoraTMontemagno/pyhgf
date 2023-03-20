@@ -493,8 +493,8 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
 </section>
 <section id="volatility-coupling">
 <h3>Volatility coupling<a class="headerlink" href="#volatility-coupling" title="Permalink to this heading">#</a></h3>
-<p>The HGF generalize this process by making the parameters of a GRW depends on another GRW at a higher level. This kind of dependeny is termed “coupling” and can target the volatiliy (<span class="math notranslate nohighlight">\(\sigma^2\)</span>) of the value (<span class="math notranslate nohighlight">\(\mu\)</span>), or both.</p>
-<p>If we take as example the two-level continuous HGF <span id="id1">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span>, the model is constituded of two states of interest, <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>. The node <span class="math notranslate nohighlight">\(x_1\)</span> is performing a GRW, but it is also paired with <span class="math notranslate nohighlight">\(x_2\)</span> via <em>volatility coupling</em>. This means that for state <span class="math notranslate nohighlight">\(x_1\)</span>, the mean of the Gaussian random walk on time point <span class="math notranslate nohighlight">\(k\)</span> is given by its previous value <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span>, while the step size (or variance) depends on the current value of the higher level state, <span class="math notranslate nohighlight">\(x_2^{(k)}\)</span>.</p>
+<p>The HGF hierarchically generalize the GRW by making the parameters of a stochastic process depend on another GRW at a higher level. This kind of dependency is termed “coupling” and can target the volatility (<span class="math notranslate nohighlight">\(\sigma^2\)</span>) or the value (<span class="math notranslate nohighlight">\(\mu\)</span>), or both.</p>
+<p>If we take as an example the two-level continuous HGF <span id="id1">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span>, the model is constituted of two states of interest, <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>. The node <span class="math notranslate nohighlight">\(x_1\)</span> is performing a GRW, but it is also paired with <span class="math notranslate nohighlight">\(x_2\)</span> via <em>volatility coupling</em>. This means that for state <span class="math notranslate nohighlight">\(x_1\)</span>, the mean of the Gaussian random walk on time point <span class="math notranslate nohighlight">\(k\)</span> is given by its previous value <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span>, while the step size (or variance) depends on the current value of the higher level state, <span class="math notranslate nohighlight">\(x_2^{(k)}\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[
 x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \, f(x_2^{(k)}))
@@ -512,11 +512,12 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 <div class="admonition-exercise-2 admonition">
 <p class="admonition-title">Exercise 2</p>
 <p>Using the equation above and your previous implementation, write a Python code that implements a hierarchical Gaussian random walk with the following parameters: <span class="math notranslate nohighlight">\(\omega_1 = -6.0\)</span>, <span class="math notranslate nohighlight">\(\omega_2 = -6.0\)</span>, <span class="math notranslate nohighlight">\(\mu_1 = 0.0\)</span>, <span class="math notranslate nohighlight">\(\mu_2 = -2.0\)</span>, <span class="math notranslate nohighlight">\(x_{1} = 0.0\)</span> and <span class="math notranslate nohighlight">\(x_{2} = -2.0\)</span></p>
+<p>What happens if you try different values of <span class="math notranslate nohighlight">\(\omega\)</span>?</p>
 </div>
 </section>
 <section id="the-continuous-hgf">
 <h3>The continuous HGF<a class="headerlink" href="#the-continuous-hgf" title="Permalink to this heading">#</a></h3>
-<p>In the following example, we illustrate how we can use the Hierarchical Gaussian Filter to filter and predict inputs in a continuous node.</p>
+<p>The pyhgf package implements this process with the corresponding update equation so the model can take as input a time series and infer the more likely generative structure that created the values. This can be extremely useful if you want to work with time series that have varying levels of volatility (i.e. meta-volatility). In the following example, we illustrate how we can use the Hierarchical Gaussian Filter to filter and predict inputs in a continuous node.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a sime two-levels continuous HGF with defaults parameters</span>
@@ -590,14 +591,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 </section>
 <section id="parameters-optimization">
 <h3>Parameters optimization<a class="headerlink" href="#parameters-optimization" title="Permalink to this heading">#</a></h3>
-<p>In the final part of the exercise, you will be asked to apply the HGF to real world situation. For example, you can download wheather time series at the following link: https://renewables.ninja/. From there you can try:</p>
-<ul class="simple">
-<li><p>an agent has been living for 20 years in city A and has learn a model of weather that works well in this city, but decide to move and live in city B for one year. He is using the same model to understant weather changes in the new city.</p></li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The proposed exercise are more suggestions. You can use any time series that you find interesting, it should just come with a volatility that is interesting to model.</p>
-</div>
+<p>So far we have been running the HGF forward by fixing the values of the parameters beforehand. We can also adopt an alternative approach and try to estimate the most likely value of a given parameter from an input time series (i.e. what would be the “best” agent in this context?). This can be done through Bayesian inference. Here we are going to use Hamiltonian Monte Carlo sampling using PyMC.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
@@ -652,12 +646,12 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/29feca12333e06bb418b5206275ace5b8c96f8cd05520bbac6adf3c3f1fad4d2.svg" src="../_images/29feca12333e06bb418b5206275ace5b8c96f8cd05520bbac6adf3c3f1fad4d2.svg" /></div>
+<img alt="../_images/7e6af4e772fd07b246d81c7e8c2cc80e2e75aae0226883680ee02cad32c62377.svg" src="../_images/7e6af4e772fd07b246d81c7e8c2cc80e2e75aae0226883680ee02cad32c62377.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">two_level_hgf</span><span class="p">:</span>
-    <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -668,7 +662,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (2 chains in 1 job)
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_1]
@@ -693,12 +687,33 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 5 seconds.
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 1, 0 divergences]
+    </div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 12 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
 </pre></div>
 </div>
 </div>
@@ -714,7 +729,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
         &lt;Axes: title={&#39;center&#39;: &#39;omega_1&#39;}&gt;]], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/8de9dd39220621be48ce7efaaec5e255fde4666715aedc058b7e28f42a4076f8.png" src="../_images/8de9dd39220621be48ce7efaaec5e255fde4666715aedc058b7e28f42a4076f8.png" />
+<img alt="../_images/a89a91c39b5f5969e71a5edc0bb1a83cbad78855d6255fead3d1f2cecffba083.png" src="../_images/a89a91c39b5f5969e71a5edc0bb1a83cbad78855d6255fead3d1f2cecffba083.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -724,9 +739,6 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>arviz - WARNING - Shape validation failed: input_shape: (1, 1000), minimum_shape: (chains=2, draws=4)
-</pre></div>
-</div>
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -759,15 +771,15 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
   <tbody>
     <tr>
       <th>omega_1</th>
-      <td>-6.313</td>
-      <td>0.705</td>
-      <td>-7.562</td>
-      <td>-4.912</td>
-      <td>0.035</td>
-      <td>0.025</td>
-      <td>416.0</td>
-      <td>379.0</td>
-      <td>NaN</td>
+      <td>-6.32</td>
+      <td>0.725</td>
+      <td>-7.635</td>
+      <td>-4.929</td>
+      <td>0.027</td>
+      <td>0.019</td>
+      <td>790.0</td>
+      <td>679.0</td>
+      <td>1.0</td>
     </tr>
   </tbody>
 </table>
@@ -782,15 +794,15 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 <li><p>How to fit the HGF to a time series.</p></li>
 <li><p>How to find the parameters that optimize a simple response function.</p></li>
 </ol>
-<p>In this section, we are going to apply this knowledge to more practical considerations and try to build an agent that can optimize its behaviour under volatile sensory inputs. We will take the example of an agent that experiences fluctuation in the weather and would like to optimize behaviour regarding whether or not he should carry an umbrella with him for the next day(s). Experiencing rain while not having an umbrella is extremely annoying for this agent (this elicits a lot of surprises), but carrying an umbrella in sunny weather is also annoying. You should therefore come up with a solution to help this agent optimise its decision. For the exercise we will consider that the agent cannot just look by the windows and check the weather, it has to make the decision one day for the next, using its current understanding of the weather.</p>
-<p>We will use data from <a href="#id2"><span class="problematic" id="id3">pfenninger:2016, staffell:2016</span></a> that is made available at the following database: https://renewables.ninja/. This database contains hourly recordings of various weather parameters that have been tracked over one year at a different positions in the world. You can explore the database and use the recording you like, you can also compare agents trained in a different part of the globe. The procedure is the following:</p>
+<p>In this section, we are going to apply this knowledge to more practical considerations and try to build agents that can optimize their behaviour under volatile sensory inputs. We will take the example of agents that experiences fluctuation in the weather and would like to optimize their behaviour (e.g. regarding whether or not they should carry an umbrella for the next day). Experiencing rain while not having an umbrella is extremely annoying for these agents (this elicits a lot of surprises), but carrying an umbrella in sunny weather is also annoying. You should therefore come up with a solution to help them optimise their decisions. For the exercise we will consider that the agents cannot just look by the windows and check the weather, they have to decide at least one day for the next or more, using their current understanding of the weather (i.e. their beliefs about the latent variables in the environment).</p>
+<p>We will use data from <a href="#id2"><span class="problematic" id="id3">pfenninger:2016, staffell:2016</span></a> that is made available at the following database: https://renewables.ninja/. This database contains hourly recordings of various weather parameters that have been tracked over one year at a different positions in the world. You can explore the database and use the recording you like, you can also compare agents trained in different part of the globe. The procedure is the following:</p>
 <ol class="arabic simple">
 <li><p>Set the point or search for a location</p></li>
 <li><p>Extend the weather button and check all boxes (if you wish to use the premade processing script) or select your data structure.</p></li>
 <li><p>Press “run” and wait for the simulation to run</p></li>
 <li><p>Save hourly output as CSV</p></li>
 </ol>
-<p>Alternatively, we provide here a data frame that can be easily loaded, it is the weather parameters recorded in Aarhus:</p>
+<p>Alternatively, we provide here a data frame that can be easily loaded, it contains the weather parameters recorded in Aarhus:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aarhus_weather_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/ilabcode/hgf-data/main/datasets/weather.csv&quot;</span><span class="p">)</span>
@@ -904,8 +916,8 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 <li><p>swtdn : Toa (top of atmosphere) incoming shortwave flux (W/m2)</p></li>
 <li><p>cldtot : Total cloud area fraction. An average over grid cells and summed over all height above ground ([0,1] scale where 0 is no cloud and 1 is very cloudy)</p></li>
 </ul>
-<div class="admonition-exercises admonition">
-<p class="admonition-title">Exercises</p>
+<div class="admonition-exercises-4 admonition">
+<p class="admonition-title">Exercises 4</p>
 <ul class="simple">
 <li><p>Select a city and download a recording OR use the data frame loaded above.</p></li>
 <li><p>Choose which weather variables to work with.</p></li>
@@ -966,6 +978,7 @@ Add 720 new continuous observations.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get beliefs trajectories from the agent</span>
 <span class="n">trajectories</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="n">trajectories</span> <span class="o">=</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;time_steps&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">trajectories</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -989,8 +1002,6 @@ Add 720 new continuous observations.
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>time_steps</th>
-      <th>time</th>
       <th>observation</th>
       <th>x_1_mu</th>
       <th>x_1_pi</th>
@@ -1008,8 +1019,6 @@ Add 720 new continuous observations.
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.0</td>
-      <td>1.0</td>
       <td>7.387</td>
       <td>7.387000</td>
       <td>10244.500000</td>
@@ -1025,8 +1034,6 @@ Add 720 new continuous observations.
     </tr>
     <tr>
       <th>1</th>
-      <td>1.0</td>
-      <td>2.0</td>
       <td>7.472</td>
       <td>7.469874</td>
       <td>10256.577148</td>
@@ -1042,8 +1049,6 @@ Add 720 new continuous observations.
     </tr>
     <tr>
       <th>2</th>
-      <td>1.0</td>
-      <td>3.0</td>
       <td>7.635</td>
       <td>7.631119</td>
       <td>10240.712891</td>
@@ -1059,8 +1064,6 @@ Add 720 new continuous observations.
     </tr>
     <tr>
       <th>3</th>
-      <td>1.0</td>
-      <td>4.0</td>
       <td>7.224</td>
       <td>7.230870</td>
       <td>10171.632812</td>
@@ -1076,8 +1079,6 @@ Add 720 new continuous observations.
     </tr>
     <tr>
       <th>4</th>
-      <td>1.0</td>
-      <td>5.0</td>
       <td>6.147</td>
       <td>6.156204</td>
       <td>10085.648438</td>
@@ -1099,27 +1100,287 @@ Add 720 new continuous observations.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># join the beliefs and observation</span>
 <span class="n">trajectories</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">aarhus_weather_df</span><span class="p">,</span> <span class="n">trajectories</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">trajectories</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">trajectories</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">])</span>
+<span class="n">trajectories</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>time</th>
+      <th>t2m</th>
+      <th>prectotland</th>
+      <th>precsnoland</th>
+      <th>snomas</th>
+      <th>rhoa</th>
+      <th>swgdn</th>
+      <th>swtdn</th>
+      <th>cldtot</th>
+      <th>observation</th>
+      <th>...</th>
+      <th>x_1_pi</th>
+      <th>x_1_muhat</th>
+      <th>x_1_pihat</th>
+      <th>x_1_surprise</th>
+      <th>x_2_mu</th>
+      <th>x_2_pi</th>
+      <th>x_2_muhat</th>
+      <th>x_2_pihat</th>
+      <th>x_2_surprise</th>
+      <th>surprise</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2019-01-01 00:00:00</td>
+      <td>7.387</td>
+      <td>0.124</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.249</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.931</td>
+      <td>7.387</td>
+      <td>...</td>
+      <td>10244.500000</td>
+      <td>7.387000</td>
+      <td>244.498947</td>
+      <td>NaN</td>
+      <td>0.427208</td>
+      <td>6.699697</td>
+      <td>0.500000</td>
+      <td>6.676144</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2019-01-01 01:00:00</td>
+      <td>7.472</td>
+      <td>0.200</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.247</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.865</td>
+      <td>7.472</td>
+      <td>...</td>
+      <td>10256.577148</td>
+      <td>7.387000</td>
+      <td>256.576599</td>
+      <td>-0.947414</td>
+      <td>0.492652</td>
+      <td>5.863727</td>
+      <td>0.427208</td>
+      <td>5.023926</td>
+      <td>-0.030151</td>
+      <td>-0.977565</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2019-01-01 02:00:00</td>
+      <td>7.635</td>
+      <td>0.196</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.244</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.701</td>
+      <td>7.635</td>
+      <td>...</td>
+      <td>10240.712891</td>
+      <td>7.469874</td>
+      <td>240.711533</td>
+      <td>6.035478</td>
+      <td>0.837745</td>
+      <td>7.473376</td>
+      <td>0.492652</td>
+      <td>4.538707</td>
+      <td>0.535200</td>
+      <td>6.570678</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2019-01-01 03:00:00</td>
+      <td>7.224</td>
+      <td>0.061</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.245</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.387</td>
+      <td>7.224</td>
+      <td>...</td>
+      <td>10171.632812</td>
+      <td>7.631119</td>
+      <td>171.632126</td>
+      <td>5.453125</td>
+      <td>1.541305</td>
+      <td>18.525702</td>
+      <td>0.837745</td>
+      <td>5.446760</td>
+      <td>2.658163</td>
+      <td>8.111288</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2019-01-01 04:00:00</td>
+      <td>6.147</td>
+      <td>0.018</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.250</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.128</td>
+      <td>6.147</td>
+      <td>...</td>
+      <td>10085.648438</td>
+      <td>7.230870</td>
+      <td>85.647461</td>
+      <td>187.365509</td>
+      <td>2.380432</td>
+      <td>57.856964</td>
+      <td>1.541305</td>
+      <td>9.637056</td>
+      <td>6.552755</td>
+      <td>193.918259</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 21 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># aggregate over one day</span>
+<span class="n">trajectories</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">trajectories</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)[[</span><span class="s2">&quot;x_1_mu&quot;</span><span class="p">,</span> <span class="s2">&quot;prectotland&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x_1_mu</th>
+      <th>prectotland</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>131.603577</td>
+      <td>0.714</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>39.268307</td>
+      <td>0.023</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>11.851880</td>
+      <td>0.042</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>108.671432</td>
+      <td>0.113</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>118.146599</td>
+      <td>0.057</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>360</th>
+      <td>0.000000</td>
+      <td>0.122</td>
+    </tr>
+    <tr>
+      <th>361</th>
+      <td>0.000000</td>
+      <td>0.065</td>
+    </tr>
+    <tr>
+      <th>362</th>
+      <td>0.000000</td>
+      <td>0.104</td>
+    </tr>
+    <tr>
+      <th>363</th>
+      <td>0.000000</td>
+      <td>0.783</td>
+    </tr>
+    <tr>
+      <th>364</th>
+      <td>0.000000</td>
+      <td>0.028</td>
+    </tr>
+  </tbody>
+</table>
+<p>365 rows × 2 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1 - create a decision function: based on the beliefs over the previous hour/day/week, decide e.g. if the agent should carry an umbrella</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1 - create a decision function: based on the beliefs over the previous hour/day/week, decide if the agent should carry an umbrella</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2 - create an outcome function: based on the parameters that were recorded in the main data frame, what was the outcome (e.g. raining or not?)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2 - create an outcome function: based on the parameters that were recorded in the main data fram, what was the outcome (raining or not?)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3  -compute the surprise: how surprise is the agent if it was raining and no umbrella etc...</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3 - compute the surprise: how surprised are the agents if it was raining and no umbrella etc...</span>
 </pre></div>
 </div>
 </div>
