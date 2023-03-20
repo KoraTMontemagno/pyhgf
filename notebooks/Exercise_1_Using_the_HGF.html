@@ -497,7 +497,7 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
 <p>If we take as an example the two-level continuous HGF <span id="id1">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span>, the model is constituted of two states of interest, <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>. The node <span class="math notranslate nohighlight">\(x_1\)</span> is performing a GRW, but it is also paired with <span class="math notranslate nohighlight">\(x_2\)</span> via <em>volatility coupling</em>. This means that for state <span class="math notranslate nohighlight">\(x_1\)</span>, the mean of the Gaussian random walk on time point <span class="math notranslate nohighlight">\(k\)</span> is given by its previous value <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span>, while the step size (or variance) depends on the current value of the higher level state, <span class="math notranslate nohighlight">\(x_2^{(k)}\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[
-x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \, f(x_2^{(k)}))
+x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \, f(x_2^{(k)}))
 \]</div>
 <p>where the exact dependency is of the form</p>
 <div class="math notranslate nohighlight">
@@ -507,7 +507,7 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \, f(x_2^{(k)}))
 <p>At the higher level of the hierarchy (here the second level), the nodes are not inheriting anything from their parents anymore, and only rely on their own variance:</p>
 <div class="math notranslate nohighlight">
 \[
-x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
+x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 \]</div>
 <div class="admonition-exercise-2 admonition">
 <p class="admonition-title">Exercise 2</p>
@@ -687,7 +687,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:08&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -708,9 +708,9 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 13 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 15 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -729,7 +729,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
         &lt;Axes: title={&#39;center&#39;: &#39;omega_1&#39;}&gt;]], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/1ed93b5b99128d2bf900fad9331f04fda37d9750b66bc0c7cc1876c432c129df.png" src="../_images/1ed93b5b99128d2bf900fad9331f04fda37d9750b66bc0c7cc1876c432c129df.png" />
+<img alt="../_images/5e82db2f822f1d33b163301856e523d86315ddd1b2a03d69b53d51b3ad6ec7ed.png" src="../_images/5e82db2f822f1d33b163301856e523d86315ddd1b2a03d69b53d51b3ad6ec7ed.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -771,14 +771,14 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
   <tbody>
     <tr>
       <th>omega_1</th>
-      <td>-6.306</td>
-      <td>0.708</td>
-      <td>-7.602</td>
-      <td>-5.039</td>
-      <td>0.026</td>
-      <td>0.019</td>
-      <td>780.0</td>
-      <td>891.0</td>
+      <td>-6.321</td>
+      <td>0.735</td>
+      <td>-7.637</td>
+      <td>-4.923</td>
+      <td>0.031</td>
+      <td>0.022</td>
+      <td>604.0</td>
+      <td>681.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
