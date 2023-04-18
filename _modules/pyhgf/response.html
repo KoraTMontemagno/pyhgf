@@ -489,61 +489,6 @@ document.write(`
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="total_gaussian_surprise"><a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.total_gaussian_surprise.html#pyhgf.response.total_gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">total_gaussian_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of the Gaussian surprise across probabilistic network.</span>
-
-<span class="sd">    .. note::</span>
-<span class="sd">      The function returns `jnp.inf` if the model could not fit at a given time point.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    hgf :</span>
-<span class="sd">        Instance of the HGF model.</span>
-<span class="sd">    response_function_parameters :</span>
-<span class="sd">        No additional parameters are required to compute the Gaussian surprise.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    surprise :</span>
-<span class="sd">        The model surprise given the input data.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># compute the sum of Gaussian surprise across every nodes</span>
-    <span class="n">surprise</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-    <span class="c1"># first we start with nodes that are value parents to input nodes</span>
-    <span class="n">input_idx_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">input_parents_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">inp</span> <span class="ow">in</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="p">:</span>
-        <span class="n">input_idx_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inp</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
-        <span class="n">va_pa</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">inp</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
-        <span class="n">input_parents_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">va_pa</span><span class="p">)</span>
-        <span class="n">surprise</span> <span class="o">+=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
-            <span class="n">gaussian_surprise</span><span class="p">(</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">inp</span><span class="o">.</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
-                <span class="n">muhat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">va_pa</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                <span class="n">pihat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">va_pa</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-
-    <span class="c1"># then we do the same for every node that is not an input node</span>
-    <span class="c1"># and not the parent of an input node</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">input_idx_list</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">input_parents_list</span><span class="p">):</span>
-            <span class="n">surprise</span> <span class="o">+=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
-                <span class="n">gaussian_surprise</span><span class="p">(</span>
-                    <span class="n">x</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
-                    <span class="n">muhat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">pihat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-
-    <span class="c1"># Return an infinite surprise if the model could not fit at any point</span>
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">jnp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">])),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">surprise</span>
-    <span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="first_level_binary_surprise"><a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.first_level_binary_surprise.html#pyhgf.response.first_level_binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">first_level_binary_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of the binary surprise along the time series (binary HGF).</span>
 
