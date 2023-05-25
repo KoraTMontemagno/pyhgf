@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -47,8 +48,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/4-Multilevel_HGF';</script>
@@ -603,7 +609,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/48e99ad38f4aa5718d8bbf4087320fac74568b0dc983e0d63a643d87e2a94e9b.svg" src="../_images/48e99ad38f4aa5718d8bbf4087320fac74568b0dc983e0d63a643d87e2a94e9b.svg" /></div>
+<img alt="../_images/92c676f5771b95b51df266b3ec120299c4e42c2ae1e9f59c73ed9911c868e08f.svg" src="../_images/92c676f5771b95b51df266b3ec120299c4e42c2ae1e9f59c73ed9911c868e08f.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -647,9 +653,9 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 01:54&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 01:13&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 115 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 74 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -669,7 +675,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
   numba_fn = numba.jit(**self.kwargs)(self.function)
 </pre></div>
 </div>
-<img alt="../_images/2276d98a0cede06801d59a12a2c949ce0bea3ddaf0d88b005fd781f0dda20a4a.png" src="../_images/2276d98a0cede06801d59a12a2c949ce0bea3ddaf0d88b005fd781f0dda20a4a.png" />
+<img alt="../_images/3f92801ed82e59de90bb74616ed5648a5c8ff08e7b38ed873021f29d5390c0ad.png" src="../_images/3f92801ed82e59de90bb74616ed5648a5c8ff08e7b38ed873021f29d5390c0ad.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -769,7 +775,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/03e6b0e3b8e59a79d016df284a9e587c498f9799aaed5b98a22d8147ec0689f0.svg" src="../_images/03e6b0e3b8e59a79d016df284a9e587c498f9799aaed5b98a22d8147ec0689f0.svg" /></div>
+<img alt="../_images/8c98ff3466caf3f3270f7a2cdb6ca45872e6409a8d9b618981eadd76a402b7a1.svg" src="../_images/8c98ff3466caf3f3270f7a2cdb6ca45872e6409a8d9b618981eadd76a402b7a1.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -813,9 +819,9 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:47&lt;00:00 Sampling chain 0, 21 divergences]
+      100.00% [2000/2000 00:31&lt;00:00 Sampling chain 0, 24 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 47 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 31 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -831,7 +837,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a636c9661c107906ff670c6b928f98882870d6bb8c4ae9f836fe2f45e5f6296b.png" src="../_images/a636c9661c107906ff670c6b928f98882870d6bb8c4ae9f836fe2f45e5f6296b.png" />
+<img alt="../_images/7fc8c29c2c971e01160716b1c773af4e7ac7c7c09a8189faf3435f84a71af24c.png" src="../_images/7fc8c29c2c971e01160716b1c773af4e7ac7c7c09a8189faf3435f84a71af24c.png" />
 </div>
 </div>
 </section>

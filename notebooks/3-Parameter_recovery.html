@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -47,8 +48,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/3-Parameter_recovery';</script>
@@ -606,9 +612,9 @@ if &#39;google.colab&#39; in sys.modules:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:38&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:25&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 39 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 26 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -628,7 +634,7 @@ if &#39;google.colab&#39; in sys.modules:
   numba_fn = numba.jit(**self.kwargs)(self.function)
 </pre></div>
 </div>
-<img alt="../_images/a4e7746650c021021c9a352122b7910f0c6c9e818756b953632a5823ec63f77c.png" src="../_images/a4e7746650c021021c9a352122b7910f0c6c9e818756b953632a5823ec63f77c.png" />
+<img alt="../_images/4fc4b101869c3f34e5d5bf0e817b93bbb5a428b7ad68ce83ae8bd45b0fb3e8b6.png" src="../_images/4fc4b101869c3f34e5d5bf0e817b93bbb5a428b7ad68ce83ae8bd45b0fb3e8b6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -677,74 +683,74 @@ if &#39;google.colab&#39; in sys.modules:
   <tbody>
     <tr>
       <th>omega_1[0]</th>
-      <td>-7.228</td>
-      <td>0.229</td>
-      <td>-7.685</td>
-      <td>-6.834</td>
+      <td>-7.230</td>
+      <td>0.231</td>
+      <td>-7.665</td>
+      <td>-6.794</td>
       <td>0.006</td>
       <td>0.004</td>
-      <td>1471.0</td>
-      <td>684.0</td>
+      <td>1379.0</td>
+      <td>818.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[1]</th>
-      <td>-6.942</td>
-      <td>0.220</td>
-      <td>-7.344</td>
-      <td>-6.543</td>
+      <td>-6.937</td>
+      <td>0.215</td>
+      <td>-7.293</td>
+      <td>-6.481</td>
       <td>0.006</td>
       <td>0.004</td>
-      <td>1248.0</td>
-      <td>767.0</td>
+      <td>1474.0</td>
+      <td>878.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[2]</th>
-      <td>-6.636</td>
-      <td>0.226</td>
-      <td>-7.093</td>
-      <td>-6.246</td>
-      <td>0.005</td>
-      <td>0.004</td>
-      <td>1748.0</td>
-      <td>564.0</td>
+      <td>-6.629</td>
+      <td>0.227</td>
+      <td>-7.063</td>
+      <td>-6.226</td>
+      <td>0.008</td>
+      <td>0.006</td>
+      <td>832.0</td>
+      <td>595.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[3]</th>
-      <td>-7.634</td>
-      <td>0.198</td>
-      <td>-7.957</td>
-      <td>-7.230</td>
-      <td>0.008</td>
-      <td>0.006</td>
-      <td>728.0</td>
-      <td>556.0</td>
+      <td>-7.648</td>
+      <td>0.199</td>
+      <td>-7.994</td>
+      <td>-7.257</td>
+      <td>0.005</td>
+      <td>0.004</td>
+      <td>1491.0</td>
+      <td>727.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[4]</th>
-      <td>-7.074</td>
-      <td>0.227</td>
-      <td>-7.517</td>
-      <td>-6.656</td>
+      <td>-7.067</td>
+      <td>0.236</td>
+      <td>-7.474</td>
+      <td>-6.603</td>
+      <td>0.007</td>
       <td>0.005</td>
-      <td>0.004</td>
-      <td>1820.0</td>
-      <td>881.0</td>
+      <td>1172.0</td>
+      <td>733.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[5]</th>
-      <td>-7.111</td>
-      <td>0.217</td>
-      <td>-7.496</td>
-      <td>-6.722</td>
+      <td>-7.107</td>
+      <td>0.212</td>
+      <td>-7.483</td>
+      <td>-6.683</td>
       <td>0.006</td>
       <td>0.004</td>
-      <td>1205.0</td>
-      <td>743.0</td>
+      <td>1199.0</td>
+      <td>816.0</td>
       <td>NaN</td>
     </tr>
   </tbody>

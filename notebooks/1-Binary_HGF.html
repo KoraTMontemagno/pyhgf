@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -47,8 +48,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/1-Binary_HGF';</script>
@@ -723,7 +729,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" src="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" /></div>
+<img alt="../_images/0d547960d6c0cacb00155a6e657ec6784e1521e51a5fa0e376d8929e28e74702.svg" src="../_images/0d547960d6c0cacb00155a6e657ec6784e1521e51a5fa0e376d8929e28e74702.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -767,9 +773,9 @@ if &#39;google.colab&#39; in sys.modules:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 8 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 5 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -789,7 +795,7 @@ if &#39;google.colab&#39; in sys.modules:
   numba_fn = numba.jit(**self.kwargs)(self.function)
 </pre></div>
 </div>
-<img alt="../_images/fcd1d8b6bb54fd7d73c12d0edb57043e2ea1be6c40450056c5e16e4145ec6043.png" src="../_images/fcd1d8b6bb54fd7d73c12d0edb57043e2ea1be6c40450056c5e16e4145ec6043.png" />
+<img alt="../_images/0385680d6740e6d5c894f45210fa632091506720c952a489e7b60884c2f144fe.png" src="../_images/0385680d6740e6d5c894f45210fa632091506720c952a489e7b60884c2f144fe.png" />
 </div>
 </div>
 </section>
@@ -847,7 +853,7 @@ Add 320 new binary observations.
       dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/2a9485072617276e5eb714022c6eda71b17a7cc91764293da317d6c0cd4378f2.png" src="../_images/2a9485072617276e5eb714022c6eda71b17a7cc91764293da317d6c0cd4378f2.png" />
+<img alt="../_images/f4a4655c2522d8fd38ba69de12625d2ab7937aa244090dbd0c4403ada63473f6.png" src="../_images/f4a4655c2522d8fd38ba69de12625d2ab7937aa244090dbd0c4403ada63473f6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -857,7 +863,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.9913, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.99838, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -924,7 +930,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/36555b6eaa4872ede7c225f6980dcdc89fb6d582368efea24e3d521dc8c7b9c4.svg" src="../_images/36555b6eaa4872ede7c225f6980dcdc89fb6d582368efea24e3d521dc8c7b9c4.svg" /></div>
+<img alt="../_images/7eb1e41dc318b3ca61b0f6019fa3d82a77fa4385d81d79444babb1fe950e1347.svg" src="../_images/7eb1e41dc318b3ca61b0f6019fa3d82a77fa4385d81d79444babb1fe950e1347.svg" /></div>
 </div>
 </section>
 <section id="id9">
@@ -968,9 +974,9 @@ Add 320 new binary observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:11&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 11 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 7 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -986,7 +992,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/520bc1f7253a7b0f05b6008f62d006c21360a92cb5dc022a11066c2ee7a02b4c.png" src="../_images/520bc1f7253a7b0f05b6008f62d006c21360a92cb5dc022a11066c2ee7a02b4c.png" />
+<img alt="../_images/2c7a99ca25405546cbbad89507e627ecbddb533ac640a47db5592080d1147e53.png" src="../_images/2c7a99ca25405546cbbad89507e627ecbddb533ac640a47db5592080d1147e53.png" />
 </div>
 </div>
 </section>
@@ -1044,7 +1050,7 @@ Add 320 new binary observations.
        &lt;Axes: ylabel=&#39;$\\mu_1$&#39;&gt;, &lt;Axes: &gt;], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/8fd1d899db9a53066eb297d6b65e670ccf84758ebcf432677b6f97c9b4b23de1.png" src="../_images/8fd1d899db9a53066eb297d6b65e670ccf84758ebcf432677b6f97c9b4b23de1.png" />
+<img alt="../_images/7ada7d120a6e8e2645f40815552a59b6ae9602352802f5fb7853f448f4a947b9.png" src="../_images/7ada7d120a6e8e2645f40815552a59b6ae9602352802f5fb7853f448f4a947b9.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1054,7 +1060,7 @@ Add 320 new binary observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.00368, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.01155, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1083,11 +1089,11 @@ jax   : 0.4.10
 jaxlib: 0.4.10
 
 seaborn   : 0.12.2
-arviz     : 0.15.1
-jax       : 0.4.10
-matplotlib: 3.7.1
-pymc      : 5.4.0
 sys       : 3.10.11 (main, Apr  6 2023, 07:59:08) [GCC 11.3.0]
+pymc      : 5.4.0
+jax       : 0.4.10
+arviz     : 0.15.1
+matplotlib: 3.7.1
 
 Watermark: 2.4.2
 </pre></div>

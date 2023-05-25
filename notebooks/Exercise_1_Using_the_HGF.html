@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -47,8 +48,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Exercise_1_Using_the_HGF';</script>
@@ -672,7 +678,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:09&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -693,9 +699,9 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:08&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 18 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 11 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -718,7 +724,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
         &lt;Axes: title={&#39;center&#39;: &#39;omega_1&#39;}&gt;]], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/c31a3b364b74d8cbc237301cfcb70ce3b3ad37c88b875e31477755d30273b025.png" src="../_images/c31a3b364b74d8cbc237301cfcb70ce3b3ad37c88b875e31477755d30273b025.png" />
+<img alt="../_images/1dd249f07dea63258799949769072a1ae030cd53fe897c9c7bf0e0c6b724e66d.png" src="../_images/1dd249f07dea63258799949769072a1ae030cd53fe897c9c7bf0e0c6b724e66d.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -764,14 +770,14 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
   <tbody>
     <tr>
       <th>omega_1</th>
-      <td>-6.288</td>
-      <td>0.748</td>
-      <td>-7.562</td>
-      <td>-4.814</td>
-      <td>0.033</td>
-      <td>0.023</td>
-      <td>590.0</td>
-      <td>549.0</td>
+      <td>-6.304</td>
+      <td>0.701</td>
+      <td>-7.539</td>
+      <td>-4.908</td>
+      <td>0.026</td>
+      <td>0.018</td>
+      <td>756.0</td>
+      <td>768.0</td>
       <td>1.0</td>
     </tr>
   </tbody>

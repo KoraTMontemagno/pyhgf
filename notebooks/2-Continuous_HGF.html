@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -47,8 +48,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/2-Continuous_HGF';</script>
@@ -836,9 +842,9 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:08&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 9 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 5 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -858,7 +864,7 @@ Add 614 new continuous observations.
   numba_fn = numba.jit(**self.kwargs)(self.function)
 </pre></div>
 </div>
-<img alt="../_images/927c2c84c672b3ea9f29c3a52d80ef57cf1e4f62deb8d3f7a4f6d6a4229b122b.png" src="../_images/927c2c84c672b3ea9f29c3a52d80ef57cf1e4f62deb8d3f7a4f6d6a4229b122b.png" />
+<img alt="../_images/27897ec6b84457112aa789a70db981bb13bdfb3ad9ed02bda651bcbec1537d09.png" src="../_images/27897ec6b84457112aa789a70db981bb13bdfb3ad9ed02bda651bcbec1537d09.png" />
 </div>
 </div>
 </section>
@@ -912,7 +918,7 @@ Add 614 new continuous observations.
       dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/833af1ff4aea3cccd446b643ea076ec9f5fab394a9ef7816aabdd1172bda6e8e.png" src="../_images/833af1ff4aea3cccd446b643ea076ec9f5fab394a9ef7816aabdd1172bda6e8e.png" />
+<img alt="../_images/dc9d5c709505a47136264259271a0871f74a554be3a44aebc6171e26376774f8.png" src="../_images/dc9d5c709505a47136264259271a0871f74a554be3a44aebc6171e26376774f8.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -922,7 +928,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-656.7074, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-656.7203, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1027,9 +1033,9 @@ Add 614 new continuous observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:10&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 10 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 7 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -1045,7 +1051,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3f551ccfb4df9da0eaff98a296d47a51512039632351e54f715585fe6a13c48c.png" src="../_images/3f551ccfb4df9da0eaff98a296d47a51512039632351e54f715585fe6a13c48c.png" />
+<img alt="../_images/ee05cdf8498bba7615eaabe6502cf4c14764923de4fa0ba1ccabb55f5951200b.png" src="../_images/ee05cdf8498bba7615eaabe6502cf4c14764923de4fa0ba1ccabb55f5951200b.png" />
 </div>
 </div>
 </section>
@@ -1094,7 +1100,7 @@ Add 614 new continuous observations.
        &lt;Axes: ylabel=&#39;$\\mu_1$&#39;&gt;, &lt;Axes: &gt;], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/91a25440da7bb98643f601cd75152613239ef7849fe25ddada742d8e1a6175f2.png" src="../_images/91a25440da7bb98643f601cd75152613239ef7849fe25ddada742d8e1a6175f2.png" />
+<img alt="../_images/586007edbfc1de892e40b30821646d26faad79f303246297609f70ca49accecf.png" src="../_images/586007edbfc1de892e40b30821646d26faad79f303246297609f70ca49accecf.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1104,7 +1110,7 @@ Add 614 new continuous observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-653.90924, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-653.74133, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1132,12 +1138,12 @@ pyhgf : 0.0.4
 jax   : 0.4.10
 jaxlib: 0.4.10
 
-matplotlib: 3.7.1
-jax       : 0.4.10
 arviz     : 0.15.1
-pymc      : 5.4.0
+jax       : 0.4.10
 seaborn   : 0.12.2
 sys       : 3.10.11 (main, Apr  6 2023, 07:59:08) [GCC 11.3.0]
+matplotlib: 3.7.1
+pymc      : 5.4.0
 
 Watermark: 2.4.2
 </pre></div>
