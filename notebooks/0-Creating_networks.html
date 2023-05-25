@@ -34,7 +34,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
     <link rel="stylesheet" type="text/css" href="../_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -52,7 +51,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/0.1-Creating_networks';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/0-Creating_networks';</script>
     <link rel="shortcut icon" href="../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -145,13 +144,6 @@
   </p>
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../theory.html">
-                        Theory
-                      </a>
-                    </li>
-                
-
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../tutorials.html">
                         Tutorials
@@ -296,13 +288,6 @@ document.write(`
   </p>
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../theory.html">
-                        Theory
-                      </a>
-                    </li>
-                
-
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../tutorials.html">
                         Tutorials
@@ -456,7 +441,10 @@ document.write(`
 \[\theta = \{\theta_1, ..., \theta_{k}\}\]</div>
 <p>a set of parameters. Nodes’ parameters can be used to register sufficient statistics of the distributions as well as various coupling weights. The <em>shape</em> of the hierarchical structure is defined by the <a class="reference external" href="https://en.wikipedia.org/wiki/Adjacency_list">adjacency list</a></p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}\xi = \{\xi_1, ..., \xi_{k} \}$$, \\where every edge $\xi_k$ contains $m$ sets of node indexes, $m$ being the adjacency dimension (here we only consider value and volatility coupling, therefore $m=2$). The propagation of precision-weighted prediction error under new observations (or other generic belief propagation dynamics) are defined by the set of $n$ update functions\\$$\mathcal{F} = \{f_1, ..., f_n\}\end{aligned}\end{align} \]</div>
+\[\xi = \{\xi_1, ..., \xi_{k} \}\]</div>
+<p>where every edge <span class="math notranslate nohighlight">\(\xi_k\)</span> contains <span class="math notranslate nohighlight">\(m\)</span> sets of node indexes, <span class="math notranslate nohighlight">\(m\)</span> being the adjacency dimension (here we only consider value and volatility coupling, therefore <span class="math notranslate nohighlight">\(m=2\)</span>). The propagation of precision-weighted prediction error under new observations (or other generic belief propagation dynamics) are defined by the set of <span class="math notranslate nohighlight">\(n\)</span> update functions</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{F} = \{f_1, ..., f_n\}\]</div>
 <p>Each update function is parametrized by a node index <span class="math notranslate nohighlight">\(n \in 1, ..., k\)</span> and the current state of the HGF model at time <span class="math notranslate nohighlight">\(t\)</span>. The most standard uses of the HGF only require continuous and/or binary update functions for input and states node. The propagation dynamics (the direction of the information flow) are controlled by the ordered update sequence</p>
 <p>$<span class="math notranslate nohighlight">\(\Sigma = [f_1(n_1), ..., f_i(n_j), f \in \mathcal{F}, n \in 1, ..., k ]\)</span>$,</p>
 <p>Each item of this sequence pairs a node index with an update function as previously defined.</p>
@@ -467,7 +455,7 @@ document.write(`
 <p>Networks are represented by two variables and two sets of functions:</p>
 <ol class="arabic simple">
 <li><p>a dictionary <code class="docutils literal notranslate"><span class="pre">parameter_structure</span></code> that registers the nodes’ parameters.</p></li>
-<li><p>a named tuple <code class="docutils literal notranslate"><span class="pre">node_structure</span></code> that encodes the <a class="reference external" href="https://en.wikipedia.org/wiki/Adjacency_list">adjacency list</a> (see <span class="xref std std-ref">pyhgf.typing.Indexes</span>).</p></li>
+<li><p>a named tuple <code class="docutils literal notranslate"><span class="pre">node_structure</span></code> that encodes the <a class="reference external" href="https://en.wikipedia.org/wiki/Adjacency_list">adjacency list</a> (see the <span class="xref myst">Indexes</span>).</p></li>
 <li><p>updates functions (see e.g. the <span class="xref std std-ref">pyhgf.continuous</span> and <span class="xref std std-ref">pyhgf.continuous</span> modules)</p></li>
 <li><p>an update sequence as a tuple of function/index pairs.</p></li>
 </ol>
@@ -609,7 +597,7 @@ document.write(`
 <p>Models that are created with parameter structures and node structures only represent static configuration of the HGF, they are not yet filtering new observation or acting in response to specific input. To add a dynamic and responsive layer, we need two additional components:</p>
 <ul class="simple">
 <li><p>update functions <span class="math notranslate nohighlight">\(\mathcal{F} = \{f_1, ..., f_n\}\)</span></p></li>
-<li><p>update sequences $<span class="math notranslate nohighlight">\(\Sigma = [f_1(n_1), ..., f_i(n_j), f \in \mathcal{F}, n \in 1, ..., k ]\)</span>$,</p></li>
+<li><p>update sequences <span class="math notranslate nohighlight">\(\Sigma = [f_1(n_1), ..., f_i(n_j), f \in \mathcal{F}, n \in 1, ..., k ]\)</span>,</p></li>
 </ul>
 <section id="update-functions">
 <h3>Update functions<a class="headerlink" href="#update-functions" title="Permalink to this heading">#</a></h3>
@@ -677,7 +665,7 @@ document.write(`
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/0.1-Creating_networks.md.txt">
+    <a href="../_sources/notebooks/0-Creating_networks.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

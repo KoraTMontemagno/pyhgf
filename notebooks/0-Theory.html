@@ -1,0 +1,1041 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>The Hierarchical Gaussian Filter &#8212; pyhgf 0.0.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/0-Theory';</script>
+    <link rel="shortcut icon" href="../_static/logo_small.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_small.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo_small.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">pyhgf</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../cite.html">
+                        Cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box"></i></span>
+            <label class="sr-only">Pypi</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../cite.html">
+                        Cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box"></i></span>
+            <label class="sr-only">Pypi</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">The Hierarchical Gaussian Filter</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-hierarchical-gaussian-filter">
+<span id="theory"></span><h1>The Hierarchical Gaussian Filter<a class="headerlink" href="#the-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
+<p>In this notebook, we introduce the main oncepts on which the Hierarchical Gaussian Filter (HGF) is based. We describe the main equations and illustrate the examples with Python code. We start with the generative model of the HGF, which describes how the model assume that the data is being generated. This generative structure is then used to filter the observation (i.e. the sensory part of the model), which is then used by the agent to produce behaviors (i.e. the action part of the model). Next, we show how this model can be “inverted” and used by an agent to infer parameter values that generated the sensory inputs. From there, we discuss the notion of prediction error and how derivations of the model can be used to infer probability densities given observed behavioural outcomes.</p>
+<section id="the-generative-model">
+<h2>The generative model<a class="headerlink" href="#the-generative-model" title="Permalink to this heading">#</a></h2>
+<p>To illustrate the generative model on which the HGF is based, we will start with a simple  two-level continuous HGF (see also the tutorial <a class="reference internal" href="2-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">The continuous Hierarchical Gaussian Filter</span></a>). The generative model that underpine the continuous HGF is a generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Random_walk#Gaussian_random_walk">Gaussian Random Walk</a> (GRW). A GRW generate a new observation <span class="math notranslate nohighlight">\(x_1^{(k)}\)</span> at each time step <span class="math notranslate nohighlight">\(k\)</span> from a normal distribution and using the previous observation <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span> such as:</p>
+<div class="math notranslate nohighlight">
+\[
+x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma^2\)</span> is the variance of the distribution. In the example below, we use <span class="math notranslate nohighlight">\(\sigma^2 = 1\)</span> and <span class="math notranslate nohighlight">\(x_1^{(0)} = 0\)</span>.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="c1"># random walk</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">200</span><span class="p">))</span>  <span class="c1"># GRW</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># starting at 0</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.4</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time step (k)&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/de2a155e25763ba5d7d76ddad5d1bbcf59b9248f59d32ebbd42df5ab2ff19cae.png" src="../_images/de2a155e25763ba5d7d76ddad5d1bbcf59b9248f59d32ebbd42df5ab2ff19cae.png" />
+</div>
+</div>
+<p>This simple process will be our first building block. Importantly here, the variability of the sensory input is constant across time: even if we don’t know exactly in which direction the time series is going to move in the future, we know that is is unlikely to make certain kind of big jumps, because it is controlled by a fixed parameter, the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</p>
+<section id="volatility-coupling">
+<h3>Volatility coupling<a class="headerlink" href="#volatility-coupling" title="Permalink to this heading">#</a></h3>
+<p>Now, we can also decide to change that and let the variance itself being a stochastic process generated by another randome walk. The HGF fundamentaly captitalize on this notion and generalize the standard GRW by letting the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span> being controlled by a higher level node.</p>
+<p>If we take as example the two-level continuous HGF <span id="id1">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span>, the model is constituded of two states of interest, <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>. <span class="math notranslate nohighlight">\(x_1\)</span> is performing a GRW as previously defined, but it is also paired with <span class="math notranslate nohighlight">\(x_2\)</span> to each other via <em>volatility coupling</em>. This means that for state <span class="math notranslate nohighlight">\(x_1\)</span>, the mean of the Gaussian random walk on trial <span class="math notranslate nohighlight">\(k\)</span> is given by its previous value <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span>, while the step size (or variance) depends on the current value of the higher level state, <span class="math notranslate nohighlight">\(x_2^{(k)}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
+x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \, f(x_2^{(k)}))
+\]</div>
+<p>where the exact dependency is of the form</p>
+<div class="math notranslate nohighlight">
+\[
+    f(x_2^{(k)}) = \exp(\kappa_1 x_2^{(k)} + \omega_1)
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(\kappa\)</span> as scalling parameter (by defaults in most case it is set to <code class="docutils literal notranslate"><span class="pre">1</span></code> which indicates a complete volatility coupling), and <span class="math notranslate nohighlight">\(\omega_1\)</span> being the <em>evolution rate</em>, also refered as the tonic part of the variance, the part that is not inherited from parent nodes.</p>
+<p>At the higher level of the hierarchy (here the second level), the nodes are not inheriting anything from their parents anymore, and only rely on their own variance:</p>
+<div class="math notranslate nohighlight">
+\[
+x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
+\]</div>
+<p>The model described above can be implemented in Python as the following:</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">kappa_1</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">omega_1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.0</span>
+<span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.0</span>
+<span class="n">mu_1</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">mu_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x_2</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># two-level hierarchical gaussian random walk</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">):</span>
+
+    <span class="c1"># x2</span>
+    <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
+    <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_2</span><span class="p">)</span>
+
+    <span class="c1"># x1</span>
+    <span class="n">pi_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">kappa_1</span> <span class="o">*</span> <span class="n">mu_2</span> <span class="o">+</span> <span class="n">omega_1</span><span class="p">)</span>
+    <span class="n">mu_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_1</span><span class="p">,</span> <span class="n">pi_1</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+
+    <span class="n">x_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_1</span><span class="p">)</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_2</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;indianred&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time step (k)&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/d4b0ee7ecdb2b7b751b667c22f19b29aad334a114080b0bab5a3038fc1144ada.png" src="../_images/d4b0ee7ecdb2b7b751b667c22f19b29aad334a114080b0bab5a3038fc1144ada.png" />
+</div>
+</div>
+<p>In this example, it becomes apparent that the volatility of the observation is not constant in time anymore, but depends on the values observed at the level above.</p>
+</section>
+<section id="value-coupling">
+<h3>Value coupling<a class="headerlink" href="#value-coupling" title="Permalink to this heading">#</a></h3>
+<p>This distant influence of one node on another is called <em>volatility coupling</em> (see below). However, a higher-level state can also have influence on a lower-level state by influencing its mean instead of its variance. In that case, the mean of the Gaussian random walk at one level is a function not only of its own previous value, but also the current value of the higher-level state. Such model can be formalized as follow:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{1} x_2^{(k)}, \, \exp(\omega_1)) \\
+    x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is the value coupling between the two nodes.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">alpha_1</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span>
+<span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x_2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># two-level hierarchical gaussian random walk</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+
+    <span class="c1"># x2</span>
+    <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
+    <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_2</span><span class="p">)</span>
+
+    <span class="c1"># x1</span>
+    <span class="n">pi_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_1</span><span class="p">)</span>
+    <span class="n">mu_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_1</span> <span class="o">+</span> <span class="p">(</span><span class="n">alpha_1</span> <span class="o">*</span> <span class="n">mu_2</span><span class="p">),</span> <span class="n">pi_1</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_1</span><span class="p">)</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_2</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;indianred&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time step (k)&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/c6f90fd596977d414fe544f4436a4256fec4eadad7aee1a151ead1ff5a4d1aa0.png" src="../_images/c6f90fd596977d414fe544f4436a4256fec4eadad7aee1a151ead1ff5a4d1aa0.png" />
+</div>
+</div>
+<p>Finally, volatility and value coupling can operate at the same time on the same node, like in this example where <span class="math notranslate nohighlight">\(x_{1}\)</span> has its values coupled with <span class="math notranslate nohighlight">\(x_{2}\)</span> and its volatility coupled with <span class="math notranslate nohighlight">\(x_{3}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+x_1^{(k)}          \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{1} x_2^{(k)}, \exp(\kappa_1 x_3^{(k)} + \omega_1)) \\
+x_2^{(k)}          \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2)) \\
+x_3^{(k)}          \sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\omega_3)) \\
+\end{split}\]</div>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">alpha_1</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">kappa_1</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_3</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">12.0</span>
+<span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span><span class="p">,</span> <span class="n">mu_3</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+<span class="n">x_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x_2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x_3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># two-level hierarchical gaussian random walk</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    
+    <span class="c1"># x3</span>
+    <span class="n">pi_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_3</span><span class="p">)</span>
+    <span class="n">mu_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_3</span><span class="p">,</span> <span class="n">pi_3</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_3</span><span class="p">)</span>
+
+    <span class="c1"># x2</span>
+    <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
+    <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_2</span><span class="p">)</span>
+
+    <span class="c1"># x1</span>
+    <span class="n">pi_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">kappa_1</span> <span class="o">*</span> <span class="n">mu_3</span> <span class="o">+</span> <span class="n">omega_1</span><span class="p">)</span>
+    <span class="n">mu_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_1</span> <span class="o">+</span> <span class="p">(</span><span class="n">alpha_1</span> <span class="o">*</span> <span class="n">mu_2</span><span class="p">),</span> <span class="n">pi_1</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="n">x_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu_1</span><span class="p">)</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_3</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;volatility coupling&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_2</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;indianred&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;value coupling&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time step (k)&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{1}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{2}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$x_</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">);</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/4db8fce2dd25952c606794db81a22a5049fe247515cd281760b86053337dc47d.png" src="../_images/4db8fce2dd25952c606794db81a22a5049fe247515cd281760b86053337dc47d.png" />
+</div>
+</div>
+<p>Based on these principles, any given state in the world can be modelled as having a volatility parent state, a value parent state, both, or none. When the node is orpean, it evolves as a Gaussian random walk around its previous value with fixed step size. Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
+<figure class="align-default" id="hgf-fig">
+<img alt="../_images/hgf.png" src="../_images/hgf.png" />
+<figcaption>
+<p><span class="caption-text">The two-level and three-level Hierarchical Gaussian Filters for binary or continuous inputs, as described in <span id="id3">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>, <a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>. The binary HGF has the particularity that it uses a sigmoid transform in the input node to convert continuous values into binary probabilities. For both models, volatility coupling is depicted with dashed lines, and value coupling with straight lines. The three-level HGF has one volatility layer more than the two-level HGF.</span><a class="headerlink" href="#hgf-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>A one-level HGF for continuous input is a <a class="reference external" href="https://en.wikipedia.org/wiki/Kalman_filter">Kalman Filter</a>.</p>
+</div>
+<p>Still assuming that Node <span class="math notranslate nohighlight">\(i\)</span> is the value child of Node <span class="math notranslate nohighlight">\(i+1\)</span>, the prediction step consists of the following computations:</p>
+<p>:label: vape-prediction</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\hat{\mu}_i^{(k+1)} &amp;= \mu_i^{(k)} + \alpha_{i,i+1} \mu_{i+1}^{(k)}\\
+\hat{\pi}_i^{(k+1)} &amp;= \frac{1}{\frac{1}{\pi_i^{(k)}} + \nu_i^{(k+1)} }
+\end{align}
+\end{split}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+\nu_i^{(k+1)} = \exp(\omega_i).
+\end{equation}
+\]</div>
+<p>Note that if Node <span class="math notranslate nohighlight">\(i\)</span> additionally has a <span class="xref std std-term">VOPE</span> parent node, the estimated volatility <span class="math notranslate nohighlight">\(\nu_i^{(k+1)}\)</span> that enters the precision update would also depend on the posterior mean of that volatility parent (cf. <span class="xref std std-ref">vope-prediction</span>).</p>
+<p>In general, the prediction of the mean will depend only on whether Node <span class="math notranslate nohighlight">\(i\)</span> has a value parent or not, whereas the prediction of the precision only depends on whether Node <span class="math notranslate nohighlight">\(i\)</span> has a volatility parent or not.</p>
+<p>Thus, the <span class="xref std std-ref">vape-prediction</span> only depends on knowing the node’s own posteriors and receiving the value parent’s posterior in time before the new input arrives.</p>
+<p>For example, the three-level continuous HGF that is illustrated <a class="reference internal" href="#hgf-fig"><span class="std std-ref">above</span></a> is built on top of the following generative model:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+u^{(k)}             &amp;\sim \mathcal{N}(u^{(k)} | x_1^{(k)}, \, \sigma_u) \\
+x_1^{(k)}           &amp;\sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{2,1} x_2^{(k)}, \, \exp(\kappa_1 \check{x}_1^{(k)} + \omega_1)) \\
+\check{x}_1^{(k)}   &amp;\sim \mathcal{N}(\check{x}_1^{(k)} | \check{x}_1^{(k-1)} + \alpha_{3,\check{1}} x_3^{(k)}, \, \exp(\omega_{\check{1}})) \\
+x_2^{(k)}           &amp;\sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\kappa_2 \check{x}_2^{(k)} + \omega_2)) \\
+\check{x}_2^{(k)}   &amp;\sim \mathcal{N}(\check{x}_2^{(k)} | \check{x}_2^{(k-1)}, \, \exp(\omega_{\check{2}})) \\
+x_3^{(k)}           &amp;\sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\kappa_3 \check{x}_3^{(k)} + \omega_3)) \\
+\check{x}_3^{(k)}   &amp;\sim \mathcal{N}(\check{x}_3^{(k)} | \check{x}_3^{(k-1)}, \, \exp(\omega_{\check{3}})) \\
+\end{align}
+\end{split}\]</div>
+<p>Note that in this example, all states that are value parents of other states (or outcomes) have their own volatility parent, while states that are volatility parents to other nodes either have a value parent (as state <span class="math notranslate nohighlight">\(\check{x}_1\)</span>), or no parents (as states <span class="math notranslate nohighlight">\(\check{x}_2\)</span> and <span class="math notranslate nohighlight">\(\check{x}_3\)</span>). This is deliberately so, and we will see these two motifs - every state of a hierarchy has its own volatility estimation, and volatility states only have value parents - reappear in the following chapters.</p>
+</section>
+</section>
+<section id="belief-updates-in-the-hgf-computations-of-nodes">
+<h2>Belief updates in the HGF: Computations of nodes<a class="headerlink" href="#belief-updates-in-the-hgf-computations-of-nodes" title="Permalink to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The update equations for volatility and value coupling in the generalized hierarchical Gaussian filter have been described in <span id="id4">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span>.</p>
+</div>
+<p>The coding examples introduced above illustrated generative models that can simulate data forward from a given volatility structure, with key parameters stochastically fluctuating. HGFs use this as a model of the environment to make sense of new observation, also refered as the sensory part of the HGF, or the filtering part. In this situation, new observation are coming in and the model has to update the volatility structure accordingly (from bottom to top nodes).</p>
+<p>In its first description, {cite:p}2011:mathys derived a set of simple, one-step update equations that represent changes in beliefs about the hidden states (i.e. the sufficient statistics of the nodes) specified in the generative model. For each state, a belief is held (and updated for every new input) by the agent and described as a Gaussian distribution, fully characterized by its mean
+and its inverse variance, or precision,
+on a given trial (this is the notation we have been using in the previous examples). We conceptualize each belief as a node in a network, where belief updates involve computations within nodes as well as message passing between nodes. The computations of any observation at each time point can be ordered in time as shown in the <span class="xref myst">belief update algorithm</span>:</p>
+<div class="admonition note" id="belief-update">
+<p class="admonition-title">Note</p>
+<p>Belief update</p>
+<p>For <span class="math notranslate nohighlight">\(i\)</span> a <span class="xref std std-term">node</span> in a probabilistic network at time <span class="math notranslate nohighlight">\(k\)</span>, with children at <span class="math notranslate nohighlight">\(i-1\)</span> and parent at <span class="math notranslate nohighlight">\(i+1\)</span></p>
+<ol class="arabic simple">
+<li><p><span class="xref std std-term">Prediction</span>
+Compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span>
+← receive <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_{i-1}\)</span> from <span class="math notranslate nohighlight">\(\mathrm{node}_{i-1}\)</span></p></li>
+<li><p>Update<br />
+compute <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span><br />
+<strong>given</strong> <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_{i-1}\)</span> and <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span><br />
+→ send <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span> to <span class="math notranslate nohighlight">\(\mathrm{node}_{i-1}\)</span></p></li>
+<li><p><span class="xref std std-term">prediction error</span>
+compute <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_i\)</span><br />
+<strong>given</strong> <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span> and <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span><br />
+→ send <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_i\)</span> to <span class="math notranslate nohighlight">\(\mathrm{node}_{i+1}\)</span><br />
+← receive <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_{i+1}\)</span> from <span class="math notranslate nohighlight">\(\mathrm{node}_{i+1}\)</span></p></li>
+<li><p><span class="xref std std-term">Prediction</span><br />
+compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}_i\)</span><br />
+<strong>given</strong> <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span> and <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_{i+1}\)</span></p></li>
+</ol>
+</div>
+<p>The exact computations in each step depend on the nature of the coupling (via <span class="xref std std-term">VAPE</span>s vs. <span class="xref std std-term">VOPE</span>s) between the parent and children nodes.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>We have placed the <span class="xref std std-term">Prediction</span> step in the end of the update loop. This is because usually, we think about the beginning of a timepoint trial as starting with receiving a new input, and of a prediction as being present before that input is received (this is especially relevant to model time points as trial in an experiemnts). However, in some variants of the HGF the prediction also depends on the time that has passed in between trials, which is something that can only be evaluated once the new input arrives - hence the additional computation of the (current) prediction in the beginning of the trial. Conceptually, it makes most sense to think of the prediction as happening continuously between trials. For implementational purposes, it is however most convenient to only compute the prediction once the new input (and with it its arrival time) enters. This ensures both that the posterior means of parent nodes have had enough time to be sent back to their children for preparation for the new input, and that the arrival time of the new input can be taken into account appropriately.</p>
+</div>
+</section>
+<section id="computations-for-vape-coupling">
+<h2>Computations for VAPE coupling<a class="headerlink" href="#computations-for-vape-coupling" title="Permalink to this heading">#</a></h2>
+<p>The exact computations of the <span class="xref std std-term">Update</span> depend on the nature of the coupling with the child node(s), while both the <span class="xref std std-term">Prediction error</span> and the <span class="xref std std-term">Prediction</span> step depend on the coupling with the parent node(s).</p>
+<p>:::{note} Update
+:class: dropdown</p>
+<p>If Node <span class="math notranslate nohighlight">\(i\)</span> is the value parent of Node <span class="math notranslate nohighlight">\(i-1\)</span>, then the following update equations apply to Node <span class="math notranslate nohighlight">\(i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\pi_i^{(k)} &amp;= \hat{\pi}_i^{(k)} + \alpha_{i-1,i}^2 \hat{\pi}_{i-1}^{(k)}\\
+\mu_i^{(k)} &amp;= \hat{\mu}_i^{(k)} + \frac{\alpha_{i-1,i}^2 \hat{\pi}_{i-1}^{(k)}} {\alpha_{i-1,i}^2 \hat{\pi}_{i-1}^{(k)} + \hat{\pi}_{i}^{(k)}} \delta_{i-1}^{(k)}
+\end{align}
+\end{split}\]</div>
+<p>We note here that we can let the update of the precision happen first, and therefore use it for the update of the mean:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\pi_i^{(k)} &amp;= \hat{\pi}_i^{(k)} + \alpha_{i-1,i}^2 \hat{\pi}_{i-1}^{(k)}\\
+\mu_i^{(k)} &amp;= \hat{\mu}_i^{(k)} + \frac{\alpha_{i-1,i}^2 \hat{\pi}_{i-1}^{(k)}} {\pi_i^{(k)}} \delta_{i-1}^{(k)}
+\end{align}
+\end{split}\]</div>
+<p>In sum, at the time of the update, Node <span class="math notranslate nohighlight">\(i\)</span> needs to have access to the following quantities:</p>
+<ul class="simple">
+<li><p>Its own predictions: <span class="math notranslate nohighlight">\(\hat{\mu}_i^{(k)}\)</span>, <span class="math notranslate nohighlight">\(\hat{\pi}_i^{(k)}\)</span></p></li>
+<li><p>Coupling strength: <span class="math notranslate nohighlight">\(\alpha_{i-1,i}\)</span></p></li>
+<li><p>From level below: <span class="math notranslate nohighlight">\(\delta_{i-1}^{(k)}\)</span>, <span class="math notranslate nohighlight">\(\hat{\pi}_{i-1}^{(k)}\)</span></p></li>
+</ul>
+<p>All of these are available at the time of the update. Node <span class="math notranslate nohighlight">\(i\)</span> therefore only needs to receive the PE and the predicted precision from the level below to perform its update.</p>
+<p>:::</p>
+<p>:::{note} Prediction error
+:class: dropdown</p>
+<p>We will assume in the following, that Node <span class="math notranslate nohighlight">\(i\)</span> is the value child of Node <span class="math notranslate nohighlight">\(i+1\)</span>. Then the following quantities have to be sent up to Node <span class="math notranslate nohighlight">\(i+1\)</span> (cf. necessary information from level below in a value parent):</p>
+<ul class="simple">
+<li><p>Predicted precision: <span class="math notranslate nohighlight">\(\hat{\pi}_{i}^{(k)}\)</span></p></li>
+<li><p>Prediction error: <span class="math notranslate nohighlight">\(\delta_{i}^{(k)}\)</span></p></li>
+</ul>
+<p>Node <span class="math notranslate nohighlight">\(i\)</span> has already performed the <strong>PREDICTION step</strong> on the previous trial, so it has already computed the predicted precision of the current trial, <span class="math notranslate nohighlight">\(\hat{\pi}_{i}^{(k)}\)</span>. Hence, in the <strong>PE step</strong>, it needs to perform only the following calculation:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+\delta_i^{(k)} = \mu_i^{(k)} - \hat{\mu}_i^{(k)}
+\end{equation}
+\]</div>
+<p>:::</p>
+<p>:::{note} Prediction
+:class: dropdown</p>
+<p>Still assuming that Node <span class="math notranslate nohighlight">\(i\)</span> is the value child of Node <span class="math notranslate nohighlight">\(i+1\)</span>, the prediction step consists of the following computations:</p>
+<p>:label: vape-prediction</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\hat{\mu}_i^{(k+1)} &amp;= \mu_i^{(k)} + \alpha_{i,i+1} \mu_{i+1}^{(k)}\\
+\hat{\pi}_i^{(k+1)} &amp;= \frac{1}{\frac{1}{\pi_i^{(k)}} + \nu_i^{(k+1)} }
+\end{align}
+\end{split}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+\nu_i^{(k+1)} = \exp(\omega_i).
+\end{equation}
+\]</div>
+<p>Note that if Node <span class="math notranslate nohighlight">\(i\)</span> additionally has a <span class="xref std std-term">VOPE</span> parent node, the estimated volatility <span class="math notranslate nohighlight">\(\nu_i^{(k+1)}\)</span> that enters the precision update would also depend on the posterior mean of that volatility parent (cf. <span class="xref std std-ref">vope-prediction</span>).</p>
+<p>In general, the prediction of the mean will depend only on whether Node <span class="math notranslate nohighlight">\(i\)</span> has a value parent or not, whereas the prediction of the precision only depends on whether Node <span class="math notranslate nohighlight">\(i\)</span> has a volatility parent or not.</p>
+<p>Thus, the <span class="xref std std-ref">vape-prediction</span> only depends on knowing the node’s own posteriors and receiving the value parent’s posterior in time before the new input arrives.
+:::</p>
+</section>
+<section id="computations-for-vope-coupling">
+<h2>Computations for VOPE coupling<a class="headerlink" href="#computations-for-vope-coupling" title="Permalink to this heading">#</a></h2>
+<p>As in the case of <span class="xref std std-term">VAPE</span> coupling, the exact computations of the <span class="xref myst">vope update</span> depend on the nature of the coupling with the child node(s), while both the <span class="xref myst">vope pe</span> and the <span class="xref myst">vope prediction</span> depend on the coupling with the parent node(s).</p>
+<p>To describe the computations entailed by <span class="xref std std-term">VOPE</span> coupling, we will introduce two changes to the notation. First of all, we will express the volatility prediction error (<span class="xref std std-term">VOPE</span>) as a function of the previously defined value prediction error (<span class="xref std std-term">VAPE</span>). That means from now on, we will use the character <span class="math notranslate nohighlight">\(\delta_i\)</span> only for <span class="xref std std-term">VAPE</span>.</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+\delta_i^{(k)} \equiv \delta_i^{(k, VAPE)} = \mu_i^{(k)} - \hat{\mu}_i^{(k)},
+\end{equation}
+\]</div>
+<p>and introduce a new character <span class="math notranslate nohighlight">\(\Delta_i\)</span> for <span class="xref std std-term">VOPE</span>, which we define as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{equation}
+  \begin{split}
+    \Delta_i^{(k)} \equiv \delta_i^{(k, VOPE)} &amp;= \frac{ \frac{1}{\pi_{i}^{(k)}} + (\mu_i^{(k)} - \hat{\mu}_i^{(k)})^2 }{ \frac{1}{\pi_{i}^{(k-1)}} + \nu_{i}^{(k)} } - 1 \\
+    &amp;= \hat{\pi}_i^{(k)} \left( \frac{1}{\pi_{i}^{(k)}} + (\mu_i^{(k)} - \hat{\mu}_i^{(k)})^2 \right) - 1 \\
+    &amp;= \hat{\pi}_i^{(k)} \left( \frac{1}{\pi_{i}^{(k)}} + (\delta_i^{(k)})^2 \right) - 1 \\
+    &amp;=  \frac{\hat{\pi}_i^{(k)}}{\pi_{i}^{(k)}} + \hat{\pi}_i^{(k)} (\delta_i^{(k)})^2 - 1. \\
+  \end{split}
+\end{equation}
+\end{split}\]</div>
+<p>Note that from the first to the second line, we have used the following definition:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation*}
+\hat{\pi}_{i-1}^{(k)} = \frac{1}{ \frac{1}{\pi_{i-1}^{(k-1)}} + \nu_{i-1}^{(k)} }.
+\end{equation*}
+\]</div>
+<p>This ensures that a given node does not need to have access to the posterior precision from the level below: <span class="math notranslate nohighlight">\(\pi_{i-1}^{(k-1)}\)</span>, which facilitates implementation.</p>
+<p>In sum, we are introducing a second prediction error unit <span class="math notranslate nohighlight">\(\Delta_i\)</span> which is concerned with deviations from predicted uncertainty and is informed by value prediction errors and other estimates of uncertainty. It is this prediction error - a function of the unweighted (squared) value prediction error with a new precision weight - which communicates between a level’s nodes and a level’s volatility parent’s nodes.</p>
+<p>Second, we will introduce another quantity, which we term the (auxiliary) expected precision</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+\gamma_i^{(k)} = \nu_i^{(k)} \hat{\pi}_i^{(k)},
+\end{equation}
+\]</div>
+<p>which will be computed as part of the <span class="xref myst">vope preditions</span> and only serves to simplify the equations and the corresponding message passing.</p>
+<p>:::{note} Update
+:class: dropdown
+:name: vope-update</p>
+<p>If Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility parent of Node <span class="math notranslate nohighlight">\(i-1\)</span>, then the following update equations apply to Node <span class="math notranslate nohighlight">\(i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\pi_i^{(k)} &amp;= \hat{\pi}_i^{(k)}
++ \frac{1}{2}(\kappa_{i-1} \nu_{i-1}^{(k)} \hat{\pi}_{i-1}^{(k)})^2
+* (1 + (1 - \frac{1}{\pi_{i-1}^{(k-1)} \nu_{i-1}^{(k)}})
+\delta_{i-1}^{(k)})\\
+&amp;= \hat{\pi}_i^{(k)}
++ \frac{1}{2}(\kappa_{i-1} \nu_{i-1}^{(k)} \hat{\pi}_{i-1}^{(k)})^2
+* (1 + (2 - \frac{1}{\hat{\pi}_{i-1}^{(k)} \nu_{i-1}^{(k)}})
+\delta_{i-1}^{(k)})\\
+\mu_i^{(k)} &amp;= \hat{\mu}_i^{(k)}
++ \frac{1}{2}\kappa_{i-1} \nu_{i-1}^{(k)}
+\frac{\hat{\pi}_{i-1}^{(k)}}{\pi_{i}^{(k)}} \delta_{i-1}^{(k)},
+\end{align*}
+\end{split}\]</div>
+<p>where we have again used the definition of the predicted precision <span class="math notranslate nohighlight">\(\hat{\pi}_{i-1}^{(k)}\)</span> to derive an expression for the posterior precision from the previous trial <span class="math notranslate nohighlight">\(\pi_{i-1}^{(k-1)}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\hat{\pi}_{i-1}^{(k)} &amp;= \frac{1}{ \frac{1}{\pi_{i-1}^{(k-1)}} + \nu_{i-1}^{(k)} }\\
+\Leftrightarrow \pi_{i-1}^{(k-1)} &amp;= \frac{1}{ \frac{1}{\hat{\pi}_{i-1}^{(k)}} - \nu_{i-1}^{(k)} }.
+\end{align*}
+\end{split}\]</div>
+<p>With the changes from above, namely the definitions of the \textsf{VOPE} <span class="math notranslate nohighlight">\(\Delta_i\)</span> and the expected precision <span class="math notranslate nohighlight">\(\gamma_i^{(k)}\)</span>, the update equations for the precision and the mean in volatility coupling simplify to:
+\vspace{0.5cm}</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\pi_i^{(k)} &amp;= \hat{\pi}_i^{(k)}
++ \frac{1}{2} (\kappa_{i,i-1} \gamma_{i-1}^{(k)})^2
++ (\kappa_{i,i-1} \gamma_{i-1}^{(k)})^2 \Delta_{i-1}^{(k)}
+- \frac{1}{2} \kappa_{i,i-1}^2 \gamma_{i-1}^{(k)} \Delta_{i-1}^{(k)}\\
+\mu_i^{(k)} &amp;= \hat{\mu}_i^{(k)}
++ \frac{1}{2} \frac{\kappa_{i,i-1} \gamma_{i-1}^{(k)}}{\pi_i^{(k)}} \Delta_{i-1}^{(k)}
+\end{align}
+\end{split}\]</div>
+<p>Therefore, at the time of the update, Node <span class="math notranslate nohighlight">\(i\)</span> needs to have access to the following quantities:</p>
+<ul class="simple">
+<li><p>Its own predictions: <span class="math notranslate nohighlight">\(\hat{\mu}_i^{(k)}\)</span>, <span class="math notranslate nohighlight">\(\hat{\pi}_i^{(k)}\)</span></p></li>
+<li><p>Coupling strength: <span class="math notranslate nohighlight">\(\kappa_{i,i-1}\)</span></p></li>
+<li><p>From level below: <span class="math notranslate nohighlight">\(\Delta_{i-1}^{(k)}\)</span>, <span class="math notranslate nohighlight">\(\gamma_{i-1}^{(k)}\)</span></p></li>
+</ul>
+<p>:::</p>
+<p>:::{note} Prediction-error
+:class: dropdown
+:name: vope-pe</p>
+<p>The exact computation of the prediction error depends, like the computation of the new prediction, on the nature of the coupling with the parent nodes. We will therefore assume in the following, that Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility child of Node <span class="math notranslate nohighlight">\(i+1\)</span>. Then the following quantities have to be sent up to Node <span class="math notranslate nohighlight">\(i+1\)</span> (see also necessary information from level below in a volatility parent):</p>
+<ul class="simple">
+<li><p>Expected precision: <span class="math notranslate nohighlight">\(\gamma_{i}^{(k)}\)</span></p></li>
+<li><p>Prediction error: <span class="math notranslate nohighlight">\(\Delta_{i}^{(k)}\)</span></p></li>
+</ul>
+<p>Node <span class="math notranslate nohighlight">\(i\)</span> has already performed the <span class="xref std std-ref">vope-prediction</span> on the previous trial, so it has already computed the predicted precision, <span class="math notranslate nohighlight">\(\hat{\pi}_{i}^{(k)}\)</span>, and the volatiliy estimate, <span class="math notranslate nohighlight">\(\nu_i^{(k)}\)</span>, and out of these the expected precision, <span class="math notranslate nohighlight">\(\gamma_{i}^{(k)}\)</span>, for the current trial. Hence, in the <strong>PE step</strong>, it needs to perform only the following calculations:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\delta_i^{(k)} &amp;= \mu_i^{(k)} - \hat{\mu}_i^{(k)}\\
+\Delta_i^{(k)} &amp;= \frac{\hat{\pi}_i^{(k)}}{\pi_{i}^{(k)}} + \hat{\pi}_i^{(k)} (\delta_i^{(k)})^2 - 1.
+\end{align}
+\end{split}\]</div>
+<p>:::</p>
+<p>:::{note} Prediction
+:class: dropdown
+:name: vope-prediction</p>
+<p>Still assuming that Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility child of Node <span class="math notranslate nohighlight">\(i+1\)</span>, the prediction consists of the following simple computations:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\hat{\mu}_i^{(k+1)} &amp;= \mu_i^{(k)}\\
+\nu_i^{(k+1)} &amp;= \exp(\kappa_i \mu_{i+1}^{(k)} + \omega_i)\\
+\hat{\pi}_i^{(k+1)} &amp;= \frac{1}{\frac{1}{\pi_i^{(k)}} + \nu_i^{(k+1)} }\\
+\gamma_i^{(k+1)} &amp;= \nu_i^{(k+1)} \hat{\pi}_i^{(k+1)}
+\end{align}
+\end{split}\]</div>
+<p>Thus, the prediction for trial <span class="math notranslate nohighlight">\(k+1\)</span> depends again only on receiving the posterior mean of Node <span class="math notranslate nohighlight">\(i+1\)</span> on trial <span class="math notranslate nohighlight">\(k\)</span>, and knowing the Node’s own posteriors.</p>
+<p>Note that if Node <span class="math notranslate nohighlight">\(i\)</span> additionally has a <span class="xref std std-term">VAPE</span> parent node, the prediction of the new mean, <span class="math notranslate nohighlight">\(\hat{\mu}_i^{k+1}\)</span> would also depend on the posterior mean of that value parent (cf. <span class="xref std std-ref">vape-prediction</span>).</p>
+</section>
+<section id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this heading">#</a></h2>
+<p>{.glossary}</p>
+<p>Node
+: HGF models are defined as networks of probabilistic nodes. A node is defined by its parameters (e.g. sufficient statistics, coupling values…) and by its connection with other nodes. The dependencies structure can have more than one dimension (i.e. there are many kinds of dependencies between nodes, especially here the volatility coupling and the value coupling).</p>
+<p>Prediction
+: At every time <span class="math notranslate nohighlight">\(k\)</span>, a continuous node <span class="math notranslate nohighlight">\(i\)</span> is defined by its sufficient statistics, the mean <span class="math notranslate nohighlight">\(\mu_i^{(k)}\)</span> and its inverse variance, or precision, <span class="math notranslate nohighlight">\(\pi_i^{(k)}\)</span>, and hold predictions about the next observed values, denoted <span class="math notranslate nohighlight">\(\hat{\mu}_i^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\hat{\pi}_i^{(k)}\)</span>.</p>
+<p>Prediction error
+: Difference between the top-down predictions at node <span class="math notranslate nohighlight">\(i\)</span> that is inherited from parents, and the bottom-up incoming observatrion passed by children nodes.</p>
+<p>Update
+: At each time <span class="math notranslate nohighlight">\(k\)</span>, a new value is observed at the input node and the sufficient statistics of the nodes (i.e. beliefs) are updated accordingly from the lower part to the upper part of the structure.</p>
+<p>VAPE
+: Value prediction error. The error of top-down prediction concerning the node’s value (<span class="math notranslate nohighlight">\(\mu_i\)</span>).</p>
+<p>VOPE
+: Volatility prediction error. The error of top-down prediction concerning the node’s volatility (<span class="math notranslate nohighlight">\(\pi_i\)</span>).</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-generative-model">The generative model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#volatility-coupling">Volatility coupling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#value-coupling">Value coupling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#belief-updates-in-the-hgf-computations-of-nodes">Belief updates in the HGF: Computations of nodes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computations-for-vape-coupling">Computations for VAPE coupling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computations-for-vope-coupling">Computations for VOPE coupling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#glossary">Glossary</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/notebooks/0-Theory.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022-2023, Nicolas Legrand.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

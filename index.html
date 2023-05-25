@@ -34,7 +34,6 @@
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -54,7 +53,7 @@
     <link rel="shortcut icon" href="_static/logo_small.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="The Hierarchical Gaussian Filter" href="theory.html" />
+    <link rel="next" title="Tutorials" href="tutorials.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -144,13 +143,6 @@
   </p>
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="theory.html">
-                        Theory
-                      </a>
-                    </li>
-                
-
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="tutorials.html">
                         Tutorials
@@ -296,13 +288,6 @@ document.write(`
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="theory.html">
-                        Theory
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="tutorials.html">
                         Tutorials
                       </a>
@@ -422,7 +407,6 @@ document.write(`
 <h1>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding<a class="headerlink" href="#the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding" title="Permalink to this heading">#</a></h1>
 <p>pyhgf is a Python library that implements the generalized, nodalized and multilevel Hierarchical Gaussian Filters for predictive coding written on top of <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax.html">JAX</a>. The library can create and manipulate graph neural networks that perform beliefs update throught the diffusion of precision-weighted prediction errors under new observations. The core functions are derivable, JIT-able, and are designed to interface smoothly with other libraries in the JAX ecosystem for Bayesian inference.</p>
 <ul class="simple">
-<li><p>🎓 <a class="reference external" href="https://ilabcode.github.io/pyhgf/theory.html">What is a Hierarchical Gaussian Filter?</a></p></li>
 <li><p>📖 <a class="reference external" href="https://ilabcode.github.io/pyhgf/">API Documentation</a></p></li>
 <li><p>✏️ <a class="reference external" href="https://ilabcode.github.io/pyhgf/tutorials.html">Tutorials and examples</a></p></li>
 </ul>
@@ -430,7 +414,7 @@ document.write(`
 <h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading">#</a></h2>
 <section id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h3>
-<p>The last official release can be download from PIP:</p>
+<p>The last official release can be downloaded from PIP:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pyhgf
 </pre></div>
 </div>
@@ -449,7 +433,7 @@ document.write(`
 <li><p>A set of update functions that operate on any of the 3 other variables, starting from a target node.</p></li>
 <li><p>An update sequence (tuple) that define the order in which the update functions are called, and the target node.</p></li>
 </ul>
-<p><img alt="png" src="images/graph_network.svg" /></p>
+<p><img alt="png" src="_images/graph_networks.svg" /></p>
 <p>Value parent and volatility parent are nodes themself. Any node can be a value and/or volatility parent for other nodes and have multiple value and/or volatility parents. A filtering structure consists of nodes embedding other nodes hierarchically. Nodes are parametrized by their sufficient statistic and parents. The transformations between nodes can be linear, non-linear, or any function (thus a <em>generalization</em> of the HGF).</p>
 <p>The resulting probabilistic network operates as a filter towards new observation. If a decision function (taking the whole model as a parameter) is also defined, behaviours can be triggered accordingly. By comparing those behaviours with actual outcomes, a surprise function can be optimized over the range of parameters of interest.</p>
 </section>
@@ -498,7 +482,7 @@ document.write(`
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="acknowledgements">
 <h1>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this heading">#</a></h1>
-<p>This implementation of the Hierarchical Gaussian Filter was largely inspired by the original <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">Matlab version</a>. A Julia implementation of the generalised, nodalised and multilevel HGF is also available <a class="reference external" href="https://github.com/ilabcode/HGF.jl">here</a>.</p>
+<p>This implementation of the Hierarchical Gaussian Filter was largely inspired by the original <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">Matlab version</a>. A Julia equivalent of the generalised, nodalised and multilevel HGF is also available <a class="reference external" href="https://github.com/ilabcode/HGF.jl">here</a>.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -515,11 +499,11 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="right-next"
-       href="theory.html"
+       href="tutorials.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">The Hierarchical Gaussian Filter</p>
+        <p class="prev-next-title">Tutorials</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
