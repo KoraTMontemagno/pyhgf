@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>The Hierarchical Gaussian Filter &#8212; pyhgf 0.0.4 documentation</title>
+    <title>An introduction to the Hierarchical Gaussian Filter &#8212; pyhgf 0.0.4 documentation</title>
   
   
   
@@ -417,7 +417,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">The Hierarchical Gaussian Filter</li>
+    <li class="breadcrumb-item active" aria-current="page">An introduction to the Hierarchical Gaussian Filter</li>
   </ul>
 </nav>
 </div>
@@ -434,8 +434,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-hierarchical-gaussian-filter">
-<span id="theory"></span><h1>The Hierarchical Gaussian Filter<a class="headerlink" href="#the-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="an-introduction-to-the-hierarchical-gaussian-filter">
+<span id="theory"></span><h1>An introduction to the Hierarchical Gaussian Filter<a class="headerlink" href="#an-introduction-to-the-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h1>
 <p>In this notebook, we introduce the main oncepts on which the Hierarchical Gaussian Filter (HGF) is based. We describe the main equations and illustrate the examples with Python code. We start with the generative model of the HGF, which describes how the model assume that the data is being generated. This generative structure is then used to filter the observation (i.e. the sensory part of the model), which is then used by the agent to produce behaviors (i.e. the action part of the model). Next, we show how this model can be “inverted” and used by an agent to infer parameter values that generated the sensory inputs. From there, we discuss the notion of prediction error and how derivations of the model can be used to infer probability densities given observed behavioural outcomes.</p>
 <section id="the-generative-model">
 <h2>The generative model<a class="headerlink" href="#the-generative-model" title="Permalink to this heading">#</a></h2>
@@ -482,7 +482,7 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
 <p>If we take as example the two-level continuous HGF <span id="id1">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span>, the model is constituded of two states of interest, <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>. <span class="math notranslate nohighlight">\(x_1\)</span> is performing a GRW as previously defined, but it is also paired with <span class="math notranslate nohighlight">\(x_2\)</span> to each other via <em>volatility coupling</em>. This means that for state <span class="math notranslate nohighlight">\(x_1\)</span>, the mean of the Gaussian random walk on trial <span class="math notranslate nohighlight">\(k\)</span> is given by its previous value <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span>, while the step size (or variance) depends on the current value of the higher level state, <span class="math notranslate nohighlight">\(x_2^{(k)}\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[
-x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \, f(x_2^{(k)}))
+x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \, f(x_2^{(k)}))
 \]</div>
 <p>where the exact dependency is of the form</p>
 <div class="math notranslate nohighlight">
@@ -493,7 +493,7 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \, f(x_2^{(k)}))
 <p>At the higher level of the hierarchy (here the second level), the nodes are not inheriting anything from their parents anymore, and only rely on their own variance:</p>
 <div class="math notranslate nohighlight">
 \[
-x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
+x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 \]</div>
 <p>The model described above can be implemented in Python as the following:</p>
 <div class="cell tag_hide-input docutils container">
@@ -548,8 +548,8 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
 <p>This distant influence of one node on another is called <em>volatility coupling</em> (see below). However, a higher-level state can also have influence on a lower-level state by influencing its mean instead of its variance. In that case, the mean of the Gaussian random walk at one level is a function not only of its own previous value, but also the current value of the higher-level state. Such model can be formalized as follow:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-    x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)} + \alpha_{1} x_2^{(k)}, \, \exp(\omega_1)) \\
-    x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \, \exp(\omega_2))
+    x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)} + \alpha_{1} x_2^{(k)}, \, \exp(\omega_1)) \\
+    x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 \end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is the value coupling between the two nodes.</p>
 <div class="cell tag_hide-input docutils container">
@@ -741,9 +741,8 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 <section id="computations-for-vape-coupling">
 <h2>Computations for VAPE coupling<a class="headerlink" href="#computations-for-vape-coupling" title="Permalink to this heading">#</a></h2>
 <p>The exact computations of the <a class="reference internal" href="#term-Update"><span class="xref std std-term">Update</span></a> depend on the nature of the coupling with the child node(s), while both the <a class="reference internal" href="#term-Prediction-error"><span class="xref std std-term">Prediction error</span></a> and the <a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a> step depend on the coupling with the parent node(s).</p>
-<div class="dropdown admonition note">
-<p class="admonition-title">Note</p>
-<p>Update</p>
+<div class="dropdown admonition">
+<p class="admonition-title">Update</p>
 <p>If Node <span class="math notranslate nohighlight">\(i\)</span> is the value parent of Node <span class="math notranslate nohighlight">\(i-1\)</span>, then the following update equations apply to Node <span class="math notranslate nohighlight">\(i\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -768,9 +767,8 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 </ul>
 <p>All of these are available at the time of the update. Node <span class="math notranslate nohighlight">\(i\)</span> therefore only needs to receive the PE and the predicted precision from the level below to perform its update.</p>
 </div>
-<div class="dropdown admonition note">
-<p class="admonition-title">Note</p>
-<p>Prediction error</p>
+<div class="dropdown admonition">
+<p class="admonition-title">Prediction error</p>
 <p>We will assume in the following, that Node <span class="math notranslate nohighlight">\(i\)</span> is the value child of Node <span class="math notranslate nohighlight">\(i+1\)</span>. Then the following quantities have to be sent up to Node <span class="math notranslate nohighlight">\(i+1\)</span> (cf. necessary information from level below in a value parent):</p>
 <ul class="simple">
 <li><p>Predicted precision: <span class="math notranslate nohighlight">\(\hat{\pi}_{i}^{(k)}\)</span></p></li>
@@ -784,9 +782,8 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 \end{equation}
 \]</div>
 </div>
-<div class="dropdown admonition note">
-<p class="admonition-title">Note</p>
-<p>Prediction</p>
+<div class="dropdown admonition">
+<p class="admonition-title">Prediction</p>
 <p>Still assuming that Node <span class="math notranslate nohighlight">\(i\)</span> is the value child of Node <span class="math notranslate nohighlight">\(i+1\)</span>, the prediction step consists of the following computations:</p>
 <p>:label: vape-prediction</p>
 <div class="math notranslate nohighlight">
@@ -847,9 +844,8 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 \end{equation}
 \]</div>
 <p>which will be computed as part of the <span class="xref myst">vope preditions</span> and only serves to simplify the equations and the corresponding message passing.</p>
-<div class="dropdown admonition note" id="vope-update">
-<p class="admonition-title">Note</p>
-<p>Update</p>
+<div class="dropdown admonition" id="vope-update">
+<p class="admonition-title">Update</p>
 <p>If Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility parent of Node <span class="math notranslate nohighlight">\(i-1\)</span>, then the following update equations apply to Node <span class="math notranslate nohighlight">\(i\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -895,9 +891,8 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 <li><p>From level below: <span class="math notranslate nohighlight">\(\Delta_{i-1}^{(k)}\)</span>, <span class="math notranslate nohighlight">\(\gamma_{i-1}^{(k)}\)</span></p></li>
 </ul>
 </div>
-<div class="dropdown admonition note" id="vope-pe">
-<p class="admonition-title">Note</p>
-<p>Prediction-error</p>
+<div class="dropdown admonition" id="vope-pe">
+<p class="admonition-title">Prediction-error</p>
 <p>The exact computation of the prediction error depends, like the computation of the new prediction, on the nature of the coupling with the parent nodes. We will therefore assume in the following, that Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility child of Node <span class="math notranslate nohighlight">\(i+1\)</span>. Then the following quantities have to be sent up to Node <span class="math notranslate nohighlight">\(i+1\)</span> (see also necessary information from level below in a volatility parent):</p>
 <ul class="simple">
 <li><p>Expected precision: <span class="math notranslate nohighlight">\(\gamma_{i}^{(k)}\)</span></p></li>
@@ -912,9 +907,8 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 \end{align}
 \end{split}\]</div>
 </div>
-<div class="dropdown admonition note" id="vope-prediction">
-<p class="admonition-title">Note</p>
-<p>Prediction</p>
+<div class="dropdown admonition" id="vope-prediction">
+<p class="admonition-title">Prediction</p>
 <p>Still assuming that Node <span class="math notranslate nohighlight">\(i\)</span> is the volatility child of Node <span class="math notranslate nohighlight">\(i+1\)</span>, the prediction consists of the following simple computations:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -927,7 +921,10 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 \end{split}\]</div>
 <p>Thus, the prediction for trial <span class="math notranslate nohighlight">\(k+1\)</span> depends again only on receiving the posterior mean of Node <span class="math notranslate nohighlight">\(i+1\)</span> on trial <span class="math notranslate nohighlight">\(k\)</span>, and knowing the Node’s own posteriors.</p>
 <p>Note that if Node <span class="math notranslate nohighlight">\(i\)</span> additionally has a <a class="reference internal" href="#term-VAPE"><span class="xref std std-term">VAPE</span></a> parent node, the prediction of the new mean, <span class="math notranslate nohighlight">\(\hat{\mu}_i^{k+1}\)</span> would also depend on the posterior mean of that value parent (cf. <span class="xref std std-ref">vape-prediction</span>).</p>
-<p class="rubric">Glossary</p>
+</div>
+</section>
+<section id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this heading">#</a></h2>
 <dl class="simple glossary">
 <dt id="term-Node">Node<a class="headerlink" href="#term-Node" title="Permalink to this term">#</a></dt><dd><p>HGF models are defined as networks of probabilistic nodes. A node is defined by its parameters (e.g. sufficient statistics, coupling values…) and by its connection with other nodes. The dependencies structure can have more than one dimension (i.e. there are many kinds of dependencies between nodes, especially here the volatility coupling and the value coupling).</p>
 </dd>
@@ -942,7 +939,6 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 <dt id="term-VOPE">VOPE<a class="headerlink" href="#term-VOPE" title="Permalink to this term">#</a></dt><dd><p>Volatility prediction error. The error of top-down prediction concerning the node’s volatility (<span class="math notranslate nohighlight">\(\pi_i\)</span>).</p>
 </dd>
 </dl>
-</div>
 </section>
 </section>
 
@@ -983,6 +979,7 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#belief-updates-in-the-hgf-computations-of-nodes">Belief updates in the HGF: Computations of nodes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computations-for-vape-coupling">Computations for VAPE coupling</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computations-for-vope-coupling">Computations for VOPE coupling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#glossary">Glossary</a></li>
 </ul>
   </nav></div>
 

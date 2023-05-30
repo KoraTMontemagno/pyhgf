@@ -481,7 +481,7 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 <h2>A multilevel continuous HGF<a class="headerlink" href="#a-multilevel-continuous-hgf" title="Permalink to this heading">#</a></h2>
 <section id="simulate-a-dataset">
 <h3>Simulate a dataset<a class="headerlink" href="#simulate-a-dataset" title="Permalink to this heading">#</a></h3>
-<p>Using the example of a hierarchical Gaussian Random Walk that we depicted in the <a class="reference internal" href="0-Theory.html#theory"><span class="std std-ref">The Hierarchical Gaussian Filter</span></a> section, we are going to us this generative model to simulate 8 random walks using known parameters and infer afterhand the group-level value of <span class="math notranslate nohighlight">\(\omega_1\)</span> from this dataset. The generative model is given by:</p>
+<p>Using the example of a hierarchical Gaussian Random Walk that we depicted in the <a class="reference internal" href="0-Theory.html#theory"><span class="std std-ref">An introduction to the Hierarchical Gaussian Filter</span></a> section, we are going to us this generative model to simulate 8 random walks using known parameters and infer afterhand the group-level value of <span class="math notranslate nohighlight">\(\omega_1\)</span> from this dataset. The generative model is given by:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \omega_1, \omega_2 = -10.0  \\
@@ -609,7 +609,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/92c676f5771b95b51df266b3ec120299c4e42c2ae1e9f59c73ed9911c868e08f.svg" src="../_images/92c676f5771b95b51df266b3ec120299c4e42c2ae1e9f59c73ed9911c868e08f.svg" /></div>
+<img alt="../_images/80333e18c081702aa2524ba46669174a13775eba505db4050df560c73c2bc71f.svg" src="../_images/80333e18c081702aa2524ba46669174a13775eba505db4050df560c73c2bc71f.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -653,9 +653,9 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 01:13&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 01:09&lt;00:00 Sampling chain 0, 1 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 74 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 70 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -675,7 +675,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
   numba_fn = numba.jit(**self.kwargs)(self.function)
 </pre></div>
 </div>
-<img alt="../_images/3f92801ed82e59de90bb74616ed5648a5c8ff08e7b38ed873021f29d5390c0ad.png" src="../_images/3f92801ed82e59de90bb74616ed5648a5c8ff08e7b38ed873021f29d5390c0ad.png" />
+<img alt="../_images/9b563f312db781edbd8b11e823b2b244e68cf394eebcca6cf0316b0ac03b6b06.png" src="../_images/9b563f312db781edbd8b11e823b2b244e68cf394eebcca6cf0316b0ac03b6b06.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -775,7 +775,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8c98ff3466caf3f3270f7a2cdb6ca45872e6409a8d9b618981eadd76a402b7a1.svg" src="../_images/8c98ff3466caf3f3270f7a2cdb6ca45872e6409a8d9b618981eadd76a402b7a1.svg" /></div>
+<img alt="../_images/1e24050d355d8daba3880d5de235ce505deeb7ab01bac8390f22ea7d417c67cc.svg" src="../_images/1e24050d355d8daba3880d5de235ce505deeb7ab01bac8390f22ea7d417c67cc.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -819,9 +819,9 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:31&lt;00:00 Sampling chain 0, 24 divergences]
+      100.00% [2000/2000 00:29&lt;00:00 Sampling chain 0, 25 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 31 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 30 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -837,7 +837,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7fc8c29c2c971e01160716b1c773af4e7ac7c7c09a8189faf3435f84a71af24c.png" src="../_images/7fc8c29c2c971e01160716b1c773af4e7ac7c7c09a8189faf3435f84a71af24c.png" />
+<img alt="../_images/23ad56d148aacb63986e8b0504a4fca42d32247f34288fcadd3d5444aa5c0fb5.png" src="../_images/23ad56d148aacb63986e8b0504a4fca42d32247f34288fcadd3d5444aa5c0fb5.png" />
 </div>
 </div>
 </section>
