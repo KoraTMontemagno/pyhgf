@@ -744,12 +744,10 @@ document.write(`
     <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s2">&quot;node&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
 
     <span class="c1"># set input nodes</span>
-    <span class="n">list_of_input_idx</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">input_node</span> <span class="ow">in</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="p">:</span>
-        <span class="n">list_of_input_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_node</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
         <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">input_node</span><span class="o">.</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">input_node</span><span class="o">.</span><span class="n">kind</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">I - </span><span class="si">{</span><span class="n">input_node</span><span class="o">.</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">kind</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">I - </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">style</span><span class="o">=</span><span class="s2">&quot;filled&quot;</span><span class="p">,</span>
             <span class="n">shape</span><span class="o">=</span><span class="s2">&quot;octagon&quot;</span><span class="p">,</span>
         <span class="p">)</span>
@@ -757,12 +755,12 @@ document.write(`
     <span class="c1"># create the rest of nodes</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">)):</span>
         <span class="c1"># only if node is not an input node</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">list_of_input_idx</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
             <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
 
     <span class="c1"># connect value parents</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">):</span>
-        <span class="n">value_parents</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">value_parents</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">):</span>
+        <span class="n">value_parents</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">value_parents</span>
 
         <span class="k">if</span> <span class="n">value_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">value_parents_idx</span> <span class="ow">in</span> <span class="n">value_parents</span><span class="p">:</span>
@@ -772,8 +770,8 @@ document.write(`
                 <span class="p">)</span>
 
     <span class="c1"># connect volatility parents</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">):</span>
-        <span class="n">volatility_parents</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">volatility_parents</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">):</span>
+        <span class="n">volatility_parents</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">volatility_parents</span>
 
         <span class="k">if</span> <span class="n">volatility_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">volatility_parents_idx</span> <span class="ow">in</span> <span class="n">volatility_parents</span><span class="p">:</span>

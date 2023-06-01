@@ -436,7 +436,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
+<span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 
 <div class="viewcode-block" id="loop_inputs"><a class="viewcode-back" href="../../generated/pyhgf.structure/pyhgf.structure.loop_inputs.html#pyhgf.structure.loop_inputs">[docs]</a><span class="k">def</span> <span class="nf">loop_inputs</span><span class="p">(</span>
@@ -444,11 +446,11 @@ document.write(`
     <span class="n">data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
     <span class="n">update_sequence</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
     <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the node structure after observing one new data point.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the node structure after observing new data point(s).</span>
 
-<span class="sd">    One time step updating node structure and returning the new node structure with</span>
-<span class="sd">    time, value and surprise stored in the input node.</span>
+<span class="sd">    One time step updating node structure and returning the new parameter structure.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -461,24 +463,28 @@ document.write(`
 <span class="sd">        volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
 <span class="sd">        It should have same length than the volatility parents&#39; indexes.</span>
 <span class="sd">    data :</span>
-<span class="sd">        The current array element. Scan will iterate over a n x 2 Array with time steps</span>
-<span class="sd">        and values (i.e. the input time series).</span>
+<span class="sd">        A tuple of (data, time_steps). `data` is a n x j+1 Array (j the number of</span>
+<span class="sd">        inputs), the last dimension is time.</span>
 <span class="sd">    update_sequence :</span>
 <span class="sd">        The sequence of updates that will be applied to the node structure.</span>
 <span class="sd">    node_structure :</span>
 <span class="sd">        The node structure with the update sequence.</span>
+<span class="sd">    input_nodes_idx :</span>
+<span class="sd">        List of input indexes. Defaults to `[0]`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Extract the current iteration variables (value and time)</span>
-    <span class="n">value</span><span class="p">,</span> <span class="n">time_step</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">time_step</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
     <span class="n">new_parameters_structure</span> <span class="o">=</span> <span class="n">apply_sequence</span><span class="p">(</span>
-        <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
         <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
         <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
         <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
         <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
+        <span class="n">input_nodes_idx</span><span class="o">=</span><span class="n">input_nodes_idx</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span>
@@ -489,18 +495,21 @@ document.write(`
 
 <div class="viewcode-block" id="apply_sequence"><a class="viewcode-back" href="../../generated/pyhgf.structure/pyhgf.structure.apply_sequence.html#pyhgf.structure.apply_sequence">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">apply_sequence</span><span class="p">(</span>
-    <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
     <span class="n">time_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">node_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">update_sequence</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a predefinded update sequence to a node structure.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply an update sequence to a node structure.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    value :</span>
-<span class="sd">        The new observation.</span>
+<span class="sd">    values :</span>
+<span class="sd">        The new observation(s). This can be a single value or a vector of observation</span>
+<span class="sd">        with length matching `input_nodes_idx`. `input_nodes_idx` is used to index the</span>
+<span class="sd">        ith value in the vector to the ith input node, so the order matters.</span>
 <span class="sd">    time_step :</span>
 <span class="sd">        The time interval between the new observation and the previous one.</span>
 <span class="sd">    parameters_structure :</span>
@@ -515,10 +524,20 @@ document.write(`
 <span class="sd">        The node structure with the update sequence.</span>
 <span class="sd">    update_sequence :</span>
 <span class="sd">        The sequence of updates that will be applied to the node structure.</span>
+<span class="sd">    input_nodes_idx :</span>
+<span class="sd">        List of input indexes. Defaults to `[0]`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">update_sequence</span><span class="p">:</span>
         <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
+
+        <span class="c1"># if we are updating an input node, select the value that should be passed</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">node_idx</span><span class="p">,</span> <span class="n">input_nodes_idx</span><span class="p">),</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">)</span> <span class="o">*</span> <span class="n">values</span><span class="p">),</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+        <span class="p">)</span>
+
         <span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
             <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
             <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
