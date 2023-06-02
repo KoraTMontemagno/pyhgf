@@ -434,100 +434,58 @@ document.write(`
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
 <span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
+<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">UpdateSequence</span>
 
-<div class="viewcode-block" id="loop_inputs"><a class="viewcode-back" href="../../generated/pyhgf.structure/pyhgf.structure.loop_inputs.html#pyhgf.structure.loop_inputs">[docs]</a><span class="k">def</span> <span class="nf">loop_inputs</span><span class="p">(</span>
+
+<div class="viewcode-block" id="beliefs_propagation"><a class="viewcode-back" href="../../generated/pyhgf.structure/pyhgf.structure.beliefs_propagation.html#pyhgf.structure.beliefs_propagation">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;update_sequence&quot;</span><span class="p">,</span> <span class="s2">&quot;node_structure&quot;</span><span class="p">,</span> <span class="s2">&quot;input_nodes_idx&quot;</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">beliefs_propagation</span><span class="p">(</span>
     <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
-    <span class="n">update_sequence</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">update_sequence</span><span class="p">:</span> <span class="n">UpdateSequence</span><span class="p">,</span>
     <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
-    <span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the node structure after observing new data point(s).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the network&#39;s parameters after observing new data point(s).</span>
 
-<span class="sd">    One time step updating node structure and returning the new parameter structure.</span>
+<span class="sd">    This function performs the beliefs propagation step at a time *t* triggered by the</span>
+<span class="sd">    observation of a new batch of value(s). The way beliefs propagate is defined by the</span>
+<span class="sd">    `update_sequence` and the `node_structure`. A tuple of two new</span>
+<span class="sd">    `parameter_structure` is then returned (the carryover and the accumulated in the</span>
+<span class="sd">    context of :py:func:`jax.lax.scan`).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    parameters_structure :</span>
-<span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
-<span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
-<span class="sd">        continuous nodes.</span>
-<span class="sd">    .. note::</span>
-<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have same length than the</span>
-<span class="sd">        volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
-<span class="sd">        It should have same length than the volatility parents&#39; indexes.</span>
+<span class="sd">        The dictionaries of nodes&#39; parameters. This variable is updated and returned</span>
+<span class="sd">        after the beliefs propagation step.</span>
 <span class="sd">    data :</span>
-<span class="sd">        A tuple of (data, time_steps). `data` is a n x j+1 Array (j the number of</span>
-<span class="sd">        inputs), the last dimension is time.</span>
+<span class="sd">        An array containing the new observation(s) as well as the time steps. The new</span>
+<span class="sd">        observations can be a single value or a vector of observation with a length</span>
+<span class="sd">        matching the length `input_nodes_idx`. `input_nodes_idx` is used to index the</span>
+<span class="sd">        ith value in the vector to the ith input node, so the ordering of the input</span>
+<span class="sd">        array matters. The time steps are the last column of the array, the default is</span>
+<span class="sd">        unit incrementation.</span>
 <span class="sd">    update_sequence :</span>
 <span class="sd">        The sequence of updates that will be applied to the node structure.</span>
 <span class="sd">    node_structure :</span>
-<span class="sd">        The node structure with the update sequence.</span>
+<span class="sd">        The nodes structure.</span>
 <span class="sd">    input_nodes_idx :</span>
-<span class="sd">        List of input indexes. Defaults to `[0]`.</span>
+<span class="sd">        An array of input indexes. The default is `[0]` (one input node, the first node</span>
+<span class="sd">        in the network).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Extract the current iteration variables (value and time)</span>
+    <span class="c1"># extract value(s) and time steps from the data</span>
     <span class="n">values</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">time_step</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">)</span>
 
     <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
-    <span class="n">new_parameters_structure</span> <span class="o">=</span> <span class="n">apply_sequence</span><span class="p">(</span>
-        <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
-        <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
-        <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
-        <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
-        <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
-        <span class="n">input_nodes_idx</span><span class="o">=</span><span class="n">input_nodes_idx</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="p">(</span>
-        <span class="n">new_parameters_structure</span><span class="p">,</span>
-        <span class="n">new_parameters_structure</span><span class="p">,</span>
-    <span class="p">)</span>  <span class="c1"># (&quot;carryover&quot;, &quot;accumulated&quot;)</span></div>
-
-
-<div class="viewcode-block" id="apply_sequence"><a class="viewcode-back" href="../../generated/pyhgf.structure/pyhgf.structure.apply_sequence.html#pyhgf.structure.apply_sequence">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">apply_sequence</span><span class="p">(</span>
-    <span class="n">values</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
-    <span class="n">time_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
-    <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
-    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
-    <span class="n">update_sequence</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
-    <span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply an update sequence to a node structure.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    values :</span>
-<span class="sd">        The new observation(s). This can be a single value or a vector of observation</span>
-<span class="sd">        with length matching `input_nodes_idx`. `input_nodes_idx` is used to index the</span>
-<span class="sd">        ith value in the vector to the ith input node, so the order matters.</span>
-<span class="sd">    time_step :</span>
-<span class="sd">        The time interval between the new observation and the previous one.</span>
-<span class="sd">    parameters_structure :</span>
-<span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
-<span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
-<span class="sd">        continuous nodes.</span>
-<span class="sd">    .. note::</span>
-<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have same length than the</span>
-<span class="sd">        volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
-<span class="sd">        It should have same length than the volatility parents&#39; indexes.</span>
-<span class="sd">    node_structure :</span>
-<span class="sd">        The node structure with the update sequence.</span>
-<span class="sd">    update_sequence :</span>
-<span class="sd">        The sequence of updates that will be applied to the node structure.</span>
-<span class="sd">    input_nodes_idx :</span>
-<span class="sd">        List of input indexes. Defaults to `[0]`.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">update_sequence</span><span class="p">:</span>
         <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
 
@@ -545,7 +503,11 @@ document.write(`
             <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">return</span> <span class="n">parameters_structure</span></div>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">parameters_structure</span><span class="p">,</span>
+        <span class="n">parameters_structure</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># (&quot;carryover&quot;, &quot;accumulated&quot;)</span></div>
 </pre></div>
 
                 </article>
