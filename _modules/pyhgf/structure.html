@@ -434,13 +434,14 @@ document.write(`
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
 <span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
-<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">UpdateSequence</span>
+<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">NodeStructure</span><span class="p">,</span> <span class="n">UpdateSequence</span>
 
 
 <div class="viewcode-block" id="beliefs_propagation"><a class="viewcode-back" href="../../generated/pyhgf.structure/pyhgf.structure.beliefs_propagation.html#pyhgf.structure.beliefs_propagation">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;update_sequence&quot;</span><span class="p">,</span> <span class="s2">&quot;node_structure&quot;</span><span class="p">,</span> <span class="s2">&quot;input_nodes_idx&quot;</span><span class="p">))</span>
@@ -508,6 +509,30 @@ document.write(`
         <span class="n">parameters_structure</span><span class="p">,</span>
         <span class="n">parameters_structure</span><span class="p">,</span>
     <span class="p">)</span>  <span class="c1"># (&quot;carryover&quot;, &quot;accumulated&quot;)</span></div>
+
+
+<div class="viewcode-block" id="get_children"><a class="viewcode-back" href="../../generated/pyhgf.structure/pyhgf.structure.get_children.html#pyhgf.structure.get_children">[docs]</a><span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span><span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node_structure</span><span class="p">:</span> <span class="n">NodeStructure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the list of all children from a given node.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    node_idx :</span>
+<span class="sd">        Index of the parent node.</span>
+<span class="sd">    node_structure :</span>
+<span class="sd">        The network structure.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    children_idx :</span>
+<span class="sd">        The indexes of the children nodes.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">children_idxs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_structure</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">([</span><span class="n">node_idx</span> <span class="ow">in</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]):</span>
+            <span class="n">children_idxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">children_idxs</span></div>
 </pre></div>
 
                 </article>
