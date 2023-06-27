@@ -451,7 +451,7 @@ document.write(`
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyhgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_network</span><span class="p">,</span> <span class="n">plot_trajectories</span>
 <span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">first_level_binary_surprise</span><span class="p">,</span> <span class="n">first_level_gaussian_surprise</span>
-<span class="kn">from</span> <span class="nn">pyhgf.structure</span> <span class="kn">import</span> <span class="n">beliefs_propagation</span><span class="p">,</span> <span class="n">get_children</span>
+<span class="kn">from</span> <span class="nn">pyhgf.structure</span> <span class="kn">import</span> <span class="n">beliefs_propagation</span>
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span><span class="p">,</span> <span class="n">InputIndexes</span><span class="p">,</span> <span class="n">NodeStructure</span><span class="p">,</span> <span class="n">UpdateSequence</span>
 
 
@@ -650,7 +650,7 @@ document.write(`
     <span class="k">def</span> <span class="nf">input_data</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">time_steps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new observations.</span>
 
@@ -658,15 +658,16 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        input_data :</span>
 <span class="sd">            2d array of new observations (time x features).</span>
-<span class="sd">        time :</span>
+<span class="sd">        time_steps :</span>
 <span class="sd">            Time vector (optional). If `None`, the time vector will defaults to</span>
-<span class="sd">            `np.arange(0, len(input_data))`.</span>
+<span class="sd">            `np.ones(len(input_data))`. This vector is automatically transformed</span>
+<span class="sd">            into a time steps vector.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">((</span><span class="sa">f</span><span class="s2">&quot;Adding </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> new observations.&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># time step vector</span>
+        <span class="k">if</span> <span class="n">time_steps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">))</span>  <span class="c1"># time steps vector</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_update_sequence</span><span class="p">()</span>
 
@@ -679,11 +680,11 @@ document.write(`
         <span class="p">)</span>
 
         <span class="c1"># concatenate data and time</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">time_steps</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">input_data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">input_data</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 
-        <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># Run the entire for loop</span>
         <span class="c1"># this is where the model loop over the input time series</span>
@@ -755,38 +756,48 @@ document.write(`
 <span class="sd">            surprise of each node in the structure.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># input parameters</span>
+        <span class="c1"># get time and time steps from the first input node</span>
         <span class="n">structure_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">&quot;time_steps&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;time_step&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]),</span>
-                <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;time_steps&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span>
+                    <span class="s2">&quot;time_step&quot;</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]</span>
+                <span class="p">),</span>
             <span class="p">}</span>
         <span class="p">)</span>
 
+        <span class="c1"># add the observations from input nodes</span>
+        <span class="k">for</span> <span class="n">inpt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
+            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">inpt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">inpt</span><span class="p">][</span>
+                <span class="s2">&quot;value&quot;</span>
+            <span class="p">]</span>
+
         <span class="c1"># loop over nodes and store sufficient statistics with surprise</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">)):</span>
-            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
-            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">):</span>
-                <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
-                    <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
-                    <span class="n">muhat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">pihat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
+                <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
+                <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+                <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">):</span>
+                    <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
+                        <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
+                        <span class="n">muhat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">pihat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
+                        <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
+                        <span class="n">muhat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">pihat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="p">)</span>
+                <span class="c1"># fill with nans when the model cannot fit</span>
+                <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                    <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">surprise</span>
                 <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
-                    <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
-                    <span class="n">muhat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">pihat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                <span class="p">)</span>
-            <span class="c1"># fill with nans when the model cannot fit</span>
-            <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">surprise</span>
-            <span class="p">)</span>
-            <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">surprise</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">surprise</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
         <span class="c1"># compute the global surprise over all node</span>
         <span class="n">structure_df</span><span class="p">[</span><span class="s2">&quot;surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">structure_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span>
@@ -842,12 +853,12 @@ document.write(`
         <span class="k">if</span> <span class="n">input_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># this is the first node, create the node structure</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span> <span class="o">=</span> <span class="p">{</span><span class="n">input_idx</span><span class="p">:</span> <span class="n">input_node_parameters</span><span class="p">}</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">((</span><span class="n">input_idx</span><span class="p">,),</span> <span class="p">(</span><span class="n">kind</span><span class="p">,))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># update the node structure</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">input_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_node_parameters</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
 
             <span class="c1"># add information about the new input node in the indexes</span>
             <span class="n">new_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
@@ -863,13 +874,13 @@ document.write(`
         <span class="n">children_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
         <span class="n">value_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">mu_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+        <span class="n">mu_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">pi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">pi_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+        <span class="n">pi_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">kappas</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">nu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
         <span class="n">psis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+        <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a value parent to node.</span>
@@ -882,23 +893,27 @@ document.write(`
 <span class="sd">            The value_coupling between the child and parent node. This is will be</span>
 <span class="sd">            appended to the `psis` parameters in the child node.</span>
 <span class="sd">        mu :</span>
-<span class="sd">            Mean.</span>
+<span class="sd">            The mean of the Gaussian distribution.</span>
 <span class="sd">        mu_hat :</span>
-<span class="sd">            Expected mean.</span>
+<span class="sd">            The expected mean of the Gaussian distribution for the next observation.</span>
 <span class="sd">        pi :</span>
-<span class="sd">            Precision.</span>
+<span class="sd">            The precision of the Gaussian distribution (inverse variance).</span>
 <span class="sd">        pi_hat :</span>
-<span class="sd">            Expected precision.</span>
+<span class="sd">            The expected precision of the Gaussian distribution (inverse variance) for</span>
+<span class="sd">            the next observation.</span>
 <span class="sd">        kappas :</span>
-<span class="sd">            Phasic part of the variance.</span>
+<span class="sd">            The phasic part of the variance (the part that is inherited from volatility</span>
+<span class="sd">            parents).</span>
 <span class="sd">        nu :</span>
 <span class="sd">            Stochasticity coupling.</span>
 <span class="sd">        psis :</span>
-<span class="sd">            Value coupling.</span>
+<span class="sd">            The value coupling with other value parents (defaults to `None` when the</span>
+<span class="sd">            node is created as no parents are defined yet).</span>
 <span class="sd">        omega :</span>
-<span class="sd">            Tonic part of the variance.</span>
+<span class="sd">            The tonic part of the variance (the variance that is not inherited from</span>
+<span class="sd">            volatility parent(s)).</span>
 <span class="sd">        rho :</span>
-<span class="sd">            Drift of the random walk.</span>
+<span class="sd">            The drift of the random walk. Defaults to `0.0` (no drift).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># how many nodes in structure</span>
@@ -919,7 +934,7 @@ document.write(`
         <span class="p">}</span>
 
         <span class="c1"># add a new node to connection structure with no parents</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">),</span> <span class="kc">None</span><span class="p">),)</span>
 
         <span class="c1"># add a new parameters to parameters structure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_parameters</span>
@@ -935,7 +950,10 @@ document.write(`
                     <span class="n">parent_idx</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
-                    <span class="n">new_value_parents_idx</span><span class="p">,</span> <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
+                    <span class="n">new_value_parents_idx</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set the value coupling strength</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;psis&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">value_coupling</span><span class="p">,)</span>
@@ -943,7 +961,10 @@ document.write(`
                 <span class="c1"># append new index</span>
                 <span class="n">new_value_parents_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">parent_idx</span><span class="p">,)</span>
                 <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
-                    <span class="n">new_value_parents_idx</span><span class="p">,</span> <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
+                    <span class="n">new_value_parents_idx</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set the value coupling strength</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;psis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">value_coupling</span><span class="p">,)</span>
@@ -958,13 +979,13 @@ document.write(`
         <span class="n">children_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
         <span class="n">volatility_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">mu_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+        <span class="n">mu_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">pi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">pi_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+        <span class="n">pi_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">kappas</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">nu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
         <span class="n">psis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+        <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a volatility parent to node.</span>
@@ -977,23 +998,26 @@ document.write(`
 <span class="sd">            The volatility coupling between the child and parent node. This is will be</span>
 <span class="sd">            appended to the `kappas` parameters in the child node.</span>
 <span class="sd">        mu :</span>
-<span class="sd">            Mean.</span>
+<span class="sd">            The mean of the Gaussian distribution.</span>
 <span class="sd">        mu_hat :</span>
-<span class="sd">            Expected mean.</span>
+<span class="sd">            The expected mean of the Gaussian distribution for the next observation.</span>
 <span class="sd">        pi :</span>
-<span class="sd">            Precision.</span>
+<span class="sd">            The precision of the Gaussian distribution (inverse variance).</span>
 <span class="sd">        pi_hat :</span>
-<span class="sd">            Expected precision.</span>
+<span class="sd">            The expected precision of the Gaussian distribution (inverse variance) for</span>
+<span class="sd">            the next observation.</span>
 <span class="sd">        kappas :</span>
 <span class="sd">            Phasic part of the variance.</span>
 <span class="sd">        nu :</span>
 <span class="sd">            Stochasticity coupling.</span>
 <span class="sd">        psis :</span>
-<span class="sd">            Value coupling.</span>
+<span class="sd">            The value coupling with other value parents (defaults to `None` when the</span>
+<span class="sd">            node is created as no parents are defined yet).</span>
 <span class="sd">        omega :</span>
-<span class="sd">            Tonic part of the variance.</span>
+<span class="sd">            The tonic part of the variance (the variance that is not inherited from</span>
+<span class="sd">            volatility parent(s)).</span>
 <span class="sd">        rho :</span>
-<span class="sd">            Drift of the random walk.</span>
+<span class="sd">            The drift of the random walk. Defaults to `0.0` (no drift).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># how many nodes in structure</span>
@@ -1014,7 +1038,7 @@ document.write(`
         <span class="p">}</span>
 
         <span class="c1"># add a new node to connection structure with no parents</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">)),)</span>
 
         <span class="c1"># add a new parameters to parameters structure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_parameters</span>
@@ -1030,7 +1054,10 @@ document.write(`
                     <span class="n">idx</span>
                 <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span> <span class="o">+</span> <span class="p">(</span><span class="n">parent_idx</span><span class="p">,)</span>
                 <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
-                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span> <span class="n">new_volatility_parents_idx</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
+                    <span class="n">new_volatility_parents_idx</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set the value coupling strength</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">volatility_coupling</span><span class="p">,)</span>
@@ -1038,7 +1065,10 @@ document.write(`
                 <span class="c1"># append new index</span>
                 <span class="n">new_volatility_parents_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">parent_idx</span><span class="p">,)</span>
                 <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
-                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span> <span class="n">new_volatility_parents_idx</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
+                    <span class="n">new_volatility_parents_idx</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                    <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set the value coupling strength</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">volatility_coupling</span><span class="p">,)</span>
@@ -1078,6 +1108,12 @@ document.write(`
             <span class="n">node_idxs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
 
         <span class="k">for</span> <span class="n">node_idx</span> <span class="ow">in</span> <span class="n">node_idxs</span><span class="p">:</span>
+            <span class="c1"># if the node has no parent, exit here</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="p">):</span>
+                <span class="k">continue</span>
+
             <span class="c1"># select the update function</span>
             <span class="c1"># --------------------------</span>
 
@@ -1098,47 +1134,53 @@ document.write(`
                 <span class="k">elif</span> <span class="n">model_kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
                     <span class="n">update_fn</span> <span class="o">=</span> <span class="n">continuous_input_update</span>
 
-            <span class="c1"># case 3 - this is the parent of at least one binary input node</span>
-            <span class="n">children_idxs</span> <span class="o">=</span> <span class="n">get_children</span><span class="p">(</span>
-                <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span> <span class="n">node_structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">child_idx</span> <span class="ow">in</span> <span class="n">children_idxs</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">child_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
-                    <span class="n">model_kind</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="n">kind_</span>
-                        <span class="k">for</span> <span class="n">kind_</span><span class="p">,</span> <span class="n">idx_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
-                        <span class="p">)</span>
-                        <span class="k">if</span> <span class="n">idx_</span> <span class="o">==</span> <span class="n">child_idx</span>
-                    <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">model_kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-                        <span class="n">update_fn</span> <span class="o">=</span> <span class="n">binary_node_update</span>
+            <span class="c1"># case 3 - this is the value parent of at least one binary input node</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">value_children_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span>
+                <span class="k">for</span> <span class="n">child_idx</span> <span class="ow">in</span> <span class="n">value_children_idx</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+                    <span class="k">if</span> <span class="n">child_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
+                        <span class="n">model_kind</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="n">kind_</span>
+                            <span class="k">for</span> <span class="n">kind_</span><span class="p">,</span> <span class="n">idx_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
+                            <span class="p">)</span>
+                            <span class="k">if</span> <span class="n">idx_</span> <span class="o">==</span> <span class="n">child_idx</span>
+                        <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">model_kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
+                            <span class="n">update_fn</span> <span class="o">=</span> <span class="n">binary_node_update</span>
 
             <span class="c1"># create a new sequence step and add it to the list</span>
             <span class="n">new_sequence</span> <span class="o">=</span> <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span>
             <span class="n">update_sequence</span> <span class="o">+=</span> <span class="p">(</span><span class="n">new_sequence</span><span class="p">,)</span>
 
             <span class="c1"># search recursively for the next update steps - make sure that all the</span>
-            <span class="c1"># children have been updated before updating the next parent</span>
+            <span class="c1"># children have been updated before updating the parent(s)</span>
             <span class="c1"># ---------------------------------------------------------------------</span>
 
             <span class="c1"># loop over all possible dependencies (e.g. value, volatility coupling)</span>
-            <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span>
+            <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">parent_types</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">parent_types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">parent_types</span><span class="p">:</span>
-                        <span class="c1"># get the list of all the parent&#39;s children</span>
-                        <span class="n">children_idxs</span> <span class="o">=</span> <span class="n">get_children</span><span class="p">(</span>
-                            <span class="n">node_idx</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">node_structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span>
-                        <span class="p">)</span>
-
-                        <span class="c1"># only call the update on the parent(s) if the current node is</span>
-                        <span class="c1"># the last on the children list (meaning that all the other</span>
-                        <span class="c1"># nodes have been updated)</span>
-                        <span class="k">if</span> <span class="n">children_idxs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
-                            <span class="n">update_sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_update_sequence</span><span class="p">(</span>
-                                <span class="n">node_idxs</span><span class="o">=</span><span class="p">(</span><span class="n">idx</span><span class="p">,),</span> <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span>
+                        <span class="c1"># get the list of all the children in the parent&#39;s family</span>
+                        <span class="n">children_idxs</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">children_idxs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                                <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">]</span>
                             <span class="p">)</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">children_idxs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                                <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">]</span>
+                            <span class="p">)</span>
+
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="c1"># only call the update on the parent(s) if the current node</span>
+                            <span class="c1"># is the last on the children list (meaning that all the</span>
+                            <span class="c1"># other nodes have been updated)</span>
+                            <span class="k">if</span> <span class="n">children_idxs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
+                                <span class="n">update_sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_update_sequence</span><span class="p">(</span>
+                                    <span class="n">node_idxs</span><span class="o">=</span><span class="p">(</span><span class="n">idx</span><span class="p">,),</span> <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span>
+                                <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">update_sequence</span></div>
 </pre></div>

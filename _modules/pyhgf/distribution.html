@@ -467,7 +467,7 @@ document.write(`
     <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">time_steps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Log probability from HGF model(s) given input data and parameter(s).</span>
 
@@ -550,10 +550,10 @@ document.write(`
 <span class="sd">        using :py:meth:`pyhgf.model.HGF.add_nodes`.</span>
 <span class="sd">    response_function_parameters :</span>
 <span class="sd">        Additional parameters to the response function.</span>
-<span class="sd">    time :</span>
+<span class="sd">    time_steps :</span>
 <span class="sd">        List of 1d Numpy arrays containing the time vectors for each input time series.</span>
 <span class="sd">        If one of the list item is `None`, or if `None` is provided instead, the time</span>
-<span class="sd">        vector will defaults to integers vector starting at 0.</span>
+<span class="sd">        vector will defaults to unit vector.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -603,10 +603,10 @@ document.write(`
 
     <span class="c1"># if no time vectors provided, set it to None (will defaults to integers vectors)</span>
     <span class="c1"># otherwise check consistency with the input data</span>
-    <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+    <span class="k">if</span> <span class="n">time_steps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">time_steps</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">time_steps</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span>
 
     <span class="n">surprise</span> <span class="o">=</span> <span class="mf">0.0</span>
 
@@ -646,7 +646,7 @@ document.write(`
                 <span class="n">pihat</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">time_steps</span><span class="o">=</span><span class="n">time_steps</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="o">.</span><span class="n">surprise</span><span class="p">(</span>
                 <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
                 <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
@@ -663,7 +663,7 @@ document.write(`
 <div class="viewcode-block" id="HGFLogpGradOp.__init__"><a class="viewcode-back" href="../../generated/pyhgf.distribution/pyhgf.distribution.HGFLogpGradOp.html#pyhgf.distribution.HGFLogpGradOp.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">time_steps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continous&quot;</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -675,13 +675,13 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        input_data :</span>
 <span class="sd">            List of input data. When `n` models should be fitted, the list contains `n`</span>
-<span class="sd">            1d Numpy arrays. By default, the associated time vector is the integers</span>
-<span class="sd">            vector starting at `0`. A different time vector can be passed to the `time`</span>
-<span class="sd">            argument.</span>
-<span class="sd">        time :</span>
-<span class="sd">            List of 1d Numpy arrays containing the time vectors for each input time</span>
-<span class="sd">            series. If one of the list item is `None`, or if `None` is provided instead,</span>
-<span class="sd">            the time vector will defaults to integers vector starting at 0.</span>
+<span class="sd">            1d Numpy arrays. By default, the associated time_steps vector is the unit</span>
+<span class="sd">            vector. A different time vector can be passed to the `time_steps` argument.</span>
+<span class="sd">        time_steps :</span>
+<span class="sd">            List of 1d Numpy arrays containing the time_steps vectors for each input</span>
+<span class="sd">            time series. If one of the list item is `None`, or if `None` is provided</span>
+<span class="sd">            instead, the time_steps vector will defaults to integers vector starting at</span>
+<span class="sd">            0.</span>
 <span class="sd">        model_type :</span>
 <span class="sd">            The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
 <span class="sd">        n_levels :</span>
@@ -700,7 +700,7 @@ document.write(`
                     <span class="n">hgf_logp</span><span class="p">,</span>
                     <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
                     <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
-                    <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
+                    <span class="n">time_steps</span><span class="o">=</span><span class="n">time_steps</span><span class="p">,</span>
                     <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
                     <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
                     <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
@@ -859,7 +859,7 @@ document.write(`
 <div class="viewcode-block" id="HGFDistribution.__init__"><a class="viewcode-back" href="../../generated/pyhgf.distribution/pyhgf.distribution.HGFDistribution.html#pyhgf.distribution.HGFDistribution.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">time_steps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -871,13 +871,13 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        input_data :</span>
 <span class="sd">            List of input data. When `n` models should be fitted, the list contains `n`</span>
-<span class="sd">            1d Numpy arrays. By default, the associated time vector is the integers</span>
-<span class="sd">            vector starting at `0`. A different time vector can be passed to the `time`</span>
-<span class="sd">            argument.</span>
-<span class="sd">        time :</span>
-<span class="sd">            List of 1d Numpy arrays containing the time vectors for each input time</span>
-<span class="sd">            series. If one of the list item is `None`, or if `None` is provided instead,</span>
-<span class="sd">            the time vector will defaults to integers vector starting at 0.</span>
+<span class="sd">            1d Numpy arrays. By default, the associated time vector is the unit</span>
+<span class="sd">            vector starting at `0`. A different time_steps vector can be passed to</span>
+<span class="sd">            the `time_steps` argument.</span>
+<span class="sd">        time_steps :</span>
+<span class="sd">            List of 1d Numpy arrays containing the time_steps vectors for each input</span>
+<span class="sd">            time series. If one of the list item is `None`, or if `None` is provided</span>
+<span class="sd">            instead, the time vector will defaults to integers vector starting at 0.</span>
 <span class="sd">        model_type :</span>
 <span class="sd">            The model type to use (can be &quot;continuous&quot; or &quot;binary&quot;).</span>
 <span class="sd">        n_levels :</span>
@@ -896,7 +896,7 @@ document.write(`
                 <span class="n">hgf_logp</span><span class="p">,</span>
                 <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
                 <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
-                <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">time_steps</span><span class="o">=</span><span class="n">time_steps</span><span class="p">,</span>
                 <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
                 <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
                 <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
@@ -906,7 +906,7 @@ document.write(`
         <span class="c1"># The gradient function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hgf_logp_grad_op</span> <span class="o">=</span> <span class="n">HGFLogpGradOp</span><span class="p">(</span>
             <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
-            <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
+            <span class="n">time_steps</span><span class="o">=</span><span class="n">time_steps</span><span class="p">,</span>
             <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
             <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
             <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>

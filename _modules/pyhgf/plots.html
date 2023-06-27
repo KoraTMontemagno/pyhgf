@@ -554,7 +554,7 @@ document.write(`
     <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
         <span class="n">axs</span><span class="p">[</span><span class="n">n_nodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-            <span class="n">trajectories_df</span><span class="o">.</span><span class="n">observation</span><span class="p">,</span>
+            <span class="n">trajectories_df</span><span class="o">.</span><span class="n">observation_input_0</span><span class="p">,</span>
             <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Input&quot;</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a2a2a&quot;</span><span class="p">,</span>
@@ -564,7 +564,7 @@ document.write(`
     <span class="k">elif</span> <span class="n">hgf</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
         <span class="n">axs</span><span class="p">[</span><span class="n">n_nodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-            <span class="n">y</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">observation</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">observation_input_0</span><span class="p">,</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Input&quot;</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4c72b0&quot;</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
@@ -684,7 +684,7 @@ document.write(`
     <span class="n">trajectories_df</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
     <span class="n">trajectories_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
         <span class="p">[</span>
-            <span class="n">trajectories_df</span><span class="p">[[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;observation&quot;</span><span class="p">,</span> <span class="s2">&quot;surprise&quot;</span><span class="p">]],</span>
+            <span class="n">trajectories_df</span><span class="p">[[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;observation_input_0&quot;</span><span class="p">,</span> <span class="s2">&quot;surprise&quot;</span><span class="p">]],</span>
             <span class="n">trajectories_df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;hat&quot;</span><span class="p">),</span>
         <span class="p">],</span>
         <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>

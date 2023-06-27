@@ -421,7 +421,6 @@ document.write(`
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.structure/pyhgf.structure.beliefs_propagation.html">pyhgf.structure.beliefs_propagation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.structure/pyhgf.structure.get_children.html">pyhgf.structure.get_children</a></li>
 </ul>
 </div>
 </nav></div>
@@ -484,13 +483,16 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pyhgf.continuous.continuous_node_update">
 <span class="sig-prename descclassname"><span class="pre">pyhgf.continuous.</span></span><span class="sig-name descname"><span class="pre">continuous_node_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Indexes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span></span><a class="reference internal" href="../../_modules/pyhgf/continuous.html#continuous_node_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.continuous.continuous_node_update" title="Permalink to this definition">#</a></dt>
-<dd><p>Update the value and volatility parents of a continuous node.</p>
-<p>If the parents have value and/or volatility parents, they will be updated
-recursively.</p>
-<p>Updating the node’s parents is a two step process:
-1. Update value parent(s) and their parents (if provided).
-2. Update volatility parent(s) and their parents (if provided).</p>
-<p>Then returns the new node structure.</p>
+<dd><p>Update the value and volatility parent(s) of a continuous node.</p>
+<p>Updating the node’s parents is a two-step process:
+1. Update value parent(s).
+2. Update volatility parent(s).</p>
+<p>If a value/volatility parent has multiple children, all the children will update
+the parent together, therefor this function should only be called once per group
+of child nodes. The method <code class="xref py py-meth docutils literal notranslate"><span class="pre">pyhgf.model.HGF.get_update_sequence()</span></code>
+ensures that this function is only called once all the children have been
+updated.</p>
+<p>Then returns the structure of the new parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -514,7 +516,7 @@ For each node, the index list value and volatility parents.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>parameters_structure</dt><dd><p>The updated node structure.</p>
+<dt>parameters_structure</dt><dd><p>The updated parameters structure.</p>
 </dd>
 </dl>
 </dd>
