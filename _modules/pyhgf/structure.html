@@ -434,10 +434,12 @@ document.write(`
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
+<span class="kn">from</span> <span class="nn">jax.tree_util</span> <span class="kn">import</span> <span class="n">tree_flatten</span>
 <span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">UpdateSequence</span>
@@ -479,12 +481,18 @@ document.write(`
 <span class="sd">        An array of input indexes. The default is `[0]` (one input node, the first node</span>
 <span class="sd">        in the network).</span>
 
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    parameters_structure, parameters_structure :</span>
+<span class="sd">        Tuple of parameters structure (carryover and accumulated).</span>
+
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># extract value(s) and time steps from the data</span>
     <span class="n">values</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">time_step</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">)</span>
 
+    <span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">)</span>
     <span class="c1"># Fit the model with the current time and value variables, given model structure</span>
     <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">update_sequence</span><span class="p">:</span>
         <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
@@ -508,6 +516,165 @@ document.write(`
         <span class="n">parameters_structure</span><span class="p">,</span>
         <span class="n">parameters_structure</span><span class="p">,</span>
     <span class="p">)</span>  <span class="c1"># (&quot;carryover&quot;, &quot;accumulated&quot;)</span></div>
+
+
+<span class="k">def</span> <span class="nf">trim_sequence</span><span class="p">(</span>
+    <span class="n">exclude_node_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">update_sequence</span><span class="p">:</span> <span class="n">UpdateSequence</span><span class="p">,</span> <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UpdateSequence</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove steps from an update sequence that depends on a set of nodes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    exclude_node_idxs :</span>
+<span class="sd">        A list of node indexes. The nodes can be input nodes or any other node in the</span>
+<span class="sd">        network.</span>
+<span class="sd">    update_sequence :</span>
+<span class="sd">        The sequence of updates that will be applied to the node structure.</span>
+<span class="sd">    node_structure :</span>
+<span class="sd">        The nodes structure.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    trimmed_update_sequence :</span>
+<span class="sd">        The update sequence without the update steps for nodes dependeing on the root</span>
+<span class="sd">        list.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># list the nodes that depends on the root indexes</span>
+    <span class="n">branch_list</span> <span class="o">=</span> <span class="n">list_branches</span><span class="p">(</span>
+        <span class="n">node_idxs</span><span class="o">=</span><span class="n">exclude_node_idxs</span><span class="p">,</span> <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span>
+    <span class="p">)</span>
+
+    <span class="c1"># remove the update steps that are targetting the excluded nodes</span>
+    <span class="n">trimmed_update_sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">seq</span> <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">update_sequence</span> <span class="k">if</span> <span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">branch_list</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trimmed_update_sequence</span>
+
+
+<span class="k">def</span> <span class="nf">list_branches</span><span class="p">(</span>
+    <span class="n">node_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">branch_list</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the branch of a network from a given set of root nodes.</span>
+
+<span class="sd">    This function serch recursively and list the parents above a given node. If all the</span>
+<span class="sd">    children of a given parent are on the exclusion list, this parent is also excluded.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    node_idxs :</span>
+<span class="sd">        A list of node indexes. The nodes can be input nodes or any other node in the</span>
+<span class="sd">        network.</span>
+<span class="sd">    node_structure :</span>
+<span class="sd">        The nodes structure.</span>
+<span class="sd">    branch_list :</span>
+<span class="sd">        The list of nodes that are already excluded (i.e )</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    branch_list :</span>
+<span class="sd">        The list of node indexes that belong to the branch.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">node_idxs</span><span class="p">:</span>
+        <span class="c1"># add this node to the exclusion list</span>
+        <span class="n">branch_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="n">all_parents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">i</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span>
+                    <span class="n">node_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
+                    <span class="n">node_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">parent_idx</span> <span class="ow">in</span> <span class="n">all_parents</span><span class="p">:</span>
+            <span class="c1"># list the children for this node</span>
+            <span class="n">all_children</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">i</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span>
+                        <span class="n">node_structure</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                        <span class="n">node_structure</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
+                    <span class="p">]</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="c1"># if this parent has only excluded children, add it to the exclusion list</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="n">i</span> <span class="ow">in</span> <span class="n">branch_list</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">all_children</span><span class="p">]):</span>
+                <span class="n">branch_list</span> <span class="o">=</span> <span class="n">list_branches</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">parent_idx</span><span class="p">],</span> <span class="n">node_structure</span><span class="p">,</span> <span class="n">branch_list</span><span class="o">=</span><span class="n">branch_list</span>
+                <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">branch_list</span>
+
+
+<span class="c1"># @partial(jit, static_argnames=(&quot;update_series&quot;, &quot;node_structure&quot;, &quot;input_nodes_idx&quot;))</span>
+<span class="k">def</span> <span class="nf">dynamic_updates</span><span class="p">(</span>
+    <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">update_series</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">UpdateSequence</span><span class="p">],</span>
+    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update parameters with a custom sequence of updates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    update_series :</span>
+<span class="sd">        A tuple of UpdateSequence with same length than `input_data`. One update</span>
+<span class="sd">        sequence is defined at every time point.</span>
+<span class="sd">    parameters_structure :</span>
+<span class="sd">        The dictionaries of nodes&#39; parameters. This variable is updated and returned</span>
+<span class="sd">        after the beliefs propagation step.</span>
+<span class="sd">    data :</span>
+<span class="sd">        An array containing the new observation(s) as well as the time steps. The new</span>
+<span class="sd">        observations can be a single value or a vector of observation with a length</span>
+<span class="sd">        matching the length `input_nodes_idx`. `input_nodes_idx` is used to index the</span>
+<span class="sd">        ith value in the vector to the ith input node, so the ordering of the input</span>
+<span class="sd">        array matters. The time steps are the last column of the array, the default is</span>
+<span class="sd">        unit incrementation.</span>
+<span class="sd">    update_sequence :</span>
+<span class="sd">        The sequence of updates that will be applied to the node structure.</span>
+<span class="sd">    node_structure :</span>
+<span class="sd">        The nodes structure.</span>
+<span class="sd">    input_nodes_idx :</span>
+<span class="sd">        An array of input indexes. The default is `[0]` (one input node, the first node</span>
+<span class="sd">        in the network).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    node_trajectories :</span>
+<span class="sd">        The nodes trajectories after update.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parameters_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># beliefs propagation using time and value variables</span>
+    <span class="c1"># given model structure and current update sequence</span>
+    <span class="k">for</span> <span class="n">update_sequence</span><span class="p">,</span> <span class="n">data_slice</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">update_series</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">parameters_structure</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">beliefs_propagation</span><span class="p">(</span>
+            <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data_slice</span><span class="p">,</span>
+            <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
+            <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
+            <span class="n">input_nodes_idx</span><span class="o">=</span><span class="n">input_nodes_idx</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">parameters_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameters_structure</span><span class="p">)</span>
+
+    <span class="c1"># fusion the list of dictionaries into a single dictionary by aggregating values</span>
+    <span class="n">leaves_list</span><span class="p">,</span> <span class="n">treedef_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">parameters_list</span><span class="p">:</span>
+        <span class="n">leaves</span><span class="p">,</span> <span class="n">treedef</span> <span class="o">=</span> <span class="n">tree_flatten</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">leaves_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">leaves</span><span class="p">)</span>
+        <span class="n">treedef_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">treedef</span><span class="p">)</span>
+    <span class="n">grouped_leaves</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">leaves_list</span><span class="p">)</span>
+    <span class="n">result_leaves</span> <span class="o">=</span> <span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">leave</span><span class="p">)</span> <span class="k">for</span> <span class="n">leave</span> <span class="ow">in</span> <span class="n">grouped_leaves</span><span class="p">]</span>
+    <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">treedef_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">result_leaves</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 
                 </article>
