@@ -457,7 +457,7 @@ document.write(`
 <span class="sd">    If the parents have value and/or volatility parents, they will be updated</span>
 <span class="sd">    recursively.</span>
 
-<span class="sd">    Updating the node&#39;s parents is a two step process:</span>
+<span class="sd">    Updating the node&#39;s parents is a two-step process:</span>
 <span class="sd">        1. Update value parent(s) and their parents (if provided).</span>
 <span class="sd">        2. Update volatility parent(s) and their parents (if provided).</span>
 
@@ -470,16 +470,16 @@ document.write(`
 <span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
 <span class="sd">        continuous nodes.</span>
 <span class="sd">    .. note::</span>
-<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have same length than the</span>
+<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have the same length as the</span>
 <span class="sd">        volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
-<span class="sd">        It should have same length than the volatility parents&#39; indexes.</span>
+<span class="sd">        It should have the same length as the volatility parents&#39; indexes.</span>
 <span class="sd">    time_step :</span>
 <span class="sd">        Interval between the previous time point and the current time point.</span>
 <span class="sd">    node_idx :</span>
-<span class="sd">        Pointer to the node that need to be updated. After continuous update, the</span>
+<span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
 <span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
 <span class="sd">    node_structure :</span>
-<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with same length than number of node.</span>
+<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with the same length as node number.</span>
 <span class="sd">        For each node, the index list value and volatility parents.</span>
 
 <span class="sd">    Returns</span>
@@ -582,7 +582,7 @@ document.write(`
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure given one observation.</span>
 
-<span class="sd">    This function is the entry level of the model fitting. It update the partents of</span>
+<span class="sd">    This function is the entry-level of the model fitting. It updates the parents of</span>
 <span class="sd">    the input node and then call :py:func:`pyhgf.binary.binary_node_update` to update</span>
 <span class="sd">    the rest of the node structure.</span>
 
@@ -591,20 +591,20 @@ document.write(`
 <span class="sd">    value :</span>
 <span class="sd">        The new observed value.</span>
 <span class="sd">    time_step :</span>
-<span class="sd">        Interval between the previous time point and the current time point.</span>
+<span class="sd">        The interval between the previous time point and the current time point.</span>
 <span class="sd">    parameters_structure :</span>
 <span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
 <span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
 <span class="sd">        continuous nodes.</span>
 <span class="sd">    .. note::</span>
-<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have same length than the</span>
+<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have the same length as the</span>
 <span class="sd">        volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
-<span class="sd">        It should have same length than the volatility parents&#39; indexes.</span>
+<span class="sd">        It should have the same length as the volatility parents&#39; indexes.</span>
 <span class="sd">    node_structure :</span>
-<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with same length than number of node.</span>
+<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with the same length as node number.</span>
 <span class="sd">        For each node, the index list value and volatility parents.</span>
 <span class="sd">    node_idx :</span>
-<span class="sd">        Pointer to the node that need to be updated. After continuous update, the</span>
+<span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
 <span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
 
 <span class="sd">    Returns</span>
@@ -655,7 +655,7 @@ document.write(`
 
         <span class="c1"># TODO: this will be decided once we figure out the multi parents/children</span>
         <span class="c1"># # 1.1.2 Look at the (optional) va_pa&#39;s value parents (x3)</span>
-        <span class="c1"># # and update the driftrate accordingly</span>
+        <span class="c1"># # and update the drift rate accordingly</span>
         <span class="c1"># if va_pa_value_parents[0][1] is not None:</span>
         <span class="c1">#     for va_pa_va_pa in va_pa_value_parents[0][1]:</span>
         <span class="c1">#         # For each x2&#39;s value parents (optional)</span>

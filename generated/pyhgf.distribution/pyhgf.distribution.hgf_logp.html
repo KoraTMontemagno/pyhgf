@@ -510,7 +510,7 @@ not inherited from parents nodes).</p>
 <dt><strong>omega_3</strong></dt><dd><p>The <span class="math notranslate nohighlight">\(\omega\)</span> parameter, or <em>evolution rate</em>, at the third level of the
 HGF. This parameter represents the tonic part of the variance (the part that is
 not inherited from parents nodes). The value of this parameter will be ignored
-when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+when using a two-level HGF (<cite>n_levels=2</cite>).</p>
 </dd>
 <dt><strong>omega_input</strong></dt><dd><p>Represent the noise associated with the input observation.</p>
 </dd>
@@ -522,14 +522,14 @@ represents the drift of the random walk.</p>
 </dd>
 <dt><strong>rho_3</strong></dt><dd><p>The <span class="math notranslate nohighlight">\(\rho\)</span> parameter at the first level of the HGF. This parameter
 represents the drift of the random walk. The value of this parameter will be
-ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+ignored when using a two-level HGF (<cite>n_levels=2</cite>).</p>
 </dd>
 <dt><strong>pi_1</strong></dt><dd><p>The <span class="math notranslate nohighlight">\(\pi\)</span> parameter, or <em>precision</em>, at the first level of the HGF.</p>
 </dd>
 <dt><strong>pi_2</strong></dt><dd><p>The <span class="math notranslate nohighlight">\(\pi\)</span> parameter, or <em>precision</em>, at the second level of the HGF.</p>
 </dd>
 <dt><strong>pi_3</strong></dt><dd><p>The <span class="math notranslate nohighlight">\(\pi\)</span> parameter, or <em>precision</em>, at the third level of the HGF. The
-value of this parameter will be ignored when using a 2-levels HGF
+value of this parameter will be ignored when using a two-level HGF
 (<cite>n_levels=2</cite>).</p>
 </dd>
 <dt><strong>mu_1</strong></dt><dd><p>The <span class="math notranslate nohighlight">\(\mu\)</span> parameter, or <em>mean</em>, at the first level of the HGF.</p>
@@ -537,18 +537,18 @@ value of this parameter will be ignored when using a 2-levels HGF
 <dt><strong>mu_2</strong></dt><dd><p>The <span class="math notranslate nohighlight">\(\mu\)</span> parameter, or <em>mean</em>, at the second level of the HGF.</p>
 </dd>
 <dt><strong>mu_3</strong></dt><dd><p>The <span class="math notranslate nohighlight">\(\mu\)</span> parameter, or <em>mean</em>, at the third level of the HGF. The value
-of this parameter will be ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+of this parameter will be ignored when using a two-level HGF (<cite>n_levels=2</cite>).</p>
 </dd>
 <dt><strong>kappa_1</strong></dt><dd><p>The value of the <span class="math notranslate nohighlight">\(\\kappa\)</span> parameter at the first level of the HGF. Kappa
 represents the phasic part of the variance (the part that is affected by the
-parents nodes) and will defines the strenght of the connection between the node
+parent nodes) and will define the strength of the connection between the node
 and the parent node. Often fixed to <cite>1</cite>.</p>
 </dd>
 <dt><strong>kappa_2</strong></dt><dd><p>The value of the <span class="math notranslate nohighlight">\(\\kappa\)</span> parameter at the second level of the HGF. Kappa
 represents the phasic part of the variance (the part that is affected by the
-parents nodes) and will defines the strenght of the connection between the node
+parent nodes) and will define the strength of the connection between the node
 and the parent node. Often fixed to <cite>1</cite>. The value of this parameter will be
-ignored when using a 2-levels HGF (<cite>n_levels=2</cite>).</p>
+ignored when using a two-level HGF (<cite>n_levels=2</cite>).</p>
 </dd>
 <dt><strong>input_data</strong></dt><dd><p>List of input data. When <cite>n</cite> models should be fitted, the list contains <cite>n</cite> 1d
 Numpy arrays. By default, the associated time vector is the integers vector
@@ -559,20 +559,20 @@ starting at <cite>0</cite>. A different time vector can be passed to the <cite>t
 <dt><strong>model_type</strong></dt><dd><p>The model type to use (can be “continuous” or “binary”).</p>
 </dd>
 <dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
-<cite>None</cite>, the nodes hierarchy is not created and might be provided afterward
+<cite>None</cite>, the nodes hierarchy is not created and might be provided afterwards
 using <code class="xref py py-meth docutils literal notranslate"><span class="pre">pyhgf.model.HGF.add_nodes()</span></code>.</p>
 </dd>
 <dt><strong>response_function_parameters</strong></dt><dd><p>Additional parameters to the response function.</p>
 </dd>
 <dt><strong>time_steps</strong></dt><dd><p>List of 1d Numpy arrays containing the time vectors for each input time series.
-If one of the list item is <cite>None</cite>, or if <cite>None</cite> is provided instead, the time
-vector will defaults to unit vector.</p>
+If one of the list items is <cite>None</cite>, or if <cite>None</cite> is provided instead, the time
+vector will default to the unit vector.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>log_prob</dt><dd><p>The sum of the log-probabilities (or negative surprise).</p>
+<dt>log_prob</dt><dd><p>The sum of the log probabilities (or negative surprise).</p>
 </dd>
 </dl>
 </dd>

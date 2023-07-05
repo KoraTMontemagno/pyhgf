@@ -439,7 +439,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">jax.lax</span> <span class="kn">import</span> <span class="n">scan</span>
+<span class="kn">from</span> <span class="nn">jax.lax</span> <span class="kn">import</span> <span class="n">scan</span><span class="p">,</span> <span class="n">switch</span>
 <span class="kn">from</span> <span class="nn">jax.tree_util</span> <span class="kn">import</span> <span class="n">Partial</span>
 <span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
@@ -451,14 +451,14 @@ document.write(`
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyhgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_network</span><span class="p">,</span> <span class="n">plot_trajectories</span>
 <span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">first_level_binary_surprise</span><span class="p">,</span> <span class="n">first_level_gaussian_surprise</span>
-<span class="kn">from</span> <span class="nn">pyhgf.structure</span> <span class="kn">import</span> <span class="n">beliefs_propagation</span><span class="p">,</span> <span class="n">dynamic_updates</span>
+<span class="kn">from</span> <span class="nn">pyhgf.structure</span> <span class="kn">import</span> <span class="n">beliefs_propagation</span>
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span><span class="p">,</span> <span class="n">InputIndexes</span><span class="p">,</span> <span class="n">NodeStructure</span><span class="p">,</span> <span class="n">UpdateSequence</span>
 
 
 <div class="viewcode-block" id="HGF"><a class="viewcode-back" href="../../generated/pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF">[docs]</a><span class="k">class</span> <span class="nc">HGF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The two-level and three-level Hierarchical Gaussian Filters (HGF).</span>
 
-<span class="sd">    This class use pre-made nodes structures that corresponds to the most widely used</span>
+<span class="sd">    This class uses pre-made nodes structures that correspond to the most widely used</span>
 <span class="sd">    HGF. The inputs can be continuous or binary.</span>
 
 <span class="sd">    Attributes</span>
@@ -475,17 +475,16 @@ document.write(`
 <span class="sd">    node_structure :</span>
 <span class="sd">        A tuple of :py:class:`pyhgf.typing.Indexes` representing the nodes hierarchy.</span>
 <span class="sd">    node_trajectories :</span>
-<span class="sd">        The parameter structure that incluse the consecutive updates at each new</span>
-<span class="sd">        observation.</span>
+<span class="sd">        The dynamic of the node&#39;s beliefs after updating.</span>
 <span class="sd">    parameters_structure :</span>
 <span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
 <span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
 <span class="sd">        continuous nodes.</span>
 <span class="sd">    .. note::</span>
-<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have same length than the</span>
+<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have the same length as the</span>
 <span class="sd">        volatility parents&#39; indexes.</span>
-<span class="sd">        `&quot;kappas&quot;` is the volatility coupling strength. It should have same length</span>
-<span class="sd">        than the volatility parents&#39; indexes.</span>
+<span class="sd">        `&quot;kappas&quot;` is the volatility coupling strength. It should have the same length</span>
+<span class="sd">        as the volatility parents&#39; indexes.</span>
 <span class="sd">    verbose : bool</span>
 <span class="sd">        Verbosity level.</span>
 
@@ -533,18 +532,18 @@ document.write(`
 <span class="sd">            The second categorical value of the binary node. Defaults to `0.0`. Only</span>
 <span class="sd">            relevant if `model_type=&quot;binary&quot;`.</span>
 <span class="sd">        initial_mu :</span>
-<span class="sd">            Dictionary containing the initial values for the :math:`\\mu` parameter at</span>
+<span class="sd">            A dictionary containing the initial values for the :math:`\\mu` parameter at</span>
 <span class="sd">            different levels of the hierarchy. Defaults set to `0.0` at all levels.</span>
 <span class="sd">        initial_pi :</span>
-<span class="sd">            Dictionary containing the initial values for the :math:`\\pi` parameter at</span>
+<span class="sd">            A dictionary containing the initial values for the :math:`\\pi` parameter at</span>
 <span class="sd">            different levels of the hierarchy. Pis values encode the precision of the</span>
-<span class="sd">            values at each level (Var = 1/pi) Defaults set to `1.0` at all levels.</span>
+<span class="sd">            values at each level (Var = 1/pi) Defaults are set to `1.0` at all levels.</span>
 <span class="sd">        kappas :</span>
-<span class="sd">            Dictionary containing the initial values for the :math:`\\kappa` parameter</span>
+<span class="sd">            A dictionary containing the initial values for the :math:`\\kappa` parameter</span>
 <span class="sd">            at different levels of the hierarchy. Kappa represents the phasic part of</span>
-<span class="sd">            the variance (the part that is affected by the parents nodes) and will</span>
-<span class="sd">            defines the strenght of the connection between the node and the parent</span>
-<span class="sd">            node. Often fixed to `1`. Defaults set to `1` at all levels.</span>
+<span class="sd">            the variance (the part that is affected by the parent nodes) and will</span>
+<span class="sd">            define the strength of the connection between the node and the parent</span>
+<span class="sd">            node. Often fixed to `1`. Defaults are set to `1` at all levels.</span>
 <span class="sd">        model_type : str</span>
 <span class="sd">            The model type to use (can be `&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
 <span class="sd">        n_levels :</span>
@@ -552,11 +551,11 @@ document.write(`
 <span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward</span>
 <span class="sd">            using `add_nodes()`. Defaults to `2` for a 2-level HGF.</span>
 <span class="sd">        omega :</span>
-<span class="sd">            Dictionary containing the initial values for the :math:`\\omega` parameter</span>
+<span class="sd">            A dictionary containing the initial values for the :math:`\\omega` parameter</span>
 <span class="sd">            at different levels of the hierarchy. :math:`\\omega` represents the tonic</span>
 <span class="sd">            part of the variance (the part that is not affected by the parent node).</span>
-<span class="sd">            Defaults set to `-3.0` at all levels. This parameter is only required for</span>
-<span class="sd">            Gaussian Random Walk nodes.</span>
+<span class="sd">            Defaults are set to `-3.0` at all levels. This parameter is only required</span>
+<span class="sd">            for Gaussian Random Walk nodes.</span>
 <span class="sd">        omega_input :</span>
 <span class="sd">            Default value sets to `log(1e-4)`. Represents the noise associated with</span>
 <span class="sd">            the input.</span>
@@ -564,12 +563,13 @@ document.write(`
 <span class="sd">            The precision of the binary input node. Default to `jnp.inf`. Only relevant</span>
 <span class="sd">            if `model_type=&quot;binary&quot;`.</span>
 <span class="sd">        rho :</span>
-<span class="sd">            Dictionary containing the initial values for the :math:`\\rho` parameter at</span>
-<span class="sd">            different levels of the hierarchy. Rho represents the drift of the random</span>
+<span class="sd">            A dictionary containing the initial values for the :math:`\\rho` parameter</span>
+<span class="sd">            at different levels of the hierarchy. Rho represents the drift of the random</span>
 <span class="sd">            walk. This parameter is only required for Gaussian Random Walk nodes.</span>
 <span class="sd">            Defaults set all entries to `0` according to the number of required levels.</span>
 <span class="sd">        verbose :</span>
-<span class="sd">            Verbosity of the methods for model creation and fitting. Defaults to `True`.</span>
+<span class="sd">            The verbosity of the methods for model creation and fitting. Defaults to</span>
+<span class="sd">            `True`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">=</span> <span class="n">model_type</span>
@@ -659,7 +659,7 @@ document.write(`
 <span class="sd">        input_data :</span>
 <span class="sd">            2d array of new observations (time x features).</span>
 <span class="sd">        time_steps :</span>
-<span class="sd">            Time vector (optional). If `None`, the time vector will defaults to</span>
+<span class="sd">            Time vector (optional). If `None`, the time vector will default to</span>
 <span class="sd">            `np.ones(len(input_data))`. This vector is automatically transformed</span>
 <span class="sd">            into a time steps vector.</span>
 
@@ -697,32 +697,35 @@ document.write(`
 
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">input_sparse_data</span><span class="p">(</span>
+    <span class="k">def</span> <span class="nf">input_custom_sequence</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">update_series</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">UpdateSequence</span><span class="p">],</span>
+        <span class="n">update_branches</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">UpdateSequence</span><span class="p">],</span>
+        <span class="n">branches_idx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
         <span class="n">time_steps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new observations with custom update sequences.</span>
 
-<span class="sd">        This function can be used to adapt the update sequence to the input (e.g. in</span>
-<span class="sd">        the case of missing/null observations that should not trigger node update).</span>
+<span class="sd">        This method should be used when the update sequence should be adapted to the</span>
+<span class="sd">        input data. (e.g. in the case of missing/null observations that should not</span>
+<span class="sd">        trigger node update).</span>
 
 <span class="sd">        .. note::</span>
-<span class="sd">           This functions is not using :py:func:`jax.lax.scan` and is therefore not</span>
-<span class="sd">           optimized. When the dynamic adaptation of the update sequence is not</span>
-<span class="sd">           required, it is recommended to use :py:meth:`pyhgf.model.HGF.input_data`</span>
-<span class="sd">           instead.</span>
+<span class="sd">           When the dynamic adaptation of the update sequence is not required, it is</span>
+<span class="sd">           recommended to use :py:meth:`pyhgf.model.HGF.input_data` instead as this</span>
+<span class="sd">           might result in performance improvement.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        update_series :</span>
-<span class="sd">            A tuple of UpdateSequence with same length than `input_data`. One update</span>
-<span class="sd">            sequence is defined at every time point.</span>
+<span class="sd">        update_branches :</span>
+<span class="sd">            A tuple of UpdateSequence listing the possible update sequences.</span>
+<span class="sd">        branches_idx :</span>
+<span class="sd">            The branches indexes (integers). Should have the same length as the input</span>
+<span class="sd">            data.</span>
 <span class="sd">        input_data :</span>
 <span class="sd">            2d array of new observations (time x features).</span>
 <span class="sd">        time_steps :</span>
-<span class="sd">            Time vector (optional). If `None`, the time vector will defaults to</span>
+<span class="sd">            Time vector (optional). If `None`, the time vector will default to</span>
 <span class="sd">            `np.ones(len(input_data))`. This vector is automatically transformed</span>
 <span class="sd">            into a time steps vector.</span>
 
@@ -736,19 +739,39 @@ document.write(`
         <span class="n">time_steps</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">input_data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">input_data</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-
         <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">dynamic_updates</span><span class="p">(</span>
-            <span class="n">update_series</span><span class="o">=</span><span class="n">update_series</span><span class="p">,</span>
-            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-            <span class="n">parameters_structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">,</span>
-            <span class="n">node_structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">,</span>
-            <span class="n">input_nodes_idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
+        <span class="c1"># create the update functions that will be scanned</span>
+        <span class="n">branches_fn</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Partial</span><span class="p">(</span>
+                <span class="n">beliefs_propagation</span><span class="p">,</span>
+                <span class="n">update_sequence</span><span class="o">=</span><span class="n">seq</span><span class="p">,</span>
+                <span class="n">node_structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">,</span>
+                <span class="n">input_nodes_idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">update_branches</span>
+        <span class="p">]</span>
+
+        <span class="c1"># create the function that will be scanned</span>
+        <span class="k">def</span> <span class="nf">switching_propagation</span><span class="p">(</span><span class="n">parameters_structure</span><span class="p">,</span> <span class="n">scan_input</span><span class="p">):</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">scan_input</span>
+            <span class="k">return</span> <span class="n">switch</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">branches_fn</span><span class="p">,</span> <span class="n">parameters_structure</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># wrap the inputs</span>
+        <span class="n">scan_input</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">branches_idx</span>
+
+        <span class="c1"># scan over the input data and apply the switching belief propagation functions</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span>
+            <span class="n">switching_propagation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">,</span> <span class="n">scan_input</span>
         <span class="p">)</span>
 
         <span class="c1"># the node structure at each value update</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">node_trajectories</span>
+
+        <span class="c1"># because some of the input node might not have been updated, here we manually</span>
+        <span class="c1"># insert the input data to the input node (without triggering updates)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">inp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[:,</span> <span class="n">inp</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 
@@ -778,15 +801,15 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        response_function :</span>
 <span class="sd">            The response function to use to compute the model surprise. If `None`</span>
-<span class="sd">            (default), return the sum of gaussian surprise if `model_type==&quot;continuous&quot;`</span>
+<span class="sd">            (default), return the sum of Gaussian surprise if `model_type==&quot;continuous&quot;`</span>
 <span class="sd">            or the sum of the binary surprise if `model_type==&quot;binary&quot;`.</span>
 <span class="sd">        response_function_parameters :</span>
-<span class="sd">            Additional parameters to the response function (optional) .</span>
+<span class="sd">            Additional parameters to the response function (optional).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        surprise :</span>
-<span class="sd">            The model surprise given the input data and the response function.</span>
+<span class="sd">            The model&#39;s surprise given the input data and the response function.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">response_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -807,8 +830,8 @@ document.write(`
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        structure_df :</span>
-<span class="sd">            Pandas data frame with the time series of the sufficient statistics and</span>
-<span class="sd">            surprise of each node in the structure.</span>
+<span class="sd">            Pandas data frame with the time series of sufficient statistics and</span>
+<span class="sd">            the surprise of each node in the structure.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># get time and time steps from the first input node</span>
@@ -938,7 +961,7 @@ document.write(`
         <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a value parent to node.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a value parent to a given set of nodes.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1043,14 +1066,14 @@ document.write(`
         <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a volatility parent to node.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a volatility parent to a given set of nodes.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        children_idxs :</span>
 <span class="sd">            The child(s) node index(es).</span>
 <span class="sd">        volatility_coupling :</span>
-<span class="sd">            The volatility coupling between the child and parent node. This is will be</span>
+<span class="sd">            The volatility coupling between the child and parent node. This will be</span>
 <span class="sd">            appended to the `kappas` parameters in the child node.</span>
 <span class="sd">        mu :</span>
 <span class="sd">            The mean of the Gaussian distribution.</span>
@@ -1092,17 +1115,17 @@ document.write(`
             <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="c1"># add a new node to connection structure with no parents</span>
+        <span class="c1"># add a new node to the connection structure with no parents</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">)),)</span>
 
-        <span class="c1"># add a new parameters to parameters structure</span>
+        <span class="c1"># add a new parameter to the parameters structure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_parameters</span>
 
         <span class="c1"># convert the structure to a list to modify it</span>
         <span class="n">structure_as_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Indexes</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">children_idxs</span><span class="p">:</span>
-            <span class="c1"># add this node as parent and set value coupling</span>
+            <span class="c1"># add this node as a parent and set value coupling</span>
             <span class="k">if</span> <span class="n">structure_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># append new index</span>
                 <span class="n">new_volatility_parents_idx</span> <span class="o">=</span> <span class="n">structure_as_list</span><span class="p">[</span>
@@ -1140,9 +1163,9 @@ document.write(`
 
 <span class="sd">        The function ensures that the following rules apply:</span>
 <span class="sd">        1. all children have been updated before propagating to the parent(s) node.</span>
-<span class="sd">        2. the update function of an input node is choosen based on the node&#39;s type</span>
+<span class="sd">        2. the update function of an input node is chosen based on the node&#39;s type</span>
 <span class="sd">        (`&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
-<span class="sd">        3. the update function of the parent of an input node is choosen based on the</span>
+<span class="sd">        3. the update function of the parent of an input node is chosen based on the</span>
 <span class="sd">        node&#39;s type (`&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
 
 <span class="sd">        Parameters</span>
@@ -1230,7 +1253,7 @@ document.write(`
 
                         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                             <span class="c1"># only call the update on the parent(s) if the current node</span>
-                            <span class="c1"># is the last on the children list (meaning that all the</span>
+                            <span class="c1"># is the last on the children&#39;s list (meaning that all the</span>
                             <span class="c1"># other nodes have been updated)</span>
                             <span class="k">if</span> <span class="n">children_idxs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
                                 <span class="n">update_sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_update_sequence</span><span class="p">(</span>

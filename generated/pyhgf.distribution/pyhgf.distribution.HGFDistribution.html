@@ -501,7 +501,7 @@ one or many parameter-s probability density with MCMC sampling.</p>
 </pre></div>
 </div>
 <p>We create the PyMC distribution here, specifying the type of model and response
-function we want to use (i.e simple gaussian surprise).</p>
+function we want to use (i.e. simple Gaussian surprise).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span><span class="p">,</span>
@@ -510,7 +510,7 @@ function we want to use (i.e simple gaussian surprise).</p>
 </pre></div>
 </div>
 <p>Create the PyMC model
-Here we are fixing all the paramters to arbitrary values and sampling the
+Here we are fixing all the parameters to arbitrary values and sampling the
 posterior probability density of Omega in the second level, using a normal
 distribution as prior : ω_2 ~ N(-11, 2).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">model</span><span class="p">:</span>
@@ -557,13 +557,13 @@ vector starting at <cite>0</cite>. A different time_steps vector can be passed t
 the <cite>time_steps</cite> argument.</p>
 </dd>
 <dt><strong>time_steps</strong></dt><dd><p>List of 1d Numpy arrays containing the time_steps vectors for each input
-time series. If one of the list item is <cite>None</cite>, or if <cite>None</cite> is provided
-instead, the time vector will defaults to integers vector starting at 0.</p>
+time series. If one of the list items is <cite>None</cite>, or if <cite>None</cite> is provided
+instead, the time vector will default to an integers vector starting at 0.</p>
 </dd>
 <dt><strong>model_type</strong></dt><dd><p>The model type to use (can be “continuous” or “binary”).</p>
 </dd>
 <dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
-<cite>None</cite>, the nodes hierarchy is not created and might be provided afterward
+<cite>None</cite>, the nodes hierarchy is not created and might be provided afterwards
 using <cite>add_nodes()</cite>.</p>
 </dd>
 <dt><strong>response_function</strong></dt><dd><p>The response function to use to compute the model surprise.</p>

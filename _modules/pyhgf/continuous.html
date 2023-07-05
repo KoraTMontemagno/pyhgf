@@ -472,16 +472,16 @@ document.write(`
 <span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
 <span class="sd">        continuous nodes.</span>
 <span class="sd">    .. note::</span>
-<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have same length than the</span>
+<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have the same length as the</span>
 <span class="sd">        volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
-<span class="sd">        It should have same length than the volatility parents&#39; indexes.</span>
+<span class="sd">        It should have the same length as the volatility parents&#39; indexes.</span>
 <span class="sd">    time_step :</span>
-<span class="sd">        Interval between the previous time point and the current time point.</span>
+<span class="sd">        The interval between the previous time point and the current time point.</span>
 <span class="sd">    node_idx :</span>
-<span class="sd">        Pointer to the node that need to be updated. After continuous update, the</span>
+<span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
 <span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
 <span class="sd">    node_structure :</span>
-<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with same length than number of node.</span>
+<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with the same length as node number.</span>
 <span class="sd">        For each node, the index list value and volatility parents.</span>
 
 <span class="sd">    Returns</span>
@@ -521,7 +521,7 @@ document.write(`
             <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
             <span class="c1"># child will update the parent at once, otherwise just pass and wait</span>
             <span class="k">if</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
-                <span class="c1"># unpack the parent&#39;s parameters with value and volatility parents</span>
+                <span class="c1"># unpack the parent&#39;s parameters with the value and volatility parents</span>
                 <span class="n">va_pa_node_parameters</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">]</span>
                 <span class="n">va_pa_value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
                 <span class="n">va_pa_volatility_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
@@ -548,13 +548,13 @@ document.write(`
                     <span class="n">new_nu</span><span class="p">,</span>
                 <span class="p">]</span>
 
-                <span class="c1"># gather precision updates from other nodes if the parent has many child</span>
-                <span class="c1"># this part corresponds to the sum over children required for the</span>
-                <span class="c1"># multi-children situations</span>
+                <span class="c1"># gather precision updates from other nodes if the parent has many</span>
+                <span class="c1"># children - this part corresponds to the sum of children required for</span>
+                <span class="c1"># the multi-children situations</span>
                 <span class="n">pi_children</span> <span class="o">=</span> <span class="mf">0.0</span>
                 <span class="k">for</span> <span class="n">child_idx</span> <span class="ow">in</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">:</span>
-                    <span class="c1"># this part find which psi corresponds to this value parent</span>
-                    <span class="c1"># in a JAX compatible way</span>
+                    <span class="c1"># this part finds which psi corresponds to this value parent</span>
+                    <span class="c1"># in a JAX-compatible way</span>
                     <span class="n">psi_child</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                         <span class="n">jnp</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
                             <span class="n">va_pa_idx</span><span class="p">,</span>
@@ -578,20 +578,20 @@ document.write(`
                 <span class="n">driftrate</span> <span class="o">=</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
 
                 <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
-                <span class="c1"># and update driftrate accordingly</span>
+                <span class="c1"># and update drift rate accordingly</span>
                 <span class="k">if</span> <span class="n">va_pa_value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">va_pa_va_pa</span> <span class="ow">in</span> <span class="n">va_pa_value_parents_idx</span><span class="p">:</span>
                         <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">va_pa_va_pa</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
                 <span class="n">muhat_pa</span> <span class="o">=</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
 
-                <span class="c1"># gather PE updates from other nodes if the parent has many child</span>
-                <span class="c1"># this part corresponds to the sum over children required for the</span>
+                <span class="c1"># gather PE updates from other nodes if the parent has many children</span>
+                <span class="c1"># this part corresponds to the sum of children required for the</span>
                 <span class="c1"># multi-children situations</span>
                 <span class="n">pe_children</span> <span class="o">=</span> <span class="mf">0.0</span>
                 <span class="k">for</span> <span class="n">child_idx</span> <span class="ow">in</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">va_pa_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">:</span>
-                    <span class="c1"># this part find which psi corresponds to this value parent</span>
-                    <span class="c1"># in a JAX compatible way</span>
+                    <span class="c1"># this part finds which psi corresponds to this value parent</span>
+                    <span class="c1"># in a JAX-compatible way</span>
                     <span class="n">psi_child</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                         <span class="n">jnp</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
                             <span class="n">va_pa_idx</span><span class="p">,</span>
@@ -664,7 +664,7 @@ document.write(`
             <span class="n">driftrate</span> <span class="o">=</span> <span class="n">vo_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
 
             <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
-            <span class="c1"># and update driftrate accordingly</span>
+            <span class="c1"># and update drift rate accordingly</span>
             <span class="k">if</span> <span class="n">vo_pa_value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">vo_pa_va_pa</span> <span class="ow">in</span> <span class="n">vo_pa_value_parents_idx</span><span class="p">:</span>
                     <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">vo_pa_va_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
@@ -692,7 +692,7 @@ document.write(`
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure.</span>
 
-<span class="sd">    This function is the entry level of the structure updates. It update the parent</span>
+<span class="sd">    This function is the entry-level of the structure updates. It updates the parent</span>
 <span class="sd">    of the input node.</span>
 
 <span class="sd">    Parameters</span>
@@ -700,20 +700,20 @@ document.write(`
 <span class="sd">    value :</span>
 <span class="sd">        The new observed value.</span>
 <span class="sd">    time_step :</span>
-<span class="sd">        Interval between the previous time point and the current time point.</span>
+<span class="sd">        The interval between the previous time point and the current time point.</span>
 <span class="sd">    parameters_structure :</span>
 <span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
 <span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
 <span class="sd">        continuous nodes.</span>
 <span class="sd">    .. note::</span>
-<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have same length than the</span>
+<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have the same length as the</span>
 <span class="sd">        volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
-<span class="sd">        It should have same length than the volatility parents&#39; indexes.</span>
+<span class="sd">        It should have the same length as the volatility parents&#39; indexes.</span>
 <span class="sd">    node_structure :</span>
 <span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with same length than number of node.</span>
 <span class="sd">        For each node, the index list value and volatility parents.</span>
 <span class="sd">    node_idx :</span>
-<span class="sd">        Pointer to the node that need to be updated. After continuous update, the</span>
+<span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
 <span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
 
 <span class="sd">    Returns</span>
@@ -786,7 +786,7 @@ document.write(`
         <span class="n">driftrate</span> <span class="o">=</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
 
         <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
-        <span class="c1"># and update driftrate accordingly</span>
+        <span class="c1"># and update drift rate accordingly</span>
         <span class="k">if</span> <span class="n">va_pa_value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">va_pa_va_pa</span> <span class="ow">in</span> <span class="n">va_pa_value_parents_idx</span><span class="p">:</span>
                 <span class="n">driftrate</span> <span class="o">+=</span> <span class="p">(</span>
@@ -819,7 +819,7 @@ document.write(`
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Surprise at an outcome under a Gaussian prediction.</span>
 
-<span class="sd">    The surprise ellicited by an observation :math:`x` under a Gaussian distribution</span>
+<span class="sd">    The surprise elicited by an observation :math:`x` under a Gaussian distribution</span>
 <span class="sd">    with expected mean :math:`\hat{\mu}` and expected precision :math:`\hat{\pi}` is</span>
 <span class="sd">    given by:</span>
 
