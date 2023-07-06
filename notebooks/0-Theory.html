@@ -472,7 +472,7 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/de2a155e25763ba5d7d76ddad5d1bbcf59b9248f59d32ebbd42df5ab2ff19cae.png" src="../_images/de2a155e25763ba5d7d76ddad5d1bbcf59b9248f59d32ebbd42df5ab2ff19cae.png" />
+<img alt="../_images/78da49f9e925a47254e5c7cdf122e0edac3b2ea77c989a4e929c5e1e851fcb09.png" src="../_images/78da49f9e925a47254e5c7cdf122e0edac3b2ea77c989a4e929c5e1e851fcb09.png" />
 </div>
 </div>
 <p>This simple process will be our first building block. Importantly here, the variability of the sensory input is constant across time: even if we don’t know exactly in which direction the time series is going to move in the future, we know that is is unlikely to make certain kind of big jumps, because it is controlled by a fixed parameter, the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</p>
@@ -538,7 +538,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/d4b0ee7ecdb2b7b751b667c22f19b29aad334a114080b0bab5a3038fc1144ada.png" src="../_images/d4b0ee7ecdb2b7b751b667c22f19b29aad334a114080b0bab5a3038fc1144ada.png" />
+<img alt="../_images/ca853587ea176fa8827be631ec7dd7278d7ba7762d45ef9e4b973f210443ad77.png" src="../_images/ca853587ea176fa8827be631ec7dd7278d7ba7762d45ef9e4b973f210443ad77.png" />
 </div>
 </div>
 <p>In this example, it becomes apparent that the volatility of the observation is not constant in time anymore, but depends on the values observed at the level above.</p>
@@ -591,7 +591,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/c6f90fd596977d414fe544f4436a4256fec4eadad7aee1a151ead1ff5a4d1aa0.png" src="../_images/c6f90fd596977d414fe544f4436a4256fec4eadad7aee1a151ead1ff5a4d1aa0.png" />
+<img alt="../_images/9966642f8a3753096c90e701f6f8ab9d3b0e9659e91364b225043c2a65c81cea.png" src="../_images/9966642f8a3753096c90e701f6f8ab9d3b0e9659e91364b225043c2a65c81cea.png" />
 </div>
 </div>
 <p>Finally, volatility and value coupling can operate at the same time on the same node, like in this example where <span class="math notranslate nohighlight">\(x_{1}\)</span> has its values coupled with <span class="math notranslate nohighlight">\(x_{2}\)</span> and its volatility coupled with <span class="math notranslate nohighlight">\(x_{3}\)</span>:</p>
@@ -651,7 +651,7 @@ x_3^{(k)}          \sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\omega_3)) 
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/4db8fce2dd25952c606794db81a22a5049fe247515cd281760b86053337dc47d.png" src="../_images/4db8fce2dd25952c606794db81a22a5049fe247515cd281760b86053337dc47d.png" />
+<img alt="../_images/bcadf8efcde55199a5d5973de16e8cbe6cb87e9f207ca64b137a75a3674f7b59.png" src="../_images/bcadf8efcde55199a5d5973de16e8cbe6cb87e9f207ca64b137a75a3674f7b59.png" />
 </div>
 </div>
 <p>Based on these principles, any given state in the world can be modelled as having a volatility parent state, a value parent state, both, or none. When the node is orpean, it evolves as a Gaussian random walk around its previous value with fixed step size. Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
