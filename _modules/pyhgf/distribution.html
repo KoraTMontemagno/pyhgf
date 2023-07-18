@@ -466,7 +466,7 @@ document.write(`
     <span class="n">response_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
     <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">time_steps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Log probability from HGF model(s) given input data and parameter(s).</span>
@@ -549,7 +549,9 @@ document.write(`
 <span class="sd">        `None`, the nodes hierarchy is not created and might be provided afterwards</span>
 <span class="sd">        using :py:meth:`pyhgf.model.HGF.add_nodes`.</span>
 <span class="sd">    response_function_parameters :</span>
-<span class="sd">        Additional parameters to the response function.</span>
+<span class="sd">        A list of tuples with the same length as the number of models. Each tuple</span>
+<span class="sd">        contains additional data and parameters that can be accessible to the response</span>
+<span class="sd">        functions.</span>
 <span class="sd">    time_steps :</span>
 <span class="sd">        List of 1d Numpy arrays containing the time vectors for each input time series.</span>
 <span class="sd">        If one of the list items is `None`, or if `None` is provided instead, the time</span>
@@ -601,6 +603,9 @@ document.write(`
         <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
     <span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">response_function_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">response_function_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+
     <span class="c1"># if no time vectors provided, set it to None (will defaults to integers vectors)</span>
     <span class="c1"># otherwise check consistency with the input data</span>
     <span class="k">if</span> <span class="n">time_steps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -649,7 +654,7 @@ document.write(`
             <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">time_steps</span><span class="o">=</span><span class="n">time_steps</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="o">.</span><span class="n">surprise</span><span class="p">(</span>
                 <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
-                <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span>
+                <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
@@ -667,7 +672,7 @@ document.write(`
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continous&quot;</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize function.</span>
 
@@ -691,7 +696,9 @@ document.write(`
 <span class="sd">        response_function :</span>
 <span class="sd">            The response function to use to compute the model surprise.</span>
 <span class="sd">        response_function_parameters :</span>
-<span class="sd">            Additional parameters to the response function.</span>
+<span class="sd">            A list of tuples with the same length as the number of models. Each tuple</span>
+<span class="sd">            contains additional data and parameters that can be accessible to the</span>
+<span class="sd">            response functions.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grad_logp</span> <span class="o">=</span> <span class="n">jit</span><span class="p">(</span>
@@ -863,7 +870,7 @@ document.write(`
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">response_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">response_function_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Distribution initialization.</span>
 
@@ -887,7 +894,9 @@ document.write(`
 <span class="sd">        response_function :</span>
 <span class="sd">            The response function to use to compute the model surprise.</span>
 <span class="sd">        response_function_parameters :</span>
-<span class="sd">            Additional parameters to the response function.</span>
+<span class="sd">            A list of tuples with the same length as the number of models. Each tuple</span>
+<span class="sd">            contains additional data and parameters that can be accessible to the</span>
+<span class="sd">            response functions.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># The value function</span>
