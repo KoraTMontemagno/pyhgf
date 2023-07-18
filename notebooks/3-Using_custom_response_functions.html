@@ -436,7 +436,12 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="using-custom-response-models">
 <span id="custom-response-functions"></span><h1>Using custom response models<a class="headerlink" href="#using-custom-response-models" title="Permalink to this heading">#</a></h1>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
 import sys
@@ -445,6 +450,7 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -457,18 +463,18 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 </div>
-<p>The probabilistic networks we have been creating so far correspond to what is often called the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> of a Hierarchical Gaussian Filter (HGF). Such models act as a <a class="reference external" href="https://en.wikipedia.org/wiki/Recursive_Bayesian_estimation">Bayesian filter</a> as they try to predict the current input(s) given past observations. In that sense, the HGF can be seen as a generalization of other Bayesian filters as a one-level continuous HGF is equivalent to a Kalman filter. Such models are designed to update beliefs (i.e. sufficient statistics over statistical distributions, critically here Gaussian distributions) by receiving new inputs <span class="math notranslate nohighlight">\(u\)</span>. Complex probabilistic networks can then handle environments for example with nested volatility, and can even receive more than one input at a time or time-varying input that would trigger different belief propagation (see <a class="reference internal" href="0-Creating_networks.html#probabilistic-networks"><span class="std std-ref">Creating and manipulating networks of probabilistic nodes</span></a> for a tutorial on how to create and manipulate probabilistic networks).</p>
-<p>But no matter how complex those networks are, they only relate to the <em>perceptual</em> part of the HGF (forming beliefs about states of the world). If we want an agent to be able to act according to the beliefs he/she is having about the environment, we need  what is traditionally called a <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> (also sometimes referred to as <em>decision model</em> or <em>observation model</em>). These models critically incorporate a <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a>, which is any function that, given the sufficient statistics of the network’s beliefs at time <span class="math notranslate nohighlight">\(t\)</span> will choose to perform an action <span class="math notranslate nohighlight">\(a_t\)</span>, selected from the range of possible actions.</p>
-<p>Being able to write and modify such <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> is critical for practical applications of the HGF as it allows users to adapt the models to theirs experimental designs. In this notebook, we will demostrate how it is possible to write custom response models for a given probabilistic network, and how different response models can change the inferred beliefs trajectories.</p>
+<p>The probabilistic networks we have been creating so far correspond to what is often called the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> of a Hierarchical Gaussian Filter (HGF). This part of the model acts as a <a class="reference external" href="https://en.wikipedia.org/wiki/Recursive_Bayesian_estimation">Bayesian filter</a> as it tries to predict the next input(s) given past observations. In that sense, the HGF can be seen as a generalization of other Bayesian filters as a one-level continuous HGF is equivalent to a Kalman filter. Such models are designed to update beliefs (i.e. sufficient statistics over statistical distributions, critically here Gaussian distributions) by receiving new inputs <span class="math notranslate nohighlight">\(u\)</span>. Complex probabilistic networks can then handle environments for example with nested volatility, and can even receive more than one input at a time or time-varying input that would trigger different belief propagation according to their structure (see <a class="reference internal" href="0-Creating_networks.html#probabilistic-networks"><span class="std std-ref">Creating and manipulating networks of probabilistic nodes</span></a> for a tutorial on how to create and manipulate probabilistic networks).</p>
+<p>But no matter how complex those networks are, they only relate to the <em>perceptual</em> part of the HGF (forming beliefs about states of the world). If we want an agent to be able to act according to the beliefs he/she is having about the environment, we need  what is traditionally called a <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> (also sometimes referred to as <em>decision model</em> or <em>observation model</em>). This part of the model critically incorporates a <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a>, which is any function that, given the sufficient statistics of the network’s beliefs at time <span class="math notranslate nohighlight">\(t\)</span>, will decide to perform an action <span class="math notranslate nohighlight">\(a_t\)</span>, selected from the range of possible actions.</p>
+<p>Being able to write and modify such <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> is critical for practical applications of the HGF as it allows users to adapt the models to their experimental designs. In this notebook, we will demonstrate how it is possible to write custom response models for a given probabilistic network.</p>
 <figure class="align-default" id="response-models-fig">
 <img alt="../_images/response_models.png" src="../_images/response_models.png" />
 <figcaption>
-<p><span class="caption-text">The <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> and the <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> of a Hierarchical Gaussian Filter. Beliefs are being updated in the probabilistic network (blue circles) as new observations are coming in (e.g. the association between a stimulus and an outcome at time <span class="math notranslate nohighlight">\(t\)</span>). Using these beliefs, the <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> selects one action <span class="math notranslate nohighlight">\(y\)</span>. Critically here, the <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> only operate in a unidirectional fashion (i.e. taking beliefs to generate action), but the actions are not modulating the way beliefs are updated (the model does not perform active inference - yet?).</span><a class="headerlink" href="#response-models-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-text"><strong>Relation between the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> and the <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> of a Hierarchical Gaussian Filter</strong>. Beliefs are being updated in the probabilistic network (blue circles) as new observations are coming in (e.g. the association between a stimulus and an outcome at time <span class="math notranslate nohighlight">\(t\)</span>). Using these beliefs, the <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> selects one action <span class="math notranslate nohighlight">\(y\)</span>. Critically here, the <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> only operate in a unidirectional fashion (i.e. taking beliefs to generate action), but the actions are not modulating the way beliefs are updated (the model does not perform active inference - yet?).</span><a class="headerlink" href="#response-models-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <section id="creating-a-new-response-function-the-binary-surprise">
 <h2>Creating a new response function: the binary surprise<a class="headerlink" href="#creating-a-new-response-function-the-binary-surprise" title="Permalink to this heading">#</a></h2>
-<p>To illustrate the influence of different response functions, we are going to use the same binary input vector from the decision task described in <span id="id1">[<a class="reference internal" href="../references.html#id7" title="Sandra Iglesias, Christoph Mathys, Kay H. Brodersen, Lars Kasper, Marco Piccirelli, Hanneke E.M. den Ouden, and Klaas E. Stephan. Hierarchical prediction errors in midbrain and basal forebrain during sensory learning. Neuron, 80(2):519-530, 2013. URL: https://www.sciencedirect.com/science/article/pii/S0896627313008076, doi:https://doi.org/10.1016/j.neuron.2013.09.009.">Iglesias <em>et al.</em>, 2013</a>]</span>.</p>
+<p>To illustrate the creation of new response functions, we are going to use the same binary input vector from the decision task described in <span id="id1">[<a class="reference internal" href="../references.html#id7" title="Sandra Iglesias, Christoph Mathys, Kay H. Brodersen, Lars Kasper, Marco Piccirelli, Hanneke E.M. den Ouden, and Klaas E. Stephan. Hierarchical prediction errors in midbrain and basal forebrain during sensory learning. Neuron, 80(2):519-530, 2013. URL: https://www.sciencedirect.com/science/article/pii/S0896627313008076, doi:https://doi.org/10.1016/j.neuron.2013.09.009.">Iglesias <em>et al.</em>, 2013</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">observations</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
@@ -476,11 +482,11 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 </div>
-<p>For the sake of example here, we will consider that the participant underwent a <em>one-armed bandit task</em>, which consisted of the presentations of two stimuli (<span class="math notranslate nohighlight">\(S_0\)</span> and <span class="math notranslate nohighlight">\(S_1\)</span>) that could be associated with two types of outcomes (<span class="math notranslate nohighlight">\(O_{+}\)</span> and <span class="math notranslate nohighlight">\(O_{-}\)</span>). On each trial, the participant was presented with the two stimuli, chose one of them and get an outcome. The underlying contingencies are changing overtime, in a way that can be more or less volatile. The <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> tries to track these contingencies by observing the previous associations. We have already been using this <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> model before in the tutorial on the binary HGF (<a class="reference internal" href="1-Binary_HGF.html#binary-hgf"><span class="std std-ref">The binary Hierarchical Gaussian Filter</span></a>). Here the input data <span class="math notranslate nohighlight">\(u\)</span> is the observed association between e.g. <span class="math notranslate nohighlight">\(S_0\)</span> and <span class="math notranslate nohighlight">\(O_{+}\)</span>. In order to incorporate a <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> on top of that, we need first to define:</p>
+<p>For the sake of example here, we will consider that the participant underwent a <em>one-armed bandit task</em>, which consisted of the presentations of two stimuli (<span class="math notranslate nohighlight">\(S_0\)</span> and <span class="math notranslate nohighlight">\(S_1\)</span>) that could be associated with two types of outcomes (<span class="math notranslate nohighlight">\(O_{+}\)</span> and <span class="math notranslate nohighlight">\(O_{-}\)</span>). On each trial, the participant was presented with the two stimuli, chose one of them and get an outcome. The underlying contingencies of stimuli associated with positive outcomes are changing over time, in a way that can be more or less volatile. The <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> tries to track these contingencies by observing the previous associations. We have already been using this <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> model before in the tutorial on the binary HGF (<a class="reference internal" href="1-Binary_HGF.html#binary-hgf"><span class="std std-ref">The binary Hierarchical Gaussian Filter</span></a>). Here the input data <span class="math notranslate nohighlight">\(u\)</span> is the observed association between e.g. <span class="math notranslate nohighlight">\(S_0\)</span> and <span class="math notranslate nohighlight">\(O_{+}\)</span>. In order to incorporate a <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> on top of that, we need first to define:</p>
 <ol class="arabic simple">
 <li><p>a range of possible actions <span class="math notranslate nohighlight">\(y\)</span>. In this case, the participant has only two alternatives so <span class="math notranslate nohighlight">\(y\)</span> can be either <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
 <li><p>a <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a> stating how the agent selects between the two actions given the beliefs of the probabilistic network at time <span class="math notranslate nohighlight">\(t\)</span>.
-In this situation, it is trivial to write such a decision function and generate actions as new inputs are coming in, for simulation purposes for example. We start by setting a <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> (i.e. a network of probabilistic nodes updated by observations). Here this is a stanbdard two-level binary HGF, and the inputs are the binary observations (the association between one of the stimuli and the positive reward).</p></li>
+In this situation, it is trivial to write such a decision function and generate actions as new inputs are coming in, for simulation purposes for example. We start by setting a <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> (i.e. a network of probabilistic nodes updated by observations). Here this is a standard two-level binary HGF, and the inputs are the binary observations (the association between one of the stimuli and the positive reward).</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -504,7 +510,7 @@ Adding 320 new observations.
 </div>
 </div>
 </div>
-<p>This perceptual model has been updated by the input sequence, meaning that we now have beliefs trajectories for all nodes in the network. The beliefs are stored in the variable <code class="docutils literal notranslate"><span class="pre">node_trajectories</span></code> in the model class, but can also be exported to Pandas using the <code class="docutils literal notranslate"><span class="pre">to_pandas</span></code> method like:</p>
+<p>This perceptual model has observed the input sequence, meaning that we now have beliefs trajectories for all nodes in the network. The beliefs are stored in the variable <code class="docutils literal notranslate"><span class="pre">node_trajectories</span></code> in the model class, but can also be exported to Pandas using the <code class="docutils literal notranslate"><span class="pre">to_pandas</span></code> method like:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">agent</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -655,7 +661,7 @@ Adding 320 new observations.
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 <span class="n">jitter</span> <span class="o">=</span> <span class="n">responses</span> <span class="o">*</span> <span class="mf">.1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">responses</span><span class="p">)</span> <span class="o">*</span> <span class="o">-</span><span class="mf">.1</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">observations</span><span class="p">)),</span> <span class="n">observations</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Observations&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4c72b0&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">responses</span><span class="p">)),</span> <span class="n">responses</span> <span class="o">+</span> <span class="n">jitter</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Responses&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#c44e52&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
@@ -670,7 +676,7 @@ Adding 320 new observations.
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0, &#39;Trials&#39;)
 </pre></div>
 </div>
-<img alt="../_images/3e4e5ee22c3a0d1e77e8c0b1d67bbd41b26a727527504acb4052be271b18dab3.png" src="../_images/3e4e5ee22c3a0d1e77e8c0b1d67bbd41b26a727527504acb4052be271b18dab3.png" />
+<img alt="../_images/faee24b72ff882006381c353eface66dcd795e6cebe9c458befd3b88b4d94f8c.png" src="../_images/faee24b72ff882006381c353eface66dcd795e6cebe9c458befd3b88b4d94f8c.png" />
 </div>
 </div>
 <p>We now have the two ingredients required to create a response model:</p>
@@ -691,18 +697,22 @@ Adding 320 new observations.
 <p class="admonition-title">Hint</p>
 <p>What is a <em>response function</em>?
 Most of the work around HGFs consists in creating and adapting <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> to work with a given experimental design. There is no limit in terms of what can be used as a <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a>, provided that the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> and the response model are clearly defined.</p>
-<p>In <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a>, the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> corresponds to the probabilistic network that is created with the main :py:class:<code class="docutils literal notranslate"><span class="pre">pyhgf.model.HGF</span></code> and :py:class:<code class="docutils literal notranslate"><span class="pre">pyhgf.distribution.HGFDistribution</span></code> classes. The <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> is something that is implicitly defined when we create the <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a>, a Python function that computes the negative of the log-likelihood of the actions given the perceptual model. This <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> can be passed as an argument to the main classes using the keywords arguments <code class="docutils literal notranslate"><span class="pre">response_function</span></code> and <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code>. The <code class="docutils literal notranslate"><span class="pre">response_function</span></code> can be any callable that returns the surprise <span class="math notranslate nohighlight">\(S\)</span> of observing action <span class="math notranslate nohighlight">\(y\)</span> given this model, and the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a>. The <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code> is where additional parameters or observations can be provided. Critically, this is where the actions <span class="math notranslate nohighlight">\(y\)</span> should be provided.</p>
-<p>:::{important}
-A <em>response function</em> should not return the actions <span class="math notranslate nohighlight">\(y\)</span> (this is what the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a> does), but the <a class="reference external" href="https://en.wikipedia.org/wiki/Information_content">surprise</a> <span class="math notranslate nohighlight">\(S\)</span> associated with the observation <span class="math notranslate nohighlight">\(x\)</span>, which is defined by:
-$<span class="math notranslate nohighlight">\(S(x) = -\log[Pr(x)]\)</span>$
-:::</p>
-<p>If you are already familiar with using HGFs in our Julia alter-ego, you probably noted that the package is split into a <strong>perceptual</strong> package <a class="reference external" href="https://github.com/ilabcode/HierarchicalGaussianFiltering.jl">HierarchicalGaussianFiltering.jl</a> and a <strong>response</strong> package <a class="reference external" href="https://github.com/ilabcode/ActionModels.jl">ActionModels.jl</a>. This was made to make the difference between the two parts of the HGF clear and be explicit that you can use a perceptual model without any action model. In <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a> however, everything happens in the same package, the response function is merely an optional, additional argument that can be passed to describe how surprise is computed.</p>
+<p>In <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a>, the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> is the probabilistic network created with the main :py:class:<code class="docutils literal notranslate"><span class="pre">pyhgf.model.HGF</span></code> and :py:class:<code class="docutils literal notranslate"><span class="pre">pyhgf.distribution.HGFDistribution</span></code> classes. The <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> is something that is implicitly defined when we create the <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a>, a Python function that computes the negative of the log-likelihood of the actions given the perceptual model. This <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> can be passed as an argument to the main classes using the keywords arguments <code class="docutils literal notranslate"><span class="pre">response_function</span></code> and <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code>. The <code class="docutils literal notranslate"><span class="pre">response_function</span></code> can be any callable that returns the surprise <span class="math notranslate nohighlight">\(S\)</span> of observing action <span class="math notranslate nohighlight">\(y\)</span> given this model, and the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a>. The <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code> is where additional parameters or observations can be provided. Critically, this is where the actions <span class="math notranslate nohighlight">\(y\)</span> should be provided.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>A <em>response function</em> should not return the actions <span class="math notranslate nohighlight">\(y\)</span> (this is what the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a> does), but the <a class="reference external" href="https://en.wikipedia.org/wiki/Information_content">surprise</a> <span class="math notranslate nohighlight">\(S\)</span> associated with the observation <span class="math notranslate nohighlight">\(x\)</span>, which is defined by:
+$<span class="math notranslate nohighlight">\(S(x) = -\log[Pr(x)]\)</span>$</p>
+</div>
+<p>If you are already familiar with using HGFs in the Julia equivalent of pyhgf, you probably noted that the toolbox is split into a <strong>perceptual</strong> package <a class="reference external" href="https://github.com/ilabcode/HierarchicalGaussianFiltering.jl">HierarchicalGaussianFiltering.jl</a> and a <strong>response</strong> package <a class="reference external" href="https://github.com/ilabcode/ActionModels.jl">ActionModels.jl</a>. This was made to make the difference between the two parts of the HGF clear and be explicit that you can use a perceptual model without any action model. In <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a> however, everything happens in the same package, the response function is merely an optional, additional argument that can be passed to describe how surprise is computed.</p>
 </div>
 <p>Therefor, ee want a <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> that returns the surprise for observing the response <span class="math notranslate nohighlight">\(y\)</span>, which is:</p>
-<p>\begin{align}
-surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}<em>1)) \
-&amp; = \sum</em>{t=1}^{t} - \log(\hat{\mu}_1^y(1 - \hat{\mu}_1)^{1-y}) \
-\end{align}</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
+&amp; = \sum_{t=1}^{t} - \log(\hat{\mu}_1^y(1 - \hat{\mu}_1)^{1-y}) \\
+\end{align}
+\end{split}\]</div>
 <p>We can write such a response function in Python as:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -737,7 +747,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}<em>1)) \
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(201.86661, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(209.85944, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -964,19 +974,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}<em>1)) \
   <tbody>
     <tr>
       <th>omega_2</th>
-      <td>-3.908</td>
-      <td>0.401</td>
-      <td>-4.685</td>
-      <td>-3.189</td>
+      <td>-4.177</td>
+      <td>0.373</td>
+      <td>-4.882</td>
+      <td>-3.488</td>
       <td>0.009</td>
-      <td>0.007</td>
-      <td>1814.0</td>
-      <td>2731.0</td>
+      <td>0.006</td>
+      <td>1813.0</td>
+      <td>2816.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/e9753b5d01c7ae88fa69a010a7c58e4d66464fb274e7fd7e73c5c486371f8d79.png" src="../_images/e9753b5d01c7ae88fa69a010a7c58e4d66464fb274e7fd7e73c5c486371f8d79.png" />
+</div></div><img alt="../_images/7843c4c73cb0af556dd7835b1acadf4c2947d1d8f668219f255595fc88ba8f80.png" src="../_images/7843c4c73cb0af556dd7835b1acadf4c2947d1d8f668219f255595fc88ba8f80.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.7 and -3.3, with a mean at -4.0 (you can find slightly different values if you sample again). This is an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1014,12 +1024,12 @@ pyhgf : 0.0.4
 jax   : 0.4.13
 jaxlib: 0.4.13
 
-numpy     : 1.22.0
-jax       : 0.4.13
-pymc      : 5.6.1
-matplotlib: 3.7.2
-arviz     : 0.16.0
 sys       : 3.10.12 (main, Jun  7 2023, 13:43:11) [GCC 11.3.0]
+pymc      : 5.6.1
+arviz     : 0.16.0
+numpy     : 1.22.0
+matplotlib: 3.7.2
+jax       : 0.4.13
 
 Watermark: 2.4.3
 </pre></div>
