@@ -436,12 +436,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="using-custom-response-models">
 <span id="custom-response-functions"></span><h1>Using custom response models<a class="headerlink" href="#using-custom-response-models" title="Permalink to this heading">#</a></h1>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
+<div class="cell tag_hice-cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
 import sys
@@ -450,7 +445,6 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 </div>
-</details>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -676,7 +670,7 @@ Adding 320 new observations.
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0, &#39;Trials&#39;)
 </pre></div>
 </div>
-<img alt="../_images/faee24b72ff882006381c353eface66dcd795e6cebe9c458befd3b88b4d94f8c.png" src="../_images/faee24b72ff882006381c353eface66dcd795e6cebe9c458befd3b88b4d94f8c.png" />
+<img alt="../_images/ae302dfc456f4a320fece604b005bb78396bc88c76d84ad008745e0a0eebbc31.png" src="../_images/ae302dfc456f4a320fece604b005bb78396bc88c76d84ad008745e0a0eebbc31.png" />
 </div>
 </div>
 <p>We now have the two ingredients required to create a response model:</p>
@@ -700,12 +694,17 @@ Most of the work around HGFs consists in creating and adapting <a class="referen
 <p>In <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a>, the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> is the probabilistic network created with the main :py:class:<code class="docutils literal notranslate"><span class="pre">pyhgf.model.HGF</span></code> and :py:class:<code class="docutils literal notranslate"><span class="pre">pyhgf.distribution.HGFDistribution</span></code> classes. The <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> is something that is implicitly defined when we create the <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a>, a Python function that computes the negative of the log-likelihood of the actions given the perceptual model. This <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> can be passed as an argument to the main classes using the keywords arguments <code class="docutils literal notranslate"><span class="pre">response_function</span></code> and <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code>. The <code class="docutils literal notranslate"><span class="pre">response_function</span></code> can be any callable that returns the surprise <span class="math notranslate nohighlight">\(S\)</span> of observing action <span class="math notranslate nohighlight">\(y\)</span> given this model, and the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a>. The <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code> is where additional parameters or observations can be provided. Critically, this is where the actions <span class="math notranslate nohighlight">\(y\)</span> should be provided.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>A <em>response function</em> should not return the actions <span class="math notranslate nohighlight">\(y\)</span> (this is what the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a> does), but the <a class="reference external" href="https://en.wikipedia.org/wiki/Information_content">surprise</a> <span class="math notranslate nohighlight">\(S\)</span> associated with the observation <span class="math notranslate nohighlight">\(x\)</span>, which is defined by:
-$<span class="math notranslate nohighlight">\(S(x) = -\log[Pr(x)]\)</span>$</p>
+<p>A <em>response function</em> should not return the actions <span class="math notranslate nohighlight">\(y\)</span> (this is what the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a> does), but the <a class="reference external" href="https://en.wikipedia.org/wiki/Information_content">surprise</a> <span class="math notranslate nohighlight">\(S\)</span> associated with the observation <span class="math notranslate nohighlight">\(x\)</span>, which is defined by:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+S(x) = -\log[Pr(x)]
+\end{align}
+\]</div>
 </div>
 <p>If you are already familiar with using HGFs in the Julia equivalent of pyhgf, you probably noted that the toolbox is split into a <strong>perceptual</strong> package <a class="reference external" href="https://github.com/ilabcode/HierarchicalGaussianFiltering.jl">HierarchicalGaussianFiltering.jl</a> and a <strong>response</strong> package <a class="reference external" href="https://github.com/ilabcode/ActionModels.jl">ActionModels.jl</a>. This was made to make the difference between the two parts of the HGF clear and be explicit that you can use a perceptual model without any action model. In <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a> however, everything happens in the same package, the response function is merely an optional, additional argument that can be passed to describe how surprise is computed.</p>
 </div>
-<p>Therefor, ee want a <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> that returns the surprise for observing the response <span class="math notranslate nohighlight">\(y\)</span>, which is:</p>
+<p>Therefore, we want a <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> that returns the surprise for observing the response <span class="math notranslate nohighlight">\(y\)</span>, which is:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{align}
@@ -747,7 +746,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(209.85944, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(201.71695, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -876,7 +875,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -897,7 +896,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -918,9 +917,9 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 8 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 10 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/arviz/utils.py:185: NumbaDeprecationWarning: The keyword argument &#39;nopython=False&#39; was supplied. From Numba 0.59.0 the default is being changed to True and use of &#39;nopython=False&#39; will raise a warning as the argument will have no effect. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
@@ -974,19 +973,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>omega_2</th>
-      <td>-4.177</td>
-      <td>0.373</td>
-      <td>-4.882</td>
-      <td>-3.488</td>
+      <td>-3.959</td>
+      <td>0.366</td>
+      <td>-4.674</td>
+      <td>-3.307</td>
       <td>0.009</td>
-      <td>0.006</td>
-      <td>1813.0</td>
-      <td>2816.0</td>
+      <td>0.007</td>
+      <td>1572.0</td>
+      <td>2826.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/7843c4c73cb0af556dd7835b1acadf4c2947d1d8f668219f255595fc88ba8f80.png" src="../_images/7843c4c73cb0af556dd7835b1acadf4c2947d1d8f668219f255595fc88ba8f80.png" />
+</div></div><img alt="../_images/95d9c28c8d77a4cd43a54b1a0ce84b026451177ef27248ff3c9db736a3fc249b.png" src="../_images/95d9c28c8d77a4cd43a54b1a0ce84b026451177ef27248ff3c9db736a3fc249b.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.7 and -3.3, with a mean at -4.0 (you can find slightly different values if you sample again). This is an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1024,11 +1023,11 @@ pyhgf : 0.0.4
 jax   : 0.4.13
 jaxlib: 0.4.13
 
-sys       : 3.10.12 (main, Jun  7 2023, 13:43:11) [GCC 11.3.0]
-pymc      : 5.6.1
 arviz     : 0.16.0
-numpy     : 1.22.0
+sys       : 3.10.12 (main, Jun  7 2023, 13:43:11) [GCC 11.3.0]
 matplotlib: 3.7.2
+numpy     : 1.22.0
+pymc      : 5.6.1
 jax       : 0.4.13
 
 Watermark: 2.4.3
