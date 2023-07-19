@@ -464,14 +464,14 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 </div>
-<p>In this notebook, we illustrate applications of the standard two-levels and three-level Hierarchical Gaussian Filters (HGF) for continuous inputs. This class of models slightly differs from the previous binary example as input nodes here are not restricted to boolean variables but accept any observations on a continuous domain. Fitting continuous data allows using the HGF with any time series, which can find several applications in neuroscience (see for example the case study on physiological modelling using the Hierarchical Gaussian Filter <a class="reference internal" href="Example_1_Heart_rate_variability.html#example-1"><span class="std std-ref">Example 1: Bayesian filtering of cardiac volatility</span></a>). The continuous HGF is built on to of the following probabilistic network:</p>
+<p>In this notebook, we illustrate applications of the standard two-level and three-level Hierarchical Gaussian Filters (HGF) for continuous inputs. This class of models slightly differs from the previous binary example as input nodes here are not restricted to boolean variables but accept any observations on a continuous domain. Fitting continuous data allows using the HGF with any time series, which can find several applications in neuroscience (see for example the case study on physiological modelling using the Hierarchical Gaussian Filter <a class="reference internal" href="Example_1_Heart_rate_variability.html#example-1"><span class="std std-ref">Example 1: Bayesian filtering of cardiac volatility</span></a>). The continuous HGF is built on to of the following probabilistic network:</p>
 <figure class="align-default" id="id1">
 <img alt="../_images/continuous.png" src="../_images/continuous.png" />
 <figcaption>
 <p><span class="caption-text">The two-level and three-level Hierarchical Gaussian Filter for continuous inputs.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<p>Here, we will use the continuous HGF to predict the the exchange rate of the US Dollar to the Swiss Franc during much of 2010 and 2011 (we use this time series as it is a classical example in the <a class="reference external" href="https://github.com/translationalneuromodeling/tapas/blob/master/HGF/README.md">Matlab toolbox)</a>.</p>
+<p>Here, we will use the continuous HGF to predict the exchange rate of the US Dollar to the Swiss Franc during much of 2010 and 2011 (we use this time series as it is a classical example in the <a class="reference external" href="https://github.com/translationalneuromodeling/tapas/blob/master/HGF/README.md">Matlab toolbox)</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">timeserie</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
@@ -487,7 +487,7 @@ if &#39;google.colab&#39; in sys.modules:
 <h4>Create the model<a class="headerlink" href="#create-the-model" title="Permalink to this heading">#</a></h4>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The default response function for a continuous HGF is the <a class="reference internal" href="../generated/pyhgf.response/pyhgf.response.total_gaussian_surprise.html#pyhgf.response.total_gaussian_surprise" title="pyhgf.response.total_gaussian_surprise"><span class="xref myst py py-func">sum of the Guassian surprise at the first level</span></a>. In other words, at each time point the model try to update its hierarchy to minimize the discrepancy between the expected and real next observation in the continuous domain.</p>
+<p>The default response function for a continuous HGF is the <a class="reference internal" href="../generated/pyhgf.response/pyhgf.response.total_gaussian_surprise.html#pyhgf.response.total_gaussian_surprise" title="pyhgf.response.total_gaussian_surprise"><span class="xref myst py py-func">sum of the Gaussian surprise at the first level</span></a>. In other words, at each time point the model try to update its hierarchy to minimize the discrepancy between the expected and real next observation in the continuous domain.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -539,7 +539,7 @@ if &#39;google.colab&#39; in sys.modules:
 </section>
 <section id="plot-trajectories">
 <h4>Plot trajectories<a class="headerlink" href="#plot-trajectories" title="Permalink to this heading">#</a></h4>
-<p>A Hierarchical Gaussian Filter parametrized with the standard Gaussian surprise as a response function will act as a Bayesian filter. By presenting new continuous observations and running the update equation forward, we can observe the trajectories of the parameters of the node that are adapting to the trajectory and volatility of the input time series (i.e. the mean <span class="math notranslate nohighlight">\(\mu\)</span> and the precision <span class="math notranslate nohighlight">\(\pi\)</span>). The <code class="docutils literal notranslate"><span class="pre">plot_trajectories</span></code> function automatically extracts the relevant parameters given the model structure and plot their evolution together with the input data.</p>
+<p>A Hierarchical Gaussian Filter parametrized with the standard Gaussian surprise as a response function will act as a Bayesian filter. By presenting new continuous observations and running the update equation forward, we can observe the trajectories of the parameters of the node that are adapting to the trajectory and volatility of the input time series (i.e. the mean <span class="math notranslate nohighlight">\(\mu\)</span> and the precision <span class="math notranslate nohighlight">\(\pi\)</span>). The <code class="docutils literal notranslate"><span class="pre">plot_trajectories</span></code> function automatically extracts the relevant parameters given the model structure and plots their evolution together with the input data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_continuous_hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
@@ -550,8 +550,8 @@ if &#39;google.colab&#39; in sys.modules:
 <img alt="../_images/3f30d80ef5e9f97b2a4c99febb975d9ab96a4f6a620dcf7e420fc4fd90ed2055.png" src="../_images/3f30d80ef5e9f97b2a4c99febb975d9ab96a4f6a620dcf7e420fc4fd90ed2055.png" />
 </div>
 </div>
-<p>Looking at the volatility level (i.e. the orange line in the first panel), we see that there are two salient events in our time series where volatility shoots up. The first is in April 2010 when the currency markets react to the news that Greece is effectively broke. This leads to a flight into the US dollar (the grey dots rising very quickly), sending the volatility higher. The second is an accelerating increase in the value of the Swiss Franc in August and September 2011, as the Euro crisis drags on. The point where the Swiss central bank intervened and put a floor under how far the Euro could fall with respect to the Franc is visible in the Franc’s valuation against the Dollar. This surprising intervention shows up as another spike in volatility.</p>
-<p>We can see that the surprise will increase when the time series exhibit more unexpected behaviours. The degree to which a given observation is expected will depend on the expected value and volatility in the input node, which is influenced by the values of higher-order nodes. One way to assess model fit is to look at the total gaussian surprise for each observation. This value can be returned using the <span class="xref std std-ref">pyhgf.model.HGF.surprise</span> method:</p>
+<p>Looking at the volatility level (i.e. the orange line in the first panel), we see that there are two salient events in our time series where volatility shoots up. The first is in April 2010 when the currency markets react to the news that Greece is effectively broke. This leads to a flight into the US dollar (the grey dots rising very quickly), sending the volatility higher. The second is an accelerating increase in the value of the Swiss Franc in August and September 2011, as the Euro crisis drags on. The point where the Swiss central bank intervened and put a floor under how far the Euro could fall with respect to the Franc is visible in Franc’s valuation against the Dollar. This surprising intervention shows up as another spike in volatility.</p>
+<p>We can see that the surprise will increase when the time series exhibit more unexpected behaviours. The degree to which a given observation is expected will depend on the expected value and volatility in the input node, which is influenced by the values of higher-order nodes. One way to assess model fit is to look at the total Gaussian surprise for each observation. This value can be returned using the <span class="xref std std-ref">pyhgf.model.HGF.surprise</span> method:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_continuous_hgf</span><span class="o">.</span><span class="n">surprise</span><span class="p">()</span>
@@ -566,7 +566,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The surprise returned by a model when presented with new observation is a function of the response model that was used. Different response functions can be added and provided, together with additional parameters in the <span class="xref std std-ref">pyhgf.model.HGF.surprise</span> method. The surprise is the negative log probability density of the new observations under the model priors:</p>
+<p>The surprise returned by a model when presented with new observations is a function of the response model that was used. Different response functions can be added and provided, together with additional parameters in the <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.model.HGF.surprise()</span></code> method. The surprise is the negative log probability density of the new observations under the model priors:</p>
 <div class="math notranslate nohighlight">
 \[surprise = -log(p)\]</div>
 </div>
@@ -590,7 +590,7 @@ if &#39;google.colab&#39; in sys.modules:
 <h3>The three-level continuous Hierarchical Gaussian Filter<a class="headerlink" href="#the-three-level-continuous-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h3>
 <section id="id2">
 <h4>Create the model<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h4>
-<p>The three-level HGF can add a meta-volatility layer to the model. This can be useful if we suspect that the volatility of the time series is not stable across time and we would like our model to learn it. Here, we create a new <span class="xref std std-ref">pyhgf.model.HGF</span> instance, setting the number of levels to <code class="docutils literal notranslate"><span class="pre">3</span></code>. Note that we are extending the size of the dictionaries accordingly.</p>
+<p>The three-level HGF can add a meta-volatility layer to the model. This can be useful if we suspect that the volatility of the time series is not stable across time and we would like our model to learn it. Here, we create a new <a class="reference internal" href="../generated/pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.model.HGF</span></code></a> instance, setting the number of levels to <code class="docutils literal notranslate"><span class="pre">3</span></code>. Note that we are extending the size of the dictionaries accordingly.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_continuous_hgf</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
@@ -667,7 +667,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 </div>
-<p>The overall amount of surprise returned by the three-level is <code class="docutils literal notranslate"><span class="pre">-381</span></code>, while it was <code class="docutils literal notranslate"><span class="pre">-382</span></code> fot the two-level HGF. Because an agent will aims to minimize surprise, it looks like the two-level model is slightly beter in this context. However, surprise will also change as the value for the parameters of the node are being optimized beforehand. One important parameter for each node is <span class="math notranslate nohighlight">\(\omega\)</span> (<code class="docutils literal notranslate"><span class="pre">omega</span></code>). This is the tonic part of the variance (the part of the variance in each node that is not affected by the parent node). Here we are going to change <span class="math notranslate nohighlight">\(\omega\)</span> at the second level to see if it can help minimizing surprise:</p>
+<p>The overall amount of surprise returned by the three-level is <code class="docutils literal notranslate"><span class="pre">-381</span></code>, while it was <code class="docutils literal notranslate"><span class="pre">-382</span></code> for the two-level HGF. Because an agent will aim to minimize surprise, it looks like the two-level model is slightly better in this context. However, the surprise will also change as the value for the parameters of the node is optimized beforehand. One important parameter for each node is <span class="math notranslate nohighlight">\(\omega\)</span> (<code class="docutils literal notranslate"><span class="pre">omega</span></code>). This is the tonic part of the variance (the part of the variance in each node that is not affected by the parent node). Here we are going to change <span class="math notranslate nohighlight">\(\omega\)</span> at the second level to see if it can help to minimize surprise:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create an alternative model with different omega values</span>
@@ -748,10 +748,10 @@ Adding 614 new observations.
 </div>
 </div>
 </div>
-<p>This log probabilit function can then be embedded in a PyMC model using the same API. Here, we are going to optimize <code class="docutils literal notranslate"><span class="pre">omega_1</span></code>. The other parameters are fixed.</p>
+<p>This log probability function can then be embedded in a PyMC model using the same API. Here, we are going to optimize <code class="docutils literal notranslate"><span class="pre">omega_1</span></code>. The other parameters are fixed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The data has being passed to the distribution in the cell above when the function is created.</p>
+<p>The data has been passed to the distribution in the cell above when the function is created.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -842,9 +842,9 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 5 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 6 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -860,7 +860,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0228b5112de47b7196cfbd03bf5de18a42ef7df4f2d79fdc2cdd9e879fa97225.png" src="../_images/0228b5112de47b7196cfbd03bf5de18a42ef7df4f2d79fdc2cdd9e879fa97225.png" />
+<img alt="../_images/f3a5b47ab55cebf5ea909b1842206744779416e793bcff5afe08bccee6a62eb1.png" src="../_images/f3a5b47ab55cebf5ea909b1842206744779416e793bcff5afe08bccee6a62eb1.png" />
 </div>
 </div>
 </section>
@@ -910,7 +910,7 @@ Adding 614 new observations.
       dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/19a36c70400c819e4c77bb34a21bc36a8b5dbdda661dab96bd1562cef9edc509.png" src="../_images/19a36c70400c819e4c77bb34a21bc36a8b5dbdda661dab96bd1562cef9edc509.png" />
+<img alt="../_images/3263b04f6040fe356c2c2ddbecab57d6a7ae29a37b1d660b436a6f5fc16b0a76.png" src="../_images/3263b04f6040fe356c2c2ddbecab57d6a7ae29a37b1d660b436a6f5fc16b0a76.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -920,7 +920,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-656.7134, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-656.7333, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1025,9 +1025,9 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 6 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 8 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -1043,7 +1043,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1fa260d2f6515bf04c3ad950a885775e22ca0b9eff59b14a24d2da5444e7d8a1.png" src="../_images/1fa260d2f6515bf04c3ad950a885775e22ca0b9eff59b14a24d2da5444e7d8a1.png" />
+<img alt="../_images/954f310065f2965394b7db0d0ba5958a6b16b79129dff192c314d351ca3b660e.png" src="../_images/954f310065f2965394b7db0d0ba5958a6b16b79129dff192c314d351ca3b660e.png" />
 </div>
 </div>
 </section>
@@ -1092,7 +1092,7 @@ Adding 614 new observations.
        &lt;Axes: ylabel=&#39;$\\mu_1$&#39;&gt;, &lt;Axes: &gt;], dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/d9e12249ee15cb4172af939d47be425aa76cd1cb91db274693d248c1412e7817.png" src="../_images/d9e12249ee15cb4172af939d47be425aa76cd1cb91db274693d248c1412e7817.png" />
+<img alt="../_images/ab4efcb8a1cc0ff20ba91a8c94cb7aa8c7f70830daed094719db315cde67515d.png" src="../_images/ab4efcb8a1cc0ff20ba91a8c94cb7aa8c7f70830daed094719db315cde67515d.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1102,7 +1102,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-653.6709, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-653.4714, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1130,12 +1130,12 @@ pyhgf : 0.0.4
 jax   : 0.4.13
 jaxlib: 0.4.13
 
-arviz     : 0.16.1
 jax       : 0.4.13
 pymc      : 5.6.1
-matplotlib: 3.7.2
+arviz     : 0.16.1
 seaborn   : 0.12.2
 sys       : 3.10.12 (main, Jun  7 2023, 13:43:11) [GCC 11.3.0]
+matplotlib: 3.7.2
 
 Watermark: 2.4.3
 </pre></div>
