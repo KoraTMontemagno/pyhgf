@@ -510,10 +510,9 @@ less than 2.</p>
 following parameters: <cite>“pihat”, “pi”, “muhat”, “mu”, “nu”, “psis”, “omega”</cite> for
 continuous nodes.</p>
 </dd>
-<dt><strong>.. note::</strong></dt><dd><p><cite>“psis”</cite> is the value coupling strength. It should have the same length as the
-volatility parents’ indexes.
-<cite>“kappas”</cite> is the volatility coupling strength. It should have the same length
-as the volatility parents’ indexes.</p>
+<dt><strong>.. note::</strong></dt><dd><p>The parameter structure also incorporate the value and volatility coupling
+strenght with children and parents (i.e. <cite>“psis_parents”</cite>, <cite>“psis_children”</cite>,
+<cite>“kappas_parents”</cite>, <cite>“kappas_children”</cite>).</p>
 </dd>
 <dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Verbosity level.</p>
 </dd>
@@ -567,7 +566,8 @@ if <cite>model_type=”binary”</cite>.</p>
 <dt><strong>rho</strong></dt><dd><p>A dictionary containing the initial values for the <span class="math notranslate nohighlight">\(\\rho\)</span> parameter
 at different levels of the hierarchy. Rho represents the drift of the random
 walk. This parameter is only required for Gaussian Random Walk nodes.
-Defaults set all entries to <cite>0</cite> according to the number of required levels.</p>
+Defaults set all entries to <cite>0.0</cite> according to the number of required
+levels.</p>
 </dd>
 <dt><strong>verbose</strong></dt><dd><p>The verbosity of the methods for model creation and fitting. Defaults to
 <cite>True</cite>.</p>

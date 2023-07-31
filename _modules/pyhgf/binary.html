@@ -470,9 +470,9 @@ document.write(`
 <span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
 <span class="sd">        continuous nodes.</span>
 <span class="sd">    .. note::</span>
-<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have the same length as the</span>
-<span class="sd">        volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
-<span class="sd">        It should have the same length as the volatility parents&#39; indexes.</span>
+<span class="sd">        The parameter structure also incorporate the value and volatility coupling</span>
+<span class="sd">        strenght with children and parents (i.e. `&quot;psis_parents&quot;`, `&quot;psis_children&quot;`,</span>
+<span class="sd">        `&quot;kappas_parents&quot;`, `&quot;kappas_children&quot;`).</span>
 <span class="sd">    time_step :</span>
 <span class="sd">        Interval between the previous time point and the current time point.</span>
 <span class="sd">    node_idx :</span>
@@ -527,7 +527,7 @@ document.write(`
         <span class="c1"># and update logvol accordingly</span>
         <span class="k">if</span> <span class="n">va_pa_volatility_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">va_pa_vo_pa</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                <span class="n">va_pa_volatility_parents_idx</span><span class="p">,</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;kappas&quot;</span><span class="p">]</span>
+                <span class="n">va_pa_volatility_parents_idx</span><span class="p">,</span> <span class="n">va_pa_node_parameters</span><span class="p">[</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">]</span>
             <span class="p">):</span>
                 <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">va_pa_vo_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
