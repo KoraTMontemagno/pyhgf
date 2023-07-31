@@ -892,6 +892,7 @@ document.write(`
         <span class="n">pihat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">eta0</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">eta1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an input node.</span>
 
@@ -910,6 +911,8 @@ document.write(`
 <span class="sd">            The lower bound of the binary process (only relevant if `kind=&quot;binary&quot;`).</span>
 <span class="sd">        eta1 :</span>
 <span class="sd">            The lower bound of the binary process (only relevant if `kind=&quot;binary&quot;`).</span>
+<span class="sd">        additional_parameters :</span>
+<span class="sd">            Add more custom parameters to the input node.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
@@ -928,6 +931,11 @@ document.write(`
                 <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="p">}</span>
+
+        <span class="c1"># add more parameters (optional)</span>
+        <span class="k">if</span> <span class="n">additional_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">input_node_parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">additional_parameters</span><span class="p">}</span>
+
         <span class="k">if</span> <span class="n">input_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># this is the first node, create the node structure</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span> <span class="o">=</span> <span class="p">{</span><span class="n">input_idx</span><span class="p">:</span> <span class="n">input_node_parameters</span><span class="p">}</span>
@@ -960,6 +968,7 @@ document.write(`
         <span class="n">psis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a value parent to a given set of nodes.</span>
 
@@ -992,6 +1001,8 @@ document.write(`
 <span class="sd">            volatility parent(s)).</span>
 <span class="sd">        rho :</span>
 <span class="sd">            The drift of the random walk. Defaults to `0.0` (no drift).</span>
+<span class="sd">        additional_parameters :</span>
+<span class="sd">            Add more custom parameters to the node.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># how many nodes in structure</span>
@@ -1010,6 +1021,10 @@ document.write(`
             <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">,</span>
             <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">,</span>
         <span class="p">}</span>
+
+        <span class="c1"># add more parameters (optional)</span>
+        <span class="k">if</span> <span class="n">additional_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">node_parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">additional_parameters</span><span class="p">}</span>
 
         <span class="c1"># add a new node to connection structure with no parents</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">),</span> <span class="kc">None</span><span class="p">),)</span>
@@ -1065,6 +1080,7 @@ document.write(`
         <span class="n">psis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a volatility parent to a given set of nodes.</span>
 
@@ -1096,6 +1112,8 @@ document.write(`
 <span class="sd">            volatility parent(s)).</span>
 <span class="sd">        rho :</span>
 <span class="sd">            The drift of the random walk. Defaults to `0.0` (no drift).</span>
+<span class="sd">        additional_parameters :</span>
+<span class="sd">            Add more custom parameters to the node.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># how many nodes in structure</span>
@@ -1114,6 +1132,10 @@ document.write(`
             <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">,</span>
             <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">,</span>
         <span class="p">}</span>
+
+        <span class="c1"># add more parameters (optional)</span>
+        <span class="k">if</span> <span class="n">additional_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">node_parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">additional_parameters</span><span class="p">}</span>
 
         <span class="c1"># add a new node to the connection structure with no parents</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">)),)</span>
