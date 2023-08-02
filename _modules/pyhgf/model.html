@@ -433,7 +433,6 @@ document.write(`
   <h1>Source code for pyhgf.model</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
@@ -503,7 +502,7 @@ document.write(`
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="n">omega_input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">),</span>
+        <span class="n">continuous_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e4</span><span class="p">,</span>
         <span class="n">omega</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span>
@@ -512,7 +511,7 @@ document.write(`
         <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
         <span class="n">eta0</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">eta1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">pihat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+        <span class="n">binary_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -555,10 +554,10 @@ document.write(`
 <span class="sd">            part of the variance (the part that is not affected by the parent node).</span>
 <span class="sd">            Defaults are set to `-3.0` at all levels. This parameter is only required</span>
 <span class="sd">            for Gaussian Random Walk nodes.</span>
-<span class="sd">        omega_input :</span>
-<span class="sd">            Default value sets to `log(1e-4)`. Represents the noise associated with</span>
-<span class="sd">            the input.</span>
-<span class="sd">        pihat :</span>
+<span class="sd">        continuous_precision :</span>
+<span class="sd">            The expected precision of the continuous input node. Default to `1e4`. Only</span>
+<span class="sd">            relevant if `model_type=&quot;continuous&quot;`.</span>
+<span class="sd">        binary_precision :</span>
 <span class="sd">            The precision of the binary input node. Default to `jnp.inf`. Only relevant</span>
 <span class="sd">            if `model_type=&quot;binary&quot;`.</span>
 <span class="sd">        rho :</span>
@@ -593,9 +592,16 @@ document.write(`
             <span class="c1"># Input #</span>
             <span class="c1">#########</span>
             <span class="k">if</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">omega_input</span><span class="o">=</span><span class="n">omega_input</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span>
+                    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">continuous_precision</span><span class="o">=</span><span class="n">continuous_precision</span>
+                <span class="p">)</span>
             <span class="k">elif</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">eta0</span><span class="o">=</span><span class="n">eta0</span><span class="p">,</span> <span class="n">eta1</span><span class="o">=</span><span class="n">eta1</span><span class="p">,</span> <span class="n">pihat</span><span class="o">=</span><span class="n">pihat</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span>
+                    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+                    <span class="n">eta0</span><span class="o">=</span><span class="n">eta0</span><span class="p">,</span>
+                    <span class="n">eta1</span><span class="o">=</span><span class="n">eta1</span><span class="p">,</span>
+                    <span class="n">binary_precision</span><span class="o">=</span><span class="n">binary_precision</span><span class="p">,</span>
+                <span class="p">)</span>
 
             <span class="c1">#########</span>
             <span class="c1"># x - 1 #</span>
@@ -888,8 +894,8 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">input_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="n">omega_input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">),</span>
-        <span class="n">pihat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+        <span class="n">continuous_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e4</span><span class="p">,</span>
+        <span class="n">binary_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">eta0</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">eta1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -903,10 +909,12 @@ document.write(`
 <span class="sd">            `&quot;binary&quot;`).</span>
 <span class="sd">        input_idx :</span>
 <span class="sd">            The index of the new input (defaults to `0`).</span>
-<span class="sd">        omega_input :</span>
-<span class="sd">            The input precision (only relevant if `kind=&quot;continuous&quot;`).</span>
-<span class="sd">        pihat :</span>
-<span class="sd">            The input precision (only relevant if `kind=&quot;binary&quot;`).</span>
+<span class="sd">        continuous_precision :</span>
+<span class="sd">            The continuous input precision (only relevant if `kind=&quot;continuous&quot;`).</span>
+<span class="sd">            Defaults to `1e4`.</span>
+<span class="sd">        binary_precision :</span>
+<span class="sd">            The binary input precision (only relevant if `kind=&quot;binary&quot;`). Default to</span>
+<span class="sd">            `jnp.inf`.</span>
 <span class="sd">        eta0 :</span>
 <span class="sd">            The lower bound of the binary process (only relevant if `kind=&quot;binary&quot;`).</span>
 <span class="sd">        eta1 :</span>
@@ -918,13 +926,13 @@ document.write(`
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
             <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega_input</span><span class="p">,</span>
+                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">continuous_precision</span><span class="p">,</span>
                 <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
             <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pihat</span><span class="p">,</span>
+                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">binary_precision</span><span class="p">,</span>
                 <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="n">eta0</span><span class="p">,</span>
                 <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="n">eta1</span><span class="p">,</span>
                 <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
@@ -1009,7 +1017,7 @@ document.write(`
             <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pi_hat</span><span class="p">,</span>
             <span class="s2">&quot;kappas_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;psis_children&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">value_coupling</span><span class="p">,),</span>
+            <span class="s2">&quot;psis_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">value_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))),</span>
             <span class="s2">&quot;psis_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="n">nu</span><span class="p">,</span>
             <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">,</span>
@@ -1113,7 +1121,9 @@ document.write(`
             <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">mu_hat</span><span class="p">,</span>
             <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">pi</span><span class="p">,</span>
             <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pi_hat</span><span class="p">,</span>
-            <span class="s2">&quot;kappas_children&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">volatility_coupling</span><span class="p">,),</span>
+            <span class="s2">&quot;kappas_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span>
+                <span class="n">volatility_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))</span>
+            <span class="p">),</span>
             <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;psis_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;psis_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>

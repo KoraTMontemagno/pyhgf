@@ -508,8 +508,6 @@ document.write(`
     <span class="k">if</span> <span class="p">(</span><span class="n">value_parents_idxs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">volatility_parents_idxs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">parameters_structure</span>
 
-    <span class="n">pihat</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
-
     <span class="c1">########################</span>
     <span class="c1"># Update value parents #</span>
     <span class="c1">########################</span>
@@ -517,27 +515,27 @@ document.write(`
         <span class="c1"># the strength of the value coupling between the base node and the parents nodes</span>
         <span class="n">psis</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">]</span>
 
-        <span class="k">for</span> <span class="n">value_parents_idx</span><span class="p">,</span> <span class="n">psi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">value_parents_idxs</span><span class="p">,</span> <span class="n">psis</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">value_parent_idx</span><span class="p">,</span> <span class="n">psi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">value_parents_idxs</span><span class="p">,</span> <span class="n">psis</span><span class="p">):</span>
             <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
             <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
-            <span class="k">if</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
                 <span class="c1"># list the value and volatility parents</span>
                 <span class="n">value_parent_value_parents_idxs</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
-                    <span class="n">value_parents_idx</span>
+                    <span class="n">value_parent_idx</span>
                 <span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
                 <span class="n">value_parent_volatility_parents_idxs</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
-                    <span class="n">value_parents_idx</span>
+                    <span class="n">value_parent_idx</span>
                 <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
 
                 <span class="c1"># Compute new value for nu and pihat</span>
-                <span class="n">logvol</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
+                <span class="n">logvol</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
 
                 <span class="c1"># Look at the (optional) va_pa&#39;s volatility parents</span>
                 <span class="c1"># and update logvol accordingly</span>
                 <span class="k">if</span> <span class="n">value_parent_volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">value_parent_volatility_parents_idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
                         <span class="n">value_parent_volatility_parents_idxs</span><span class="p">,</span>
-                        <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
+                        <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
                     <span class="p">):</span>
                         <span class="n">logvol</span> <span class="o">+=</span> <span class="p">(</span>
                             <span class="n">k</span>
@@ -551,7 +549,7 @@ document.write(`
                 <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
                 <span class="n">pihat_value_parent</span><span class="p">,</span> <span class="n">nu_value_parent</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">),</span>
+                    <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">),</span>
                     <span class="n">new_nu</span><span class="p">,</span>
                 <span class="p">]</span>
 
@@ -560,8 +558,8 @@ document.write(`
                 <span class="c1"># required for the multi-children situations</span>
                 <span class="n">pi_children</span> <span class="o">=</span> <span class="mf">0.0</span>
                 <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                    <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
+                    <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
                 <span class="p">):</span>
                     <span class="n">pihat_child</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
                     <span class="n">pi_children</span> <span class="o">+=</span> <span class="n">psi_child</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pihat_child</span>
@@ -569,7 +567,7 @@ document.write(`
                 <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">pihat_value_parent</span> <span class="o">+</span> <span class="n">pi_children</span>
 
                 <span class="c1"># Compute new muhat</span>
-                <span class="n">driftrate</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
+                <span class="n">driftrate</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
 
                 <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
                 <span class="c1"># and update drift rate accordingly</span>
@@ -578,8 +576,7 @@ document.write(`
                         <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">va_pa_va_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
                 <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
                 <span class="p">)</span>
 
                 <span class="c1"># gather PE updates from other nodes if the parent has many children</span>
@@ -587,8 +584,8 @@ document.write(`
                 <span class="c1"># multi-children situations</span>
                 <span class="n">pe_children</span> <span class="o">=</span> <span class="mf">0.0</span>
                 <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                    <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
+                    <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
                 <span class="p">):</span>
                     <span class="n">vape_child</span> <span class="o">=</span> <span class="p">(</span>
                         <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
@@ -602,94 +599,145 @@ document.write(`
                 <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">muhat_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
 
                 <span class="c1"># Update this parent&#39;s parameters</span>
-                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_value_parent</span>
-                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
-                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_value_parent</span>
-                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_value_parent</span>
-                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_value_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_value_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_value_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_value_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_value_parent</span>
 
     <span class="c1">#############################</span>
     <span class="c1"># Update volatility parents #</span>
     <span class="c1">#############################</span>
     <span class="k">if</span> <span class="n">volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># the strength of the value coupling between the base node and the parents nodes</span>
-        <span class="n">kappas</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">]</span>
+        <span class="n">kappas_parents</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">]</span>
 
         <span class="n">nu</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span>
-        <span class="n">vope</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="mi">1</span> <span class="o">/</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="p">(</span>
-                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-                <span class="o">-</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="o">**</span> <span class="mi">2</span>
-        <span class="p">)</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
 
-        <span class="k">for</span> <span class="n">volatility_parents_idx</span><span class="p">,</span> <span class="n">kappa</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">volatility_parents_idxs</span><span class="p">,</span> <span class="n">kappas</span><span class="p">):</span>
-            <span class="c1"># list the value and volatility parents</span>
-            <span class="n">volatility_parent_value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
-                <span class="n">volatility_parents_idx</span>
-            <span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
-            <span class="n">volatility_parent_volatility_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
-                <span class="n">volatility_parents_idx</span>
-            <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
+        <span class="k">for</span> <span class="n">volatility_parent_idx</span><span class="p">,</span> <span class="n">kappas_parent</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="n">volatility_parents_idxs</span><span class="p">,</span> <span class="n">kappas_parents</span>
+        <span class="p">):</span>
+            <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
+            <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="o">==</span> <span class="n">node_idx</span>
+            <span class="p">):</span>
+                <span class="c1"># list the value and volatility parents</span>
+                <span class="n">volatility_parent_value_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
+                    <span class="n">volatility_parent_idx</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
+                <span class="n">volatility_parent_volatility_parents_idx</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
+                    <span class="n">volatility_parent_idx</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
 
-            <span class="c1"># Compute new value for nu and pihat</span>
-            <span class="n">logvol</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
+                <span class="c1"># Compute new value for nu and pihat</span>
+                <span class="n">logvol</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
 
-            <span class="c1"># Look at the (optional) vo_pa&#39;s volatility parents</span>
-            <span class="c1"># and update logvol accordingly</span>
-            <span class="k">if</span> <span class="n">volatility_parent_volatility_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">vo_pa_vo_pa</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                    <span class="n">volatility_parent_volatility_parents_idx</span><span class="p">,</span>
-                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
+                <span class="c1"># Look at the (optional) vo_pa&#39;s volatility parents</span>
+                <span class="c1"># and update logvol accordingly</span>
+                <span class="k">if</span> <span class="n">volatility_parent_volatility_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">vo_pa_vo_pa</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                        <span class="n">volatility_parent_volatility_parents_idx</span><span class="p">,</span>
+                        <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
+                    <span class="p">):</span>
+                        <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">vo_pa_vo_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+
+                <span class="c1"># Estimate new_nu</span>
+                <span class="n">new_nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
+                <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">new_nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">new_nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+                <span class="n">pihat_volatility_parent</span><span class="p">,</span> <span class="n">nu_volatility_parent</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="mi">1</span>
+                    <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">),</span>
+                    <span class="n">new_nu</span><span class="p">,</span>
+                <span class="p">]</span>
+
+                <span class="c1"># gather volatility precisions from the child nodes</span>
+                <span class="n">children_volatility_precision</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">kappas_children</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;kappas_children&quot;</span><span class="p">],</span>
                 <span class="p">):</span>
-                    <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">vo_pa_vo_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                    <span class="n">nu_children</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span>
+                    <span class="n">pihat_children</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+                    <span class="n">pi_children</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
+                    <span class="n">vope_children</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="mi">1</span> <span class="o">/</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
+                        <span class="o">+</span> <span class="p">(</span>
+                            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                            <span class="o">-</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+                        <span class="p">)</span>
+                        <span class="o">**</span> <span class="mi">2</span>
+                    <span class="p">)</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
 
-            <span class="c1"># Estimate new_nu</span>
-            <span class="n">new_nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
-            <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">new_nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">new_nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                    <span class="n">children_volatility_precision</span> <span class="o">+=</span> <span class="p">(</span>
+                        <span class="mf">0.5</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="n">kappas_children</span> <span class="o">*</span> <span class="n">nu_children</span> <span class="o">*</span> <span class="n">pihat_children</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+                        <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">nu_children</span> <span class="o">*</span> <span class="n">pi_children</span><span class="p">))</span> <span class="o">*</span> <span class="n">vope_children</span><span class="p">)</span>
+                    <span class="p">)</span>
 
-            <span class="n">pihat_volatility_parent</span><span class="p">,</span> <span class="n">nu_volatility_parent</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">),</span>
-                <span class="n">new_nu</span><span class="p">,</span>
-            <span class="p">]</span>
+                <span class="n">pi_volatility_parent</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">pihat_volatility_parent</span> <span class="o">+</span> <span class="n">children_volatility_precision</span>
+                <span class="p">)</span>
 
-            <span class="n">pi_volatility_parent</span> <span class="o">=</span> <span class="n">pihat_volatility_parent</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span>
-                <span class="n">kappa</span> <span class="o">*</span> <span class="n">nu</span> <span class="o">*</span> <span class="n">pihat</span>
-            <span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">nu</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="n">vope</span><span class="p">)</span>
-            <span class="n">pi_volatility_parent</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                <span class="n">pi_volatility_parent</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">pi_volatility_parent</span>
-            <span class="p">)</span>
+                <span class="n">pi_volatility_parent</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                    <span class="n">pi_volatility_parent</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">pi_volatility_parent</span>
+                <span class="p">)</span>
 
-            <span class="c1"># Compute new muhat</span>
-            <span class="n">driftrate</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
+                <span class="c1"># drift rate of the GRW</span>
+                <span class="n">driftrate</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
 
-            <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
-            <span class="c1"># and update drift rate accordingly</span>
-            <span class="k">if</span> <span class="n">volatility_parent_value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">vo_pa_va_pa</span> <span class="ow">in</span> <span class="n">volatility_parent_value_parents_idx</span><span class="p">:</span>
-                    <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">vo_pa_va_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
+                <span class="c1"># and update drift rate accordingly</span>
+                <span class="k">if</span> <span class="n">volatility_parent_value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">vo_pa_va_pa</span> <span class="ow">in</span> <span class="n">volatility_parent_value_parents_idx</span><span class="p">:</span>
+                        <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">vo_pa_va_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
-            <span class="n">muhat_volatility_parent</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-                <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
-            <span class="p">)</span>
-            <span class="n">mu_volatility_parent</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">muhat_volatility_parent</span>
-                <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">kappa</span> <span class="o">*</span> <span class="n">nu</span> <span class="o">*</span> <span class="n">pihat</span> <span class="o">/</span> <span class="n">pi_volatility_parent</span> <span class="o">*</span> <span class="n">vope</span>
-            <span class="p">)</span>
+                <span class="n">muhat_volatility_parent</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
+                <span class="p">)</span>
 
-            <span class="c1"># Update this parent&#39;s parameters</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span>
-                <span class="s2">&quot;pihat&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="n">pihat_volatility_parent</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_volatility_parent</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span>
-                <span class="s2">&quot;muhat&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="n">muhat_volatility_parent</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_volatility_parent</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_volatility_parent</span>
+                <span class="c1"># gather volatility prediction errors from the child nodes</span>
+                <span class="n">children_volatility_prediction_error</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">kappas_children</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="n">node_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;kappas_children&quot;</span><span class="p">],</span>
+                <span class="p">):</span>
+                    <span class="n">nu_children</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span>
+                    <span class="n">pihat_children</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+                    <span class="n">vope_children</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="mi">1</span> <span class="o">/</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
+                        <span class="o">+</span> <span class="p">(</span>
+                            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                            <span class="o">-</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+                        <span class="p">)</span>
+                        <span class="o">**</span> <span class="mi">2</span>
+                    <span class="p">)</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+                    <span class="n">children_volatility_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
+                        <span class="mf">0.5</span>
+                        <span class="o">*</span> <span class="n">kappas_children</span>
+                        <span class="o">*</span> <span class="n">nu_children</span>
+                        <span class="o">*</span> <span class="n">pihat_children</span>
+                        <span class="o">/</span> <span class="n">pi_volatility_parent</span>
+                        <span class="o">*</span> <span class="n">vope_children</span>
+                    <span class="p">)</span>
+
+                <span class="n">mu_volatility_parent</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">muhat_volatility_parent</span> <span class="o">+</span> <span class="n">children_volatility_prediction_error</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Update this parent&#39;s parameters</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span>
+                    <span class="s2">&quot;pihat&quot;</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="n">pihat_volatility_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_volatility_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span>
+                    <span class="s2">&quot;muhat&quot;</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="n">muhat_volatility_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_volatility_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_volatility_parent</span>
 
     <span class="k">return</span> <span class="n">parameters_structure</span></div>
 
@@ -744,92 +792,108 @@ document.write(`
 <span class="sd">       arXiv. https://doi.org/10.48550/ARXIV.2305.10937</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># store value and timestep in the node&#39;s parameters</span>
+    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_step</span>
+    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
     <span class="c1"># list value and volatility parents</span>
     <span class="n">value_parents_idxs</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
-    <span class="n">volatility_parents_idxs</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
-
-    <span class="n">lognoise</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="n">volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">volatility_parents_idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-            <span class="n">volatility_parents_idxs</span><span class="p">,</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">]</span>
-        <span class="p">):</span>
-            <span class="n">lognoise</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-    <span class="n">pihat</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">lognoise</span><span class="p">)</span>
 
     <span class="c1">########################</span>
     <span class="c1"># Update value parents #</span>
     <span class="c1">########################</span>
     <span class="k">if</span> <span class="n">value_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">value_parents_idx</span> <span class="ow">in</span> <span class="n">value_parents_idxs</span><span class="p">:</span>
-            <span class="c1"># unpack the current parent&#39;s parameters with value and volatility parents</span>
-            <span class="n">value_parent_value_parents_idxs</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
-                <span class="n">value_parents_idx</span>
-            <span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
-            <span class="n">value_parent_volatility_parents_idxs</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
-                <span class="n">value_parents_idx</span>
-            <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
+        <span class="k">for</span> <span class="n">value_parent_idx</span> <span class="ow">in</span> <span class="n">value_parents_idxs</span><span class="p">:</span>
+            <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
+            <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
+            <span class="k">if</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
+                <span class="c1"># list value and volatility parents</span>
+                <span class="n">value_parent_value_parents_idxs</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
+                    <span class="n">value_parent_idx</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
+                <span class="n">value_parent_volatility_parents_idxs</span> <span class="o">=</span> <span class="n">node_structure</span><span class="p">[</span>
+                    <span class="n">value_parent_idx</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
 
-            <span class="n">vape</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-                <span class="o">-</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
-            <span class="p">)</span>
+                <span class="c1"># Compute new value for nu and pihat</span>
+                <span class="n">logvol</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
 
-            <span class="c1"># Compute new value for nu and pihat</span>
-            <span class="n">logvol</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
+                <span class="c1"># Look at the (optional) va_pa&#39;s volatility parents</span>
+                <span class="c1"># and update logvol accordingly</span>
+                <span class="k">if</span> <span class="n">value_parent_volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">value_parent_volatility_parents_idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                        <span class="n">value_parent_volatility_parents_idxs</span><span class="p">,</span>
+                        <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
+                    <span class="p">):</span>
+                        <span class="n">logvol</span> <span class="o">+=</span> <span class="p">(</span>
+                            <span class="n">k</span>
+                            <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_volatility_parents_idx</span><span class="p">][</span>
+                                <span class="s2">&quot;mu&quot;</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
 
-            <span class="c1"># Look at the (optional) va_pa&#39;s volatility parents</span>
-            <span class="c1"># and update logvol accordingly</span>
-            <span class="k">if</span> <span class="n">value_parent_volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">value_parent_volatility_parents_idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                    <span class="n">value_parent_volatility_parents_idxs</span><span class="p">,</span>
-                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
+                <span class="c1"># Estimate new_nu</span>
+                <span class="n">nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
+                <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+                <span class="n">pihat_value_parent</span><span class="p">,</span> <span class="n">nu_value_parent</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">),</span>
+                    <span class="n">new_nu</span><span class="p">,</span>
+                <span class="p">]</span>
+
+                <span class="c1"># gather precisions updates from other input nodes</span>
+                <span class="c1"># in the case of a multivariate descendency</span>
+                <span class="n">pi_children</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
                 <span class="p">):</span>
-                    <span class="n">logvol</span> <span class="o">+=</span> <span class="p">(</span>
-                        <span class="n">k</span>
-                        <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_volatility_parents_idx</span><span class="p">][</span>
-                            <span class="s2">&quot;mu&quot;</span>
-                        <span class="p">]</span>
+                    <span class="n">pihat_child</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+                    <span class="n">pi_children</span> <span class="o">+=</span> <span class="n">psi_child</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pihat_child</span>
+
+                <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">pihat_value_parent</span> <span class="o">+</span> <span class="n">pi_children</span>
+
+                <span class="c1"># Compute new muhat</span>
+                <span class="n">driftrate</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
+
+                <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
+                <span class="c1"># and update drift rate accordingly</span>
+                <span class="k">if</span> <span class="n">value_parent_value_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="p">(</span>
+                        <span class="n">value_parent_value_parents_idx</span>
+                    <span class="p">)</span> <span class="ow">in</span> <span class="n">value_parent_value_parents_idxs</span><span class="p">:</span>
+                        <span class="n">driftrate</span> <span class="o">+=</span> <span class="p">(</span>
+                            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_value_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                        <span class="p">)</span>
+
+                <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
+                <span class="p">)</span>
+
+                <span class="c1"># gather PE updates from other input nodes</span>
+                <span class="c1"># in the case of a multivariate descendency</span>
+                <span class="n">pe_children</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
+                <span class="p">):</span>
+                    <span class="n">child_value_prediction_error</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">muhat_value_parent</span>
                     <span class="p">)</span>
+                    <span class="n">pihat_child</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+                    <span class="n">pe_children</span> <span class="o">+=</span> <span class="p">(</span>
+                        <span class="n">psi_child</span> <span class="o">*</span> <span class="n">pihat_child</span> <span class="o">*</span> <span class="n">child_value_prediction_error</span>
+                    <span class="p">)</span> <span class="o">/</span> <span class="n">pi_value_parent</span>
 
-            <span class="c1"># Estimate new_nu</span>
-            <span class="n">nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
-            <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">muhat_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
 
-            <span class="n">pihat_value_parent</span><span class="p">,</span> <span class="n">nu_value_parent</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">),</span>
-                <span class="n">new_nu</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">pihat_value_parent</span> <span class="o">+</span> <span class="n">pihat</span>
-
-            <span class="c1"># Compute new muhat</span>
-            <span class="n">driftrate</span> <span class="o">=</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
-
-            <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
-            <span class="c1"># and update drift rate accordingly</span>
-            <span class="k">if</span> <span class="n">value_parent_value_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">value_parent_value_parents_idx</span> <span class="ow">in</span> <span class="n">value_parent_value_parents_idxs</span><span class="p">:</span>
-                    <span class="n">driftrate</span> <span class="o">+=</span> <span class="p">(</span>
-                        <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                        <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_value_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-                    <span class="p">)</span>
-
-            <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
-            <span class="p">)</span>
-            <span class="n">vape</span> <span class="o">=</span> <span class="n">value</span> <span class="o">-</span> <span class="n">muhat_value_parent</span>
-            <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">muhat_value_parent</span> <span class="o">+</span> <span class="n">pihat</span> <span class="o">/</span> <span class="n">pi_value_parent</span> <span class="o">*</span> <span class="n">vape</span>
-
-            <span class="c1"># update input node&#39;s parameters</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_value_parent</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_value_parent</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_value_parent</span>
-            <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parents_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_value_parent</span>
-
-    <span class="c1"># store value and timestep in the node&#39;s parameters</span>
-    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_step</span>
-    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="c1"># update input node&#39;s parameters</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_value_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_value_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_value_parent</span>
+                <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_value_parent</span>
 
     <span class="k">return</span> <span class="n">parameters_structure</span></div>
 

@@ -797,7 +797,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
         <span class="n">hgf_logp_op</span><span class="p">(</span>
             <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
             <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
-            <span class="n">omega_input</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+            <span class="n">continuous_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
@@ -855,7 +855,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -876,7 +876,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -897,7 +897,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -918,9 +918,9 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 15 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 10 seconds.
 </pre></div>
 </div>
 </div>
@@ -966,19 +966,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>omega_2</th>
-      <td>-3.951</td>
-      <td>0.493</td>
-      <td>-4.871</td>
-      <td>-3.071</td>
-      <td>0.012</td>
+      <td>-3.932</td>
+      <td>0.484</td>
+      <td>-4.813</td>
+      <td>-2.977</td>
+      <td>0.011</td>
       <td>0.008</td>
-      <td>1826.0</td>
-      <td>2104.0</td>
+      <td>1921.0</td>
+      <td>2677.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/c4d48bf921de15dd298d7b4bf3c9e171ecee970a9e9039863d86661a25439bf2.png" src="../_images/c4d48bf921de15dd298d7b4bf3c9e171ecee970a9e9039863d86661a25439bf2.png" />
+</div></div><img alt="../_images/62d8ce90241e4d71e9545f982fab376514bba327b7a5198711c9dd2d001cb4ce.png" src="../_images/62d8ce90241e4d71e9545f982fab376514bba327b7a5198711c9dd2d001cb4ce.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1006,7 +1006,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Aug 01 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Aug 02 2023
 
 Python implementation: CPython
 Python version       : 3.10.12
@@ -1016,12 +1016,12 @@ pyhgf : 0.0.5
 jax   : 0.4.14
 jaxlib: 0.4.14
 
-sys       : 3.10.12 (main, Jun  7 2023, 13:43:11) [GCC 11.3.0]
+jax       : 0.4.14
+arviz     : 0.16.1
 pymc      : 5.7.0
 matplotlib: 3.7.2
-arviz     : 0.16.1
 numpy     : 1.22.0
-jax       : 0.4.14
+sys       : 3.10.12 (main, Jun  7 2023, 13:43:11) [GCC 11.3.0]
 
 Watermark: 2.4.3
 </pre></div>

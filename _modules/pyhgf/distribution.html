@@ -450,7 +450,7 @@ document.write(`
     <span class="n">omega_1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">omega_2</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">omega_3</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
-    <span class="n">omega_input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">continuous_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">rho_1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">rho_2</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">rho_3</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
@@ -498,8 +498,8 @@ document.write(`
 <span class="sd">        HGF. This parameter represents the tonic part of the variance (the part that is</span>
 <span class="sd">        not inherited from parents nodes). The value of this parameter will be ignored</span>
 <span class="sd">        when using a two-level HGF (`n_levels=2`).</span>
-<span class="sd">    omega_input :</span>
-<span class="sd">        Represent the noise associated with the input observation.</span>
+<span class="sd">    continuous_precision :</span>
+<span class="sd">        Represent the expected precision associated with the continuous input.</span>
 <span class="sd">    rho_1 :</span>
 <span class="sd">        The :math:`\rho` parameter at the first level of the HGF. This parameter</span>
 <span class="sd">        represents the drift of the random walk.</span>
@@ -571,7 +571,7 @@ document.write(`
         <span class="n">_omega_1</span><span class="p">,</span>
         <span class="n">_omega_2</span><span class="p">,</span>
         <span class="n">_omega_3</span><span class="p">,</span>
-        <span class="n">_omega_input</span><span class="p">,</span>
+        <span class="n">_continuous_precision</span><span class="p">,</span>
         <span class="n">_rho_1</span><span class="p">,</span>
         <span class="n">_rho_2</span><span class="p">,</span>
         <span class="n">_rho_3</span><span class="p">,</span>
@@ -588,7 +588,7 @@ document.write(`
         <span class="n">omega_1</span><span class="p">,</span>
         <span class="n">omega_2</span><span class="p">,</span>
         <span class="n">omega_3</span><span class="p">,</span>
-        <span class="n">omega_input</span><span class="p">,</span>
+        <span class="n">continuous_precision</span><span class="p">,</span>
         <span class="n">rho_1</span><span class="p">,</span>
         <span class="n">rho_2</span><span class="p">,</span>
         <span class="n">rho_3</span><span class="p">,</span>
@@ -641,14 +641,14 @@ document.write(`
                 <span class="n">initial_mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">,</span>
                 <span class="n">initial_pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">,</span>
                 <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">,</span>
-                <span class="n">omega_input</span><span class="o">=</span><span class="n">_omega_input</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">continuous_precision</span><span class="o">=</span><span class="n">_continuous_precision</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
                 <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span>
                 <span class="n">kappas</span><span class="o">=</span><span class="n">kappas</span><span class="p">,</span>
                 <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
                 <span class="n">n_levels</span><span class="o">=</span><span class="n">n_levels</span><span class="p">,</span>
                 <span class="n">eta0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                 <span class="n">eta1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-                <span class="n">pihat</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+                <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">time_steps</span><span class="o">=</span><span class="n">time_steps</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -721,7 +721,7 @@ document.write(`
         <span class="n">omega_1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">),</span>
         <span class="n">omega_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">),</span>
         <span class="n">omega_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
-        <span class="n">omega_input</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">),</span>
+        <span class="n">continuous_precision</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1e4</span><span class="p">),</span>
         <span class="n">rho_1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">rho_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
         <span class="n">rho_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
@@ -740,7 +740,7 @@ document.write(`
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_2</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_3</span><span class="p">),</span>
-            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_input</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">continuous_precision</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_2</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_3</span><span class="p">),</span>
@@ -766,7 +766,7 @@ document.write(`
             <span class="n">grad_omega_1</span><span class="p">,</span>
             <span class="n">grad_omega_2</span><span class="p">,</span>
             <span class="n">grad_omega_3</span><span class="p">,</span>
-            <span class="n">grad_omega_input</span><span class="p">,</span>
+            <span class="n">grad_continuous_precision</span><span class="p">,</span>
             <span class="n">grad_rho_1</span><span class="p">,</span>
             <span class="n">grad_rho_2</span><span class="p">,</span>
             <span class="n">grad_rho_3</span><span class="p">,</span>
@@ -783,7 +783,9 @@ document.write(`
         <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_omega_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">outputs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_omega_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">outputs</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_omega_3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="n">outputs</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_omega_input</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+            <span class="n">grad_continuous_precision</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
+        <span class="p">)</span>
         <span class="n">outputs</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_rho_1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">outputs</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_rho_2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">outputs</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">grad_rho_3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
@@ -927,7 +929,7 @@ document.write(`
         <span class="n">omega_1</span><span class="p">,</span>
         <span class="n">omega_2</span><span class="p">,</span>
         <span class="n">omega_3</span><span class="p">,</span>
-        <span class="n">omega_input</span><span class="p">,</span>
+        <span class="n">continuous_precision</span><span class="p">,</span>
         <span class="n">rho_1</span><span class="p">,</span>
         <span class="n">rho_2</span><span class="p">,</span>
         <span class="n">rho_3</span><span class="p">,</span>
@@ -945,7 +947,7 @@ document.write(`
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_2</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_3</span><span class="p">),</span>
-            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">omega_input</span><span class="p">),</span>
+            <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">continuous_precision</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_1</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_2</span><span class="p">),</span>
             <span class="n">pt</span><span class="o">.</span><span class="n">as_tensor_variable</span><span class="p">(</span><span class="n">rho_3</span><span class="p">),</span>
@@ -973,7 +975,7 @@ document.write(`
             <span class="n">grad_omega_1</span><span class="p">,</span>
             <span class="n">grad_omega_2</span><span class="p">,</span>
             <span class="n">grad_omega_3</span><span class="p">,</span>
-            <span class="n">grad_omega_input</span><span class="p">,</span>
+            <span class="n">grad_continuous_precision</span><span class="p">,</span>
             <span class="n">grad_rho_1</span><span class="p">,</span>
             <span class="n">grad_rho_2</span><span class="p">,</span>
             <span class="n">grad_rho_3</span><span class="p">,</span>
@@ -994,7 +996,7 @@ document.write(`
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_omega_1</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_omega_2</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_omega_3</span><span class="p">,</span>
-            <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_omega_input</span><span class="p">,</span>
+            <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_continuous_precision</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_rho_1</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_rho_2</span><span class="p">,</span>
             <span class="n">output_gradient</span> <span class="o">*</span> <span class="n">grad_rho_3</span><span class="p">,</span>
