@@ -470,8 +470,8 @@ document.write(`
 <span class="sd">        If `True` plot each node&#39;s surprise together with sufficient statistics.</span>
 <span class="sd">        If `False`, only the input node&#39;s surprise is depicted.</span>
 <span class="sd">    figsize :</span>
-<span class="sd">        The width and height of the figure. Defaults to `(18, 9)` for a 2-levels model,</span>
-<span class="sd">        or to `(18, 12)` for a 3-levels model.</span>
+<span class="sd">        The width and height of the figure. Defaults to `(18, 9)` for a two-level model,</span>
+<span class="sd">        or to `(18, 12)` for a three-level model.</span>
 <span class="sd">    axs :</span>
 <span class="sd">        A list of Matplotlib axes instances where to draw the trajectories. This should</span>
 <span class="sd">        correspond to the number of nodes in the structure. The default is `None`</span>
@@ -793,13 +793,13 @@ document.write(`
     <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span>
     <span class="n">node_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
     <span class="n">ci</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">surprise</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">children_inputs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">show_current_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">show_surprise</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">show_observations</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">show_current_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
     <span class="n">axs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Axes</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plot the trajectories of the nodes&#39; sufficient statistics and surprise.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plot the sufficient statistics trajectories of a set of nodes.</span>
 
 <span class="sd">    This function will plot :math:`\hat{\mu}`, :math:`\hat{\pi}` (converted into</span>
 <span class="sd">    standard deviation) and the Gaussian surprise :math:`\mu` given :math:`\hat{\pi}`</span>
@@ -810,24 +810,29 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    hgf :</span>
-<span class="sd">        An instance of the HGF model.</span>
+<span class="sd">        An instance of the HGF model class after inference over input data.</span>
 <span class="sd">    node_idxs :</span>
-<span class="sd">        The node(s) index(es).</span>
+<span class="sd">        The index(es) of the probabilistic node(s) that should be plotted. If multiple</span>
+<span class="sd">        indexes are provided, multiple rows will be appended to the figure, one for</span>
+<span class="sd">        each node.</span>
 <span class="sd">    ci :</span>
-<span class="sd">        Show the uncertainty around the values estimates (standard deviation).</span>
-<span class="sd">    surprise :</span>
-<span class="sd">        If `True` plot each node&#39;s surprise together with sufficient statistics.</span>
-<span class="sd">        If `False`, only the input node&#39;s surprise is depicted.</span>
-<span class="sd">    children_inputs :</span>
-<span class="sd">        If `True`, show the input received from the child nodes. In case of value</span>
-<span class="sd">        coupling, plot the mean of the node(s) below, in case of volatility coupling,</span>
-<span class="sd">        plot the precision of the nodes below.</span>
+<span class="sd">        Whether to show the uncertainty around the values estimates (using the standard</span>
+<span class="sd">        deviation :math:`\sqrt{\frac{1}{\hat{\pi}}}`).</span>
+<span class="sd">    show_surprise :</span>
+<span class="sd">        If `True` the surprise, defined as the negative log probability of the</span>
+<span class="sd">        observation given the expectation, is plotted in the backgroud of the figure</span>
+<span class="sd">        as grey shadded area.</span>
+<span class="sd">    show_observations :</span>
+<span class="sd">        If `True`, show the observations received from the child node(s). In the</span>
+<span class="sd">        situation of value coupled nodes, plot the mean :math:`\hat{\mu}` of the child</span>
+<span class="sd">        node(s). This feature is not supported in the situation of volatility coupling.</span>
+<span class="sd">        Defaults to `False`.</span>
 <span class="sd">    show_current_state :</span>
 <span class="sd">        If `True`, plot the current states (:math:`\mu` and :math:`\pi`) on the top of</span>
 <span class="sd">        expected states (:math:`\hat{\mu} and :math:`\hat{\pi}). Defaults to `False`.</span>
 <span class="sd">    figsize :</span>
-<span class="sd">        The width and height of the figure. Defaults to `(18, 9)` for a 2-levels model,</span>
-<span class="sd">        or to `(18, 12)` for a 3-levels model.</span>
+<span class="sd">        The width and height of the figure. Defaults to `(18, 9)` for a two-level model,</span>
+<span class="sd">        or to `(18, 12)` for a three-level model.</span>
 <span class="sd">    axs :</span>
 <span class="sd">        A list of Matplotlib axes instances where to draw the trajectories. This should</span>
 <span class="sd">        correspond to the number of nodes in the structure. The default is `None`</span>
@@ -896,7 +901,7 @@ document.write(`
             <span class="n">mu</span><span class="p">,</span>
             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\hat{\mu}$&quot;</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
-            <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -944,14 +949,13 @@ document.write(`
 
         <span class="c1"># plotting surprise</span>
         <span class="c1"># -----------------</span>
-        <span class="k">if</span> <span class="n">surprise</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">show_surprise</span><span class="p">:</span>
             <span class="n">surprise_ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
             <span class="n">surprise_ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                 <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                 <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">],</span>
                 <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a2a2a&quot;</span><span class="p">,</span>
                 <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
                 <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                 <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surprise&quot;</span><span class="p">,</span>
             <span class="p">)</span>
@@ -973,9 +977,19 @@ document.write(`
 
         <span class="c1"># plot the inputs from child nodes</span>
         <span class="c1"># --------------------------------</span>
-        <span class="k">if</span> <span class="n">children_inputs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">show_observations</span><span class="p">:</span>
             <span class="c1"># value coupling</span>
             <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">input_colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">cividis</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+                        <span class="mi">0</span><span class="p">,</span>
+                        <span class="mi">1</span><span class="p">,</span>
+                        <span class="nb">len</span><span class="p">(</span>
+                            <span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span>  <span class="c1"># type: ignore</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
                 <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">child_idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
                     <span class="n">hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span>  <span class="c1"># type: ignore</span>
                 <span class="p">):</span>
@@ -984,9 +998,18 @@ document.write(`
                             <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                             <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">],</span>
                             <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Input child - </span><span class="si">{</span><span class="n">ii</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                            <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Value child node - </span><span class="si">{</span><span class="n">ii</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                             <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                            <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
+                            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                            <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                            <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">],</span>
+                            <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                            <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+                            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                            <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">child_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
@@ -996,9 +1019,18 @@ document.write(`
                             <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                             <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
                             <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Input child - </span><span class="si">{</span><span class="n">ii</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                            <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Value child node - </span><span class="si">{</span><span class="n">ii</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                            <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
+                            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                            <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                            <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
+                            <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                            <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+                            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                            <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
                         <span class="p">)</span>
 
         <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>

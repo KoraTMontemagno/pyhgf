@@ -436,25 +436,22 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="creating-and-manipulating-networks-of-probabilistic-nodes">
 <span id="probabilistic-networks"></span><h1>Creating and manipulating networks of probabilistic nodes<a class="headerlink" href="#creating-and-manipulating-networks-of-probabilistic-nodes" title="Permalink to this heading">#</a></h1>
-<p><a class="reference external" href="https://ilabcode.github.io/pyhgf/index.html#">pyhgf</a> is designed with inspiration from graph neural network libraries that can support message-passing schemes and performs beliefs propagation through network nodes. Here, this principle is applied to predictive processing modelisation and focuses on networks that are structured as rooted trees and perform variational message passing to update beliefs about the state of the environment, inferred from the observations that are provided at the root of the tree. While this library is well-suited and optimized to implement the standard two-level and three-level HGF, it can also be applied to much larger use cases and the main idea is to generalize belief propagation as it has been described so far to larger and more complex networks that will capture greater variety of environmental structure. Therefore, the library is also designed to facilitate the creation and manipulation of such probabilistic networks. The main idea is that a network can be fully described by the following variables:</p>
+<p><a class="reference external" href="https://ilabcode.github.io/pyhgf/index.html#">pyhgf</a> is designed with inspiration from graph neural network libraries that can support message-passing schemes and performs beliefs propagation through networks of probabilistic nodes. Here, this principle is applied to predictive processing and focuses on networks that are structured as <strong>rooted trees</strong> and perform variational message passing to update beliefs about the state of the environment, inferred from the observations at the root of the tree. While this library is optimized to implement the standard two-level and three-level HGF <span id="id1">[]</span>, as well as the generalized HGF <span id="id2">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span>, it can also be applied to much larger use cases, with the idea is to generalize belief propagation as it has been described so far to larger and more complex networks that will capture a greater variety of environmental structure. Therefore, the library is also designed to facilitate the creation and manipulation of such probabilistic networks. Importantly, here we consider that a probabilistic network should be defined by the following four variables:</p>
 <ol class="arabic simple">
 <li><p>the network parameters</p></li>
 <li><p>the network structure</p></li>
 <li><p>the update function(s)</p></li>
 <li><p>the update sequence(s)
-Splitting the networks this way makes the components easily compatible with JAX main transformations, and dynamically accessible during the inference processes, allowing the creation of agents that can manipulate these components to minimize surprise.</p></li>
+Splitting the networks this way makes the components easily compatible with JAX main transformations, and dynamically accessible during the inference processes, which allows the creation of agents that can manipulate these components to minimize surprise.</p></li>
 </ol>
 <p>In this notebook, we dive into the details of creating such networks and illustrate their modularity by the manipulation of the four main variables.</p>
 <section id="theory-and-implementation-details">
 <h2>Theory and implementation details<a class="headerlink" href="#theory-and-implementation-details" title="Permalink to this heading">#</a></h2>
-<p>Any probabilistic network can be fully described by the following variables. Let</p>
-<div class="math notranslate nohighlight">
-\[\mathcal{HGF}_{k} = \{\theta, \xi, \mathcal{F}, \Sigma \}\]</div>
-<p>be a probabilistic network that contains <span class="math notranslate nohighlight">\(K\)</span> probabilistic nodes. The variable</p>
+<p>A let <span class="math notranslate nohighlight">\(\mathcal{N}_{k} = \{\theta, \xi, \mathcal{F}, \Sigma \}\)</span> be a probabilistic network with <span class="math notranslate nohighlight">\(k\)</span> probabilistic nodes. The variable</p>
 <div class="math notranslate nohighlight">
 \[\theta = \{\theta_1, ..., \theta_{k}\}\]</div>
-<p>is the set of parameters, and each parameter is a set of values. Nodes’ parameters can be used to register sufficient statistics of the distributions as well as various coupling weights. This component is registered as the <code class="docutils literal notranslate"><span class="pre">parameters_structure</span></code> dictionary.</p>
-<p>The <em>shape</em> of the hierarchical structure is defined by its <a class="reference external" href="https://en.wikipedia.org/wiki/Adjacency_list">adjacency list</a>, which register the connections between a node and other nodes from the network.</p>
+<p>is the parameter set, and each parameter is a set of real values. Nodes’ parameters can be used to register sufficient statistics of the distributions as well as various coupling weights. This component is registered as the <code class="docutils literal notranslate"><span class="pre">parameters_structure</span></code> dictionary.</p>
+<p>The <em>shape</em> of the hierarchical structure is defined by its <a class="reference external" href="https://en.wikipedia.org/wiki/Adjacency_list">adjacency list</a>, which registers the connections between a node and other nodes from the network.</p>
 <div class="math notranslate nohighlight">
 \[\xi = \{\xi_1, ..., \xi_{k} \}\]</div>
 <p>where every edge <span class="math notranslate nohighlight">\(\xi_k\)</span> contains <span class="math notranslate nohighlight">\(m\)</span> sets of node indexes, <span class="math notranslate nohighlight">\(m\)</span> being the adjacency dimension (here we only consider value and volatility coupling, therefore <span class="math notranslate nohighlight">\(m=2\)</span>).</p>
@@ -490,8 +487,8 @@ One of the advantages of reasoning this way is that it dissociates variables tha
 </div>
 <p>The code above illustrate the creation of a probabilistic network of 3 nodes with simple parameters sets <span class="math notranslate nohighlight">\((\mu=0.0, \pi=1.0)\)</span>. Node 2 is the value parent of node 1. Node 3 is the value parent of node 2 and has no parents.</p>
 </section>
-<section id="visualizing-probabilistic-network">
-<h3>Visualizing probabilistic network<a class="headerlink" href="#visualizing-probabilistic-network" title="Permalink to this heading">#</a></h3>
+<section id="visualizing-probabilistic-networks">
+<h3>Visualizing probabilistic networks<a class="headerlink" href="#visualizing-probabilistic-networks" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
@@ -533,7 +530,7 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
 <p>For example, the following networks are valid HGF structures:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">custom_hgf</span> <span class="o">=</span> <span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a_custom_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -544,7 +541,7 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
     <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
 <span class="p">)</span>
-<span class="n">custom_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+<span class="n">a_custom_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -553,7 +550,7 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">custom_hgf</span> <span class="o">=</span> <span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">another_custom_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -563,7 +560,7 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="p">)</span>
-<span class="n">custom_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+<span class="n">another_custom_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -574,7 +571,7 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the node structure</span>
-<span class="n">custom_hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">another_custom_hgf</span><span class="o">.</span><span class="n">node_structure</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -591,7 +588,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 <section id="multivariate-coupling">
 <h3>Multivariate coupling<a class="headerlink" href="#multivariate-coupling" title="Permalink to this heading">#</a></h3>
-<p>As we can see in the examples above, nodes in a valid HGF network can be influenced by multiple parents (either value or volatility parents). Similarly, a single node can be influenced by multiple children. This feature is termed <em>multivariate descendency</em> and <em>multivariate ascendency</em> (respectively) and is a central addition to the generalization of the HGF <span id="id1">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span> that was implemented in this package, as well as in the <a class="reference external" href="https://github.com/ilabcode/HierarchicalGaussianFiltering.jl">Julia counterpart</a>.</p>
+<p>As we can see in the examples above, nodes in a valid HGF network can be influenced by multiple parents (either value or volatility parents). Similarly, a single node can be influenced by multiple children. This feature is termed <em>multivariate descendency</em> and <em>multivariate ascendency</em> (respectively) and is a central addition to the generalization of the HGF <span id="id3">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span> that was implemented in this package, as well as in the <a class="reference external" href="https://github.com/ilabcode/HierarchicalGaussianFiltering.jl">Julia counterpart</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Hierarchical Gaussian Filters have often been described in terms of levels. For example, the two-level and three-level HGFs are specific instances of  node structures designed to track the volatility and meta-volatility of binary or continuous processes, respectively. While such models can easily be implemented in this framework, the notion of level itself is now less informative. This is a consequence of the multivariate control and influence properties, which can result in structures in which some nodes have a position in the hierarchy that cannot be clearly disambiguated.</p>
@@ -608,22 +605,22 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># simulate some time series - sampling from N(0, 1) sometime shifted by 5</span>
-<span class="n">u_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">u_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-
-<span class="n">u_0</span><span class="p">[</span><span class="mi">20</span><span class="p">:</span><span class="mi">50</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">5</span>
-<span class="n">u_0</span><span class="p">[</span><span class="mi">90</span><span class="p">:]</span> <span class="o">+=</span> <span class="mi">5</span>
-
-<span class="n">u_1</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">70</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">5</span>
-<span class="n">u_1</span><span class="p">[</span><span class="mi">70</span><span class="p">:]</span> <span class="o">+=</span> <span class="mi">5</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># simulate some time series - one Gaussian noise and one noisy in wave</span>
+<span class="n">u_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">u_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mi">30</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">u_0</span><span class="p">,</span> <span class="n">u_1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -646,7 +643,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_value_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_value_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -654,50 +651,50 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 100 new observations.
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7feea1707a00&gt;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># many_children_hgf.plot_nodes([0, 1, 2], figsize=(12, 9))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_value_children_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
 </pre></div>
 </div>
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#plt.plot(many_children_hgf.to_pandas().observation_input_0, label=&quot;Input-0&quot;)</span>
-<span class="c1">#plt.plot(many_children_hgf.to_pandas().observation_input_1, label=&quot;Input-1&quot;)</span>
-<span class="c1">#plt.plot(many_children_hgf.to_pandas().x_2_mu, label=&quot;mu_x2&quot;)</span>
-<span class="c1">#plt.plot(many_children_hgf.to_pandas().x_3_mu, label=&quot;mu_x3&quot;)</span>
-<span class="c1">#plt.legend()</span>
-</pre></div>
+<div class="cell_output docutils container">
+<img alt="../_images/81668f6e21514f5fe147ef8eed9d24118d08252ec5922301908087b2cbce9e06.png" src="../_images/81668f6e21514f5fe147ef8eed9d24118d08252ec5922301908087b2cbce9e06.png" />
 </div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this figure, we can observe the joint influence of the two input nodes over the shared value parents: the shared parent tries to find a compromise between the drifts of the two child nodes.</p>
 </div>
 </section>
 <section id="volatility-coupling">
 <h5>Volatility coupling<a class="headerlink" href="#volatility-coupling" title="Permalink to this heading">#</a></h5>
-<div class="cell docutils container">
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># simulate some time series - sampling from N(0, 1) sometime multiplied by 5</span>
 <span class="n">u_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 <span class="n">u_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
-<span class="n">u_0</span><span class="p">[</span><span class="mi">200</span><span class="p">:</span><span class="mi">500</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">5</span>
-<span class="n">u_0</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">5</span>
+<span class="n">u_0</span><span class="p">[</span><span class="mi">200</span><span class="p">:</span><span class="mi">400</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">5</span>
+<span class="n">u_1</span><span class="p">[</span><span class="mi">600</span><span class="p">:</span><span class="mi">800</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">5</span>
 
-<span class="n">u_1</span><span class="p">[</span><span class="mi">800</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">5</span>
+<span class="n">u_0</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">5</span>
+<span class="n">u_1</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">5</span>
 
 <span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">u_0</span><span class="p">,</span> <span class="n">u_1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -721,7 +718,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -729,49 +726,21 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7fee9c475510&gt;
-</pre></div>
-</div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># many_volatility_children_hgf.plot_nodes([2, 3, 4])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">show_observations</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#plt.plot(many_volatility_children_hgf.to_pandas().observation_input_0, label=&quot;Input-0&quot;)</span>
-<span class="c1">#plt.plot(many_volatility_children_hgf.to_pandas().observation_input_1, label=&quot;Input-1&quot;)</span>
-<span class="c1">#plt.legend()</span>
-</pre></div>
+<div class="cell_output docutils container">
+<img alt="../_images/d48d8296092a4d83b40bf5a258a48d36c3be151c2b604917564ae6d70670e01d.png" src="../_images/d48d8296092a4d83b40bf5a258a48d36c3be151c2b604917564ae6d70670e01d.png" />
 </div>
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#plt.plot(many_volatility_children_hgf.to_pandas().x_2_mu, label=&quot;mu_x2&quot;)</span>
-<span class="c1">#plt.plot(many_volatility_children_hgf.to_pandas().x_3_mu, label=&quot;mu_x3&quot;)</span>
-<span class="c1">#plt.legend()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#plt.plot(many_volatility_children_hgf.to_pandas().x_4_pi, label=&quot;pi_x4&quot;)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#plt.plot(many_volatility_children_hgf.to_pandas().x_4_mu, label=&quot;mu_x4&quot;)</span>
-</pre></div>
-</div>
-</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this figure, we can see that the two continuous nodes that are predicting the values of the two input nodes are directly influenced by the burst of noises alternatively appearing in the two input time series. This is reflected in changes in the underlying mean as the node tries to track the more volatile changes in the inputs, but critically, we can also observe changes around the precision of the expectations on both sides: if an input node is getting more noisy, the expectations around the second input node will also get more uncertain, and the surprise more important, due to the shared variance.</p>
 </div>
 </section>
 </section>
@@ -779,15 +748,15 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <h4>The case of <em>multivariate ascendency</em><a class="headerlink" href="#the-case-of-multivariate-ascendency" title="Permalink to this heading">#</a></h4>
 <p><em>Multivariate ascendency</em> refers to situations where a node is influenced (and updates backwards through prediction errors) multiple value or volatility parents.</p>
 </section>
-<section id="id2">
-<h4>Value coupling<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h4>
+<section id="id4">
+<h4>Value coupling<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h4>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Work in progress</p>
 </div>
 </section>
-<section id="id3">
-<h4>Volatility coupling<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h4>
+<section id="id5">
+<h4>Volatility coupling<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h4>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Work in progress</p>
@@ -797,18 +766,19 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </section>
 <section id="creating-custom-update-functions">
 <h2>Creating custom update functions<a class="headerlink" href="#creating-custom-update-functions" title="Permalink to this heading">#</a></h2>
-<p>Models that are created with parameter structures and node structures only represent static configuration of the HGF, they are not yet filtering new observation or acting in response to specific input. To add a dynamic and responsive layer, we need two additional components:</p>
-<ul class="simple">
-<li><p>update functions <span class="math notranslate nohighlight">\(\mathcal{F} = \{f_1, ..., f_n\}\)</span></p></li>
-<li><p>update sequences <span class="math notranslate nohighlight">\(\Sigma = [f_1(n_1), ..., f_i(n_j), f \in \mathcal{F}, n \in 1, ..., k ]\)</span>,</p></li>
-</ul>
+<p>The structure of the network and the node’s parameters are the most static component of the network. Actually, we could consider that the network already exists once those two variables are in place. However in <a class="reference external" href="https://ilabcode.github.io/pyhgf/index.html#">pyhgf</a> we consider that the update functions <span class="math notranslate nohighlight">\(\mathcal{F} = \{f_1, ..., f_n\}\)</span> and the update sequence <span class="math notranslate nohighlight">\(\Sigma = [f_1(n_1), ..., f_i(n_j), f \in \mathcal{F}, n \in 1, ..., k ]\)</span> (the order of update) are also part of the models. This choice was made to explicitly account that there is no one unique way of modelling the way beliefs propagate through the network, and a core task for predictive coding applications is to develop new <em>probabilistic nodes</em> that account for a greater variety of phenomena. This step critically requires modelling beliefs diffusion, and therefore to modify, or creating the underlying update functions.</p>
 <section id="update-functions">
 <h3>Update functions<a class="headerlink" href="#update-functions" title="Permalink to this heading">#</a></h3>
-<p>Update functions are the heart of the HGF filtering procedure, these functions implement the message passing and parameters updating steps between node. An update function in its simplier form is a fuction defined as</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span><span class="n">node_idx</span><span class="p">,</span> <span class="n">parameters_structure</span><span class="p">,</span> <span class="n">node_structure</span><span class="p">)</span>
+<p>Update functions are the heart of the HGF filtering procedure, these functions implement the message-passing and parameter-updating steps between nodes. An update function in its simpler form is a Python function defined as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update_fn</span><span class="p">(</span><span class="n">node_idx</span><span class="p">,</span> <span class="n">parameters_structure</span><span class="p">,</span> <span class="n">node_structure</span><span class="p">):</span>
+
+    <span class="c1"># some computation here</span>
+    <span class="c1"># ---------------------</span>
+
+    <span class="k">return</span> <span class="n">new_parameters_structure</span>
 </pre></div>
 </div>
-<p>In other words, it is updating the parameters structure by applying certain transformation using the node <span class="math notranslate nohighlight">\(i\)</span> as reference. This usually means that an observation has reached node <span class="math notranslate nohighlight">\(i\)</span> and we want to send prediction-error to the parent nodes and update their sufficient statistics. The function has acess to the entire parameters and nodes structure, which mean that it can retrive parameters from parents, children, grand-parents etc… But in practice, pessage passing updates only use information found in the <a class="reference external" href="https://en.wikipedia.org/wiki/Markov_blanket">Markov blanket</a> of the given node.</p>
+<p>In other words, it is updating the parameters of the network by applying certain transformations using the node <span class="math notranslate nohighlight">\(i\)</span> as a reference. This usually means that an observation has reached node <span class="math notranslate nohighlight">\(i\)</span> and we want to send prediction error to the parent nodes and update their sufficient statistics. The function has access to the entire parameters and nodes structure, which means that it can retrieve parameters from parents, children, grandparents etc… But in practice, message-passing updates make heavy use of the mean-field approximation, which only requires accessing the most proximal nodes.</p>
 </section>
 </section>
 <section id="creating-custom-update-sequences">
@@ -826,6 +796,10 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <h2>Time-varying update sequences<a class="headerlink" href="#time-varying-update-sequences" title="Permalink to this heading">#</a></h2>
 <section id="static-assignation-of-update-sequences">
 <h3>Static assignation of update sequences<a class="headerlink" href="#static-assignation-of-update-sequences" title="Permalink to this heading">#</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Work in progress</p>
+</div>
 </section>
 <section id="dynamic-assignation-of-update-sequences">
 <h3>Dynamic assignation of update sequences<a class="headerlink" href="#dynamic-assignation-of-update-sequences" title="Permalink to this heading">#</a></h3>
@@ -868,7 +842,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theory-and-implementation-details">Theory and implementation details</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-probabilistic-nodes">Creating probabilistic nodes</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-probabilistic-network">Visualizing probabilistic network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-probabilistic-networks">Visualizing probabilistic networks</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-the-parameter-structure">Modifying the parameter structure</a></li>
@@ -880,8 +854,8 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-case-of-multivariate-ascendency">The case of <em>multivariate ascendency</em></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Value coupling</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Volatility coupling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Value coupling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Volatility coupling</a></li>
 </ul>
 </li>
 </ul>
