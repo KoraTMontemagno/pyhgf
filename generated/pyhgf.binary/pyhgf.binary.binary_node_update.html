@@ -55,6 +55,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generated/pyhgf.binary/pyhgf.binary.binary_node_update';</script>
     <link rel="shortcut icon" href="../../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -485,16 +487,8 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pyhgf.binary.binary_node_update">
 <span class="sig-prename descclassname"><span class="pre">pyhgf.binary.</span></span><span class="sig-name descname"><span class="pre">binary_node_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Indexes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span></span><a class="reference internal" href="../../_modules/pyhgf/binary.html#binary_node_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.binary.binary_node_update" title="Permalink to this definition">#</a></dt>
-<dd><p>Update the value and volatility parents of a binary node.</p>
-<p>If the parents have value and/or volatility parents, they will be updated
-recursively.</p>
-<dl class="simple">
-<dt>Updating the node’s parents is a two-step process:</dt><dd><ol class="arabic simple">
-<li><p>Update value parent(s) and their parents (if provided).</p></li>
-<li><p>Update volatility parent(s) and their parents (if provided).</p></li>
-</ol>
-</dd>
-</dl>
+<dd><p>Update the value parent(s) of a binary node.</p>
+<p>In a three-level HGF, this step will update the node <span class="math notranslate nohighlight">\(x_2\)</span>.</p>
 <p>Then returns the new node tuple <cite>(parameters, value_parents, volatility_parents)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
