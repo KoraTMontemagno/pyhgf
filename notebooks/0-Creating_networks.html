@@ -553,9 +553,7 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">another_custom_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
@@ -629,7 +627,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <span class="n">many_value_children_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 <span class="p">)</span>
@@ -669,7 +667,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/cde34ad9873aaf9fd351250da5e7c2676ccef83bcd9a6687ec39ed71a610b435.png" src="../_images/cde34ad9873aaf9fd351250da5e7c2676ccef83bcd9a6687ec39ed71a610b435.png" />
+<img alt="../_images/ab0dc6ccb92f30e76208c1f9f14973aa3a4ca446702f0037b939d6d2d2ec7b04.png" src="../_images/ab0dc6ccb92f30e76208c1f9f14973aa3a4ca446702f0037b939d6d2d2ec7b04.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -708,7 +706,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <span class="n">many_volatility_children_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
@@ -743,7 +741,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e809ffb88f5a345448e7ff129b0cc30cf217864a1ac990482041548bc19aae02.png" src="../_images/e809ffb88f5a345448e7ff129b0cc30cf217864a1ac990482041548bc19aae02.png" />
+<img alt="../_images/a22816ccff43a8095cb83261918e6d48687dc4748b081cb107411f9ad6081d60.png" src="../_images/a22816ccff43a8095cb83261918e6d48687dc4748b081cb107411f9ad6081d60.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -780,7 +778,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <span class="n">many_binary_children_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
@@ -827,7 +825,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/59beeebbc7af3d7dccb8bce98fd866165185a8c36a014f4039bd4e874a8520da.png" src="../_images/59beeebbc7af3d7dccb8bce98fd866165185a8c36a014f4039bd4e874a8520da.png" />
+<img alt="../_images/f4da91ab46207cbb4759df8f55bfcc2473e69a9933443e689fefe147fe8b5d18.png" src="../_images/f4da91ab46207cbb4759df8f55bfcc2473e69a9933443e689fefe147fe8b5d18.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -902,6 +900,36 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </section>
 </section>
 </section>
+<section class="tex2jax_ignore mathjax_ignore" id="system-configuration">
+<h1>System configuration<a class="headerlink" href="#system-configuration" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -p pyhgf,jax,jaxlib
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Aug 09 2023
+
+Python implementation: CPython
+Python version       : 3.10.12
+IPython version      : 8.14.0
+
+pyhgf : 0.0.5
+jax   : 0.4.14
+jaxlib: 0.4.14
+
+seaborn   : 0.12.2
+numpy     : 1.22.0
+matplotlib: 3.7.2
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 
 
                 </article>
@@ -932,6 +960,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Creating and manipulating networks of probabilistic nodes</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theory-and-implementation-details">Theory and implementation details</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-probabilistic-nodes">Creating probabilistic nodes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-probabilistic-networks">Visualizing probabilistic networks</a></li>
@@ -964,6 +993,10 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </ul>
 </li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#system-configuration">System configuration</a></li>
+</ul>
+
   </nav></div>
 
   <div class="sidebar-secondary-item">

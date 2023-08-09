@@ -897,7 +897,7 @@ document.write(`
     <span class="k">def</span> <span class="nf">add_input_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">input_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">input_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">continuous_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e4</span><span class="p">,</span>
         <span class="n">binary_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">eta0</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -911,7 +911,7 @@ document.write(`
 <span class="sd">        kind :</span>
 <span class="sd">            The kind of input that should be created (can be `&quot;continuous&quot;` or</span>
 <span class="sd">            `&quot;binary&quot;`).</span>
-<span class="sd">        input_idx :</span>
+<span class="sd">        input_idxs :</span>
 <span class="sd">            The index of the new input (defaults to `0`).</span>
 <span class="sd">        continuous_precision :</span>
 <span class="sd">            The continuous input precision (only relevant if `kind=&quot;continuous&quot;`).</span>
@@ -927,6 +927,9 @@ document.write(`
 <span class="sd">            Add more custom parameters to the input node.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_idxs</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">input_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_idxs</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
             <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
@@ -948,28 +951,29 @@ document.write(`
         <span class="k">if</span> <span class="n">additional_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">input_node_parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">additional_parameters</span><span class="p">}</span>
 
-        <span class="k">if</span> <span class="n">input_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># this is the first node, create the node structure</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span> <span class="o">=</span> <span class="p">{</span><span class="n">input_idx</span><span class="p">:</span> <span class="n">input_node_parameters</span><span class="p">}</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">((</span><span class="n">input_idx</span><span class="p">,),</span> <span class="p">(</span><span class="n">kind</span><span class="p">,))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># update the node structure</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">input_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_node_parameters</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+        <span class="k">for</span> <span class="n">input_idx</span> <span class="ow">in</span> <span class="n">input_idxs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">input_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># this is the first node, create the node structure</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span> <span class="o">=</span> <span class="p">{</span><span class="n">input_idx</span><span class="p">:</span> <span class="n">input_node_parameters</span><span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">((</span><span class="n">input_idx</span><span class="p">,),</span> <span class="p">(</span><span class="n">kind</span><span class="p">,))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># update the node structure</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters_structure</span><span class="p">[</span><span class="n">input_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_node_parameters</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
 
-            <span class="c1"># add information about the new input node in the indexes</span>
-            <span class="n">new_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
-            <span class="n">new_idx</span> <span class="o">+=</span> <span class="p">(</span><span class="n">input_idx</span><span class="p">,)</span>
-            <span class="n">new_kind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span>
-            <span class="n">new_kind</span> <span class="o">+=</span> <span class="p">(</span><span class="n">kind</span><span class="p">,)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">(</span><span class="n">new_idx</span><span class="p">,</span> <span class="n">new_kind</span><span class="p">)</span>
+                <span class="c1"># add information about the new input node in the indexes</span>
+                <span class="n">new_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
+                <span class="n">new_idx</span> <span class="o">+=</span> <span class="p">(</span><span class="n">input_idx</span><span class="p">,)</span>
+                <span class="n">new_kind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span>
+                <span class="n">new_kind</span> <span class="o">+=</span> <span class="p">(</span><span class="n">kind</span><span class="p">,)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">(</span><span class="n">new_idx</span><span class="p">,</span> <span class="n">new_kind</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">add_value_parent</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">children_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
+        <span class="n">children_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">value_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">mu_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -1009,6 +1013,9 @@ document.write(`
 <span class="sd">            Add more custom parameters to the node.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">children_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">children_idxs</span><span class="p">]</span>
+
         <span class="c1"># how many nodes in structure</span>
         <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">)</span>
         <span class="n">parent_idx</span> <span class="o">=</span> <span class="n">n_nodes</span>  <span class="c1"># append a new parent in the structure</span>
@@ -1075,7 +1082,7 @@ document.write(`
 
     <span class="k">def</span> <span class="nf">add_volatility_parent</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">children_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
+        <span class="n">children_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">volatility_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">mu_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -1115,6 +1122,9 @@ document.write(`
 <span class="sd">            Add more custom parameters to the node.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">children_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">children_idxs</span><span class="p">]</span>
+
         <span class="c1"># how many nodes in structure</span>
         <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_structure</span><span class="p">)</span>
         <span class="n">parent_idx</span> <span class="o">=</span> <span class="n">n_nodes</span>  <span class="c1"># append a new parent in the structure</span>
