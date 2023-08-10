@@ -682,14 +682,18 @@ document.write(`
             <span class="c1"># # 1.1.2 Look at the (optional) value parent&#39;s value parents (x3)</span>
             <span class="c1"># # and update the drift rate accordingly</span>
             <span class="k">if</span> <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parent_value_parent_idxs</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">value_parent_value_parent_value_parent_idx</span> <span class="ow">in</span> <span class="n">node_structure</span><span class="p">[</span>
-                    <span class="n">value_parent_value_parent_idxs</span>
-                <span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">:</span>
+                <span class="k">for</span> <span class="p">(</span>
+                    <span class="n">value_parent_value_parent_value_parent_idx</span><span class="p">,</span>
+                    <span class="n">psi_parent_parent</span><span class="p">,</span>
+                <span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="n">node_structure</span><span class="p">[</span><span class="n">value_parent_value_parent_idxs</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
+                    <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_value_parent_idxs</span><span class="p">][</span>
+                        <span class="s2">&quot;psis_parents&quot;</span>
+                    <span class="p">],</span>
+                <span class="p">):</span>
                     <span class="c1"># For each x2&#39;s value parents (optional)</span>
                     <span class="n">driftrate</span> <span class="o">+=</span> <span class="p">(</span>
-                        <span class="n">parameters_structure</span><span class="p">[</span><span class="n">value_parent_value_parent_idxs</span><span class="p">][</span>
-                            <span class="s2">&quot;psis_parents&quot;</span>
-                        <span class="p">]</span>
+                        <span class="n">psi_parent_parent</span>
                         <span class="o">*</span> <span class="n">parameters_structure</span><span class="p">[</span>
                             <span class="n">value_parent_value_parent_value_parent_idx</span>
                         <span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
