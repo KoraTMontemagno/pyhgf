@@ -444,25 +444,25 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">UpdateSequence</span>
 
 
-<div class="viewcode-block" id="beliefs_propagation"><a class="viewcode-back" href="../../generated/pyhgf.networks/pyhgf.networks.beliefs_propagation.html#pyhgf.networks.beliefs_propagation">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;update_sequence&quot;</span><span class="p">,</span> <span class="s2">&quot;node_structure&quot;</span><span class="p">,</span> <span class="s2">&quot;input_nodes_idx&quot;</span><span class="p">))</span>
+<div class="viewcode-block" id="beliefs_propagation"><a class="viewcode-back" href="../../generated/pyhgf.networks/pyhgf.networks.beliefs_propagation.html#pyhgf.networks.beliefs_propagation">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;update_sequence&quot;</span><span class="p">,</span> <span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;input_nodes_idx&quot;</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">beliefs_propagation</span><span class="p">(</span>
-    <span class="n">parameters_structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
     <span class="n">update_sequence</span><span class="p">:</span> <span class="n">UpdateSequence</span><span class="p">,</span>
-    <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">edges</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
     <span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the network&#39;s parameters after observing new data point(s).</span>
 
 <span class="sd">    This function performs the beliefs propagation step at a time *t* triggered by the</span>
 <span class="sd">    observation of a new batch of value(s). The way beliefs propagate is defined by the</span>
-<span class="sd">    `update_sequence` and the `node_structure`. A tuple of two new</span>
+<span class="sd">    `update_sequence` and the `edges`. A tuple of two new</span>
 <span class="sd">    `parameter_structure` is then returned (the carryover and the accumulated in the</span>
 <span class="sd">    context of :py:func:`jax.lax.scan`).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    parameters_structure :</span>
+<span class="sd">    attributes :</span>
 <span class="sd">        The dictionaries of nodes&#39; parameters. This variable is updated and returned</span>
 <span class="sd">        after the beliefs propagation step.</span>
 <span class="sd">    data :</span>
@@ -474,7 +474,7 @@ document.write(`
 <span class="sd">        unit incrementation.</span>
 <span class="sd">    update_sequence :</span>
 <span class="sd">        The sequence of updates that will be applied to the node structure.</span>
-<span class="sd">    node_structure :</span>
+<span class="sd">    edges :</span>
 <span class="sd">        The nodes structure.</span>
 <span class="sd">    input_nodes_idx :</span>
 <span class="sd">        An array of input indexes. The default is `[0]` (one input node, the first node</span>
@@ -482,7 +482,7 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    parameters_structure, parameters_structure :</span>
+<span class="sd">    attributes, attributes :</span>
 <span class="sd">        A tuple of parameters structure (carryover and accumulated).</span>
 
 
@@ -503,22 +503,22 @@ document.write(`
             <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">parameters_structure</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
-            <span class="n">parameters_structure</span><span class="o">=</span><span class="n">parameters_structure</span><span class="p">,</span>
+        <span class="n">attributes</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span>
             <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
             <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
-            <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span><span class="p">,</span>
+            <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span>
-        <span class="n">parameters_structure</span><span class="p">,</span>
-        <span class="n">parameters_structure</span><span class="p">,</span>
+        <span class="n">attributes</span><span class="p">,</span>
+        <span class="n">attributes</span><span class="p">,</span>
     <span class="p">)</span>  <span class="c1"># (&quot;carryover&quot;, &quot;accumulated&quot;)</span></div>
 
 
 <div class="viewcode-block" id="trim_sequence"><a class="viewcode-back" href="../../generated/pyhgf.networks/pyhgf.networks.trim_sequence.html#pyhgf.networks.trim_sequence">[docs]</a><span class="k">def</span> <span class="nf">trim_sequence</span><span class="p">(</span>
-    <span class="n">exclude_node_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">update_sequence</span><span class="p">:</span> <span class="n">UpdateSequence</span><span class="p">,</span> <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span>
+    <span class="n">exclude_node_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">update_sequence</span><span class="p">:</span> <span class="n">UpdateSequence</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Tuple</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UpdateSequence</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove steps from an update sequence that depends on a set of nodes.</span>
 
@@ -529,7 +529,7 @@ document.write(`
 <span class="sd">        network.</span>
 <span class="sd">    update_sequence :</span>
 <span class="sd">        The sequence of updates that will be applied to the node structure.</span>
-<span class="sd">    node_structure :</span>
+<span class="sd">    edges :</span>
 <span class="sd">        The nodes structure.</span>
 
 <span class="sd">    Returns</span>
@@ -540,9 +540,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># list the nodes that depend on the root indexes</span>
-    <span class="n">branch_list</span> <span class="o">=</span> <span class="n">list_branches</span><span class="p">(</span>
-        <span class="n">node_idxs</span><span class="o">=</span><span class="n">exclude_node_idxs</span><span class="p">,</span> <span class="n">node_structure</span><span class="o">=</span><span class="n">node_structure</span>
-    <span class="p">)</span>
+    <span class="n">branch_list</span> <span class="o">=</span> <span class="n">list_branches</span><span class="p">(</span><span class="n">node_idxs</span><span class="o">=</span><span class="n">exclude_node_idxs</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">)</span>
 
     <span class="c1"># remove the update steps that are targetting the excluded nodes</span>
     <span class="n">trimmed_update_sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
@@ -552,9 +550,7 @@ document.write(`
     <span class="k">return</span> <span class="n">trimmed_update_sequence</span></div>
 
 
-<div class="viewcode-block" id="list_branches"><a class="viewcode-back" href="../../generated/pyhgf.networks/pyhgf.networks.list_branches.html#pyhgf.networks.list_branches">[docs]</a><span class="k">def</span> <span class="nf">list_branches</span><span class="p">(</span>
-    <span class="n">node_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">node_structure</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">branch_list</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+<div class="viewcode-block" id="list_branches"><a class="viewcode-back" href="../../generated/pyhgf.networks/pyhgf.networks.list_branches.html#pyhgf.networks.list_branches">[docs]</a><span class="k">def</span> <span class="nf">list_branches</span><span class="p">(</span><span class="n">node_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">branch_list</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the branch of a network from a given set of root nodes.</span>
 
 <span class="sd">    This function searches recursively and lists the parents above a given node. If all</span>
@@ -566,7 +562,7 @@ document.write(`
 <span class="sd">    node_idxs :</span>
 <span class="sd">        A list of node indexes. The nodes can be input nodes or any other node in the</span>
 <span class="sd">        network.</span>
-<span class="sd">    node_structure :</span>
+<span class="sd">    edges :</span>
 <span class="sd">        The nodes structure.</span>
 <span class="sd">    branch_list :</span>
 <span class="sd">        The list of nodes that are already excluded (i.e )</span>
@@ -584,8 +580,8 @@ document.write(`
             <span class="p">[</span>
                 <span class="n">i</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span>
-                    <span class="n">node_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
-                    <span class="n">node_structure</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
+                    <span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
+                    <span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
                 <span class="p">]</span>
                 <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
             <span class="p">]</span>
@@ -596,8 +592,8 @@ document.write(`
                 <span class="p">[</span>
                     <span class="n">i</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span>
-                        <span class="n">node_structure</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                        <span class="n">node_structure</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
+                        <span class="n">edges</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                        <span class="n">edges</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                     <span class="p">]</span>
                     <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                 <span class="p">]</span>
@@ -605,7 +601,7 @@ document.write(`
             <span class="c1"># if this parent has only excluded children, add it to the exclusion list</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="n">i</span> <span class="ow">in</span> <span class="n">branch_list</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">all_children</span><span class="p">]):</span>
                 <span class="n">branch_list</span> <span class="o">=</span> <span class="n">list_branches</span><span class="p">(</span>
-                    <span class="p">[</span><span class="n">parent_idx</span><span class="p">],</span> <span class="n">node_structure</span><span class="p">,</span> <span class="n">branch_list</span><span class="o">=</span><span class="n">branch_list</span>
+                    <span class="p">[</span><span class="n">parent_idx</span><span class="p">],</span> <span class="n">edges</span><span class="p">,</span> <span class="n">branch_list</span><span class="o">=</span><span class="n">branch_list</span>
                 <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">branch_list</span></div>
