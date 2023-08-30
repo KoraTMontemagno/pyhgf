@@ -7,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>pyhgf.networks.trim_sequence &#8212; pyhgf 0.0.6 documentation</title>
   
@@ -424,6 +424,8 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="pyhgf.networks.beliefs_propagation.html">pyhgf.networks.beliefs_propagation</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">pyhgf.networks.trim_sequence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyhgf.networks.list_branches.html">pyhgf.networks.list_branches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyhgf.networks.fill_categorical_state_node.html">pyhgf.networks.fill_categorical_state_node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyhgf.networks.get_update_sequence.html">pyhgf.networks.get_update_sequence</a></li>
 </ul>
 </div>
 </nav></div>
@@ -488,7 +490,7 @@ document.write(`
 <span class="sig-prename descclassname"><span class="pre">pyhgf.networks.</span></span><span class="sig-name descname"><span class="pre">trim_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exclude_node_idxs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/pyhgf/networks.html#trim_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.networks.trim_sequence" title="Permalink to this definition">#</a></dt>
 <dd><p>Remove steps from an update sequence that depends on a set of nodes.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>exclude_node_idxs</strong></dt><dd><p>A list of node indexes. The nodes can be input nodes or any other node in the
 network.</p>
@@ -499,7 +501,7 @@ network.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
 <dt>trimmed_update_sequence</dt><dd><p>The update sequence without the update steps for nodes depending on the root
 list.</p>

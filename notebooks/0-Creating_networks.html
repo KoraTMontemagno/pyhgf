@@ -7,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Creating and manipulating networks of probabilistic nodes &#8212; pyhgf 0.0.6 documentation</title>
   
@@ -501,10 +501,18 @@ One of the advantages of reasoning this way is that it dissociates variables tha
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a continuous Hierarchical Gaussian Filter with 3 levels.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
-<img alt="../_images/73540c5eadf8f3aba114d867f93a7fb3d84271cb0e7c56f6ae683cba523acc5f.svg" src="../_images/73540c5eadf8f3aba114d867f93a7fb3d84271cb0e7c56f6ae683cba523acc5f.svg" /></div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a continuous Hierarchical Gaussian Filter with 3 levels.
+... Create the update sequence from the network structure.
+... Create the belief propagation function.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+</pre></div>
+</div>
+<img alt="../_images/d0460d224d463dfec1bf26fd4f870d5b9304223efd759cc9370000c8fcaa5d77.svg" src="../_images/d0460d224d463dfec1bf26fd4f870d5b9304223efd759cc9370000c8fcaa5d77.svg" /></div>
 </div>
 </section>
 </section>
@@ -547,7 +555,10 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8dc776707f54c3de75e31630661a3820b4629d9424283b43454e7169d1567825.svg" src="../_images/8dc776707f54c3de75e31630661a3820b4629d9424283b43454e7169d1567825.svg" /></div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
+</pre></div>
+</div>
+<img alt="../_images/e9b13227ed4e53fb9a6de1c4f6269b3fa88b6afac604fcf00a1eba156770f8f7.svg" src="../_images/e9b13227ed4e53fb9a6de1c4f6269b3fa88b6afac604fcf00a1eba156770f8f7.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -564,7 +575,10 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/53c3849a83483e2f57155ed4d220e491186348a4d8cbdd0c042e641b92bea093.svg" src="../_images/53c3849a83483e2f57155ed4d220e491186348a4d8cbdd0c042e641b92bea093.svg" /></div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
+</pre></div>
+</div>
+<img alt="../_images/67a579eecd1f81ab4e285d15900455b968dc5513e776a82699093af19bc7d7e7.svg" src="../_images/67a579eecd1f81ab4e285d15900455b968dc5513e776a82699093af19bc7d7e7.svg" /></div>
 </div>
 <p>The structure of the probabilistic network is stored in the <code class="docutils literal notranslate"><span class="pre">edges</span></code> variable which consists of a tuple of <code class="docutils literal notranslate"><span class="pre">Indexes</span></code> that store the indexes of value/volatility parents/children for each node. For example, accessing the nodes connected to node <code class="docutils literal notranslate"><span class="pre">4</span></code> in the example above is done with:</p>
 <div class="cell docutils container">
@@ -630,6 +644,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="p">)</span>
 
 <span class="c1"># plot the network</span>
@@ -638,7 +653,15 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7de0fdfa53ffe359985eb1ef10fd0677c982a17138c4fb88aec168579abaecf1.svg" src="../_images/7de0fdfa53ffe359985eb1ef10fd0677c982a17138c4fb88aec168579abaecf1.svg" /></div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
+... Create the update sequence from the network structure.
+... Create the belief propagation function.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+</pre></div>
+</div>
+<img alt="../_images/1ec19c774543f4d5f678f10bd2e826cb61ef0adf803ba28d60dfbba0baaa2b76.svg" src="../_images/1ec19c774543f4d5f678f10bd2e826cb61ef0adf803ba28d60dfbba0baaa2b76.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -647,9 +670,6 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
@@ -667,7 +687,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4975b10e168d3b0c06b678e00f361447433bf1d9204e90b3863d550a10011027.png" src="../_images/4975b10e168d3b0c06b678e00f361447433bf1d9204e90b3863d550a10011027.png" />
+<img alt="../_images/ecb8bab341aaa2d05b303604ea40d45078f6b61605bb236e214b0d935fc4105a.png" src="../_images/ecb8bab341aaa2d05b303604ea40d45078f6b61605bb236e214b0d935fc4105a.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -710,6 +730,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="p">)</span>
 
 <span class="c1"># plot the network</span>
@@ -718,7 +739,15 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/91d772bb687454bacbe6369bf02fc975eab937872f44c0124d95b3cdd44dd19d.svg" src="../_images/91d772bb687454bacbe6369bf02fc975eab937872f44c0124d95b3cdd44dd19d.svg" /></div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
+... Create the update sequence from the network structure.
+... Create the belief propagation function.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+</pre></div>
+</div>
+<img alt="../_images/48c9b0c50440898b27984f92cfd259223498d47422a0b93c3e2f8b9acc7df48c.svg" src="../_images/48c9b0c50440898b27984f92cfd259223498d47422a0b93c3e2f8b9acc7df48c.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -741,7 +770,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/610c5b10484e3cec900e67bddd9e96f77473f0b7111b89f34302a0a20c9bb697.png" src="../_images/610c5b10484e3cec900e67bddd9e96f77473f0b7111b89f34302a0a20c9bb697.png" />
+<img alt="../_images/6602f6bce48b59681c32ab60b1a5cff16636e7e317e6d27508044a4b5b46ffde.png" src="../_images/6602f6bce48b59681c32ab60b1a5cff16636e7e317e6d27508044a4b5b46ffde.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -783,6 +812,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="p">)</span>
 
 <span class="c1"># plot the network</span>
@@ -791,7 +821,15 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/918349c54d9e9d72908316795eadc32a853e8bfc8699e0e671bb1846880088a3.svg" src="../_images/918349c54d9e9d72908316795eadc32a853e8bfc8699e0e671bb1846880088a3.svg" /></div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
+... Create the update sequence from the network structure.
+... Create the belief propagation function.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+</pre></div>
+</div>
+<img alt="../_images/14fc298d7facb3927e2f0be49cdce40d096d851dff6878eff4cd152397f47d8b.svg" src="../_images/14fc298d7facb3927e2f0be49cdce40d096d851dff6878eff4cd152397f47d8b.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -825,7 +863,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/54d7bfd20d4e85d17bde5aad47f19cdaae2d178dc0da2dd0a108885b02f21551.png" src="../_images/54d7bfd20d4e85d17bde5aad47f19cdaae2d178dc0da2dd0a108885b02f21551.png" />
+<img alt="../_images/2e2c41b909f46592327ce5806564f23d2c6a0584f8f411e4bbd023a6837da1e0.png" src="../_images/2e2c41b909f46592327ce5806564f23d2c6a0584f8f411e4bbd023a6837da1e0.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -910,7 +948,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Mon Aug 21 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Aug 30 2023
 
 Python implementation: CPython
 Python version       : 3.10.12
@@ -920,9 +958,9 @@ pyhgf : 0.0.6
 jax   : 0.4.14
 jaxlib: 0.4.14
 
-seaborn   : 0.12.2
 matplotlib: 3.7.2
 numpy     : 1.22.0
+seaborn   : 0.12.2
 
 Watermark: 2.4.3
 </pre></div>

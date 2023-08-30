@@ -698,11 +698,17 @@ document.write(`
 
     <span class="c1"># set input nodes</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
+            <span class="n">label</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Co-</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;oval&quot;</span>
+        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
+            <span class="n">label</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Bi-</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;box&quot;</span>
+        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
+            <span class="n">label</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Ca-</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;diamond&quot;</span>
         <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">kind</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">I - </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
             <span class="n">style</span><span class="o">=</span><span class="s2">&quot;filled&quot;</span><span class="p">,</span>
-            <span class="n">shape</span><span class="o">=</span><span class="s2">&quot;octagon&quot;</span><span class="p">,</span>
+            <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># create the rest of nodes</span>
@@ -886,7 +892,7 @@ document.write(`
                 <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                 <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;$\mu_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;$\mu_</span><span class="se">{{</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="se">}}</span><span class="s2">$&quot;</span><span class="p">)</span>
 
             <span class="c1"># plotting standard deviation</span>
             <span class="k">if</span> <span class="n">ci</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
@@ -1004,28 +1010,6 @@ document.write(`
                                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                                 <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
                             <span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">child_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span> <span class="o">==</span> <span class="n">child_idx</span>
-                            <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-                                <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
-                                <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                                <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Value child node - </span><span class="si">{</span><span class="n">ii</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-                                <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
-                                <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
-                            <span class="p">)</span>
-                            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                                <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
-                                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                                <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
-                                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-                                <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
-                            <span class="p">)</span>
-                            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
             <span class="c1"># plotting surprise</span>
             <span class="c1"># -----------------</span>

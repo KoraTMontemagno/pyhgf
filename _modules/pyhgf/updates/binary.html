@@ -505,10 +505,7 @@ document.write(`
                     <span class="n">value_parent_idx</span>
                 <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
 
-                <span class="c1"># 1. get pihat and nu from the value parent (x2)</span>
-
-                <span class="c1"># 1.1 get new_nu (x2)</span>
-                <span class="c1"># 1.1.1 get logvol</span>
+                <span class="c1"># get logvolatility</span>
                 <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
 
                 <span class="c1"># 1.1.2 Look at the (optional) va_pa&#39;s volatility parents</span>
@@ -584,13 +581,119 @@ document.write(`
                 <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">muhat_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
 
                 <span class="c1"># 5. Update node&#39;s parameters and node&#39;s parents recursively</span>
-                <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_value_parent</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
-                <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_value_parent</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_value_parent</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_value_parent</span>
 
     <span class="k">return</span> <span class="n">attributes</span></div>
+
+
+<span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">binary_node_prediction</span><span class="p">(</span>
+    <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the value parent(s) of a binary node.</span>
+
+<span class="sd">    In a three-level HGF, this step will update the node :math:`x_2`.</span>
+
+<span class="sd">    Then returns the new node tuple `(parameters, value_parents, volatility_parents)`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    attributes :</span>
+<span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
+<span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
+<span class="sd">        continuous nodes.</span>
+<span class="sd">    .. note::</span>
+<span class="sd">        The parameter structure also incorporate the value and volatility coupling</span>
+<span class="sd">        strenght with children and parents (i.e. `&quot;psis_parents&quot;`, `&quot;psis_children&quot;`,</span>
+<span class="sd">        `&quot;kappas_parents&quot;`, `&quot;kappas_children&quot;`).</span>
+<span class="sd">    time_step :</span>
+<span class="sd">        Interval between the previous time point and the current time point.</span>
+<span class="sd">    node_idx :</span>
+<span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
+<span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
+<span class="sd">    edges :</span>
+<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with the same length as node number.</span>
+<span class="sd">        For each node, the index list value and volatility parents.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    attributes :</span>
+<span class="sd">        The updated node structure.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Weber, L. A., Waade, P. T., Legrand, N., Møller, A. H., Stephan, K. E., &amp;</span>
+<span class="sd">       Mathys, C. (2023). The generalized Hierarchical Gaussian Filter (Version 1).</span>
+<span class="sd">       arXiv. https://doi.org/10.48550/ARXIV.2305.10937</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># using the current node index, unwrap parameters and parents</span>
+    <span class="n">value_parent_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
+
+    <span class="c1"># Return here if no parents node are found</span>
+    <span class="k">if</span> <span class="n">value_parent_idxs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">attributes</span>
+
+    <span class="c1">############################################################</span>
+    <span class="c1"># Update predictions in the continuous value parents (x-2) #</span>
+    <span class="c1">############################################################</span>
+    <span class="k">if</span> <span class="n">value_parent_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">value_parent_idx</span> <span class="ow">in</span> <span class="n">value_parent_idxs</span><span class="p">:</span>
+            <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
+            <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
+            <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
+                <span class="n">value_parent_value_parent_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
+                <span class="n">value_parent_volatility_parent_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span>
+                    <span class="n">value_parent_idx</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
+
+                <span class="c1"># get log volatility</span>
+                <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
+
+                <span class="c1"># look at the va_pa&#39;s volatility parents and update accordingly</span>
+                <span class="k">if</span> <span class="n">value_parent_volatility_parent_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">value_parent_volatility_parent_idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                        <span class="n">value_parent_volatility_parent_idxs</span><span class="p">,</span>
+                        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
+                    <span class="p">):</span>
+                        <span class="n">logvol</span> <span class="o">+=</span> <span class="p">(</span>
+                            <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                        <span class="p">)</span>
+
+                <span class="c1"># compute new_nu</span>
+                <span class="n">nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
+                <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+                <span class="c1"># compute new value for pihat</span>
+                <span class="n">pihat_value_parent</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span>
+                    <span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span>
+                <span class="p">)</span>
+
+                <span class="c1"># drift rate</span>
+                <span class="n">driftrate</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
+
+                <span class="c1"># look at value parent&#39;s value parents and update driftrate accordingly</span>
+                <span class="k">if</span> <span class="n">value_parent_value_parent_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">value_parent_value_parent_idx</span><span class="p">,</span> <span class="n">psi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                        <span class="n">value_parent_value_parent_idxs</span><span class="p">,</span>
+                        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">],</span>
+                    <span class="p">):</span>
+                        <span class="n">driftrate</span> <span class="o">+=</span> <span class="p">(</span>
+                            <span class="n">psi</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                        <span class="p">)</span>
+
+                <span class="c1"># compute new muhat</span>
+                <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
+                <span class="p">)</span>
+
+                <span class="c1"># update the parent nodes&#39; parameters</span>
+                <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_value_parent</span>
+                <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_value_parent</span>
+
+    <span class="k">return</span> <span class="n">attributes</span>
 
 
 <div class="viewcode-block" id="binary_input_update"><a class="viewcode-back" href="../../../generated/pyhgf.updates.binary/pyhgf.updates.binary.binary_input_update.html#pyhgf.updates.binary.binary_input_update">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
@@ -688,7 +791,6 @@ document.write(`
             <span class="p">)</span>
 
             <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">sgm</span><span class="p">(</span><span class="n">muhat_value_parent</span><span class="p">)</span>
-            <span class="n">pihat_value_parent</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">muhat_value_parent</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">muhat_value_parent</span><span class="p">))</span>
 
             <span class="c1"># 2. Compute surprise</span>
             <span class="c1"># -------------------</span>
@@ -703,9 +805,7 @@ document.write(`
             <span class="p">)</span>
 
             <span class="c1"># Update value parent&#39;s parameters</span>
-            <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_value_parent</span>
             <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
-            <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_value_parent</span>
             <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_value_parent</span>
 
     <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">surprise</span>
@@ -713,6 +813,108 @@ document.write(`
     <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="k">return</span> <span class="n">attributes</span></div>
+
+
+<span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">binary_input_prediction</span><span class="p">(</span>
+    <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure given one binary observation.</span>
+
+<span class="sd">    This function is the entry-level of the binary node. It updates the parents of</span>
+<span class="sd">    the input node (:math:`x_1`).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value :</span>
+<span class="sd">        The new observed value.</span>
+<span class="sd">    time_step :</span>
+<span class="sd">        The interval between the previous time point and the current time point.</span>
+<span class="sd">    attributes :</span>
+<span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
+<span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
+<span class="sd">        continuous nodes.</span>
+<span class="sd">    .. note::</span>
+<span class="sd">        `&quot;psis&quot;` is the value coupling strength. It should have the same length as the</span>
+<span class="sd">        volatility parents&#39; indexes. `&quot;kappas&quot;` is the volatility coupling strength.</span>
+<span class="sd">        It should have the same length as the volatility parents&#39; indexes.</span>
+<span class="sd">    edges :</span>
+<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with the same length as node number.</span>
+<span class="sd">        For each node, the index list value and volatility parents.</span>
+<span class="sd">    node_idx :</span>
+<span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
+<span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    attributes :</span>
+<span class="sd">        The updated parameters structure.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    update_continuous_parents, update_continuous_input_parents</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Weber, L. A., Waade, P. T., Legrand, N., Møller, A. H., Stephan, K. E., &amp;</span>
+<span class="sd">       Mathys, C. (2023). The generalized Hierarchical Gaussian Filter (Version 1).</span>
+<span class="sd">       arXiv. https://doi.org/10.48550/ARXIV.2305.10937</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># list value and volatility parents</span>
+    <span class="n">value_parent_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
+    <span class="n">volatility_parent_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">value_parent_idxs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">volatility_parent_idxs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">attributes</span>
+
+    <span class="c1">#######################################################</span>
+    <span class="c1"># Update the value parent(s) of the binary input node #</span>
+    <span class="c1">#######################################################</span>
+    <span class="k">if</span> <span class="n">value_parent_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">value_parent_idx</span> <span class="ow">in</span> <span class="n">value_parent_idxs</span><span class="p">:</span>
+            <span class="c1"># list the (unique) value parents</span>
+            <span class="n">value_parent_value_parent_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># 1. Compute new muhat_value_parent and pihat_value_parent</span>
+            <span class="c1"># --------------------------------------------------------</span>
+            <span class="c1"># 1.1 Compute new_muhat from continuous node parent (x2)</span>
+            <span class="c1"># 1.1.1 get rho from the value parent of the binary node (x2)</span>
+            <span class="n">driftrate</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_value_parent_idxs</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
+
+            <span class="c1"># # 1.1.2 Look at the (optional) value parent&#39;s value parents (x3)</span>
+            <span class="c1"># # and update the drift rate accordingly</span>
+            <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_value_parent_idxs</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="p">(</span>
+                    <span class="n">value_parent_value_parent_value_parent_idx</span><span class="p">,</span>
+                    <span class="n">psi_parent_parent</span><span class="p">,</span>
+                <span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_value_parent_idxs</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
+                    <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_value_parent_idxs</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">],</span>
+                <span class="p">):</span>
+                    <span class="c1"># For each x2&#39;s value parents (optional)</span>
+                    <span class="n">driftrate</span> <span class="o">+=</span> <span class="p">(</span>
+                        <span class="n">psi_parent_parent</span>
+                        <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_value_parent_value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+
+            <span class="c1"># 1.1.3 compute new_muhat</span>
+            <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_value_parent_idxs</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
+            <span class="p">)</span>
+
+            <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">sgm</span><span class="p">(</span><span class="n">muhat_value_parent</span><span class="p">)</span>
+            <span class="n">pihat_value_parent</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">muhat_value_parent</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">muhat_value_parent</span><span class="p">))</span>
+
+            <span class="c1"># Update value parent&#39;s parameters</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pihat_value_parent</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_value_parent</span>
+
+    <span class="k">return</span> <span class="n">attributes</span>
 
 
 <div class="viewcode-block" id="gaussian_density"><a class="viewcode-back" href="../../../generated/pyhgf.updates.binary/pyhgf.updates.binary.gaussian_density.html#pyhgf.updates.binary.gaussian_density">[docs]</a><span class="k">def</span> <span class="nf">gaussian_density</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">pi</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span>

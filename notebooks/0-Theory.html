@@ -7,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>An introduction to the Hierarchical Gaussian Filter &#8212; pyhgf 0.0.6 documentation</title>
   
@@ -439,7 +439,7 @@ document.write(`
 <p>In this notebook, we introduce the main concepts on which the Hierarchical Gaussian Filter (HGF) is based. We describe the main equations and illustrate the examples with Python code. We start with the generative model of the HGF, which describes how the model assumes that the data is being generated. This generative structure is then used to filter the observation (i.e. the sensory part of the model), which is then used by the agent to produce behaviours (i.e. the action part of the model). Next, we show how this model can be “inverted” and used by an agent to infer parameter values that generated the sensory inputs. From there, we discuss the notion of prediction error and how derivations of the model can be used to infer probability densities given observed behavioural outcomes.</p>
 <section id="the-generative-model">
 <h2>The generative model<a class="headerlink" href="#the-generative-model" title="Permalink to this heading">#</a></h2>
-<p>To illustrate the generative model on which the HGF is based, we will start with a simple  two-level continuous HGF (see also the tutorial <a class="reference internal" href="2-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">The continuous Hierarchical Gaussian Filter</span></a>). The generative model that underpins the continuous HGF is a generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Random_walk#Gaussian_random_walk">Gaussian Random Walk</a> (GRW). A GRW generate a new observation <span class="math notranslate nohighlight">\(x_1^{(k)}\)</span> at each time step <span class="math notranslate nohighlight">\(k\)</span> from a normal distribution and using the previous observation <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span> such as:</p>
+<p>To illustrate the generative model on which the HGF is based, we will start with a simple  two-level continuous HGF (see also the tutorial <a class="reference internal" href="1.3-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">The continuous Hierarchical Gaussian Filter</span></a>). The generative model that underpins the continuous HGF is a generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Random_walk#Gaussian_random_walk">Gaussian Random Walk</a> (GRW). A GRW generate a new observation <span class="math notranslate nohighlight">\(x_1^{(k)}\)</span> at each time step <span class="math notranslate nohighlight">\(k\)</span> from a normal distribution and using the previous observation <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span> such as:</p>
 <div class="math notranslate nohighlight">
 \[
 x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
@@ -925,7 +925,7 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 </section>
 <section id="glossary">
 <h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this heading">#</a></h2>
-<dl class="simple glossary">
+<dl class="glossary simple">
 <dt id="term-Node">Node<a class="headerlink" href="#term-Node" title="Permalink to this term">#</a></dt><dd><p>HGF models are defined as networks of probabilistic nodes. A node is defined by its parameters (e.g. sufficient statistics, coupling values…) and by its connection with other nodes. The dependencies structure can have more than one dimension (i.e. there are many kinds of dependencies between nodes, especially here the volatility coupling and the value coupling).</p>
 </dd>
 <dt id="term-Prediction">Prediction<a class="headerlink" href="#term-Prediction" title="Permalink to this term">#</a></dt><dd><p>At every time <span class="math notranslate nohighlight">\(k\)</span>, a continuous node <span class="math notranslate nohighlight">\(i\)</span> is defined by its sufficient statistics, the mean <span class="math notranslate nohighlight">\(\mu_i^{(k)}\)</span> and its inverse variance, or precision, <span class="math notranslate nohighlight">\(\pi_i^{(k)}\)</span>, and hold predictions about the next observed values, denoted <span class="math notranslate nohighlight">\(\hat{\mu}_i^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\hat{\pi}_i^{(k)}\)</span>.</p>
@@ -951,7 +951,7 @@ compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Mon Aug 21 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Aug 30 2023
 
 Python implementation: CPython
 Python version       : 3.10.12
@@ -962,8 +962,8 @@ jax   : 0.4.14
 jaxlib: 0.4.14
 
 matplotlib: 3.7.2
-numpy     : 1.22.0
 seaborn   : 0.12.2
+numpy     : 1.22.0
 
 Watermark: 2.4.3
 </pre></div>
