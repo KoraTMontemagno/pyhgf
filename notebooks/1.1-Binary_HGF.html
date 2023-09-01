@@ -473,10 +473,10 @@ if &#39;google.colab&#39; in sys.modules:
 <p>In this example, we will use data from a decision-making task where the outcome probability was manipulated across time, and observe how the binary HGFs can track switches in response probabilities.</p>
 <section id="imports">
 <h2>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h2>
-<p>We import a time series of binary responses from the decision task described in <span id="id2">[<a class="reference internal" href="../references.html#id7" title="Sandra Iglesias, Christoph Mathys, Kay H. Brodersen, Lars Kasper, Marco Piccirelli, Hanneke E.M. den Ouden, and Klaas E. Stephan. Hierarchical prediction errors in midbrain and basal forebrain during sensory learning. Neuron, 80(2):519-530, 2013. URL: https://www.sciencedirect.com/science/article/pii/S0896627313008076, doi:https://doi.org/10.1016/j.neuron.2013.09.009.">Iglesias <em>et al.</em>, 2013</a>]</span>.</p>
+<p>We import a time series of binary observations from the decision task described in <span id="id2">[<a class="reference internal" href="../references.html#id7" title="Sandra Iglesias, Lars Kasper, Samuel J. Harrison, Robert Manka, Christoph Mathys, and Klaas E. Stephan. Cholinergic and dopaminergic effects on prediction error and uncertainty responses during sensory associative learning. NeuroImage, 226:117590, February 2021. URL: https://doi.org/10.1016/j.neuroimage.2020.117590, doi:10.1016/j.neuroimage.2020.117590.">Iglesias <em>et al.</em>, 2021</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">timeserie</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -535,7 +535,7 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Provide new observations</span>
-<span class="n">two_levels_hgf</span> <span class="o">=</span> <span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span><span class="p">)</span>
+<span class="n">two_levels_hgf</span> <span class="o">=</span> <span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">u</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -551,16 +551,11 @@ if &#39;google.colab&#39; in sys.modules:
 <p>A Hierarchical Gaussian Filter is acting as a Bayesian filter when presented with new observation, and by running the update equation forward, we can observe the trajectories of the parameters of the node that are being updated after each new observation (i.e. the mean <span class="math notranslate nohighlight">\(\mu\)</span> and the precision <span class="math notranslate nohighlight">\(\pi\)</span>). The <code class="docutils literal notranslate"><span class="pre">plot_trajectories</span></code> function automatically extracts the relevant parameters given the model structure and will plot their evolution together with the input data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: ylabel=&#39;$\\mu_{2}$&#39;&gt;, &lt;Axes: ylabel=&#39;$\\mu_{1}$&#39;&gt;,
-       &lt;Axes: title={&#39;left&#39;: &#39;Binary Input Node 0&#39;}&gt;, &lt;Axes: &gt;],
-      dtype=object)
-</pre></div>
-</div>
 <img alt="../_images/24e8dc8bd6876ab73c13f8b185498bc9d162dd08ebea8644558ed4876926cc19.png" src="../_images/24e8dc8bd6876ab73c13f8b185498bc9d162dd08ebea8644558ed4876926cc19.png" />
 </div>
 </div>
@@ -636,7 +631,7 @@ if &#39;google.colab&#39; in sys.modules:
 <h4>Add data<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_hgf</span> <span class="o">=</span> <span class="n">three_levels_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_hgf</span> <span class="o">=</span> <span class="n">three_levels_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">u</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -651,17 +646,11 @@ if &#39;google.colab&#39; in sys.modules:
 <h4>Plot trajectories<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: ylabel=&#39;$\\mu_{3}$&#39;&gt;, &lt;Axes: ylabel=&#39;$\\mu_{2}$&#39;&gt;,
-       &lt;Axes: ylabel=&#39;$\\mu_{1}$&#39;&gt;,
-       &lt;Axes: title={&#39;left&#39;: &#39;Binary Input Node 0&#39;}&gt;, &lt;Axes: &gt;],
-      dtype=object)
-</pre></div>
-</div>
 <img alt="../_images/0a8db3f73861cb7a1b621b8650bd2cd222654b58375d2e148f11b870942718aa.png" src="../_images/0a8db3f73861cb7a1b621b8650bd2cd222654b58375d2e148f11b870942718aa.png" />
 </div>
 </div>
@@ -691,7 +680,7 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">timeserie</span><span class="p">],</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">u</span><span class="p">],</span>
     <span class="n">response_function</span><span class="o">=</span><span class="n">first_level_binary_surprise</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -742,7 +731,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" src="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" /></div>
+<img alt="../_images/0d547960d6c0cacb00155a6e657ec6784e1521e51a5fa0e376d8929e28e74702.svg" src="../_images/0d547960d6c0cacb00155a6e657ec6784e1521e51a5fa0e376d8929e28e74702.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -786,7 +775,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -807,9 +796,9 @@ if &#39;google.colab&#39; in sys.modules:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 5 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 9 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -825,7 +814,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ecbb3eb26b471b4b36e34e3e285cb01da9aed00b3286c13e3dc3a836c11e167e.png" src="../_images/ecbb3eb26b471b4b36e34e3e285cb01da9aed00b3286c13e3dc3a836c11e167e.png" />
+<img alt="../_images/f473c73cf040af3fc67145144f98fd5b42f4110cde5097c3fd2521e9f923ea89.png" src="../_images/f473c73cf040af3fc67145144f98fd5b42f4110cde5097c3fd2521e9f923ea89.png" />
 </div>
 </div>
 </section>
@@ -850,7 +839,7 @@ if &#39;google.colab&#39; in sys.modules:
     <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">omega_2</span><span class="p">},</span>
     <span class="n">rho</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
     <span class="n">kappas</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
-        <span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span>
+        <span class="n">input_data</span><span class="o">=</span><span class="n">u</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -869,17 +858,12 @@ Adding 320 new observations.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: ylabel=&#39;$\\mu_{2}$&#39;&gt;, &lt;Axes: ylabel=&#39;$\\mu_{1}$&#39;&gt;,
-       &lt;Axes: title={&#39;left&#39;: &#39;Binary Input Node 0&#39;}&gt;, &lt;Axes: &gt;],
-      dtype=object)
-</pre></div>
-</div>
-<img alt="../_images/4c849bd2dd526388a0f62b8c71dee28b7c6a97b0388c9c5ea5ad6ba778677f19.png" src="../_images/4c849bd2dd526388a0f62b8c71dee28b7c6a97b0388c9c5ea5ad6ba778677f19.png" />
+<img alt="../_images/df75c3d45e1bc3a41f1dd7699cdbed55bba613bf1269d6eeb3d627c636067270.png" src="../_images/df75c3d45e1bc3a41f1dd7699cdbed55bba613bf1269d6eeb3d627c636067270.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -889,7 +873,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.99393, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.99191, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -904,7 +888,7 @@ Adding 320 new observations.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">timeserie</span><span class="p">],</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">u</span><span class="p">],</span>
     <span class="n">response_function</span><span class="o">=</span><span class="n">first_level_binary_surprise</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -956,7 +940,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3bfcdb1c8c20d77b0010d8b201cbc79873c153a68dd33301d3dc02c10761a048.svg" src="../_images/3bfcdb1c8c20d77b0010d8b201cbc79873c153a68dd33301d3dc02c10761a048.svg" /></div>
+<img alt="../_images/7eb1e41dc318b3ca61b0f6019fa3d82a77fa4385d81d79444babb1fe950e1347.svg" src="../_images/7eb1e41dc318b3ca61b0f6019fa3d82a77fa4385d81d79444babb1fe950e1347.svg" /></div>
 </div>
 </section>
 <section id="id8">
@@ -1000,7 +984,7 @@ Adding 320 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:08&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1021,9 +1005,9 @@ Adding 320 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 8 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 14 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -1039,7 +1023,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/66f5717a51aa4b8232f4f9bbb7b09a02d5b468dcb04e37d02dca97a7a472b1e5.png" src="../_images/66f5717a51aa4b8232f4f9bbb7b09a02d5b468dcb04e37d02dca97a7a472b1e5.png" />
+<img alt="../_images/773df71aa8d45f31342d49280cccb230a254dd9ccb307b06b235b3e5a18732e1.png" src="../_images/773df71aa8d45f31342d49280cccb230a254dd9ccb307b06b235b3e5a18732e1.png" />
 </div>
 </div>
 </section>
@@ -1065,7 +1049,7 @@ Adding 320 new observations.
     <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">omega_2</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="n">omega_3</span><span class="p">},</span>
     <span class="n">rho</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
     <span class="n">kappas</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
-        <span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span>
+        <span class="n">input_data</span><span class="o">=</span><span class="n">u</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -1084,18 +1068,12 @@ Adding 320 new observations.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: ylabel=&#39;$\\mu_{3}$&#39;&gt;, &lt;Axes: ylabel=&#39;$\\mu_{2}$&#39;&gt;,
-       &lt;Axes: ylabel=&#39;$\\mu_{1}$&#39;&gt;,
-       &lt;Axes: title={&#39;left&#39;: &#39;Binary Input Node 0&#39;}&gt;, &lt;Axes: &gt;],
-      dtype=object)
-</pre></div>
-</div>
-<img alt="../_images/8049303ace56b4212f5fc4c09fd59ad15b936957c9a7dc0ee521986153d675dd.png" src="../_images/8049303ace56b4212f5fc4c09fd59ad15b936957c9a7dc0ee521986153d675dd.png" />
+<img alt="../_images/2735babe34a9fec1cab7bad90f3a3f557d8cb01f3ba76ba74804e8bbe0d10f3e.png" src="../_images/2735babe34a9fec1cab7bad90f3a3f557d8cb01f3ba76ba74804e8bbe0d10f3e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1105,7 +1083,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.00217, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.00081, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1123,22 +1101,22 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Aug 30 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Sep 01 2023
 
 Python implementation: CPython
 Python version       : 3.10.12
-IPython version      : 8.14.0
+IPython version      : 8.15.0
 
 pyhgf : 0.0.6
 jax   : 0.4.14
 jaxlib: 0.4.14
 
+seaborn   : 0.12.2
 matplotlib: 3.7.2
+sys       : 3.10.12 (main, Jun  7 2023, 13:43:11) [GCC 11.3.0]
+jax       : 0.4.14
 arviz     : 0.16.1
 pymc      : 5.7.2
-seaborn   : 0.12.2
-jax       : 0.4.14
-sys       : 3.10.12 (main, Jun  7 2023, 13:43:11) [GCC 11.3.0]
 
 Watermark: 2.4.3
 </pre></div>

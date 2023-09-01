@@ -468,10 +468,10 @@ if &#39;google.colab&#39; in sys.modules:
 </figure>
 <section id="creating-a-new-response-function-the-binary-surprise">
 <h2>Creating a new response function: the binary surprise<a class="headerlink" href="#creating-a-new-response-function-the-binary-surprise" title="Permalink to this heading">#</a></h2>
-<p>To illustrate the creation of new response functions, we are going to use the same binary input vector from the decision task described in <span id="id1">[<a class="reference internal" href="../references.html#id7" title="Sandra Iglesias, Christoph Mathys, Kay H. Brodersen, Lars Kasper, Marco Piccirelli, Hanneke E.M. den Ouden, and Klaas E. Stephan. Hierarchical prediction errors in midbrain and basal forebrain during sensory learning. Neuron, 80(2):519-530, 2013. URL: https://www.sciencedirect.com/science/article/pii/S0896627313008076, doi:https://doi.org/10.1016/j.neuron.2013.09.009.">Iglesias <em>et al.</em>, 2013</a>]</span>.</p>
+<p>To illustrate the creation of new response functions, we are going to use the same binary input vector from the decision task described in <span id="id1">[]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">observations</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -490,7 +490,7 @@ In this situation, it is trivial to write such a decision function and generate 
     <span class="n">initial_mu</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span>
     <span class="n">initial_pi</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">},</span>
     <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">},</span>
-<span class="p">)</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">observations</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">u</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -663,7 +663,7 @@ Adding 320 new observations.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 <span class="n">jitter</span> <span class="o">=</span> <span class="n">responses</span> <span class="o">*</span> <span class="mf">.1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">responses</span><span class="p">)</span> <span class="o">*</span> <span class="o">-</span><span class="mf">.1</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">observations</span><span class="p">)),</span> <span class="n">observations</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Observations&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4c72b0&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)),</span> <span class="n">u</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Observations&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4c72b0&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">responses</span><span class="p">)),</span> <span class="n">responses</span> <span class="o">+</span> <span class="n">jitter</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Responses&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#c44e52&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Beliefs&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
@@ -735,6 +735,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 </div>
+<p>This function takes the expected probability from the binary node and uses it to predict the participant’s decision. The surprise is computed using the binary surprise (see <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.update.binary.binary_surprise()</span></code>). This corresponds to the standard binary softmax response function that is also accessible from the <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.response.binary_softmax()</span></code> function.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Note here that our <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> has a structure that is the standard way to write response functions in <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a>, that is with two input arguments:</p>
@@ -777,7 +778,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">observations</span><span class="p">],</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">u</span><span class="p">],</span>
     <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
     <span class="n">response_function_parameters</span><span class="o">=</span><span class="p">[(</span><span class="n">responses</span><span class="p">,</span> <span class="p">)]</span>
 <span class="p">)</span>
@@ -860,7 +861,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -881,7 +882,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -902,7 +903,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -923,9 +924,9 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 9 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 15 seconds.
 </pre></div>
 </div>
 </div>
@@ -971,19 +972,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>omega_2</th>
-      <td>-3.942</td>
-      <td>0.492</td>
-      <td>-4.839</td>
-      <td>-2.979</td>
-      <td>0.011</td>
-      <td>0.008</td>
-      <td>1998.0</td>
-      <td>2600.0</td>
+      <td>-3.952</td>
+      <td>0.493</td>
+      <td>-4.863</td>
+      <td>-2.983</td>
+      <td>0.012</td>
+      <td>0.009</td>
+      <td>1591.0</td>
+      <td>3139.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/3e024eac8baf21afc8b005e994eaeedbd33096afe500596008fee7acbd4091d6.png" src="../_images/3e024eac8baf21afc8b005e994eaeedbd33096afe500596008fee7acbd4091d6.png" />
+</div></div><img alt="../_images/51fa878f99d5f27ae73a6b5414157fc9837dfb079a7f0727ab206b371c9cdef3.png" src="../_images/51fa878f99d5f27ae73a6b5414157fc9837dfb079a7f0727ab206b371c9cdef3.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1011,22 +1012,22 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Aug 30 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Sep 01 2023
 
 Python implementation: CPython
 Python version       : 3.10.12
-IPython version      : 8.14.0
+IPython version      : 8.15.0
 
 pyhgf : 0.0.6
 jax   : 0.4.14
 jaxlib: 0.4.14
 
-pymc      : 5.7.2
 matplotlib: 3.7.2
-numpy     : 1.22.0
-jax       : 0.4.14
+pymc      : 5.7.2
 sys       : 3.10.12 (main, Jun  7 2023, 13:43:11) [GCC 11.3.0]
+numpy     : 1.22.0
 arviz     : 0.16.1
+jax       : 0.4.14
 
 Watermark: 2.4.3
 </pre></div>
