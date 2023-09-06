@@ -507,7 +507,7 @@ document.write(`
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span>
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+        <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
         <span class="n">eta0</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">eta1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">binary_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
@@ -1008,7 +1008,6 @@ document.write(`
                     <span class="s2">&quot;pi_3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
                     <span class="s2">&quot;mu_1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                     <span class="s2">&quot;mu_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;mu_hat_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
                     <span class="s2">&quot;mu_3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                     <span class="s2">&quot;omega_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
                     <span class="s2">&quot;omega_3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
@@ -1028,9 +1027,7 @@ document.write(`
         <span class="n">children_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">value_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">mu_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">pi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">pi_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1045,14 +1042,11 @@ document.write(`
 <span class="sd">            The value_coupling between the child and parent node. This is will be</span>
 <span class="sd">            appended to the `psis` parameters in the parent and child node(s).</span>
 <span class="sd">        mu :</span>
-<span class="sd">            The mean of the Gaussian distribution.</span>
-<span class="sd">        mu_hat :</span>
-<span class="sd">            The expected mean of the Gaussian distribution for the next observation.</span>
+<span class="sd">            The mean of the Gaussian distribution. This value is passed both to the</span>
+<span class="sd">            current and expected states.</span>
 <span class="sd">        pi :</span>
-<span class="sd">            The precision of the Gaussian distribution (inverse variance).</span>
-<span class="sd">        pi_hat :</span>
-<span class="sd">            The expected precision of the Gaussian distribution (inverse variance) for</span>
-<span class="sd">            the next observation.</span>
+<span class="sd">            The precision of the Gaussian distribution (inverse variance). This</span>
+<span class="sd">            value is passed both to the current and expected states.</span>
 <span class="sd">        omega :</span>
 <span class="sd">            The tonic part of the variance (the variance that is not inherited from</span>
 <span class="sd">            volatility parent(s)).</span>
@@ -1072,9 +1066,9 @@ document.write(`
         <span class="c1"># parent&#39;s parameter</span>
         <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span>
-            <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">mu_hat</span><span class="p">,</span>
+            <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span>
             <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">pi</span><span class="p">,</span>
-            <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pi_hat</span><span class="p">,</span>
+            <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pi</span><span class="p">,</span>
             <span class="s2">&quot;kappas_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;psis_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">value_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))),</span>
@@ -1132,9 +1126,7 @@ document.write(`
         <span class="n">children_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">volatility_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">mu_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">pi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">pi_hat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
         <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1149,14 +1141,11 @@ document.write(`
 <span class="sd">            The volatility coupling between the child and parent node. This is will be</span>
 <span class="sd">            appended to the `kappas` parameters in the parent and child node(s).</span>
 <span class="sd">        mu :</span>
-<span class="sd">            The mean of the Gaussian distribution.</span>
-<span class="sd">        mu_hat :</span>
-<span class="sd">            The expected mean of the Gaussian distribution for the next observation.</span>
+<span class="sd">            The mean of the Gaussian distribution. This value is passed both to the</span>
+<span class="sd">            current and expected states.</span>
 <span class="sd">        pi :</span>
-<span class="sd">            The precision of the Gaussian distribution (inverse variance).</span>
-<span class="sd">        pi_hat :</span>
-<span class="sd">            The expected precision of the Gaussian distribution (inverse variance) for</span>
-<span class="sd">            the next observation.</span>
+<span class="sd">            The precision of the Gaussian distribution (inverse variance). This</span>
+<span class="sd">            value is passed both to the current and expected states.</span>
 <span class="sd">        omega :</span>
 <span class="sd">            The tonic part of the variance (the variance that is not inherited from</span>
 <span class="sd">            volatility parent(s)).</span>
@@ -1176,9 +1165,9 @@ document.write(`
         <span class="c1"># parent&#39;s parameter</span>
         <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span>
-            <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">mu_hat</span><span class="p">,</span>
+            <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span>
             <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">pi</span><span class="p">,</span>
-            <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pi_hat</span><span class="p">,</span>
+            <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pi</span><span class="p">,</span>
             <span class="s2">&quot;kappas_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span>
                 <span class="n">volatility_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))</span>
             <span class="p">),</span>

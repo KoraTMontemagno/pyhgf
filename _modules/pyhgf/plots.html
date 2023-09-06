@@ -924,12 +924,8 @@ document.write(`
 
                         <span class="c1"># compute  mu +/- sd at time t-1</span>
                         <span class="c1"># and use the sigmoid transform before plotting</span>
-                        <span class="n">mu_parent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-                            <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-                        <span class="p">)</span>
-                        <span class="n">pi_parent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-                            <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2">_pi&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-                        <span class="p">)</span>
+                        <span class="n">mu_parent</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span>
+                        <span class="n">pi_parent</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span>
                         <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi_parent</span><span class="p">)</span>
                         <span class="n">y1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mu_parent</span> <span class="o">+</span> <span class="n">sd</span><span class="p">))</span>
                         <span class="n">y2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mu_parent</span> <span class="o">-</span> <span class="n">sd</span><span class="p">))</span>
@@ -1010,6 +1006,28 @@ document.write(`
                                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                                 <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
                             <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">child_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span> <span class="o">==</span> <span class="n">child_idx</span>
+                            <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+                                <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
+                                <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Value child node - </span><span class="si">{</span><span class="n">ii</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                                <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
+                                <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                                <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
+                                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+                                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                                <span class="n">color</span><span class="o">=</span><span class="n">input_colors</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
+                            <span class="p">)</span>
+                            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
             <span class="c1"># plotting surprise</span>
             <span class="c1"># -----------------</span>
