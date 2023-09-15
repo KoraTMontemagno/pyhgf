@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,8 +38,9 @@
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=927b94d3fcb96560df09"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -71,6 +72,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -111,7 +121,8 @@
     <span class="fa-solid fa-bars"></span>
   </label>
   
-  <div class="navbar-header-items__start">
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
   
@@ -135,7 +146,6 @@
 </a></div>
     
   </div>
-  
   
   <div class="col-lg-9 navbar-header-items">
     
@@ -187,23 +197,25 @@
       
         <div class="navbar-item navbar-persistent--container">
           
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
         <div class="navbar-item">
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script></div>
@@ -219,8 +231,8 @@ document.write(`
           
           
           
-          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
-            <label class="sr-only">GitHub</label></a>
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -231,8 +243,8 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
-            <label class="sr-only">Twitter</label></a>
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Twitter</span></a>
         </li>
         <li class="nav-item">
           
@@ -243,8 +255,8 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box"></i></span>
-            <label class="sr-only">Pypi</label></a>
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Pypi</span></a>
         </li>
 </ul></div>
       
@@ -254,18 +266,20 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__kbd-shortcut">Search</span>
+    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
       <span class="fa-solid fa-outdent"></span>
     </label>
   
@@ -333,10 +347,10 @@ document.write(`
           <div class="navbar-item">
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script></div>
@@ -352,8 +366,8 @@ document.write(`
           
           
           
-          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
-            <label class="sr-only">GitHub</label></a>
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -364,8 +378,8 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
-            <label class="sr-only">Twitter</label></a>
+          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Twitter</span></a>
         </li>
         <li class="nav-item">
           
@@ -376,8 +390,8 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box"></i></span>
-            <label class="sr-only">Pypi</label></a>
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Pypi</span></a>
         </li>
 </ul></div>
         
@@ -409,8 +423,8 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumbs">
-  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="index.html" class="nav-link" aria-label="Home">
@@ -439,23 +453,26 @@ document.write(`
 <ul class="simple">
 <li><p><a class="reference internal" href="#api" id="id1">API</a></p>
 <ul>
-<li><p><a class="reference internal" href="#updates" id="id2">Updates</a></p></li>
-<li><p><a class="reference internal" href="#distribution" id="id3">Distribution</a></p></li>
-<li><p><a class="reference internal" href="#model" id="id4">Model</a></p></li>
-<li><p><a class="reference internal" href="#plots" id="id5">Plots</a></p></li>
-<li><p><a class="reference internal" href="#response" id="id6">Response</a></p></li>
-<li><p><a class="reference internal" href="#networks" id="id7">Networks</a></p></li>
+<li><p><a class="reference internal" href="#nodes-updates" id="id2">Nodes updates</a></p></li>
+<li><p><a class="reference internal" href="#posterior-updates" id="id3">Posterior updates</a></p></li>
+<li><p><a class="reference internal" href="#prediction-updates" id="id4">Prediction updates</a></p></li>
+<li><p><a class="reference internal" href="#distribution" id="id5">Distribution</a></p></li>
+<li><p><a class="reference internal" href="#model" id="id6">Model</a></p></li>
+<li><p><a class="reference internal" href="#plots" id="id7">Plots</a></p></li>
+<li><p><a class="reference internal" href="#response" id="id8">Response</a></p></li>
+<li><p><a class="reference internal" href="#networks" id="id9">Networks</a></p></li>
 </ul>
 </li>
 </ul>
 </div>
 <section id="api">
 <h1><a class="toc-backref" href="#id1">API</a><a class="headerlink" href="#api" title="Permalink to this heading">#</a></h1>
-<section id="updates">
-<h2><a class="toc-backref" href="#id2">Updates</a><a class="headerlink" href="#updates" title="Permalink to this heading">#</a></h2>
+<section id="nodes-updates">
+<h2><a class="toc-backref" href="#id2">Nodes updates</a><a class="headerlink" href="#nodes-updates" title="Permalink to this heading">#</a></h2>
+<p>Update functions used to update the posteriors or predict outcomes of probabilistic nodes. These functions call intenaly the more specific update function listed in the posterior and prediction sections below.</p>
 <section id="binary">
 <h3>Binary<a class="headerlink" href="#binary" title="Permalink to this heading">#</a></h3>
-<p>Core functionnalities to update <em>binary</em> node structures.</p>
+<p>Core functionnalities to update <em>binary</em> nodes.</p>
 <table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
@@ -482,7 +499,7 @@ document.write(`
 </section>
 <section id="continuous">
 <h3>Continuous<a class="headerlink" href="#continuous" title="Permalink to this heading">#</a></h3>
-<p>Core functionnalities to update <em>continuous</em> node structures.</p>
+<p>Core functionnalities to update <em>continuous</em> nodes.</p>
 <table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
@@ -490,9 +507,15 @@ document.write(`
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.updates.continuous/pyhgf.updates.continuous.continuous_node_update.html#pyhgf.updates.continuous.continuous_node_update" title="pyhgf.updates.continuous.continuous_node_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">continuous_node_update</span></code></a>(attributes, ...)</p></td>
+<td><p>Update the posterior of the value and volatility parent(s) of a continuous node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.updates.continuous/pyhgf.updates.continuous.continuous_node_prediction.html#pyhgf.updates.continuous.continuous_node_prediction" title="pyhgf.updates.continuous.continuous_node_prediction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">continuous_node_prediction</span></code></a>(attributes, ...)</p></td>
 <td><p>Update the value and volatility parent(s) of a continuous node.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.updates.continuous/pyhgf.updates.continuous.continuous_input_update.html#pyhgf.updates.continuous.continuous_input_update" title="pyhgf.updates.continuous.continuous_input_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">continuous_input_update</span></code></a>(attributes, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.updates.continuous/pyhgf.updates.continuous.continuous_input_update.html#pyhgf.updates.continuous.continuous_input_update" title="pyhgf.updates.continuous.continuous_input_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">continuous_input_update</span></code></a>(attributes, ...)</p></td>
+<td><p>Update the input node structure.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.updates.continuous/pyhgf.updates.continuous.continuous_input_prediction.html#pyhgf.updates.continuous.continuous_input_prediction" title="pyhgf.updates.continuous.continuous_input_prediction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">continuous_input_prediction</span></code></a>(attributes, ...)</p></td>
 <td><p>Update the input node structure.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.updates.continuous/pyhgf.updates.continuous.gaussian_surprise.html#pyhgf.updates.continuous.gaussian_surprise" title="pyhgf.updates.continuous.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(x, muhat, pihat)</p></td>
@@ -501,9 +524,59 @@ document.write(`
 </tbody>
 </table>
 </section>
+<section id="categorical">
+<h3>Categorical<a class="headerlink" href="#categorical" title="Permalink to this heading">#</a></h3>
+<p>Core functionnalities to update <em>categorical</em> nodes.</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.updates.categorical/pyhgf.updates.categorical.categorical_input_update.html#pyhgf.updates.categorical.categorical_input_update" title="pyhgf.updates.categorical.categorical_input_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">categorical_input_update</span></code></a>(attributes, ...)</p></td>
+<td><p>Update the categorical input node given an array of binary observations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.updates.categorical/pyhgf.updates.categorical.dirichlet_kullback_leibler.html#pyhgf.updates.categorical.dirichlet_kullback_leibler" title="pyhgf.updates.categorical.dirichlet_kullback_leibler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dirichlet_kullback_leibler</span></code></a>(alpha_1, alpha_2)</p></td>
+<td><p>Compute the Kullback-Leibler divergence between two Dirichlet distributions.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="posterior-updates">
+<h2><a class="toc-backref" href="#id3">Posterior updates</a><a class="headerlink" href="#posterior-updates" title="Permalink to this heading">#</a></h2>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_mean_value_parent.html#pyhgf.updates.posterior.continuous.update_mean_value_parent" title="pyhgf.updates.posterior.continuous.update_mean_value_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_mean_value_parent</span></code></a>(attributes, edges, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_precision_value_parent.html#pyhgf.updates.posterior.continuous.update_precision_value_parent" title="pyhgf.updates.posterior.continuous.update_precision_value_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_precision_value_parent</span></code></a>(attributes, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_value_parent.html#pyhgf.updates.posterior.continuous.update_value_parent" title="pyhgf.updates.posterior.continuous.update_value_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_value_parent</span></code></a>(attributes, edges, ...)</p></td>
+<td><p>Update the mean and precision of the value parent of a continuous node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_volatility_parent.html#pyhgf.updates.posterior.continuous.update_volatility_parent" title="pyhgf.updates.posterior.continuous.update_volatility_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_volatility_parent</span></code></a>(attributes, edges, ...)</p></td>
+<td><p>Update the mean and precision of the volatility parent of a continuous node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_precision_volatility_parent.html#pyhgf.updates.posterior.continuous.update_precision_volatility_parent" title="pyhgf.updates.posterior.continuous.update_precision_volatility_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_precision_volatility_parent</span></code></a>(...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_mean_volatility_parent.html#pyhgf.updates.posterior.continuous.update_mean_volatility_parent" title="pyhgf.updates.posterior.continuous.update_mean_volatility_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_mean_volatility_parent</span></code></a>(attributes, ...)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="prediction-updates">
+<h2><a class="toc-backref" href="#id4">Prediction updates</a><a class="headerlink" href="#prediction-updates" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="distribution">
-<h2><a class="toc-backref" href="#id3">Distribution</a><a class="headerlink" href="#distribution" title="Permalink to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id5">Distribution</a><a class="headerlink" href="#distribution" title="Permalink to this heading">#</a></h2>
 <p>The Herarchical Gaussian Filter as a PyMC distribution. This distribution can be
 embedded in models using PyMC&gt;=5.0.0.</p>
 <table class="autosummary longtable table autosummary">
@@ -525,7 +598,7 @@ embedded in models using PyMC&gt;=5.0.0.</p>
 </table>
 </section>
 <section id="model">
-<h2><a class="toc-backref" href="#id4">Model</a><a class="headerlink" href="#model" title="Permalink to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id6">Model</a><a class="headerlink" href="#model" title="Permalink to this heading">#</a></h2>
 <p>The main class used to create a standard Hierarchical Gaussian Filter for binary or
 continuous inputs, with two or three levels. This class wraps the previous JAX modules
 and create a standard node structure for these models.</p>
@@ -542,7 +615,7 @@ and create a standard node structure for these models.</p>
 </table>
 </section>
 <section id="plots">
-<h2><a class="toc-backref" href="#id5">Plots</a><a class="headerlink" href="#plots" title="Permalink to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id7">Plots</a><a class="headerlink" href="#plots" title="Permalink to this heading">#</a></h2>
 <p>Plotting functionnalities to visualize parameters trajectories and correlations after
 observing new data.</p>
 <table class="autosummary longtable table autosummary">
@@ -567,7 +640,7 @@ observing new data.</p>
 </table>
 </section>
 <section id="response">
-<h2><a class="toc-backref" href="#id6">Response</a><a class="headerlink" href="#response" title="Permalink to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id8">Response</a><a class="headerlink" href="#response" title="Permalink to this heading">#</a></h2>
 <p>A collection of responses functions. A response function is simply a callable taking at
 least the HGF instance as input after observation and returning surprise.</p>
 <table class="autosummary longtable table autosummary">
@@ -589,7 +662,7 @@ least the HGF instance as input after observation and returning surprise.</p>
 </table>
 </section>
 <section id="networks">
-<h2><a class="toc-backref" href="#id7">Networks</a><a class="headerlink" href="#networks" title="Permalink to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id9">Networks</a><a class="headerlink" href="#networks" title="Permalink to this heading">#</a></h2>
 <p>Utilities for manipulating networks of probabilistic nodes.</p>
 <table class="autosummary longtable table autosummary">
 <colgroup>
@@ -622,11 +695,10 @@ least the HGF instance as input after observation and returning surprise.</p>
               
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="tutorials.html"
@@ -646,10 +718,7 @@ least the HGF instance as input after observation and returning surprise.</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -664,11 +733,14 @@ least the HGF instance as input after observation and returning surprise.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#updates">Updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nodes-updates">Nodes updates</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binary">Binary</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous">Continuous</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical">Categorical</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-updates">Posterior updates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediction-updates">Prediction updates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution">Distribution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model">Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plots">Plots</a></li>
@@ -698,8 +770,8 @@ least the HGF instance as input after observation and returning surprise.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -725,10 +797,11 @@ least the HGF instance as input after observation and returning surprise.</p>
     </div>
   
   
+  
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.0.
 </p></div>
       
     </div>
