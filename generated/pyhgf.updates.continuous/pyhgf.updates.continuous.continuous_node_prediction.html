@@ -61,7 +61,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyhgf.updates.continuous.continuous_input_update" href="pyhgf.updates.continuous.continuous_input_update.html" />
-    <link rel="prev" title="pyhgf.updates.continuous.continuous_node_update" href="pyhgf.updates.continuous.continuous_node_update.html" />
+    <link rel="prev" title="pyhgf.updates.continuous.continuous_node_prediction_error" href="pyhgf.updates.continuous.continuous_node_prediction_error.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -411,7 +411,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.binary/pyhgf.updates.binary.binary_surprise.html">pyhgf.updates.binary.binary_surprise</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="pyhgf.updates.continuous.continuous_node_update.html">pyhgf.updates.continuous.continuous_node_update</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyhgf.updates.continuous.continuous_node_prediction_error.html">pyhgf.updates.continuous.continuous_node_prediction_error</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">pyhgf.updates.continuous.continuous_node_prediction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyhgf.updates.continuous.continuous_input_update.html">pyhgf.updates.continuous.continuous_input_update</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyhgf.updates.continuous.continuous_input_prediction.html">pyhgf.updates.continuous.continuous_input_prediction</a></li>
@@ -422,12 +422,12 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.categorical/pyhgf.updates.categorical.dirichlet_kullback_leibler.html">pyhgf.updates.categorical.dirichlet_kullback_leibler</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_mean_value_parent.html">pyhgf.updates.posterior.continuous.update_mean_value_parent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_precision_value_parent.html">pyhgf.updates.posterior.continuous.update_precision_value_parent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_value_parent.html">pyhgf.updates.posterior.continuous.update_value_parent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_volatility_parent.html">pyhgf.updates.posterior.continuous.update_volatility_parent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_precision_volatility_parent.html">pyhgf.updates.posterior.continuous.update_precision_volatility_parent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.update_mean_volatility_parent.html">pyhgf.updates.posterior.continuous.update_mean_volatility_parent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.prediction_error.continuous/pyhgf.updates.prediction_error.continuous.prediction_error_mean_value_parent.html">pyhgf.updates.prediction_error.continuous.prediction_error_mean_value_parent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.prediction_error.continuous/pyhgf.updates.prediction_error.continuous.prediction_error_precision_value_parent.html">pyhgf.updates.prediction_error.continuous.prediction_error_precision_value_parent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.prediction_error.continuous/pyhgf.updates.prediction_error.continuous.prediction_error_value_parent.html">pyhgf.updates.prediction_error.continuous.prediction_error_value_parent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.prediction_error.continuous/pyhgf.updates.prediction_error.continuous.prediction_error_volatility_parent.html">pyhgf.updates.prediction_error.continuous.prediction_error_volatility_parent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.prediction_error.continuous/pyhgf.updates.prediction_error.continuous.prediction_error_precision_volatility_parent.html">pyhgf.updates.prediction_error.continuous.prediction_error_precision_volatility_parent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.prediction_error.continuous/pyhgf.updates.prediction_error.continuous.prediction_error_mean_volatility_parent.html">pyhgf.updates.prediction_error.continuous.prediction_error_mean_volatility_parent</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.distribution/pyhgf.distribution.hgf_logp.html">pyhgf.distribution.hgf_logp</a></li>
@@ -516,7 +516,7 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pyhgf.updates.continuous.continuous_node_prediction">
 <span class="sig-prename descclassname"><span class="pre">pyhgf.updates.continuous.</span></span><span class="sig-name descname"><span class="pre">continuous_node_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Indexes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span></span><a class="reference internal" href="../../_modules/pyhgf/updates/continuous.html#continuous_node_prediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.updates.continuous.continuous_node_prediction" title="Permalink to this definition">#</a></dt>
-<dd><p>Update the value and volatility parent(s) of a continuous node.</p>
+<dd><p>Prediction step for the value and volatility parents of a continuous node.</p>
 <p>Updating the node’s parents is a two-step process:
 1. Update value parent(s).
 2. Update volatility parent(s).</p>
@@ -583,12 +583,12 @@ arXiv. <a class="reference external" href="https://doi.org/10.48550/ARXIV.2305.1
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="pyhgf.updates.continuous.continuous_node_update.html"
+       href="pyhgf.updates.continuous.continuous_node_prediction_error.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">pyhgf.updates.continuous.continuous_node_update</p>
+        <p class="prev-next-title">pyhgf.updates.continuous.continuous_node_prediction_error</p>
       </div>
     </a>
     <a class="right-next"
