@@ -448,11 +448,9 @@ document.write(`
 <span></span><span class="c1"># Author: Nicolas Legrand &lt;nicolas.legrand@cas.au.dk&gt;</span>
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 
-<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">jit</span>
-<span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
 
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Edges</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.prediction.continuous</span> <span class="kn">import</span> <span class="p">(</span>
@@ -461,6 +459,7 @@ document.write(`
     <span class="n">prediction_volatility_parent</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.prediction_error.continuous</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">prediction_error_input_value_parent</span><span class="p">,</span>
     <span class="n">prediction_error_value_parent</span><span class="p">,</span>
     <span class="n">prediction_error_volatility_parent</span><span class="p">,</span>
 <span class="p">)</span>
@@ -724,81 +723,13 @@ document.write(`
             <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
             <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
             <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
-                <span class="c1"># list value and volatility parents</span>
-                <span class="n">value_parent_value_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
-                <span class="n">value_parent_volatility_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span>
-                    <span class="n">value_parent_idx</span>
-                <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
-
-                <span class="c1"># Compute new value for nu and pihat</span>
-                <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
-
-                <span class="c1"># Look at the (optional) va_pa&#39;s volatility parents</span>
-                <span class="c1"># and update logvol accordingly</span>
-                <span class="k">if</span> <span class="n">value_parent_volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">value_parent_volatility_parents_idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                        <span class="n">value_parent_volatility_parents_idxs</span><span class="p">,</span>
-                        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
-                    <span class="p">):</span>
-                        <span class="n">logvol</span> <span class="o">+=</span> <span class="p">(</span>
-                            <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-                        <span class="p">)</span>
-
-                <span class="c1"># Estimate new_nu</span>
-                <span class="n">nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
-                <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-
-                <span class="n">pihat_value_parent</span><span class="p">,</span> <span class="n">nu_value_parent</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">),</span>
-                    <span class="n">new_nu</span><span class="p">,</span>
-                <span class="p">]</span>
-
-                <span class="c1"># gather precisions updates from other input nodes</span>
-                <span class="c1"># in the case of a multivariate descendency</span>
-                <span class="n">pi_children</span> <span class="o">=</span> <span class="mf">0.0</span>
-                <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                    <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                    <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
-                <span class="p">):</span>
-                    <span class="n">pihat_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
-                    <span class="n">pi_children</span> <span class="o">+=</span> <span class="n">psi_child</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pihat_child</span>
-
-                <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">pihat_value_parent</span> <span class="o">+</span> <span class="n">pi_children</span>
-
-                <span class="c1"># Compute new muhat</span>
-                <span class="n">driftrate</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
-
-                <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
-                <span class="c1"># and update drift rate accordingly</span>
-                <span class="k">if</span> <span class="n">value_parent_value_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="p">(</span>
-                        <span class="n">value_parent_value_parents_idx</span>
-                    <span class="p">)</span> <span class="ow">in</span> <span class="n">value_parent_value_parents_idxs</span><span class="p">:</span>
-                        <span class="n">driftrate</span> <span class="o">+=</span> <span class="p">(</span>
-                            <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                            <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_value_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
-                        <span class="p">)</span>
-
-                <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
+                <span class="p">(</span>
+                    <span class="n">pi_value_parent</span><span class="p">,</span>
+                    <span class="n">nu_value_parent</span><span class="p">,</span>
+                    <span class="n">mu_value_parent</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_input_value_parent</span><span class="p">(</span>
+                    <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
                 <span class="p">)</span>
-
-                <span class="c1"># gather PE updates from other input nodes</span>
-                <span class="c1"># in the case of a multivariate descendency</span>
-                <span class="n">pe_children</span> <span class="o">=</span> <span class="mf">0.0</span>
-                <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                    <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                    <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
-                <span class="p">):</span>
-                    <span class="n">child_value_prediction_error</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">muhat_value_parent</span>
-                    <span class="p">)</span>
-                    <span class="n">pihat_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
-                    <span class="n">pe_children</span> <span class="o">+=</span> <span class="p">(</span>
-                        <span class="n">psi_child</span> <span class="o">*</span> <span class="n">pihat_child</span> <span class="o">*</span> <span class="n">child_value_prediction_error</span>
-                    <span class="p">)</span> <span class="o">/</span> <span class="n">pi_value_parent</span>
-
-                <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">muhat_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
 
                 <span class="c1"># update input node&#39;s parameters</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
@@ -881,51 +812,6 @@ document.write(`
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muhat_value_parent</span>
 
     <span class="k">return</span> <span class="n">attributes</span></div>
-
-
-<div class="viewcode-block" id="gaussian_surprise"><a class="viewcode-back" href="../../../generated/pyhgf.updates.continuous/pyhgf.updates.continuous.gaussian_surprise.html#pyhgf.updates.continuous.gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">gaussian_surprise</span><span class="p">(</span>
-    <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
-    <span class="n">muhat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
-    <span class="n">pihat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Surprise at an outcome under a Gaussian prediction.</span>
-
-<span class="sd">    The surprise elicited by an observation :math:`x` under a Gaussian distribution</span>
-<span class="sd">    with expected mean :math:`\hat{\mu}` and expected precision :math:`\hat{\pi}` is</span>
-<span class="sd">    given by:</span>
-
-<span class="sd">    .. math::</span>
-
-<span class="sd">       \frac{1}{2} \log(2 \pi) - \log(\hat{\pi}) + \hat{\pi}\sqrt{x - \hat{\mu}}</span>
-
-<span class="sd">    where :math:`\pi` is the mathematical constant.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    x :</span>
-<span class="sd">        The outcome.</span>
-<span class="sd">    muhat :</span>
-<span class="sd">        The expected mean of the Gaussian distribution.</span>
-<span class="sd">    pihat :</span>
-<span class="sd">        The expected precision of the Gaussian distribution.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    surprise :</span>
-<span class="sd">        The Gaussian surprise.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; from pyhgf.continuous import gaussian_surprise</span>
-<span class="sd">    &gt;&gt;&gt; gaussian_surprise(x=2.0, muhat=0.0, pihat=1.0)</span>
-<span class="sd">    `Array(2.9189386, dtype=float32, weak_type=True)`</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
-        <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-        <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pihat</span><span class="p">)</span>
-        <span class="o">+</span> <span class="n">pihat</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">muhat</span><span class="p">))</span>
-    <span class="p">)</span></div>
 </pre></div>
 
                 </article>
