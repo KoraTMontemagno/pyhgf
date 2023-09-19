@@ -533,7 +533,7 @@ document.write(`
 <span class="sd">        hgf.input_data(input_data=timeserie)</span>
 
 <span class="sd">        # Plot</span>
-<span class="sd">        hgf.plot_trajectories()</span>
+<span class="sd">        hgf.plot_trajectories();</span>
 
 <span class="sd">    Visualization of nodes&#39; trajectories from a three-level binary HGF model.</span>
 
@@ -544,7 +544,7 @@ document.write(`
 <span class="sd">        import jax.numpy as jnp</span>
 
 <span class="sd">        # Read binary input</span>
-<span class="sd">        timeserie = load_data(&quot;binary&quot;)</span>
+<span class="sd">        u, _ = load_data(&quot;binary&quot;)</span>
 
 <span class="sd">        three_levels_hgf = HGF(</span>
 <span class="sd">            n_levels=3,</span>
@@ -556,14 +556,14 @@ document.write(`
 <span class="sd">            kappas={&quot;1&quot;: None, &quot;2&quot;: 1.0},</span>
 <span class="sd">            eta0=0.0,</span>
 <span class="sd">            eta1=1.0,</span>
-<span class="sd">            pihat = jnp.inf,</span>
+<span class="sd">            binary_precision = jnp.inf,</span>
 <span class="sd">        )</span>
 
 <span class="sd">        # Feed input</span>
 <span class="sd">        three_levels_hgf = three_levels_hgf.input_data(timeserie)</span>
 
 <span class="sd">        # Plot</span>
-<span class="sd">        three_levels_hgf.plot_trajectories()</span>
+<span class="sd">        three_levels_hgf.plot_trajectories();</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">trajectories_df</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>

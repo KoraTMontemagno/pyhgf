@@ -451,11 +451,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">jit</span>
-<span class="kn">from</span> <span class="nn">jax.scipy.special</span> <span class="kn">import</span> <span class="n">digamma</span><span class="p">,</span> <span class="n">gamma</span>
-<span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
 
-<span class="kn">from</span> <span class="nn">pyhgf.math</span> <span class="kn">import</span> <span class="n">binary_surprise</span>
+<span class="kn">from</span> <span class="nn">pyhgf.math</span> <span class="kn">import</span> <span class="n">binary_surprise</span><span class="p">,</span> <span class="n">dirichlet_kullback_leibler</span>
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Edges</span>
 
 
@@ -558,49 +556,6 @@ document.write(`
     <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_step</span>
 
     <span class="k">return</span> <span class="n">attributes</span></div>
-
-
-<div class="viewcode-block" id="dirichlet_kullback_leibler"><a class="viewcode-back" href="../../../generated/pyhgf.updates.categorical/pyhgf.updates.categorical.dirichlet_kullback_leibler.html#pyhgf.updates.categorical.dirichlet_kullback_leibler">[docs]</a><span class="k">def</span> <span class="nf">dirichlet_kullback_leibler</span><span class="p">(</span><span class="n">alpha_1</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">alpha_2</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the Kullback-Leibler divergence between two Dirichlet distributions.</span>
-
-<span class="sd">    The Kullback-Leibler divergence from the distribution :math:`Q` to the distribution</span>
-<span class="sd">    :math:`P`, two Dirichlet distributions parametrized by :math:`\\alpha_2` and</span>
-<span class="sd">    :math:`\\alpha_1` (respectively) is given by the following equation:</span>
-
-<span class="sd">    .. math::</span>
-<span class="sd">       KL[P||Q] = \\</span>
-<span class="sd">       \\ln{\\frac{\\Gamma(\\sum_{i=1}^k\\alpha_{1i})} \\</span>
-<span class="sd">       {\\Gamma(\\sum_{i=1}^k\\alpha_{2i})}} + \\</span>
-<span class="sd">       \\sum_{i=1}^k \\ln{\\frac{\\Gamma(\\alpha_{2i})}{\\Gamma(\\alpha_{1i})}} + \\</span>
-<span class="sd">       \\sum_{i=1}^k(\\alpha_{1i} -\\</span>
-<span class="sd">       \\alpha_{2i})\\left[\\psi(\alpha_{1i})-\\psi(\\sum_{i=1}^k\alpha_{1i})\\right]</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    alpha_1 :</span>
-<span class="sd">        The concentration parameters for the distribution :math:`P`.</span>
-<span class="sd">    alpha_2 :</span>
-<span class="sd">        The concentration parameters for the distribution :math:`Q`.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    kl :</span>
-<span class="sd">        The Kullback-Leibler divergence of distribution :math:`P` from distribution</span>
-<span class="sd">        :math:`Q`.</span>
-
-<span class="sd">    References</span>
-<span class="sd">    ----------</span>
-<span class="sd">    .. [1] https://statproofbook.github.io/P/dir-kl.html</span>
-<span class="sd">    .. [2] Penny, William D. (2001): &quot;KL-Divergences of Normal, Gamma, Dirichlet and</span>
-<span class="sd">       Wishart densities&quot; ; in: University College, London , p. 2, eqs. 8-9 ;</span>
-<span class="sd">       URL: https://www.fil.ion.ucl.ac.uk/~wpenny/publications/densities.ps .</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">(</span>
-        <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">gamma</span><span class="p">(</span><span class="n">alpha_1</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">(</span><span class="n">alpha_2</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
-        <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">gamma</span><span class="p">(</span><span class="n">alpha_2</span><span class="p">)</span> <span class="o">/</span> <span class="n">gamma</span><span class="p">(</span><span class="n">alpha_1</span><span class="p">)))</span>
-        <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">alpha_1</span> <span class="o">-</span> <span class="n">alpha_2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">digamma</span><span class="p">(</span><span class="n">alpha_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">digamma</span><span class="p">(</span><span class="n">alpha_1</span><span class="o">.</span><span class="n">sum</span><span class="p">())))</span>
-    <span class="p">)</span></div>
 </pre></div>
 
                 </article>
