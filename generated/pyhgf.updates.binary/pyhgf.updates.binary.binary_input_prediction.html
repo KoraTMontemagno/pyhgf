@@ -555,16 +555,15 @@ the input node (<span class="math notranslate nohighlight">\(x_1\)</span>).</p>
 </dd>
 <dt><strong>time_step</strong></dt><dd><p>The interval between the previous time point and the current time point.</p>
 </dd>
-<dt><strong>attributes</strong></dt><dd><p>The structure of nodes’ parameters. Each parameter is a dictionary with the
-following parameters: <cite>“pihat”, “pi”, “muhat”, “mu”, “nu”, “psis”, “omega”</cite> for
-continuous nodes.</p>
+<dt><strong>attributes</strong></dt><dd><p>The attributes of the probabilistic nodes.</p>
 </dd>
 <dt><strong>.. note::</strong></dt><dd><p><cite>“psis”</cite> is the value coupling strength. It should have the same length as the
 volatility parents’ indexes. <cite>“kappas”</cite> is the volatility coupling strength.
 It should have the same length as the volatility parents’ indexes.</p>
 </dd>
-<dt><strong>edges</strong></dt><dd><p>Tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code> with the same length as node number.
-For each node, the index list value and volatility parents.</p>
+<dt><strong>edges</strong></dt><dd><p>The edges of the probabilistic nodes as a tuple of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code>. The tuple has the same length as node number.
+For each node, the index list value and volatility parents and children.</p>
 </dd>
 <dt><strong>node_idx</strong></dt><dd><p>Pointer to the node that needs to be updated. After continuous updates, the
 parameters of value and volatility parents (if any) will be different.</p>

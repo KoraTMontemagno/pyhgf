@@ -486,21 +486,21 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    attributes :</span>
-<span class="sd">        The nodes&#39; parameters.</span>
+<span class="sd">        The attributes of the probabilistic nodes.</span>
 <span class="sd">    time_step :</span>
 <span class="sd">        The interval between the previous time point and the current time point.</span>
 <span class="sd">    node_idx :</span>
 <span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
 <span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
 <span class="sd">    edges :</span>
-<span class="sd">        The edges of the network as a tuple of :py:class:`pyhgf.typing.Indexes` with</span>
-<span class="sd">        the same length as node number. For each node, the index list value and</span>
-<span class="sd">        volatility parents.</span>
+<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
+<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
+<span class="sd">        For each node, the index list value and volatility parents and children.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    attributes :</span>
-<span class="sd">        The updated nodes&#39; parameters.</span>
+<span class="sd">        The updated attributes of the probabilistic nodes.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -529,18 +529,13 @@ document.write(`
             <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
             <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
             <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
-                <span class="p">(</span>
-                    <span class="n">pi_value_parent</span><span class="p">,</span>
-                    <span class="n">mu_value_parent</span><span class="p">,</span>
-                    <span class="n">nu_value_parent</span><span class="p">,</span>
-                <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_value_parent</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">pi_value_parent</span><span class="p">,</span> <span class="n">mu_value_parent</span><span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_value_parent</span><span class="p">(</span>
                     <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Update this parent&#39;s parameters</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_value_parent</span>
-                <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_value_parent</span>
 
     <span class="c1">#############################</span>
     <span class="c1"># Update volatility parents #</span>
@@ -553,7 +548,6 @@ document.write(`
                 <span class="p">(</span>
                     <span class="n">pi_volatility_parent</span><span class="p">,</span>
                     <span class="n">mu_volatility_parent</span><span class="p">,</span>
-                    <span class="n">nu_volatility_parent</span><span class="p">,</span>
                 <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_volatility_parent</span><span class="p">(</span>
                     <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">volatility_parent_idx</span>
                 <span class="p">)</span>
@@ -561,7 +555,6 @@ document.write(`
                 <span class="c1"># Update this parent&#39;s parameters</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_volatility_parent</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_volatility_parent</span>
-                <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_volatility_parent</span>
 
     <span class="k">return</span> <span class="n">attributes</span></div>
 
@@ -587,9 +580,7 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    attributes :</span>
-<span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
-<span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
-<span class="sd">        continuous nodes.</span>
+<span class="sd">        The attributes of the probabilistic nodes.</span>
 <span class="sd">    .. note::</span>
 <span class="sd">        The parameter structure also incorporate the value and volatility coupling</span>
 <span class="sd">        strenght with children and parents (i.e. `&quot;psis_parents&quot;`, `&quot;psis_children&quot;`,</span>
@@ -600,13 +591,14 @@ document.write(`
 <span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
 <span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
 <span class="sd">    edges :</span>
-<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with the same length as node number.</span>
-<span class="sd">        For each node, the index list value and volatility parents.</span>
+<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
+<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
+<span class="sd">        For each node, the index list value and volatility parents and children.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    attributes :</span>
-<span class="sd">        The updated parameters structure.</span>
+<span class="sd">        The updated attributes of the probabilistic nodes.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -679,16 +671,15 @@ document.write(`
 <span class="sd">    time_step :</span>
 <span class="sd">        The interval between the previous time point and the current time point.</span>
 <span class="sd">    attributes :</span>
-<span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
-<span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;omega&quot;` for</span>
-<span class="sd">        continuous nodes.</span>
+<span class="sd">        The attributes of the probabilistic nodes.</span>
 <span class="sd">    .. note::</span>
 <span class="sd">        The parameter structure also incorporate the value and volatility coupling</span>
 <span class="sd">        strenght with children and parents (i.e. `&quot;psis_parents&quot;`, `&quot;psis_children&quot;`,</span>
 <span class="sd">        `&quot;kappas_parents&quot;`, `&quot;kappas_children&quot;`).</span>
 <span class="sd">    edges :</span>
-<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with same length than number of node.</span>
-<span class="sd">        For each node, the index list value and volatility parents.</span>
+<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
+<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
+<span class="sd">        For each node, the index list value and volatility parents and children.</span>
 <span class="sd">    node_idx :</span>
 <span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
 <span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
@@ -696,7 +687,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    attributes :</span>
-<span class="sd">        The updated parameters structure.</span>
+<span class="sd">        The updated attributes of the probabilistic nodes.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -726,7 +717,6 @@ document.write(`
             <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
                 <span class="p">(</span>
                     <span class="n">pi_value_parent</span><span class="p">,</span>
-                    <span class="n">nu_value_parent</span><span class="p">,</span>
                     <span class="n">mu_value_parent</span><span class="p">,</span>
                 <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_input_value_parent</span><span class="p">(</span>
                     <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
@@ -735,7 +725,6 @@ document.write(`
                 <span class="c1"># update input node&#39;s parameters</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_value_parent</span>
-                <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;nu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nu_value_parent</span>
 
     <span class="k">return</span> <span class="n">attributes</span>
 
@@ -760,16 +749,15 @@ document.write(`
 <span class="sd">    time_step :</span>
 <span class="sd">        The interval between the previous time point and the current time point.</span>
 <span class="sd">    attributes :</span>
-<span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
-<span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;omega&quot;` for</span>
-<span class="sd">        continuous nodes.</span>
+<span class="sd">        The attributes of the probabilistic nodes.</span>
 <span class="sd">    .. note::</span>
 <span class="sd">        The parameter structure also incorporate the value and volatility coupling</span>
 <span class="sd">        strenght with children and parents (i.e. `&quot;psis_parents&quot;`, `&quot;psis_children&quot;`,</span>
 <span class="sd">        `&quot;kappas_parents&quot;`, `&quot;kappas_children&quot;`).</span>
 <span class="sd">    edges :</span>
-<span class="sd">        Tuple of :py:class:`pyhgf.typing.Indexes` with same length than number of node.</span>
-<span class="sd">        For each node, the index list value and volatility parents.</span>
+<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
+<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
+<span class="sd">        For each node, the index list value and volatility parents and children.</span>
 <span class="sd">    node_idx :</span>
 <span class="sd">        Pointer to the node that needs to be updated. After continuous updates, the</span>
 <span class="sd">        parameters of value and volatility parents (if any) will be different.</span>
@@ -777,7 +765,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    attributes :</span>
-<span class="sd">        The updated parameters structure.</span>
+<span class="sd">        The updated attributes of the probabilistic nodes.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

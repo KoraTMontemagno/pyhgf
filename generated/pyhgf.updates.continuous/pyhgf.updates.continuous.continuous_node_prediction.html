@@ -556,9 +556,7 @@ updated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>attributes</strong></dt><dd><p>The structure of nodes’ parameters. Each parameter is a dictionary with the
-following parameters: <cite>“pihat”, “pi”, “muhat”, “mu”, “nu”, “psis”, “omega”</cite> for
-continuous nodes.</p>
+<dt><strong>attributes</strong></dt><dd><p>The attributes of the probabilistic nodes.</p>
 </dd>
 <dt><strong>.. note::</strong></dt><dd><p>The parameter structure also incorporate the value and volatility coupling
 strenght with children and parents (i.e. <cite>“psis_parents”</cite>, <cite>“psis_children”</cite>,
@@ -569,14 +567,15 @@ strenght with children and parents (i.e. <cite>“psis_parents”</cite>, <cite>
 <dt><strong>node_idx</strong></dt><dd><p>Pointer to the node that needs to be updated. After continuous updates, the
 parameters of value and volatility parents (if any) will be different.</p>
 </dd>
-<dt><strong>edges</strong></dt><dd><p>Tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code> with the same length as node number.
-For each node, the index list value and volatility parents.</p>
+<dt><strong>edges</strong></dt><dd><p>The edges of the probabilistic nodes as a tuple of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code>. The tuple has the same length as node number.
+For each node, the index list value and volatility parents and children.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>attributes</dt><dd><p>The updated parameters structure.</p>
+<dt>attributes</dt><dd><p>The updated attributes of the probabilistic nodes.</p>
 </dd>
 </dl>
 </dd>

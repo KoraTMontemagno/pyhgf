@@ -510,7 +510,7 @@ In this situation, it is trivial to write such a decision function and generate 
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1695134995.739242    2780 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1695199009.372768    2780 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -877,7 +877,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -898,7 +898,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -919,7 +919,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -940,9 +940,9 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 14 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 10 seconds.
 </pre></div>
 </div>
 </div>
@@ -988,19 +988,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>omega_2</th>
-      <td>-3.948</td>
-      <td>0.484</td>
-      <td>-4.909</td>
-      <td>-3.092</td>
-      <td>0.011</td>
+      <td>-3.937</td>
+      <td>0.487</td>
+      <td>-4.819</td>
+      <td>-3.004</td>
+      <td>0.012</td>
       <td>0.008</td>
-      <td>1939.0</td>
-      <td>2639.0</td>
+      <td>1727.0</td>
+      <td>2529.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/ed91583f2e98891c7c161b8308b4d437635242d7443c219daa137691c4a5a933.png" src="../_images/ed91583f2e98891c7c161b8308b4d437635242d7443c219daa137691c4a5a933.png" />
+</div></div><img alt="../_images/8f317f09375443a4e1c5ecff4d31919698bf2e270e231c37a4db96ef06dcabda.png" src="../_images/8f317f09375443a4e1c5ecff4d31919698bf2e270e231c37a4db96ef06dcabda.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1028,7 +1028,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Sep 19 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Sep 20 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -1038,12 +1038,12 @@ pyhgf : 0.0.9
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-numpy     : 1.22.0
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 jax       : 0.4.16
+pymc      : 5.8.1
+numpy     : 1.22.0
 arviz     : 0.16.1
 matplotlib: 3.8.0
-pymc      : 5.8.1
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 
 Watermark: 2.4.3
 </pre></div>

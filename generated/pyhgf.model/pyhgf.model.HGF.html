@@ -560,13 +560,13 @@ network only has one input node.</p>
 <dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the model, including the input vector. Cannot be
 less than 2.</p>
 </dd>
-<dt><strong>edges</strong></dt><dd><p>A tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code> representing the nodes hierarchy.</p>
+<dt><strong>edges</strong></dt><dd><p>The edges of the probabilistic nodes as a tuple of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code>. The tuple has the same length as node number.
+For each node, the index list value and volatility parents and children.</p>
 </dd>
 <dt><strong>node_trajectories</strong></dt><dd><p>The dynamic of the node’s beliefs after updating.</p>
 </dd>
-<dt><strong>attributes</strong></dt><dd><p>The structure of nodes’ parameters. Each parameter is a dictionary with the
-following parameters: <cite>“pihat”, “pi”, “muhat”, “mu”, “nu”, “psis”, “omega”</cite> for
-continuous nodes.</p>
+<dt><strong>attributes</strong></dt><dd><p>The attributes of the probabilistic nodes.</p>
 </dd>
 <dt><strong>.. note::</strong></dt><dd><p>The parameter structure also incorporate the value and volatility coupling
 strenght with children and parents (i.e. <cite>“psis_parents”</cite>, <cite>“psis_children”</cite>,

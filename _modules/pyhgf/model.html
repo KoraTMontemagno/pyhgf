@@ -485,13 +485,13 @@ document.write(`
 <span class="sd">        The number of hierarchies in the model, including the input vector. Cannot be</span>
 <span class="sd">        less than 2.</span>
 <span class="sd">    edges :</span>
-<span class="sd">        A tuple of :py:class:`pyhgf.typing.Indexes` representing the nodes hierarchy.</span>
+<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
+<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
+<span class="sd">        For each node, the index list value and volatility parents and children.</span>
 <span class="sd">    node_trajectories :</span>
 <span class="sd">        The dynamic of the node&#39;s beliefs after updating.</span>
 <span class="sd">    attributes :</span>
-<span class="sd">        The structure of nodes&#39; parameters. Each parameter is a dictionary with the</span>
-<span class="sd">        following parameters: `&quot;pihat&quot;, &quot;pi&quot;, &quot;muhat&quot;, &quot;mu&quot;, &quot;nu&quot;, &quot;psis&quot;, &quot;omega&quot;` for</span>
-<span class="sd">        continuous nodes.</span>
+<span class="sd">        The attributes of the probabilistic nodes.</span>
 <span class="sd">    .. note::</span>
 <span class="sd">        The parameter structure also incorporate the value and volatility coupling</span>
 <span class="sd">        strenght with children and parents (i.e. `&quot;psis_parents&quot;`, `&quot;psis_children&quot;`,</span>
@@ -1087,7 +1087,6 @@ document.write(`
             <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;psis_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">value_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))),</span>
             <span class="s2">&quot;psis_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">,</span>
             <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">,</span>
         <span class="p">}</span>
@@ -1188,7 +1187,6 @@ document.write(`
             <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;psis_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
             <span class="s2">&quot;psis_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">,</span>
             <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">,</span>
         <span class="p">}</span>
