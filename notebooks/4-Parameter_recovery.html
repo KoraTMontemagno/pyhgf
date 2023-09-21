@@ -557,6 +557,7 @@ if &#39;google.colab&#39; in sys.modules:
             <span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span>
             <span class="n">omega_2</span><span class="o">=-</span><span class="mf">10.0</span><span class="p">,</span>
             <span class="n">continuous_precision</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
+            <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">pi_1</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
@@ -599,7 +600,7 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1695201723.966556    3203 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1695333759.052277    3106 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -628,9 +629,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:29&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:28&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 30 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 28 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -646,7 +647,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d7febc0464d4e60aa21b0e9bf509836b8784df53a04fbc8ebe224126aa688ddf.png" src="../_images/d7febc0464d4e60aa21b0e9bf509836b8784df53a04fbc8ebe224126aa688ddf.png" />
+<img alt="../_images/6609c0a7bfee564c8f23849a256f01fe45f1fcb279870a041489df75ea27f43a.png" src="../_images/6609c0a7bfee564c8f23849a256f01fe45f1fcb279870a041489df75ea27f43a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -691,74 +692,74 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
   <tbody>
     <tr>
       <th>omega_1[0]</th>
-      <td>-8.020</td>
-      <td>0.193</td>
-      <td>-8.344</td>
-      <td>-7.632</td>
+      <td>-8.028</td>
+      <td>0.188</td>
+      <td>-8.358</td>
+      <td>-7.690</td>
       <td>0.005</td>
       <td>0.004</td>
-      <td>1421.0</td>
-      <td>780.0</td>
+      <td>1390.0</td>
+      <td>786.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[1]</th>
-      <td>-7.760</td>
-      <td>0.199</td>
-      <td>-8.128</td>
-      <td>-7.391</td>
-      <td>0.005</td>
+      <td>-7.745</td>
+      <td>0.197</td>
+      <td>-8.099</td>
+      <td>-7.402</td>
+      <td>0.006</td>
       <td>0.004</td>
-      <td>1469.0</td>
-      <td>856.0</td>
+      <td>1298.0</td>
+      <td>873.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[2]</th>
-      <td>-7.522</td>
-      <td>0.204</td>
-      <td>-7.908</td>
-      <td>-7.162</td>
-      <td>0.006</td>
+      <td>-7.523</td>
+      <td>0.208</td>
+      <td>-7.915</td>
+      <td>-7.127</td>
+      <td>0.005</td>
       <td>0.004</td>
-      <td>1256.0</td>
-      <td>681.0</td>
+      <td>1607.0</td>
+      <td>721.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[3]</th>
-      <td>-8.133</td>
-      <td>0.171</td>
-      <td>-8.427</td>
-      <td>-7.789</td>
-      <td>0.005</td>
+      <td>-8.138</td>
+      <td>0.176</td>
+      <td>-8.447</td>
+      <td>-7.807</td>
+      <td>0.006</td>
       <td>0.004</td>
-      <td>1027.0</td>
-      <td>832.0</td>
+      <td>1004.0</td>
+      <td>637.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[4]</th>
-      <td>-7.864</td>
-      <td>0.196</td>
-      <td>-8.243</td>
-      <td>-7.514</td>
-      <td>0.005</td>
+      <td>-7.863</td>
+      <td>0.185</td>
+      <td>-8.186</td>
+      <td>-7.506</td>
+      <td>0.004</td>
       <td>0.003</td>
-      <td>1728.0</td>
-      <td>825.0</td>
+      <td>1791.0</td>
+      <td>914.0</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>omega_1[5]</th>
-      <td>-7.824</td>
-      <td>0.192</td>
-      <td>-8.180</td>
-      <td>-7.492</td>
-      <td>0.005</td>
-      <td>0.003</td>
-      <td>1796.0</td>
-      <td>794.0</td>
+      <td>-7.825</td>
+      <td>0.196</td>
+      <td>-8.168</td>
+      <td>-7.445</td>
+      <td>0.006</td>
+      <td>0.004</td>
+      <td>1236.0</td>
+      <td>841.0</td>
       <td>NaN</td>
     </tr>
   </tbody>
@@ -777,7 +778,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Sep 20 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Sep 21 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -788,11 +789,11 @@ jax   : 0.4.16
 jaxlib: 0.4.16
 
 jax       : 0.4.16
-matplotlib: 3.8.0
+numpy     : 1.22.0
+pymc      : 5.8.2
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 arviz     : 0.16.1
-numpy     : 1.22.0
-pymc      : 5.8.1
+matplotlib: 3.8.0
 
 Watermark: 2.4.3
 </pre></div>

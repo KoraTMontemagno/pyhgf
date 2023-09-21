@@ -598,6 +598,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
             <span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span>
             <span class="n">omega_2</span><span class="o">=-</span><span class="mf">10.0</span><span class="p">,</span>
             <span class="n">continuous_precision</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
+            <span class="n">binary_precision</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">pi_1</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
@@ -623,7 +624,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b3db416833c668707bb559bf90a4e9915d54af3740337b3a6ec0606cd7fe2c42.svg" src="../_images/b3db416833c668707bb559bf90a4e9915d54af3740337b3a6ec0606cd7fe2c42.svg" /></div>
+<img alt="../_images/e76dbc8de0cf41c448029f9ee19e39b60fcfae63fbb38a955dfc0e050e172b00.svg" src="../_images/e76dbc8de0cf41c448029f9ee19e39b60fcfae63fbb38a955dfc0e050e172b00.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -640,7 +641,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1695201596.166529    2826 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1695333625.731614    2864 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -669,9 +670,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 01:17&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 01:18&lt;00:00 Sampling chain 0, 5 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 78 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 79 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -687,7 +688,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fc6600b436eba0de92ad1c46babc06b0db067dbeb983a5a65a64e520931c5c6a.png" src="../_images/fc6600b436eba0de92ad1c46babc06b0db067dbeb983a5a65a64e520931c5c6a.png" />
+<img alt="../_images/093184112298eed73b31cc4f6b858a44ac7b4da06dd9aa07f6a4efde26dedd74.png" src="../_images/093184112298eed73b31cc4f6b858a44ac7b4da06dd9aa07f6a4efde26dedd74.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -758,6 +759,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
             <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
             <span class="n">continuous_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
             <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
@@ -785,7 +787,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d63859d0ad8f6d79950cb8209bd8ed2e74c6ea70499adca1b1ff7e4a14b4ba1d.svg" src="../_images/d63859d0ad8f6d79950cb8209bd8ed2e74c6ea70499adca1b1ff7e4a14b4ba1d.svg" /></div>
+<img alt="../_images/a21b6f93ee230c491055aa5b75ee58d66fd7e12e8cfb9d97461a76740819a24d.svg" src="../_images/a21b6f93ee230c491055aa5b75ee58d66fd7e12e8cfb9d97461a76740819a24d.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -829,9 +831,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 0, 64 divergences]
+      100.00% [2000/2000 00:31&lt;00:00 Sampling chain 0, 42 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 25 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 32 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -847,7 +849,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c918b7a27189a9814ac6b775fccdc7869de810df1a76ae87ffd54e2eb0d28d0f.png" src="../_images/c918b7a27189a9814ac6b775fccdc7869de810df1a76ae87ffd54e2eb0d28d0f.png" />
+<img alt="../_images/c1aed17426fcbcf622f44c6c25727df471e2202b0919e5887af96b1334ee9a77.png" src="../_images/c1aed17426fcbcf622f44c6c25727df471e2202b0919e5887af96b1334ee9a77.png" />
 </div>
 </div>
 </section>
@@ -864,7 +866,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Sep 20 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Sep 21 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -874,11 +876,11 @@ pyhgf : 0.0.9
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-arviz     : 0.16.1
 numpy     : 1.22.0
-matplotlib: 3.8.0
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-pymc      : 5.8.1
+matplotlib: 3.8.0
+arviz     : 0.16.1
+pymc      : 5.8.2
 jax       : 0.4.16
 
 Watermark: 2.4.3

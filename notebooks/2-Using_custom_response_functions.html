@@ -510,7 +510,7 @@ In this situation, it is trivial to write such a decision function and generate 
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1695201557.114483    2742 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1695333589.559124    2781 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -820,6 +820,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
             <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
             <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
             <span class="n">continuous_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
             <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
             <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
@@ -942,7 +943,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
       100.00% [2000/2000 00:02&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 11 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 10 seconds.
 </pre></div>
 </div>
 </div>
@@ -990,17 +991,17 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
       <th>omega_2</th>
       <td>-3.939</td>
       <td>0.491</td>
-      <td>-4.829</td>
-      <td>-2.997</td>
-      <td>0.013</td>
-      <td>0.009</td>
-      <td>1408.0</td>
-      <td>2707.0</td>
+      <td>-4.82</td>
+      <td>-2.999</td>
+      <td>0.012</td>
+      <td>0.008</td>
+      <td>1817.0</td>
+      <td>2507.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/4a55f22701cd2201561355a9d845c44b493b16be91e19bb1ff58cdb35580ca70.png" src="../_images/4a55f22701cd2201561355a9d845c44b493b16be91e19bb1ff58cdb35580ca70.png" />
+</div></div><img alt="../_images/6c96421771888b030173d8503717946bab2fc911c60e358b7a6cd7283ff9b217.png" src="../_images/6c96421771888b030173d8503717946bab2fc911c60e358b7a6cd7283ff9b217.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1028,7 +1029,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Sep 20 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Sep 21 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -1038,12 +1039,12 @@ pyhgf : 0.0.9
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-pymc      : 5.8.1
-jax       : 0.4.16
-numpy     : 1.22.0
-arviz     : 0.16.1
 matplotlib: 3.8.0
+arviz     : 0.16.1
+jax       : 0.4.16
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+numpy     : 1.22.0
+pymc      : 5.8.2
 
 Watermark: 2.4.3
 </pre></div>
