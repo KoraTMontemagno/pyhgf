@@ -453,8 +453,10 @@ document.write(`
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
 
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Edges</span>
-<span class="kn">from</span> <span class="nn">pyhgf.updates.continuous</span> <span class="kn">import</span> <span class="n">prediction_value_parent</span>
-<span class="kn">from</span> <span class="nn">pyhgf.updates.prediction.binary</span> <span class="kn">import</span> <span class="n">prediction_input_value_parent</span>
+<span class="kn">from</span> <span class="nn">pyhgf.updates.prediction.binary</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">prediction_input_value_parent</span><span class="p">,</span>
+    <span class="n">prediction_value_parent</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.prediction_error.binary</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">prediction_error_input_value_parent</span><span class="p">,</span>
     <span class="n">prediction_error_value_parent</span><span class="p">,</span>
@@ -519,7 +521,9 @@ document.write(`
                 <span class="p">(</span>
                     <span class="n">pi_value_parent</span><span class="p">,</span>
                     <span class="n">mu_value_parent</span><span class="p">,</span>
-                <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_value_parent</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">value_parent_idx</span><span class="p">)</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_value_parent</span><span class="p">(</span>
+                    <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
+                <span class="p">)</span>
                 <span class="c1"># 5. Update node&#39;s parameters and node&#39;s parents recursively</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_value_parent</span>
@@ -659,7 +663,9 @@ document.write(`
                 <span class="n">pi_value_parent</span><span class="p">,</span>
                 <span class="n">mu_value_parent</span><span class="p">,</span>
                 <span class="n">surprise</span><span class="p">,</span>
-            <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_input_value_parent</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">value_parent_idx</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_input_value_parent</span><span class="p">(</span>
+                <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
+            <span class="p">)</span>
 
             <span class="c1"># Update value parent&#39;s parameters</span>
             <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pi_value_parent</span>

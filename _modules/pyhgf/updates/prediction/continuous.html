@@ -484,22 +484,21 @@ document.write(`
 <span class="sd">        The expected value for the mean of the value parent (:math:`\\hat{\\mu}`).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># List the value and volatility parents of the value parent</span>
+    <span class="c1"># list the value and volatility parents</span>
     <span class="n">value_parent_value_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
 
-    <span class="c1"># Get the drift rate of the value parent</span>
+    <span class="c1"># drift rate of the parent node</span>
     <span class="n">driftrate</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Look at the (optional) value parents of the value parent</span>
-    <span class="c1"># and update the drift rate accordingly</span>
+    <span class="c1"># Look at the (optional) valu parents of the value parents and update drift rate</span>
     <span class="k">if</span> <span class="n">value_parent_value_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">value_parent_value_parent_idx</span><span class="p">,</span> <span class="n">psi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="k">for</span> <span class="n">va_pa_va_pa</span><span class="p">,</span> <span class="n">psi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="n">value_parent_value_parents_idxs</span><span class="p">,</span>
             <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">],</span>
         <span class="p">):</span>
-            <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+            <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">va_pa_va_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Compute the new expected mean for the value parent</span>
+    <span class="c1"># Compute new expected value</span>
     <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
 
     <span class="k">return</span> <span class="n">muhat_value_parent</span></div>
@@ -530,14 +529,14 @@ document.write(`
 <span class="sd">        The expected value for the mean of the value parent (:math:`\\hat{\\pi}`).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># List the value parent&#39;s volatility parents</span>
+    <span class="c1"># list the value and volatility parents</span>
     <span class="n">value_parent_volatility_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
 
-    <span class="c1"># Get the log volatility from the value parent</span>
+    <span class="c1"># Compute new value for nu and pihat</span>
     <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Look at the (optional) value parent&#39;s volatility parents</span>
-    <span class="c1"># and update the log volatility accordingly</span>
+    <span class="c1"># Look at the (optional) va_pa&#39;s volatility parents</span>
+    <span class="c1"># and update logvol accordingly</span>
     <span class="k">if</span> <span class="n">value_parent_volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">value_parent_volatility_parents_idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="n">value_parent_volatility_parents_idxs</span><span class="p">,</span>
@@ -545,11 +544,10 @@ document.write(`
         <span class="p">):</span>
             <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Estimate new nu</span>
+    <span class="c1"># Estimate new_nu</span>
     <span class="n">nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
     <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
-    <span class="c1"># Estimate the new expected precision for the value parent</span>
     <span class="n">pihat_value_parent</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pihat_value_parent</span></div>
@@ -565,9 +563,9 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Prediction step for the value parent(s) of a continuous node.</span>
 
 <span class="sd">    Updating the posterior distribution of the value parent is a two-step process:</span>
-<span class="sd">    #. Update the posterior precision using</span>
+<span class="sd">    1. Update the posterior precision using</span>
 <span class="sd">    :py:func:`pyhgf.updates.prediction.continuous.prediction_precision_value_parent`.</span>
-<span class="sd">    #. Update the posterior mean using</span>
+<span class="sd">    2. Update the posterior mean value using</span>
 <span class="sd">    :py:func:`pyhgf.updates.prediction.continuous.prediction_mean_value_parent`.</span>
 
 <span class="sd">    Parameters</span>
@@ -591,11 +589,10 @@ document.write(`
 <span class="sd">        The mean (:math:`\\mu`) of the value parent.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Get the new estimation for the value parent&#39;s precision</span>
+
     <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">prediction_precision_value_parent</span><span class="p">(</span>
         <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
     <span class="p">)</span>
-    <span class="c1"># Get the new estimation for the value parent&#39;s mean</span>
     <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">prediction_mean_value_parent</span><span class="p">(</span>
         <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
     <span class="p">)</span>
@@ -607,38 +604,16 @@ document.write(`
 <span class="k">def</span> <span class="nf">prediction_precision_volatility_parent</span><span class="p">(</span>
     <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">volatility_parent_idx</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Expected value for the precision of the volatility parent of a contiuous node.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    attributes :</span>
-<span class="sd">        The attributes of the probabilistic nodes.</span>
-<span class="sd">    edges :</span>
-<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
-<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
-<span class="sd">        For each node, the index list value and volatility parents and children.</span>
-<span class="sd">    time_step :</span>
-<span class="sd">        The interval between the previous time point and the current time point.</span>
-<span class="sd">    volatility_parent_idx :</span>
-<span class="sd">        Pointer to the volatility parent node that will be updated.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    pihat_volatility_parent :</span>
-<span class="sd">        The new expected value for the mean of the volatility parent</span>
-<span class="sd">        (:math:`\\hat{\\pi}`).</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># List the volatility parent&#39;s volatility parents</span>
+    <span class="c1"># list the volatility parents</span>
     <span class="n">volatility_parent_volatility_parents_idx</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span>
         <span class="n">volatility_parent_idx</span>
     <span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
 
-    <span class="c1"># Get the log volatility from the volatility parent</span>
+    <span class="c1"># Compute new value for nu and pihat</span>
     <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Look at the (optional) volatility parent&#39;s volatility parents</span>
-    <span class="c1"># and update the log volatility accordingly</span>
+    <span class="c1"># Look at the (optional) vo_pa&#39;s volatility parents</span>
+    <span class="c1"># and update logvol accordingly</span>
     <span class="k">if</span> <span class="n">volatility_parent_volatility_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">vo_pa_vo_pa</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="n">volatility_parent_volatility_parents_idx</span><span class="p">,</span>
@@ -649,8 +624,6 @@ document.write(`
     <span class="c1"># Estimate new_nu</span>
     <span class="n">new_nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
     <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">new_nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">new_nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-
-    <span class="c1"># Estimate the new expected precision for the volatility parent</span>
     <span class="n">pihat_volatility_parent</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pihat_volatility_parent</span></div>
@@ -658,38 +631,16 @@ document.write(`
 
 <div class="viewcode-block" id="prediction_mean_volatility_parent"><a class="viewcode-back" href="../../../../generated/pyhgf.updates.prediction.continuous/pyhgf.updates.prediction.continuous.prediction_mean_volatility_parent.html#pyhgf.updates.prediction.continuous.prediction_mean_volatility_parent">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;volatility_parent_idx&quot;</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">prediction_mean_volatility_parent</span><span class="p">(</span>
-    <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">volatility_parent_idx</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">volatility_parent_idx</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Expected value for the mean of the volatility parent of a contiuous node.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    attributes :</span>
-<span class="sd">        The attributes of the probabilistic nodes.</span>
-<span class="sd">    edges :</span>
-<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
-<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
-<span class="sd">        For each node, the index list value and volatility parents and children.</span>
-<span class="sd">    time_step :</span>
-<span class="sd">        The interval between the previous time point and the current time point.</span>
-<span class="sd">    volatility_parent_idx :</span>
-<span class="sd">        Pointer to the volatility parent node that will be updated.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    muhat_volatility_parent :</span>
-<span class="sd">        The new expected value for the mean of the volatility parent</span>
-<span class="sd">        (:math:`\\hat{\\mu}`).</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># List the volatility parent&#39;s value parents</span>
+    <span class="c1"># list the value parents</span>
     <span class="n">volatility_parent_value_parents_idx</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
 
-    <span class="c1"># Get the drift rate from the volatility parent</span>
+    <span class="c1"># drift rate of the GRW</span>
     <span class="n">driftrate</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Look at the (optional) volatility parent&#39;s value parents</span>
-    <span class="c1"># and update the drift rate accordingly</span>
+    <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
+    <span class="c1"># and update drift rate accordingly</span>
     <span class="k">if</span> <span class="n">volatility_parent_value_parents_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">vo_pa_va_pa</span><span class="p">,</span> <span class="n">psi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="n">volatility_parent_value_parents_idx</span><span class="p">,</span>
@@ -697,7 +648,6 @@ document.write(`
         <span class="p">):</span>
             <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">vo_pa_va_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Estimate the new expected mean for the volatility parent</span>
     <span class="n">muhat_volatility_parent</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
     <span class="p">)</span>
@@ -715,9 +665,9 @@ document.write(`
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Prediction step for the volatility parent(s) of a continuous node.</span>
 
 <span class="sd">    Updating the posterior distribution of the volatility parent is a two-step process:</span>
-<span class="sd">    #. Update the posterior precision using</span>
+<span class="sd">    1. Update the posterior precision using</span>
 <span class="sd">    :py:fun:`update_precision_volatility_parent`.</span>
-<span class="sd">    #. Update the posterior mean value using</span>
+<span class="sd">    2. Update the posterior mean value using</span>
 <span class="sd">    :py:fun:`update_mean_volatility_parent`.</span>
 
 <span class="sd">    Parameters</span>
@@ -735,10 +685,11 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    pi_volatility_parent :</span>
-<span class="sd">        The precision (:math:`\\pi`) of the volatility parent.</span>
-<span class="sd">    mu_volatility_parent :</span>
-<span class="sd">        The mean (:math:`\\mu`) of the volatility parent.</span>
+<span class="sd">    pi_value_parent :</span>
+<span class="sd">        The precision (:math:`\\pi`) of the value parent.</span>
+<span class="sd">    mu_value_parent :</span>
+<span class="sd">        The mean (:math:`\\mu`) of the value parent.</span>
+<span class="sd">    nu_value_parent :</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pi_volatility_parent</span> <span class="o">=</span> <span class="n">prediction_precision_volatility_parent</span><span class="p">(</span>
@@ -758,36 +709,6 @@ document.write(`
     <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">value_parent_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prediction step for the value parent of a continuous input node.</span>
-
-<span class="sd">    Updating the posterior distribution of the value parent of a continuous input node</span>
-<span class="sd">    is a two-step process:</span>
-<span class="sd">    #. Update the parent&#39;s expected mean using</span>
-<span class="sd">    :py:func:`pyhgf.updates.prediction.continuous.prediction_input_mean_value_parent`.</span>
-<span class="sd">    #. Update the parent&#39;s expected precision using</span>
-<span class="sd">    :py:func:`pyhgf.updates.prediction.continuous.prediction_input_precision_value_parent`.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    attributes :</span>
-<span class="sd">        The attributes of the probabilistic nodes.</span>
-<span class="sd">    edges :</span>
-<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
-<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
-<span class="sd">        For each node, the index list value and volatility parents and children.</span>
-<span class="sd">    time_step :</span>
-<span class="sd">        The interval between the previous time point and the current time point.</span>
-<span class="sd">    value_parent_idx :</span>
-<span class="sd">        Pointer to the value parent node.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    pihat_value_parent :</span>
-<span class="sd">        The precision (:math:`\\hat{\\pi}`) of the value parent.</span>
-<span class="sd">    muhat_value_parent :</span>
-<span class="sd">        The mean (:math:`\\hat{\\mu}`) of the value parent.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">prediction_input_mean_value_parent</span><span class="p">(</span>
         <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
     <span class="p">)</span>
@@ -805,35 +726,14 @@ document.write(`
     <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">value_parent_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Expected value for the mean of the input&#39;s value parent.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    attributes :</span>
-<span class="sd">        The attributes of the probabilistic nodes.</span>
-<span class="sd">    edges :</span>
-<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
-<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
-<span class="sd">        For each node, the index list value and volatility parents and children.</span>
-<span class="sd">    time_step :</span>
-<span class="sd">        The interval between the previous time point and the current time point.</span>
-<span class="sd">    value_parent_idx :</span>
-<span class="sd">        Pointer to the node that will be updated.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    muhat_value_parent :</span>
-<span class="sd">        The expected value for the mean of the value parent (:math:`\\hat{\\mu}`).</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># list the value parent&#39;s value parents</span>
+    <span class="c1"># list value parents</span>
     <span class="n">value_parent_value_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
 
-    <span class="c1"># Get the value parent&#39;s log volatility</span>
+    <span class="c1"># Compute new muhat</span>
     <span class="n">driftrate</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Look at the (optional) value parent&#39;s value parents</span>
-    <span class="c1"># and update the drift rate accordingly</span>
+    <span class="c1"># Look at the (optional) va_pa&#39;s value parents</span>
+    <span class="c1"># and update drift rate accordingly</span>
     <span class="k">if</span> <span class="n">value_parent_value_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">value_parent_value_parents_idx</span> <span class="ow">in</span> <span class="n">value_parent_value_parents_idxs</span><span class="p">:</span>
             <span class="n">driftrate</span> <span class="o">+=</span> <span class="p">(</span>
@@ -841,7 +741,6 @@ document.write(`
                 <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_value_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
             <span class="p">)</span>
 
-    <span class="c1"># Estimate the new expected mean for the value parent</span>
     <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
 
     <span class="k">return</span> <span class="n">muhat_value_parent</span>
@@ -854,35 +753,14 @@ document.write(`
     <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">value_parent_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Expected value for the precision of the input&#39;s value parent.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    attributes :</span>
-<span class="sd">        The attributes of the probabilistic nodes.</span>
-<span class="sd">    edges :</span>
-<span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
-<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
-<span class="sd">        For each node, the index list value and volatility parents and children.</span>
-<span class="sd">    time_step :</span>
-<span class="sd">        The interval between the previous time point and the current time point.</span>
-<span class="sd">    value_parent_idx :</span>
-<span class="sd">        Pointer to the node that will be updated.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    pihat_value_parent :</span>
-<span class="sd">        The expected value for the mean of the value parent (:math:`\\hat{\\pi}`).</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># List volatility parents</span>
+    <span class="c1"># list volatility parents</span>
     <span class="n">value_parent_volatility_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
 
-    <span class="c1"># Get the log volatility from the value parent</span>
+    <span class="c1"># Compute new value for nu and pihat</span>
     <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Look at the (optional) value parent&#39;s volatility parents</span>
-    <span class="c1"># and update the log volatility accordingly</span>
+    <span class="c1"># Look at the (optional) va_pa&#39;s volatility parents</span>
+    <span class="c1"># and update logvol accordingly</span>
     <span class="k">if</span> <span class="n">value_parent_volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">value_parent_volatility_parents_idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="n">value_parent_volatility_parents_idxs</span><span class="p">,</span>
@@ -890,11 +768,9 @@ document.write(`
         <span class="p">):</span>
             <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Estimate new nu</span>
+    <span class="c1"># Estimate new_nu</span>
     <span class="n">nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
     <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-
-    <span class="c1"># Estimate the new expected precision for the value parent</span>
     <span class="n">pihat_value_parent</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pihat_value_parent</span>
