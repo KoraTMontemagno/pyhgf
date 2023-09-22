@@ -566,7 +566,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1695372811.430269    3458 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1695391494.991377    3460 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -677,27 +677,8 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
     <span class="c1"># omegas priors</span>
     <span class="n">omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">)</span>
 
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
-        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
-        <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span>
-            <span class="n">omega_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span>
-            <span class="n">continuous_precision</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
-            <span class="n">binary_precision</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_1</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
-            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1e1</span><span class="p">,</span>
-            <span class="n">mu_1</span><span class="o">=</span><span class="n">timeseries</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">omega_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">pi_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">mu_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">kappa_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
+    <span class="c1"># HGF distribution</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">mu_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -750,7 +731,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -771,7 +752,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -792,7 +773,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -813,9 +794,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 19 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 24 seconds.
 </pre></div>
 </div>
 </div>
@@ -827,7 +808,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/77de3fba34c0a10907f29079a5d08bd917c5c19946a1238e648006a5fbdbed65.png" src="../_images/77de3fba34c0a10907f29079a5d08bd917c5c19946a1238e648006a5fbdbed65.png" />
+<img alt="../_images/ee81056d898112640e36bf002e4993ce6b2cf241c2a6308ecb547e405222bdd8.png" src="../_images/ee81056d898112640e36bf002e4993ce6b2cf241c2a6308ecb547e405222bdd8.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -869,14 +850,14 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
   <tbody>
     <tr>
       <th>omega_1</th>
-      <td>-6.962</td>
-      <td>0.686</td>
-      <td>-8.185</td>
-      <td>-5.668</td>
-      <td>0.017</td>
-      <td>0.012</td>
-      <td>1691.0</td>
-      <td>1700.0</td>
+      <td>-6.067</td>
+      <td>0.913</td>
+      <td>-7.637</td>
+      <td>-4.301</td>
+      <td>0.032</td>
+      <td>0.023</td>
+      <td>934.0</td>
+      <td>836.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1270,7 +1251,7 @@ Adding 720 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1314,7 +1295,7 @@ Adding 720 new observations.
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
       100.00% [2000/2000 00:01&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 6 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 8 seconds.
 </pre></div>
 </div>
 </div>
@@ -1326,7 +1307,7 @@ Adding 720 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/833f4de5f45b0b83233bef4db890b97b345053e855a61814cf23c14af385ac73.png" src="../_images/833f4de5f45b0b83233bef4db890b97b345053e855a61814cf23c14af385ac73.png" />
+<img alt="../_images/96b83037ff6f8543594fdb605a63ce3e7a72287a006515d2ba6d6d6f72981f10.png" src="../_images/96b83037ff6f8543594fdb605a63ce3e7a72287a006515d2ba6d6d6f72981f10.png" />
 </div>
 </div>
 <p>Assess model fitting, here using leave-one-out cross-validation from the <a class="reference external" href="https://python.arviz.org/en/stable/api/generated/arviz.loo.html">Arviz</a> library.</p>
@@ -1341,8 +1322,8 @@ Adding 720 new observations.
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -222.51     0.00
-p_loo        0.75        -
+elpd_loo  -222.39     0.00
+p_loo        0.64        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1460,7 +1441,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:32&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:29&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1481,7 +1462,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:28&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:29&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1502,7 +1483,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:27&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:30&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1523,9 +1504,9 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:26&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:31&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 116 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 121 seconds.
 </pre></div>
 </div>
 </div>
@@ -1537,7 +1518,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/79acac64a82924f75cb8c1913995fdd2e072a34411ff188fb833e658a510247e.png" src="../_images/79acac64a82924f75cb8c1913995fdd2e072a34411ff188fb833e658a510247e.png" />
+<img alt="../_images/22adce27d1e7c1cd32b6034b9e59f16e5149dfdc8f45b37c4b8b5f56c796a5a2.png" src="../_images/22adce27d1e7c1cd32b6034b9e59f16e5149dfdc8f45b37c4b8b5f56c796a5a2.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1551,8 +1532,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -104.05     0.00
-p_loo        0.78        -
+elpd_loo  -104.14     0.00
+p_loo        0.90        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1561,8 +1542,8 @@ Pareto k diagnostic values:
                          Count   Pct.
 (-Inf, 0.5]   (good)        0    0.0%
  (0.5, 0.7]   (ok)          0    0.0%
-   (0.7, 1]   (bad)         1  100.0%
-   (1, Inf)   (very bad)    0    0.0%
+   (0.7, 1]   (bad)         0    0.0%
+   (1, Inf)   (very bad)    1  100.0%
 </pre></div>
 </div>
 </div>
@@ -1631,24 +1612,7 @@ Pareto k diagnostic values:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">logp</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
-            <span class="n">omega_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">continuous_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">pi_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">mu_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">mu_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">kappa_2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1702,7 +1666,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1723,7 +1687,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 1 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1744,7 +1708,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1765,12 +1729,9 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 14 seconds.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 1 divergences after tuning. Increase `target_accept` or reparameterize.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 18 seconds.
 </pre></div>
 </div>
 </div>
@@ -1782,7 +1743,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/493a73a2386fc8c0f33ee355169aebbb8bfcde86b5ac67e3c5a57f1f1ab049e5.png" src="../_images/493a73a2386fc8c0f33ee355169aebbb8bfcde86b5ac67e3c5a57f1f1ab049e5.png" />
+<img alt="../_images/205d16e74b13ae9e41257c1f24e3c00d0509e4f257000ad6da170980629575b0.png" src="../_images/205d16e74b13ae9e41257c1f24e3c00d0509e4f257000ad6da170980629575b0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1796,8 +1757,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -114.28     0.00
-p_loo        0.97        -
+elpd_loo  -114.25     0.00
+p_loo        0.95        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1831,24 +1792,7 @@ Pareto k diagnostic values:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">logp</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">omega_2</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
-            <span class="n">omega_3</span><span class="o">=-</span><span class="mf">6.0</span><span class="p">,</span>
-            <span class="n">continuous_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_3</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">pi_3</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">mu_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">mu_3</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">kappa_2</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_3</span><span class="o">=-</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">mu_3</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1902,7 +1846,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 2 divergences]
+      100.00% [2000/2000 00:08&lt;00:00 Sampling chain 0, 2 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1923,7 +1867,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 5 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 7 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1944,7 +1888,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 2, 4 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1965,12 +1909,12 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 3 divergences]
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 3, 3 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 18 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 24 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 10 divergences after tuning. Increase `target_accept` or reparameterize.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 16 divergences after tuning. Increase `target_accept` or reparameterize.
 </pre></div>
 </div>
 </div>
@@ -1983,7 +1927,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/55b6d9dcd0c1da1c6e16a19279dc540bd1a8aa1cec5c33e09eebc91ce88a2ab5.png" src="../_images/55b6d9dcd0c1da1c6e16a19279dc540bd1a8aa1cec5c33e09eebc91ce88a2ab5.png" />
+<img alt="../_images/1769187a3ca4f451053111fc04cbbde31a8645720c9c1979af17fe9fdc32c517.png" src="../_images/1769187a3ca4f451053111fc04cbbde31a8645720c9c1979af17fe9fdc32c517.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1997,8 +1941,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -113.81     0.00
-p_loo        0.85        -
+elpd_loo  -113.94     0.00
+p_loo        0.97        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -2061,8 +2005,8 @@ Pareto k diagnostic values:
     <tr>
       <th>RW</th>
       <td>0</td>
-      <td>-104.049177</td>
-      <td>0.779525</td>
+      <td>-104.140243</td>
+      <td>0.902488</td>
       <td>0.000000</td>
       <td>1.000000e+00</td>
       <td>0.0</td>
@@ -2073,10 +2017,10 @@ Pareto k diagnostic values:
     <tr>
       <th>three-level</th>
       <td>1</td>
-      <td>-113.812786</td>
-      <td>0.853284</td>
-      <td>9.763610</td>
-      <td>2.386980e-15</td>
+      <td>-113.935797</td>
+      <td>0.974902</td>
+      <td>9.795555</td>
+      <td>1.831868e-15</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>True</td>
@@ -2085,10 +2029,10 @@ Pareto k diagnostic values:
     <tr>
       <th>two-level</th>
       <td>2</td>
-      <td>-114.282219</td>
-      <td>0.967614</td>
-      <td>10.233042</td>
-      <td>0.000000e+00</td>
+      <td>-114.250208</td>
+      <td>0.951097</td>
+      <td>10.109965</td>
+      <td>6.661338e-16</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>True</td>
@@ -2097,10 +2041,10 @@ Pareto k diagnostic values:
     <tr>
       <th>biased_random</th>
       <td>3</td>
-      <td>-222.507005</td>
-      <td>0.751094</td>
-      <td>118.457828</td>
-      <td>6.883383e-15</td>
+      <td>-222.386359</td>
+      <td>0.641383</td>
+      <td>118.246116</td>
+      <td>0.000000e+00</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>True</td>
@@ -2188,7 +2132,7 @@ Pareto k diagnostic values:
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/262c8b1653e0bcfdb59a6cefa7a03b6c2088c6f081846c6a929053d032fa0f8a.png" src="../_images/262c8b1653e0bcfdb59a6cefa7a03b6c2088c6f081846c6a929053d032fa0f8a.png" />
+<img alt="../_images/024c7f6c9dd12d85aa697e79b1e88cf4319d844a2056eb2c8370674c200c87d5.png" src="../_images/024c7f6c9dd12d85aa697e79b1e88cf4319d844a2056eb2c8370674c200c87d5.png" />
 </div>
 </div>
 </section>
@@ -2214,14 +2158,14 @@ pyhgf : 0.0.10
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-pytensor  : 2.16.2
 arviz     : 0.16.1
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 jax       : 0.4.16
 matplotlib: 3.8.0
 pandas    : 2.0.3
+pytensor  : 2.16.2
 numpy     : 1.22.0
 pymc      : 5.8.2
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 seaborn   : 0.12.2
 
 Watermark: 2.4.3

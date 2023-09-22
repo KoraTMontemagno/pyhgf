@@ -516,7 +516,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1695372465.950703    2771 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1695391097.010382    2663 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -756,7 +756,7 @@ Adding 614 new observations.
 </div>
 </div>
 <section id="two-level-model">
-<h3>two-level model<a class="headerlink" href="#two-level-model" title="Permalink to this heading">#</a></h3>
+<h3>Two-level model<a class="headerlink" href="#two-level-model" title="Permalink to this heading">#</a></h3>
 <section id="creating-the-model">
 <h4>Creating the model<a class="headerlink" href="#creating-the-model" title="Permalink to this heading">#</a></h4>
 <div class="admonition note">
@@ -783,29 +783,13 @@ Adding 614 new observations.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_level_hgf</span><span class="p">:</span>
 
-    <span class="c1"># omegas priors</span>
+    <span class="c1"># Set a prior over the evolution rate at the first level.</span>
     <span class="n">omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
 
+    <span class="c1"># Call the pre-parametrized HGF distribution here.</span>
+    <span class="c1"># All parameters are set to their default value except omega_1, omega_2 and mu_1.</span>
     <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
-        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
-        <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span>
-            <span class="n">omega_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span>
-            <span class="n">continuous_precision</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
-            <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_1</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
-            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1e1</span><span class="p">,</span>
-            <span class="n">mu_1</span><span class="o">=</span><span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">omega_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">pi_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">mu_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">kappa_2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-        <span class="p">),</span>
+        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">mu_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -869,7 +853,7 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -890,9 +874,9 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 9 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 12 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -908,7 +892,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0c16c3de6acfd361eca3613db1ab9a20acf9cf23e45439af771c0a1a8743cedd.png" src="../_images/0c16c3de6acfd361eca3613db1ab9a20acf9cf23e45439af771c0a1a8743cedd.png" />
+<img alt="../_images/7a37cb5cf926a75bccadcf714a6b93900f44ffb66c38062440d0b943e2470e93.png" src="../_images/7a37cb5cf926a75bccadcf714a6b93900f44ffb66c38062440d0b943e2470e93.png" />
 </div>
 </div>
 </section>
@@ -959,7 +943,7 @@ Adding 614 new observations.
       dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/d4386bb5cc746e42dc89d534ee979b1ad2c0e854b3ec1057c6b9864c35f82567.png" src="../_images/d4386bb5cc746e42dc89d534ee979b1ad2c0e854b3ec1057c6b9864c35f82567.png" />
+<img alt="../_images/3ea971b8740fd2924538c6e54e85e58bfa41ee46600441a9b9e35dbb9111f140.png" src="../_images/3ea971b8740fd2924538c6e54e85e58bfa41ee46600441a9b9e35dbb9111f140.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -969,7 +953,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1184.8723, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1184.702, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -994,28 +978,13 @@ Adding 614 new observations.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">three_level_hgf</span><span class="p">:</span>
 
+    <span class="c1"># Set a prior over the evolution rate at the first level.</span>
     <span class="n">omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
 
+    <span class="c1"># Call the pre-parametrized HGF distribution here.</span>
+    <span class="c1"># All parameters are set to their default value except omega_1, omega_2, omega_3 and mu_1.</span>
     <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
-        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
-        <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span>
-            <span class="n">omega_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span>
-            <span class="n">omega_3</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span>
-            <span class="n">continuous_precision</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
-            <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_3</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_1</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
-            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1e1</span><span class="p">,</span>
-            <span class="n">pi_3</span><span class="o">=</span><span class="mf">1e1</span><span class="p">,</span>
-            <span class="n">mu_1</span><span class="o">=</span><span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">mu_3</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">kappa_2</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-        <span class="p">),</span>
+        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">omega_3</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">mu_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -1075,7 +1044,7 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:08&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:09&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1096,9 +1065,9 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 14 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 15 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -1114,7 +1083,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/bece12b4e61fb257b1fec22c63c0d53df3b9881f71b78f77f4bdd9859c9a16fe.png" src="../_images/bece12b4e61fb257b1fec22c63c0d53df3b9881f71b78f77f4bdd9859c9a16fe.png" />
+<img alt="../_images/a5fa8a937d9828f457a185d314683428e9749b62cd9ff5305b259696060e0d55.png" src="../_images/a5fa8a937d9828f457a185d314683428e9749b62cd9ff5305b259696060e0d55.png" />
 </div>
 </div>
 </section>
@@ -1159,7 +1128,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6bccda0c6f113aed4982ac251dbf8455885e7aa17b457d0874dece68541f352b.png" src="../_images/6bccda0c6f113aed4982ac251dbf8455885e7aa17b457d0874dece68541f352b.png" />
+<img alt="../_images/830418c4908fb154f1f5737ffe854afae8615448efae317b37581f9525c12685.png" src="../_images/830418c4908fb154f1f5737ffe854afae8615448efae317b37581f9525c12685.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1169,7 +1138,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1166.9987, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1166.7544, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1197,12 +1166,12 @@ pyhgf : 0.0.10
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-seaborn   : 0.12.2
-pymc      : 5.8.2
-jax       : 0.4.16
-matplotlib: 3.8.0
-arviz     : 0.16.1
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+matplotlib: 3.8.0
+pymc      : 5.8.2
+arviz     : 0.16.1
+seaborn   : 0.12.2
+jax       : 0.4.16
 
 Watermark: 2.4.3
 </pre></div>
@@ -1255,7 +1224,7 @@ Watermark: 2.4.3
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-parameters-with-mcmc-sampling">Learning parameters with MCMC sampling</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-level-model">two-level model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-level-model">Two-level model</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-model">Creating the model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-model">Visualizing the model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling">Sampling</a></li>

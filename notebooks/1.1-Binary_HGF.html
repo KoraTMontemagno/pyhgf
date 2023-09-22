@@ -521,7 +521,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1695372357.773877    2331 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1695390985.581921    2336 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -688,7 +688,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <section id="two-level-model">
-<h3>two-level model<a class="headerlink" href="#two-level-model" title="Permalink to this heading">#</a></h3>
+<h3>Two-level model<a class="headerlink" href="#two-level-model" title="Permalink to this heading">#</a></h3>
 <section id="creating-the-model">
 <h4>Creating the model<a class="headerlink" href="#creating-the-model" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
@@ -705,35 +705,18 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The data is being passed to the distribution when the instance is created.</p>
+<p>The data is being passed to the distribution when the instance is created, so we won’t use the <code class="docutils literal notranslate"><span class="pre">observed</span></code> argument in our PyMC model.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
 
+    <span class="c1"># Set a prior over the evolution rate at the second level.</span>
     <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
-        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
-        <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
-            <span class="n">continuous_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">mu_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">omega_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">rho_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">pi_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">mu_3</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">kappa_2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
+    <span class="c1"># Call the pre-parametrized HGF distribution here.</span>
+    <span class="c1"># All parameters are set to their default value, except omega_2.</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -813,9 +796,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 9 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 10 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -831,7 +814,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9cbe3c149d4ccc1a6b52d5e825c7a048e77305515a03c9292ddc3e0285ddbdcc.png" src="../_images/9cbe3c149d4ccc1a6b52d5e825c7a048e77305515a03c9292ddc3e0285ddbdcc.png" />
+<img alt="../_images/b6b09af80e361c40db971ba520e92ce66b2be02bf12d26bccaad791ecca41e65.png" src="../_images/b6b09af80e361c40db971ba520e92ce66b2be02bf12d26bccaad791ecca41e65.png" />
 </div>
 </div>
 </section>
@@ -880,7 +863,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/84275e89039cebcecc32e4fef1805412f5706ee1048661a496134661cc1d6ecc.png" src="../_images/84275e89039cebcecc32e4fef1805412f5706ee1048661a496134661cc1d6ecc.png" />
+<img alt="../_images/cf6d972be0b967d87905bce672b7105ec0531553b2b31878ec27f70cbf9b1592.png" src="../_images/cf6d972be0b967d87905bce672b7105ec0531553b2b31878ec27f70cbf9b1592.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -890,14 +873,14 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.5296, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.53006, dtype=float32)
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="three-level-model">
-<h3>three-level model<a class="headerlink" href="#three-level-model" title="Permalink to this heading">#</a></h3>
+<h3>Three-level model<a class="headerlink" href="#three-level-model" title="Permalink to this heading">#</a></h3>
 <section id="id6">
 <h4>Creating the model<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
@@ -912,38 +895,17 @@ Adding 320 new observations.
 </div>
 </div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The data is passed to the distribution when the instance is created.</p>
-</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">three_levels_binary_hgf</span><span class="p">:</span>
 
+     <span class="c1"># Set a prior over the evolution rate at the second and third levels.</span>
     <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
     <span class="n">omega_3</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_3&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
-        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
-        <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">omega_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span>
-            <span class="n">omega_3</span><span class="o">=</span><span class="n">omega_3</span><span class="p">,</span>
-            <span class="n">continuous_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-            <span class="n">binary_precision</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">rho_3</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">pi_3</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">mu_1</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">mu_3</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">kappa_2</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
+    <span class="c1"># Call the pre-parametrized HGF distribution here.</span>
+    <span class="c1"># All parameters are set to their default value except omega_2 and omega_3.</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_3</span><span class="o">=</span><span class="n">omega_3</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -958,7 +920,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7eb1e41dc318b3ca61b0f6019fa3d82a77fa4385d81d79444babb1fe950e1347.svg" src="../_images/7eb1e41dc318b3ca61b0f6019fa3d82a77fa4385d81d79444babb1fe950e1347.svg" /></div>
+<img alt="../_images/95ee7951fe67cfcede0a494dd6fbf41e0dd82e6d94572fdfd9760d8fa938b48e.svg" src="../_images/95ee7951fe67cfcede0a494dd6fbf41e0dd82e6d94572fdfd9760d8fa938b48e.svg" /></div>
 </div>
 </section>
 <section id="id8">
@@ -1002,7 +964,7 @@ Adding 320 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:08&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:09&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1023,9 +985,9 @@ Adding 320 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 14 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 17 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -1041,7 +1003,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1fb6c0653670973f7ba0a413e2b58ceed2724ea830b26721b5388c80b958c5a5.png" src="../_images/1fb6c0653670973f7ba0a413e2b58ceed2724ea830b26721b5388c80b958c5a5.png" />
+<img alt="../_images/4b50aad77d694656dbad6acb1b8ee89c2f61de4352891572af15747317dffcb2.png" src="../_images/4b50aad77d694656dbad6acb1b8ee89c2f61de4352891572af15747317dffcb2.png" />
 </div>
 </div>
 </section>
@@ -1091,7 +1053,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1e02dcf803947ea43d6de50ed9fd7ab52016a0ea061a7fbb5455226f89bc292a.png" src="../_images/1e02dcf803947ea43d6de50ed9fd7ab52016a0ea061a7fbb5455226f89bc292a.png" />
+<img alt="../_images/0836b673e4f5fbc567c58ef284ef64f7de7eeae6d79c8cf85e30f319e5425d31.png" src="../_images/0836b673e4f5fbc567c58ef284ef64f7de7eeae6d79c8cf85e30f319e5425d31.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1101,7 +1063,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.02713, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.01819, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1129,12 +1091,12 @@ pyhgf : 0.0.10
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-jax       : 0.4.16
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-matplotlib: 3.8.0
 seaborn   : 0.12.2
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 pymc      : 5.8.2
 arviz     : 0.16.1
+matplotlib: 3.8.0
+jax       : 0.4.16
 
 Watermark: 2.4.3
 </pre></div>
@@ -1187,14 +1149,14 @@ Watermark: 2.4.3
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-parameters-with-mcmc-sampling">Learning parameters with MCMC sampling</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-level-model">two-level model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-level-model">Two-level model</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-model">Creating the model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-model">Visualizing the model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling">Sampling</a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-learned-parameters">Using the learned parameters</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-level-model">three-level model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-level-model">Three-level model</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Creating the model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Visualizing the model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Sampling</a></li>

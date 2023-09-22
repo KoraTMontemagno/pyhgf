@@ -604,19 +604,16 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>input_data</strong></dt><dd><p>List of input data. When <cite>n</cite> models should be fitted, the list contains <cite>n</cite>
-1d Numpy arrays. By default, the associated time vector is the unit
-vector starting at <cite>0</cite>. A different time_steps vector can be passed to
-the <cite>time_steps</cite> argument.</p>
+1d Numpy arrays.</p>
 </dd>
 <dt><strong>time_steps</strong></dt><dd><p>List of 1d Numpy arrays containing the time_steps vectors for each input
-time series. If one of the list items is <cite>None</cite>, or if <cite>None</cite> is provided
-instead, the time vector will default to an integers vector starting at 0.</p>
+time series. By default, all time steps are set to <cite>1.0</cite>.</p>
 </dd>
-<dt><strong>model_type</strong></dt><dd><p>The model type to use (can be “continuous” or “binary”).</p>
+<dt><strong>model_type</strong></dt><dd><p>The model type to use (can be “continuous” or “binary”). Defaults to
+<cite>“continuous”</cite>.</p>
 </dd>
-<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
-<cite>None</cite>, the nodes hierarchy is not created and might be provided afterwards
-using <cite>add_nodes()</cite>.</p>
+<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>).
+Defaults to <cite>2</cite>.</p>
 </dd>
 <dt><strong>response_function</strong></dt><dd><p>The response function to use to compute the model surprise.</p>
 </dd>
@@ -657,7 +654,7 @@ response functions.</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad</span></code>(inputs, output_gradients)</p></td>
 <td><p>Gradient of the function.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_node</span></code>(omega_1, omega_2, omega_3, ...)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_node</span></code>([omega_1, omega_2, omega_3, ...])</p></td>
 <td><p>Convert inputs to symbolic variables.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_py_thunk</span></code>(node, storage_map, ...[, debug])</p></td>

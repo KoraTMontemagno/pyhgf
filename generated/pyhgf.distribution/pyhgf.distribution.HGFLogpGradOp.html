@@ -547,17 +547,15 @@ document.write(`
 vector. A different time vector can be passed to the <cite>time_steps</cite> argument.</p>
 </dd>
 <dt><strong>time_steps</strong></dt><dd><p>List of 1d Numpy arrays containing the time_steps vectors for each input
-time series. If one of the list items is <cite>None</cite>, or if <cite>None</cite> is provided
-instead, the time_steps vector will default to an integers vector starting
-at 0.</p>
+time series. By defaults, all time steps are set to <cite>1.0</cite></p>
 </dd>
-<dt><strong>model_type</strong></dt><dd><p>The model type to use (can be “continuous” or “binary”).</p>
+<dt><strong>model_type</strong></dt><dd><p>The model type to use (can be “continuous” or “binary”). Defaults to
+<cite>“continuous”</cite>.</p>
 </dd>
-<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
-<cite>None</cite>, the nodes hierarchy is not created and might be provided afterward
-using <cite>add_nodes()</cite>.</p>
+<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>).
+Defaults to <cite>2</cite>.</p>
 </dd>
-<dt><strong>response_function</strong></dt><dd><p>The response function to use to compute the model surprise.</p>
+<dt><strong>response_function</strong></dt><dd><p>The response function to use to compute the model’s surprise.</p>
 </dd>
 <dt><strong>response_function_parameters</strong></dt><dd><p>A list of tuples with the same length as the number of models. Each tuple
 contains additional data and parameters that can be accessible to the
