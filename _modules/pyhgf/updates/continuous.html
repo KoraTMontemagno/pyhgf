@@ -453,15 +453,13 @@ document.write(`
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
 
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Edges</span>
-<span class="kn">from</span> <span class="nn">pyhgf.updates.prediction.continuous</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">prediction_input_value_parent</span><span class="p">,</span>
-    <span class="n">prediction_value_parent</span><span class="p">,</span>
-    <span class="n">prediction_volatility_parent</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pyhgf.updates.prediction.continuous</span> <span class="kn">import</span> <span class="n">predict_mean</span><span class="p">,</span> <span class="n">predict_precision</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.prediction_error.continuous</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">prediction_error_input_value_parent</span><span class="p">,</span>
-    <span class="n">prediction_error_value_parent</span><span class="p">,</span>
-    <span class="n">prediction_error_volatility_parent</span><span class="p">,</span>
+    <span class="n">prediction_error_input_mean_value_parent</span><span class="p">,</span>
+    <span class="n">prediction_error_mean_value_parent</span><span class="p">,</span>
+    <span class="n">prediction_error_mean_volatility_parent</span><span class="p">,</span>
+    <span class="n">prediction_error_precision_value_parent</span><span class="p">,</span>
+    <span class="n">prediction_error_precision_volatility_parent</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -529,8 +527,13 @@ document.write(`
             <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
             <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
             <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
-                <span class="p">(</span><span class="n">pi_value_parent</span><span class="p">,</span> <span class="n">mu_value_parent</span><span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_value_parent</span><span class="p">(</span>
+                <span class="c1"># Estimate the precision of the posterior distribution</span>
+                <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">prediction_error_precision_value_parent</span><span class="p">(</span>
                     <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">value_parent_idx</span>
+                <span class="p">)</span>
+                <span class="c1"># Estimate the mean of the posterior distribution</span>
+                <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">prediction_error_mean_value_parent</span><span class="p">(</span>
+                    <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">value_parent_idx</span><span class="p">,</span> <span class="n">pi_value_parent</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Update this parent&#39;s parameters</span>
@@ -545,11 +548,17 @@ document.write(`
             <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
             <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
             <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
-                <span class="p">(</span>
-                    <span class="n">pi_volatility_parent</span><span class="p">,</span>
-                    <span class="n">mu_volatility_parent</span><span class="p">,</span>
-                <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_volatility_parent</span><span class="p">(</span>
+                <span class="c1"># Estimate the new precision of the volatility parent</span>
+                <span class="n">pi_volatility_parent</span> <span class="o">=</span> <span class="n">prediction_error_precision_volatility_parent</span><span class="p">(</span>
                     <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">volatility_parent_idx</span>
+                <span class="p">)</span>
+                <span class="c1"># Estimate the new mean of the volatility parent</span>
+                <span class="n">mu_volatility_parent</span> <span class="o">=</span> <span class="n">prediction_error_mean_volatility_parent</span><span class="p">(</span>
+                    <span class="n">attributes</span><span class="p">,</span>
+                    <span class="n">edges</span><span class="p">,</span>
+                    <span class="n">time_step</span><span class="p">,</span>
+                    <span class="n">volatility_parent_idx</span><span class="p">,</span>
+                    <span class="n">pi_volatility_parent</span><span class="p">,</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Update this parent&#39;s parameters</span>
@@ -624,7 +633,10 @@ document.write(`
     <span class="c1">########################</span>
     <span class="k">if</span> <span class="n">value_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">value_parent_idx</span> <span class="ow">in</span> <span class="n">value_parents_idxs</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">pihat_value_parent</span><span class="p">,</span> <span class="n">muhat_value_parent</span><span class="p">)</span> <span class="o">=</span> <span class="n">prediction_value_parent</span><span class="p">(</span>
+            <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">predict_mean</span><span class="p">(</span>
+                <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
+            <span class="p">)</span>
+            <span class="n">pihat_value_parent</span> <span class="o">=</span> <span class="n">predict_precision</span><span class="p">(</span>
                 <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
             <span class="p">)</span>
 
@@ -637,10 +649,10 @@ document.write(`
     <span class="c1">#############################</span>
     <span class="k">if</span> <span class="n">volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">volatility_parent_idx</span> <span class="ow">in</span> <span class="n">volatility_parents_idxs</span><span class="p">:</span>
-            <span class="p">(</span>
-                <span class="n">pihat_volatility_parent</span><span class="p">,</span>
-                <span class="n">muhat_volatility_parent</span><span class="p">,</span>
-            <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_volatility_parent</span><span class="p">(</span>
+            <span class="n">muhat_volatility_parent</span> <span class="o">=</span> <span class="n">predict_mean</span><span class="p">(</span>
+                <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">volatility_parent_idx</span>
+            <span class="p">)</span>
+            <span class="n">pihat_volatility_parent</span> <span class="o">=</span> <span class="n">predict_precision</span><span class="p">(</span>
                 <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">volatility_parent_idx</span>
             <span class="p">)</span>
 
@@ -715,11 +727,13 @@ document.write(`
             <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
             <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
             <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
-                <span class="p">(</span>
-                    <span class="n">pi_value_parent</span><span class="p">,</span>
-                    <span class="n">mu_value_parent</span><span class="p">,</span>
-                <span class="p">)</span> <span class="o">=</span> <span class="n">prediction_error_input_value_parent</span><span class="p">(</span>
+                <span class="c1"># Estimate the new precision of the value parent</span>
+                <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">prediction_error_precision_value_parent</span><span class="p">(</span>
                     <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">value_parent_idx</span>
+                <span class="p">)</span>
+                <span class="c1"># Estimate the new mean of the value parent</span>
+                <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">prediction_error_input_mean_value_parent</span><span class="p">(</span>
+                    <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">value_parent_idx</span><span class="p">,</span> <span class="n">pi_value_parent</span>
                 <span class="p">)</span>
 
                 <span class="c1"># update input node&#39;s parameters</span>
@@ -792,7 +806,10 @@ document.write(`
             <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
             <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
             <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
-                <span class="n">pihat_value_parent</span><span class="p">,</span> <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">prediction_input_value_parent</span><span class="p">(</span>
+                <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">predict_mean</span><span class="p">(</span>
+                    <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
+                <span class="p">)</span>
+                <span class="n">pihat_value_parent</span> <span class="o">=</span> <span class="n">predict_precision</span><span class="p">(</span>
                     <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">value_parent_idx</span>
                 <span class="p">)</span>
 
