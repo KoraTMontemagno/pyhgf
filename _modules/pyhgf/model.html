@@ -480,6 +480,12 @@ document.write(`
 <span class="sd">        network only has one input node.</span>
 <span class="sd">    model_type :</span>
 <span class="sd">        The model implemented (can be `&quot;continuous&quot;`, `&quot;binary&quot;` or `&quot;custom&quot;`).</span>
+<span class="sd">    update_type :</span>
+<span class="sd">        The type of update to perform for volatility coupling. Can be `&quot;eHGF&quot;`</span>
+<span class="sd">        (defaults) or `&quot;standard&quot;`. The eHGF update step was proposed as an alternative</span>
+<span class="sd">        to the original definition in that it starts by updating the mean and then the</span>
+<span class="sd">        precision of the parent node, which generally reduces the errors associated with</span>
+<span class="sd">        impossible parameter space and improves sampling.</span>
 <span class="sd">    n_levels :</span>
 <span class="sd">        The number of hierarchies in the model, including the input vector. Cannot be</span>
 <span class="sd">        less than 2.</span>
@@ -505,6 +511,7 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
+        <span class="n">update_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;eHGF&quot;</span><span class="p">,</span>
         <span class="n">initial_mean</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -581,6 +588,7 @@ document.write(`
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">=</span> <span class="n">model_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_type</span> <span class="o">=</span> <span class="n">update_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">=</span> <span class="n">n_levels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span>
