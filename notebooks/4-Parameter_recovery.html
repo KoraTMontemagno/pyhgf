@@ -548,11 +548,11 @@ if &#39;google.colab&#39; in sys.modules:
     
     <span class="c1"># Priors</span>
     <span class="c1"># ------</span>
-    <span class="n">omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
+    <span class="n">tonic_volatility_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
 
     <span class="c1"># The multi-HGF distribution</span>
     <span class="c1"># --------------------------</span>
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="o">=-</span><span class="mf">10.0</span><span class="p">))</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">tonic_volatility_1</span><span class="o">=</span><span class="n">tonic_volatility_1</span><span class="p">,</span> <span class="n">tonic_volatility_2</span><span class="o">=-</span><span class="mf">10.0</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -581,7 +581,7 @@ if &#39;google.colab&#39; in sys.modules:
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1696248827.285788    3152 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1696279535.791480    3122 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -610,7 +610,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:40&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:29&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -631,9 +631,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:31&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:21&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 72 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 51 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -649,7 +649,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b94daa007577711d868fc6c1867fce7c62a2049d7e9b02cb1eb1fcaaa2af854e.png" src="../_images/b94daa007577711d868fc6c1867fce7c62a2049d7e9b02cb1eb1fcaaa2af854e.png" />
+<img alt="../_images/a3c61d454e4d9f6864f36873287f7a94862131a9bb24281a332f2942ea872c40.png" src="../_images/a3c61d454e4d9f6864f36873287f7a94862131a9bb24281a332f2942ea872c40.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -691,74 +691,74 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
   <tbody>
     <tr>
       <th>omega_1[0]</th>
-      <td>-5.991</td>
-      <td>0.640</td>
-      <td>-7.144</td>
-      <td>-4.822</td>
-      <td>0.015</td>
+      <td>-5.975</td>
+      <td>0.655</td>
+      <td>-7.135</td>
+      <td>-4.761</td>
+      <td>0.014</td>
       <td>0.010</td>
-      <td>2015.0</td>
-      <td>1377.0</td>
+      <td>2243.0</td>
+      <td>1166.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[1]</th>
-      <td>-5.744</td>
-      <td>0.559</td>
-      <td>-6.817</td>
-      <td>-4.780</td>
-      <td>0.012</td>
-      <td>0.009</td>
-      <td>2160.0</td>
-      <td>1210.0</td>
+      <td>-5.755</td>
+      <td>0.524</td>
+      <td>-6.666</td>
+      <td>-4.688</td>
+      <td>0.011</td>
+      <td>0.007</td>
+      <td>2587.0</td>
+      <td>1470.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[2]</th>
-      <td>-5.120</td>
-      <td>0.583</td>
-      <td>-6.200</td>
-      <td>-4.031</td>
-      <td>0.011</td>
-      <td>0.008</td>
-      <td>2934.0</td>
-      <td>1448.0</td>
+      <td>-5.112</td>
+      <td>0.574</td>
+      <td>-6.280</td>
+      <td>-4.140</td>
+      <td>0.013</td>
+      <td>0.009</td>
+      <td>2129.0</td>
+      <td>1572.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[3]</th>
-      <td>-6.614</td>
-      <td>0.668</td>
-      <td>-7.737</td>
-      <td>-5.352</td>
-      <td>0.015</td>
-      <td>0.010</td>
-      <td>2377.0</td>
-      <td>1211.0</td>
+      <td>-6.567</td>
+      <td>0.662</td>
+      <td>-7.744</td>
+      <td>-5.346</td>
+      <td>0.019</td>
+      <td>0.013</td>
+      <td>1623.0</td>
+      <td>1050.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[4]</th>
-      <td>-5.439</td>
-      <td>0.599</td>
-      <td>-6.586</td>
-      <td>-4.369</td>
+      <td>-5.458</td>
+      <td>0.593</td>
+      <td>-6.521</td>
+      <td>-4.335</td>
       <td>0.013</td>
       <td>0.009</td>
-      <td>2213.0</td>
-      <td>1444.0</td>
+      <td>2161.0</td>
+      <td>1597.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[5]</th>
-      <td>-5.255</td>
-      <td>0.591</td>
-      <td>-6.417</td>
-      <td>-4.167</td>
-      <td>0.012</td>
+      <td>-5.240</td>
+      <td>0.616</td>
+      <td>-6.351</td>
+      <td>-4.064</td>
+      <td>0.013</td>
       <td>0.009</td>
-      <td>2375.0</td>
-      <td>1533.0</td>
+      <td>2386.0</td>
+      <td>1396.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -789,10 +789,10 @@ jaxlib: 0.4.16
 
 arviz     : 0.16.1
 numpy     : 1.22.0
+pymc      : 5.8.2
+matplotlib: 3.8.0
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 jax       : 0.4.16
-matplotlib: 3.8.0
-pymc      : 5.8.2
 
 Watermark: 2.4.3
 </pre></div>

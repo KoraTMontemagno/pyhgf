@@ -563,17 +563,10 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;hhgf_loglike&quot;</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="n">hgf_logp_op</span><span class="p">(</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">omega_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">omega_2</span><span class="o">=</span><span class="n">ω_2</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">continuous_input</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1e4</span><span class="p">),</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">binary_input</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">rho_1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">rho_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">pi_1</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">pi_2</span><span class="o">=</span><span class="mf">1e1</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">mu_1</span><span class="o">=</span><span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">mu_2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>            <span class="n">kappa_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">tonic_volatility_2</span><span class="o">=</span><span class="n">ω_2</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">precision_1</span><span class="o">=</span><span class="mf">1e4</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">precision_2</span><span class="o">=</span><span class="mf">1e1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">mean_1</span><span class="o">=</span><span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="p">),</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="p">)</span>
 </pre></div>
@@ -598,16 +591,19 @@ distribution as prior : ω_2 ~ N(-11, 2).</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>input_data</strong></dt><dd><p>List of input data. When <cite>n</cite> models should be fitted, the list contains <cite>n</cite>
-1d Numpy arrays.</p>
+1d Numpy arrays. By default, the associated time vector is the unit
+vector starting at <cite>0</cite>. A different time_steps vector can be passed to
+the <cite>time_steps</cite> argument.</p>
 </dd>
 <dt><strong>time_steps</strong></dt><dd><p>List of 1d Numpy arrays containing the time_steps vectors for each input
-time series. By default, all time steps are set to <cite>1.0</cite>.</p>
+time series. If one of the list items is <cite>None</cite>, or if <cite>None</cite> is provided
+instead, the time vector will default to an integers vector starting at 0.</p>
 </dd>
-<dt><strong>model_type</strong></dt><dd><p>The model type to use (can be “continuous” or “binary”). Defaults to
-<cite>“continuous”</cite>.</p>
+<dt><strong>model_type</strong></dt><dd><p>The model type to use (can be “continuous” or “binary”).</p>
 </dd>
-<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>).
-Defaults to <cite>2</cite>.</p>
+<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
+<cite>None</cite>, the nodes hierarchy is not created and might be provided afterwards
+using <cite>add_nodes()</cite>.</p>
 </dd>
 <dt><strong>response_function</strong></dt><dd><p>The response function to use to compute the model surprise.</p>
 </dd>
@@ -648,7 +644,7 @@ response functions.</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad</span></code>(inputs, output_gradients)</p></td>
 <td><p>Gradient of the function.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_node</span></code>([omega_1, omega_2, omega_3, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_node</span></code>([tonic_volatility_1, ...])</p></td>
 <td><p>Convert inputs to symbolic variables.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_py_thunk</span></code>(node, storage_map, ...[, debug])</p></td>

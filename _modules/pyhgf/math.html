@@ -454,9 +454,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 
-<div class="viewcode-block" id="gaussian_density"><a class="viewcode-back" href="../../generated/pyhgf.math/pyhgf.math.gaussian_density.html#pyhgf.math.gaussian_density">[docs]</a><span class="k">def</span> <span class="nf">gaussian_density</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">pi</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span>
+<div class="viewcode-block" id="gaussian_density"><a class="viewcode-back" href="../../generated/pyhgf.math/pyhgf.math.gaussian_density.html#pyhgf.math.gaussian_density">[docs]</a><span class="k">def</span> <span class="nf">gaussian_density</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">precision</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gaussian density as defined by mean and precision.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">pi</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">precision</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">precision</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="sigmoid"><a class="viewcode-back" href="../../generated/pyhgf.math/pyhgf.math.sigmoid.html#pyhgf.math.sigmoid">[docs]</a><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span>
@@ -469,7 +469,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="binary_surprise"><a class="viewcode-back" href="../../generated/pyhgf.math/pyhgf.math.binary_surprise.html#pyhgf.math.binary_surprise">[docs]</a><span class="k">def</span> <span class="nf">binary_surprise</span><span class="p">(</span>
-    <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">muhat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">expected_mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Surprise at a binary outcome.</span>
 
@@ -487,7 +487,7 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    x :</span>
 <span class="sd">        The outcome.</span>
-<span class="sd">    muhat :</span>
+<span class="sd">    expected_mean :</span>
 <span class="sd">        The mean of the Bernoulli distribution.</span>
 
 <span class="sd">    Returns</span>
@@ -499,17 +499,19 @@ document.write(`
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from pyhgf.binary import binary_surprise</span>
-<span class="sd">    &gt;&gt;&gt; binary_surprise(x=1.0, muhat=0.7)</span>
+<span class="sd">    &gt;&gt;&gt; binary_surprise(x=1.0, expected_mean=0.7)</span>
 <span class="sd">    `Array(0.35667497, dtype=float32, weak_type=True)`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">muhat</span><span class="p">),</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">-</span> <span class="n">muhat</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">expected_mean</span><span class="p">),</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">-</span> <span class="n">expected_mean</span><span class="p">)</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="gaussian_surprise"><a class="viewcode-back" href="../../generated/pyhgf.math/pyhgf.math.gaussian_surprise.html#pyhgf.math.gaussian_surprise">[docs]</a><span class="k">def</span> <span class="nf">gaussian_surprise</span><span class="p">(</span>
     <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
-    <span class="n">muhat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
-    <span class="n">pihat</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">expected_mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">expected_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Surprise at an outcome under a Gaussian prediction.</span>
 
@@ -527,9 +529,9 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    x :</span>
 <span class="sd">        The outcome.</span>
-<span class="sd">    muhat :</span>
+<span class="sd">    expected_mean :</span>
 <span class="sd">        The expected mean of the Gaussian distribution.</span>
-<span class="sd">    pihat :</span>
+<span class="sd">    expected_precision :</span>
 <span class="sd">        The expected precision of the Gaussian distribution.</span>
 
 <span class="sd">    Returns</span>
@@ -540,14 +542,14 @@ document.write(`
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from pyhgf.continuous import gaussian_surprise</span>
-<span class="sd">    &gt;&gt;&gt; gaussian_surprise(x=2.0, muhat=0.0, pihat=1.0)</span>
+<span class="sd">    &gt;&gt;&gt; gaussian_surprise(x=2.0, expected_mean=0.0, expected_precision=1.0)</span>
 <span class="sd">    `Array(2.9189386, dtype=float32, weak_type=True)`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
         <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-        <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pihat</span><span class="p">)</span>
-        <span class="o">+</span> <span class="n">pihat</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">muhat</span><span class="p">))</span>
+        <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">expected_precision</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">expected_precision</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">expected_mean</span><span class="p">))</span>
     <span class="p">)</span></div>
 
 

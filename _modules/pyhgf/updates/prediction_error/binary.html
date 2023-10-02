@@ -495,20 +495,22 @@ document.write(`
     <span class="c1"># Get the current expected precision for the volatility parent</span>
     <span class="c1"># The prediction sequence was triggered by the new observation so this value is</span>
     <span class="c1"># already in the node attributes</span>
-    <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+    <span class="n">expected_mean_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 
     <span class="c1"># Gather prediction errors from all child nodes if the parent has many children</span>
     <span class="c1"># This part corresponds to the sum of children for the multi-children situations</span>
     <span class="n">pe_children</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
-        <span class="n">vape_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+        <span class="n">vape_child</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
         <span class="n">pe_children</span> <span class="o">+=</span> <span class="p">(</span><span class="n">psi_child</span> <span class="o">*</span> <span class="n">vape_child</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi_value_parent</span>
 
     <span class="c1"># Estimate the new mean of the value parent</span>
-    <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">muhat_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
+    <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">expected_mean_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
 
     <span class="k">return</span> <span class="n">mu_value_parent</span></div>
 
@@ -545,20 +547,20 @@ document.write(`
     <span class="c1"># Get the current expected precision for the volatility parent</span>
     <span class="c1"># The prediction sequence was triggered by the new observation so this value is</span>
     <span class="c1"># already in the node attributes</span>
-    <span class="n">pihat_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+    <span class="n">expected_precision_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
 
     <span class="c1"># Gather precision updates from all child nodes if the parent has many children.</span>
     <span class="c1"># This part corresponds to the sum over children for the multi-children situations.</span>
     <span class="n">pi_children</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
-        <span class="n">pihat_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
-        <span class="n">pi_children</span> <span class="o">+=</span> <span class="n">psi_child</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pihat_child</span><span class="p">)</span>
+        <span class="n">expected_precision_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
+        <span class="n">pi_children</span> <span class="o">+=</span> <span class="n">psi_child</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">expected_precision_child</span><span class="p">)</span>
 
     <span class="c1"># Estimate new value for the precision of the value parent</span>
-    <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">pihat_value_parent</span> <span class="o">+</span> <span class="n">pi_children</span>
+    <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">expected_precision_value_parent</span> <span class="o">+</span> <span class="n">pi_children</span>
 
     <span class="k">return</span> <span class="n">pi_value_parent</span></div>
 
@@ -640,59 +642,60 @@ document.write(`
     <span class="c1"># Get the current expected mean for the value parent</span>
     <span class="c1"># The prediction sequence was triggered by the new observation so this value is</span>
     <span class="c1"># already in the node attributes</span>
-    <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+    <span class="n">expected_mean_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 
     <span class="c1"># Read parameters from the binary input</span>
     <span class="c1"># Currently, only one binary input can be child of the binary node</span>
     <span class="n">child_node_idx</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">eta0</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_node_idx</span><span class="p">][</span><span class="s2">&quot;eta0&quot;</span><span class="p">]</span>
     <span class="n">eta1</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_node_idx</span><span class="p">][</span><span class="s2">&quot;eta1&quot;</span><span class="p">]</span>
-    <span class="n">pihat</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_node_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+    <span class="n">expected_precision</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_node_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_node_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
     <span class="c1"># Compute the surprise, new mean and precision</span>
     <span class="n">mu_value_parent</span><span class="p">,</span> <span class="n">pi_value_parent</span><span class="p">,</span> <span class="n">surprise</span> <span class="o">=</span> <span class="n">cond</span><span class="p">(</span>
-        <span class="n">pihat</span> <span class="o">==</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+        <span class="n">expected_precision</span> <span class="o">==</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">input_surprise_inf</span><span class="p">,</span>
         <span class="n">input_surprise_reg</span><span class="p">,</span>
-        <span class="p">(</span><span class="n">pihat</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">muhat_value_parent</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">expected_precision</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">expected_mean_value_parent</span><span class="p">),</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pi_value_parent</span><span class="p">,</span> <span class="n">mu_value_parent</span><span class="p">,</span> <span class="n">surprise</span></div>
 
 
 <div class="viewcode-block" id="input_surprise_inf"><a class="viewcode-back" href="../../../../generated/pyhgf.updates.prediction_error.binary/pyhgf.updates.prediction_error.binary.input_surprise_inf.html#pyhgf.updates.prediction_error.binary.input_surprise_inf">[docs]</a><span class="k">def</span> <span class="nf">input_surprise_inf</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply special case if pihat is `jnp.inf` (just pass the value through).&quot;&quot;&quot;</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">op</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply special case if expected_precision is `jnp.inf`.&quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">expected_mean_value_parent</span> <span class="o">=</span> <span class="n">op</span>
     <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">value</span>
     <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span>
-    <span class="n">surprise</span> <span class="o">=</span> <span class="n">binary_surprise</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">muhat_value_parent</span><span class="p">)</span>
+    <span class="n">surprise</span> <span class="o">=</span> <span class="n">binary_surprise</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">expected_mean_value_parent</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">mu_value_parent</span><span class="p">,</span> <span class="n">pi_value_parent</span><span class="p">,</span> <span class="n">surprise</span></div>
 
 
 <div class="viewcode-block" id="input_surprise_reg"><a class="viewcode-back" href="../../../../generated/pyhgf.updates.prediction_error.binary/pyhgf.updates.prediction_error.binary.input_surprise_reg.html#pyhgf.updates.prediction_error.binary.input_surprise_reg">[docs]</a><span class="k">def</span> <span class="nf">input_surprise_reg</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the surprise, mu_value_parent and pi_value_parent.&quot;&quot;&quot;</span>
-    <span class="n">pihat</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">op</span>
+    <span class="n">expected_precision</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">expected_mean_value_parent</span> <span class="o">=</span> <span class="n">op</span>
 
     <span class="c1"># Likelihood under eta1</span>
-    <span class="n">und1</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">pihat</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">eta1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">und1</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">expected_precision</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">eta1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># Likelihood under eta0</span>
-    <span class="n">und0</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">pihat</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">eta0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">und0</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">expected_precision</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">value</span> <span class="o">-</span> <span class="n">eta0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># Eq. 39 in Mathys et al. (2014) (i.e., Bayes)</span>
     <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">muhat_value_parent</span>
+        <span class="n">expected_mean_value_parent</span>
         <span class="o">*</span> <span class="n">und1</span>
-        <span class="o">/</span> <span class="p">(</span><span class="n">muhat_value_parent</span> <span class="o">*</span> <span class="n">und1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">muhat_value_parent</span><span class="p">)</span> <span class="o">*</span> <span class="n">und0</span><span class="p">)</span>
+        <span class="o">/</span> <span class="p">(</span><span class="n">expected_mean_value_parent</span> <span class="o">*</span> <span class="n">und1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">expected_mean_value_parent</span><span class="p">)</span> <span class="o">*</span> <span class="n">und0</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">mu_value_parent</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">mu_value_parent</span><span class="p">))</span>
 
     <span class="c1"># Surprise</span>
     <span class="n">surprise</span> <span class="o">=</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-        <span class="n">muhat_value_parent</span> <span class="o">*</span> <span class="n">gaussian_density</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span>
-        <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">muhat_value_parent</span><span class="p">)</span> <span class="o">*</span> <span class="n">gaussian_density</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">pihat</span><span class="p">)</span>
+        <span class="n">expected_mean_value_parent</span> <span class="o">*</span> <span class="n">gaussian_density</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">expected_precision</span><span class="p">)</span>
+        <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">expected_mean_value_parent</span><span class="p">)</span>
+        <span class="o">*</span> <span class="n">gaussian_density</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">eta0</span><span class="p">,</span> <span class="n">expected_precision</span><span class="p">)</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">mu_value_parent</span><span class="p">,</span> <span class="n">pi_value_parent</span><span class="p">,</span> <span class="n">surprise</span></div>

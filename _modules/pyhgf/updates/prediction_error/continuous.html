@@ -487,21 +487,25 @@ document.write(`
     <span class="c1"># Get the current expected precision for the volatility parent</span>
     <span class="c1"># The prediction sequence was triggered by the new observation so this value is</span>
     <span class="c1"># already in the node attributes</span>
-    <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+    <span class="n">expected_mean_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 
     <span class="c1"># Gather prediction errors from all child nodes if the parent has many children</span>
     <span class="c1"># This part corresponds to the sum of children for the multi-children situations</span>
     <span class="n">pe_children</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
-        <span class="n">vape_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
-        <span class="n">pihat_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
-        <span class="n">pe_children</span> <span class="o">+=</span> <span class="p">(</span><span class="n">psi_child</span> <span class="o">*</span> <span class="n">pihat_child</span> <span class="o">*</span> <span class="n">vape_child</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi_value_parent</span>
+        <span class="n">vape_child</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">expected_precision_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
+        <span class="n">pe_children</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="n">psi_child</span> <span class="o">*</span> <span class="n">expected_precision_child</span> <span class="o">*</span> <span class="n">vape_child</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">pi_value_parent</span>
 
     <span class="c1"># Estimate the new mean of the value parent</span>
-    <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">muhat_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
+    <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">expected_mean_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
 
     <span class="k">return</span> <span class="n">mu_value_parent</span></div>
 
@@ -532,20 +536,20 @@ document.write(`
     <span class="c1"># Get the current expected mean for the volatility parent</span>
     <span class="c1"># The prediction sequence was triggered by the new observation so this value is</span>
     <span class="c1"># already in the node attributes</span>
-    <span class="n">pihat_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+    <span class="n">expected_precision_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
 
     <span class="c1"># Gather precision updates from all child nodes if the parent has many children.</span>
     <span class="c1"># This part corresponds to the sum over children for the multi-children situations.</span>
     <span class="n">pi_children</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
-        <span class="n">pihat_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
-        <span class="n">pi_children</span> <span class="o">+=</span> <span class="n">psi_child</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pihat_child</span>
+        <span class="n">expected_precision_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
+        <span class="n">pi_children</span> <span class="o">+=</span> <span class="n">psi_child</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">expected_precision_child</span>
 
     <span class="c1"># Estimate new value for the precision of the value parent</span>
-    <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">pihat_value_parent</span> <span class="o">+</span> <span class="n">pi_children</span>
+    <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">expected_precision_value_parent</span> <span class="o">+</span> <span class="n">pi_children</span>
 
     <span class="k">return</span> <span class="n">pi_value_parent</span></div>
 
@@ -578,42 +582,47 @@ document.write(`
     <span class="c1"># Get the current expected precision for the volatility parent</span>
     <span class="c1"># The prediction sequence was triggered by the new observation so this value is</span>
     <span class="c1"># already in the node attributes</span>
-    <span class="n">pihat_volatility_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+    <span class="n">expected_precision_volatility_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span>
+        <span class="s2">&quot;expected_precision&quot;</span>
+    <span class="p">]</span>
 
     <span class="c1"># gather volatility precisions from the child nodes</span>
     <span class="n">children_volatility_precision</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">kappas_children</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
-        <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;kappas_children&quot;</span><span class="p">],</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
         <span class="c1"># Look at the (optional) volatility parents and update logvol accordingly</span>
-        <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
+        <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">child_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">chld_vo_pa</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
                 <span class="n">edges</span><span class="p">[</span><span class="n">child_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
-                <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
+                <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">],</span>
             <span class="p">):</span>
-                <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">chld_vo_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">chld_vo_pa</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
 
         <span class="c1"># Compute new value for nu</span>
         <span class="n">nu_children</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
         <span class="n">nu_children</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu_children</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu_children</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
-        <span class="n">pihat_children</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
-        <span class="n">pi_children</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
+        <span class="n">expected_precision_children</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
+        <span class="n">pi_children</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span>
         <span class="n">vope_children</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
-        <span class="p">)</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">])</span>
+            <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
 
         <span class="n">children_volatility_precision</span> <span class="o">+=</span> <span class="p">(</span>
             <span class="mf">0.5</span>
-            <span class="o">*</span> <span class="p">(</span><span class="n">kappas_children</span> <span class="o">*</span> <span class="n">nu_children</span> <span class="o">*</span> <span class="n">pihat_children</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">kappas_children</span> <span class="o">*</span> <span class="n">nu_children</span> <span class="o">*</span> <span class="n">expected_precision_children</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
             <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">nu_children</span> <span class="o">*</span> <span class="n">pi_children</span><span class="p">))</span> <span class="o">*</span> <span class="n">vope_children</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="c1"># Estimate the new precision of the volatility parent</span>
-    <span class="n">pi_volatility_parent</span> <span class="o">=</span> <span class="n">pihat_volatility_parent</span> <span class="o">+</span> <span class="n">children_volatility_precision</span>
+    <span class="n">pi_volatility_parent</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">expected_precision_volatility_parent</span> <span class="o">+</span> <span class="n">children_volatility_precision</span>
+    <span class="p">)</span>
     <span class="n">pi_volatility_parent</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
         <span class="n">pi_volatility_parent</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">pi_volatility_parent</span>
     <span class="p">)</span>
@@ -643,50 +652,51 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    mu_volatility_parent :</span>
-<span class="sd">        The updated value for the mean of the value parent (:math:`\\pi`).</span>
+<span class="sd">        The updated value for the mean of the value parent (:math:`\\mu`).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get the current expected mean for the volatility parent</span>
     <span class="c1"># The prediction sequence was triggered by the new observation so this value is</span>
     <span class="c1"># already in the node attributes</span>
-    <span class="n">muhat_volatility_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+    <span class="n">expected_mean_volatility_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 
     <span class="c1"># Gather volatility prediction errors from the child nodes</span>
     <span class="n">children_volatility_prediction_error</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">kappas_children</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
-        <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;kappas_children&quot;</span><span class="p">],</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
         <span class="c1"># Look at the (optional) volatility parents and update logvol accordingly</span>
-        <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
+        <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">child_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">chld_vo_pa</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
                 <span class="n">edges</span><span class="p">[</span><span class="n">child_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
-                <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
+                <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">],</span>
             <span class="p">):</span>
-                <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">chld_vo_pa</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+                <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">chld_vo_pa</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
 
         <span class="c1"># Compute new value for nu</span>
         <span class="n">nu_children</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
         <span class="n">nu_children</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu_children</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu_children</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
-        <span class="n">pihat_children</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+        <span class="n">expected_precision_children</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
         <span class="n">vope_children</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
-        <span class="p">)</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">])</span>
+            <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">children_volatility_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
             <span class="mf">0.5</span>
             <span class="o">*</span> <span class="n">kappas_children</span>
             <span class="o">*</span> <span class="n">nu_children</span>
-            <span class="o">*</span> <span class="n">pihat_children</span>
+            <span class="o">*</span> <span class="n">expected_precision_children</span>
             <span class="o">/</span> <span class="n">pi_volatility_parent</span>
             <span class="o">*</span> <span class="n">vope_children</span>
         <span class="p">)</span>
 
     <span class="c1"># Estimate the new mean of the volatility parent</span>
     <span class="n">mu_volatility_parent</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">muhat_volatility_parent</span> <span class="o">+</span> <span class="n">children_volatility_prediction_error</span>
+        <span class="n">expected_mean_volatility_parent</span> <span class="o">+</span> <span class="n">children_volatility_prediction_error</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">mu_volatility_parent</span></div>
@@ -721,25 +731,25 @@ document.write(`
     <span class="c1"># Get the current expected mean for the volatility parent.</span>
     <span class="c1"># The prediction sequence was triggered by the new observation so this value is</span>
     <span class="c1"># already in the node attributes.</span>
-    <span class="n">muhat_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">]</span>
+    <span class="n">expected_mean_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 
     <span class="c1"># gather PE updates from other input nodes</span>
     <span class="c1"># in the case of a multivariate descendency</span>
     <span class="n">pe_children</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;psis_children&quot;</span><span class="p">],</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
         <span class="n">child_value_prediction_error</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">muhat_value_parent</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">expected_mean_value_parent</span>
         <span class="p">)</span>
-        <span class="n">pihat_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+        <span class="n">expected_precision_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
         <span class="n">pe_children</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="n">psi_child</span> <span class="o">*</span> <span class="n">pihat_child</span> <span class="o">*</span> <span class="n">child_value_prediction_error</span>
+            <span class="n">psi_child</span> <span class="o">*</span> <span class="n">expected_precision_child</span> <span class="o">*</span> <span class="n">child_value_prediction_error</span>
         <span class="p">)</span> <span class="o">/</span> <span class="n">pi_value_parent</span>
 
     <span class="c1"># Compute the new mean of the value parent</span>
-    <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">muhat_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
+    <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">expected_mean_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
 
     <span class="k">return</span> <span class="n">mu_value_parent</span></div>
 </pre></div>

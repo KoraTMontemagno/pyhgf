@@ -472,7 +472,7 @@ document.write(`
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axes</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plot the trajectories of the nodes&#39; sufficient statistics and surprise.</span>
 
-<span class="sd">    This function will plot :math:`\hat{mu}`, :math:`\¨hat{pi}` (converted into standard</span>
+<span class="sd">    This function will plot the expected mean and precision (converted into standard</span>
 <span class="sd">    deviation) and the surprise at each level of the node structure.</span>
 
 <span class="sd">    Parameters</span>
@@ -485,13 +485,13 @@ document.write(`
 <span class="sd">        If `True` plot each node&#39;s surprise together with sufficient statistics.</span>
 <span class="sd">        If `False`, only the input node&#39;s surprise is depicted.</span>
 <span class="sd">    show_current_state :</span>
-<span class="sd">        If `True`, plot the current states (:math:`\mu` and :math:`\pi`) on the top of</span>
-<span class="sd">        expected states (:math:`\hat{\mu} and :math:`\hat{\pi}). Defaults to `False`.</span>
+<span class="sd">        If `True`, plot the current mean and precision on the top of expected mean and</span>
+<span class="sd">        precision. Defaults to `False`.</span>
 <span class="sd">    show_observations :</span>
 <span class="sd">        If `True`, show the observations received from the child node(s). In the</span>
-<span class="sd">        situation of value coupled nodes, plot the mean :math:`\hat{\mu}` of the child</span>
-<span class="sd">        node(s). This feature is not supported in the situation of volatility coupling.</span>
-<span class="sd">        Defaults to `False`.</span>
+<span class="sd">        situation of value coupled nodes, plot the mean of the child node(s). This</span>
+<span class="sd">        feature is not supported in the situation of volatility coupling. Defaults to</span>
+<span class="sd">        `False`.</span>
 <span class="sd">    figsize :</span>
 <span class="sd">        The width and height of the figure. Defaults to `(18, 9)` for a two-level model,</span>
 <span class="sd">        or to `(18, 12)` for a three-level model.</span>
@@ -518,11 +518,11 @@ document.write(`
 <span class="sd">        hgf = HGF(</span>
 <span class="sd">            n_levels=3,</span>
 <span class="sd">            model_type=&quot;continuous&quot;,</span>
-<span class="sd">            initial_mu={&quot;1&quot;: 1.04, &quot;2&quot;: 1.0, &quot;3&quot;: 1.0},</span>
-<span class="sd">            initial_pi={&quot;1&quot;: 1e4, &quot;2&quot;: 1e1, &quot;3&quot;: 1e1},</span>
-<span class="sd">            omega={&quot;1&quot;: -13.0, &quot;2&quot;: -2.0, &quot;3&quot;: -2.0},</span>
-<span class="sd">            rho={&quot;1&quot;: 0.0, &quot;2&quot;: 0.0, &quot;3&quot;: 0.0},</span>
-<span class="sd">            kappas={&quot;1&quot;: 1.0, &quot;2&quot;: 1.0},</span>
+<span class="sd">            initial_mean={&quot;1&quot;: 1.04, &quot;2&quot;: 1.0, &quot;3&quot;: 1.0},</span>
+<span class="sd">            initial_precision={&quot;1&quot;: 1e4, &quot;2&quot;: 1e1, &quot;3&quot;: 1e1},</span>
+<span class="sd">            tonic_volatility={&quot;1&quot;: -13.0, &quot;2&quot;: -2.0, &quot;3&quot;: -2.0},</span>
+<span class="sd">            tonic_drift={&quot;1&quot;: 0.0, &quot;2&quot;: 0.0, &quot;3&quot;: 0.0},</span>
+<span class="sd">            volatility_coupling={&quot;1&quot;: 1.0, &quot;2&quot;: 1.0},</span>
 <span class="sd">        )</span>
 
 <span class="sd">        # Read USD-CHF data</span>
@@ -548,11 +548,11 @@ document.write(`
 <span class="sd">        three_levels_hgf = HGF(</span>
 <span class="sd">            n_levels=3,</span>
 <span class="sd">            model_type=&quot;binary&quot;,</span>
-<span class="sd">            initial_mu={&quot;1&quot;: .0, &quot;2&quot;: .5, &quot;3&quot;: 0.},</span>
-<span class="sd">            initial_pi={&quot;1&quot;: .0, &quot;2&quot;: 1e4, &quot;3&quot;: 1e1},</span>
-<span class="sd">            omega={&quot;1&quot;: None, &quot;2&quot;: -6.0, &quot;3&quot;: -2.0},</span>
-<span class="sd">            rho={&quot;1&quot;: None, &quot;2&quot;: 0.0, &quot;3&quot;: 0.0},</span>
-<span class="sd">            kappas={&quot;1&quot;: None, &quot;2&quot;: 1.0},</span>
+<span class="sd">            initial_mean={&quot;1&quot;: .0, &quot;2&quot;: .5, &quot;3&quot;: 0.},</span>
+<span class="sd">            initial_precision={&quot;1&quot;: .0, &quot;2&quot;: 1e4, &quot;3&quot;: 1e1},</span>
+<span class="sd">            tonic_volatility={&quot;1&quot;: None, &quot;2&quot;: -6.0, &quot;3&quot;: -2.0},</span>
+<span class="sd">            tonic_drift={&quot;1&quot;: None, &quot;2&quot;: 0.0, &quot;3&quot;: 0.0},</span>
+<span class="sd">            volatility_coupling={&quot;1&quot;: None, &quot;2&quot;: 1.0},</span>
 <span class="sd">            eta0=0.0,</span>
 <span class="sd">            eta1=1.0,</span>
 <span class="sd">            binary_precision = jnp.inf,</span>
@@ -651,20 +651,10 @@ document.write(`
     <span class="n">trajectories_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
         <span class="p">[</span>
             <span class="n">trajectories_df</span><span class="p">[[</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;observation_input_0&quot;</span><span class="p">,</span> <span class="s2">&quot;surprise&quot;</span><span class="p">]],</span>
-            <span class="n">trajectories_df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;hat&quot;</span><span class="p">),</span>
+            <span class="n">trajectories_df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;expected&quot;</span><span class="p">),</span>
         <span class="p">],</span>
         <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span>
-
-    <span class="c1"># rename columns with LateX expressions</span>
-    <span class="n">trajectories_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="sa">r</span><span class="s2">&quot;$\hat{\mu}_&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="si">}</span><span class="s2">$&quot;</span> <span class="k">if</span> <span class="s2">&quot;muhat&quot;</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="n">c</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">trajectories_df</span><span class="o">.</span><span class="n">columns</span>
-    <span class="p">]</span>
-    <span class="n">trajectories_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="sa">r</span><span class="s2">&quot;$\hat{\pi}_&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="si">}</span><span class="s2">$&quot;</span> <span class="k">if</span> <span class="s2">&quot;pihat&quot;</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="n">c</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">trajectories_df</span><span class="o">.</span><span class="n">columns</span>
-    <span class="p">]</span>
 
     <span class="n">correlation_mat</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
@@ -774,10 +764,9 @@ document.write(`
 <span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plot the sufficient statistics trajectories of a set of nodes.</span>
 
-<span class="sd">    This function will plot :math:`\hat{\mu}`, :math:`\hat{\pi}` (converted into</span>
-<span class="sd">    standard deviation) and the Gaussian surprise :math:`\mu` given :math:`\hat{\pi}`</span>
-<span class="sd">    and :math:`\hat{\mu}` at the previous time point. If `children_inputs` is `True`,</span>
-<span class="sd">    will also plot the children input (:math:`\mu` for value coupling and :math:`\pi`</span>
+<span class="sd">    This function will plot the mean and precision (converted into standard deviation)</span>
+<span class="sd">    and the Gaussian surprise after observing the input value. If `children_inputs` is</span>
+<span class="sd">    `True`, will also plot the children input (mean for value coupling and precision</span>
 <span class="sd">    for volatility coupling).</span>
 
 <span class="sd">    Parameters</span>
@@ -797,12 +786,12 @@ document.write(`
 <span class="sd">        as grey shadded area.</span>
 <span class="sd">    show_observations :</span>
 <span class="sd">        If `True`, show the observations received from the child node(s). In the</span>
-<span class="sd">        situation of value coupled nodes, plot the mean :math:`\hat{\mu}` of the child</span>
+<span class="sd">        situation of value coupled nodes, plot the expected mean of the child</span>
 <span class="sd">        node(s). This feature is not supported in the situation of volatility coupling.</span>
 <span class="sd">        Defaults to `False`.</span>
 <span class="sd">    show_current_state :</span>
-<span class="sd">        If `True`, plot the current states (:math:`\mu` and :math:`\pi`) on the top of</span>
-<span class="sd">        expected states (:math:`\hat{\mu} and :math:`\hat{\pi}). Defaults to `False`.</span>
+<span class="sd">        If `True`, plot the current states (mean and precision) on the top of</span>
+<span class="sd">        expected states (mean and precision). Defaults to `False`.</span>
 <span class="sd">    figsize :</span>
 <span class="sd">        The width and height of the figure. Defaults to `(18, 9)` for a two-level model,</span>
 <span class="sd">        or to `(18, 12)` for a three-level model.</span>
@@ -831,11 +820,11 @@ document.write(`
 <span class="sd">        hgf = HGF(</span>
 <span class="sd">            n_levels=3,</span>
 <span class="sd">            model_type=&quot;continuous&quot;,</span>
-<span class="sd">            initial_mu={&quot;1&quot;: 1.04, &quot;2&quot;: 1.0, &quot;3&quot;: 1.0},</span>
-<span class="sd">            initial_pi={&quot;1&quot;: 1e4, &quot;2&quot;: 1e1, &quot;3&quot;: 1e1},</span>
-<span class="sd">            omega={&quot;1&quot;: -13.0, &quot;2&quot;: -2.0, &quot;3&quot;: -2.0},</span>
-<span class="sd">            rho={&quot;1&quot;: 0.0, &quot;2&quot;: 0.0, &quot;3&quot;: 0.0},</span>
-<span class="sd">            kappas={&quot;1&quot;: 1.0, &quot;2&quot;: 1.0},</span>
+<span class="sd">            initial_mean={&quot;1&quot;: 1.04, &quot;2&quot;: 1.0, &quot;3&quot;: 1.0},</span>
+<span class="sd">            initial_precision={&quot;1&quot;: 1e4, &quot;2&quot;: 1e1, &quot;3&quot;: 1e1},</span>
+<span class="sd">            tonic_volatility={&quot;1&quot;: -13.0, &quot;2&quot;: -2.0, &quot;3&quot;: -2.0},</span>
+<span class="sd">            tonic_drift={&quot;1&quot;: 0.0, &quot;2&quot;: 0.0, &quot;3&quot;: 0.0},</span>
+<span class="sd">            volatility_coupling={&quot;1&quot;: 1.0, &quot;2&quot;: 1.0},</span>
 <span class="sd">        )</span>
 
 <span class="sd">        # Read USD-CHF data</span>
@@ -893,13 +882,13 @@ document.write(`
             <span class="c1"># ------------------------</span>
 
             <span class="c1"># extract sufficient statistics from the data frame</span>
-            <span class="n">mu</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span>
-            <span class="n">pi</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_expected_mean&quot;</span><span class="p">]</span>
+            <span class="n">precision</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_expected_precision&quot;</span><span class="p">]</span>
 
             <span class="c1"># plotting mean</span>
             <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                 <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                <span class="n">mu</span><span class="p">,</span>
+                <span class="n">mean</span><span class="p">,</span>
                 <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\hat{\mu}$&quot;</span><span class="p">,</span>
                 <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
                 <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -909,9 +898,9 @@ document.write(`
 
             <span class="c1"># plotting standard deviation</span>
             <span class="k">if</span> <span class="n">ci</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
-                <span class="n">y1</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">sd</span>
-                <span class="n">y2</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sd</span>
+                <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">precision</span><span class="p">)</span>
+                <span class="n">y1</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_expected_mean&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">sd</span>
+                <span class="n">y2</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_expected_mean&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sd</span>
 
                 <span class="c1"># if this is the value parent of an input node</span>
                 <span class="c1"># the CI should be treated diffeently</span>
@@ -937,11 +926,13 @@ document.write(`
 
                         <span class="c1"># compute  mu +/- sd at time t-1</span>
                         <span class="c1"># and use the sigmoid transform before plotting</span>
-                        <span class="n">mu_parent</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2">_muhat&quot;</span><span class="p">]</span>
-                        <span class="n">pi_parent</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2">_pihat&quot;</span><span class="p">]</span>
-                        <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi_parent</span><span class="p">)</span>
-                        <span class="n">y1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mu_parent</span> <span class="o">+</span> <span class="n">sd</span><span class="p">))</span>
-                        <span class="n">y2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mu_parent</span> <span class="o">-</span> <span class="n">sd</span><span class="p">))</span>
+                        <span class="n">mean_parent</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2">_expected_mean&quot;</span><span class="p">]</span>
+                        <span class="n">precision_parent</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span>
+                            <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2">_expected_precision&quot;</span>
+                        <span class="p">]</span>
+                        <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">precision_parent</span><span class="p">)</span>
+                        <span class="n">y1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mean_parent</span> <span class="o">+</span> <span class="n">sd</span><span class="p">))</span>
+                        <span class="n">y2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mean_parent</span> <span class="o">-</span> <span class="n">sd</span><span class="p">))</span>
 
                 <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
                     <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
@@ -958,13 +949,13 @@ document.write(`
             <span class="c1"># -----------------------</span>
             <span class="k">if</span> <span class="n">show_current_state</span><span class="p">:</span>
                 <span class="c1"># extract sufficient statistics from the data frame</span>
-                <span class="n">mu</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">]</span>
-                <span class="n">pi</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_pi&quot;</span><span class="p">]</span>
+                <span class="n">mean</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_mean&quot;</span><span class="p">]</span>
+                <span class="n">precision</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_precision&quot;</span><span class="p">]</span>
 
                 <span class="c1"># plotting mean</span>
                 <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                     <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                    <span class="n">mu</span><span class="p">,</span>
+                    <span class="n">mean</span><span class="p">,</span>
                     <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">,</span>
                     <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
                     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -974,11 +965,11 @@ document.write(`
 
                 <span class="c1"># plotting standard deviation</span>
                 <span class="k">if</span> <span class="n">ci</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
+                    <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">precision</span><span class="p">)</span>
                     <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
                         <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                        <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">sd</span><span class="p">,</span>
-                        <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sd</span><span class="p">,</span>
+                        <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_mean&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">sd</span><span class="p">,</span>
+                        <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_mean&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sd</span><span class="p">,</span>
                         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                         <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
                         <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -1004,7 +995,7 @@ document.write(`
                         <span class="k">if</span> <span class="n">child_idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
                             <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
                                 <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">],</span>
+                                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">_mean&quot;</span><span class="p">],</span>
                                 <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                                 <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Value child node - </span><span class="si">{</span><span class="n">ii</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -1013,7 +1004,7 @@ document.write(`
                             <span class="p">)</span>
                             <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                                 <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">_mu&quot;</span><span class="p">],</span>
+                                <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">child_idx</span><span class="si">}</span><span class="s2">_mean&quot;</span><span class="p">],</span>
                                 <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                                 <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
                                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>

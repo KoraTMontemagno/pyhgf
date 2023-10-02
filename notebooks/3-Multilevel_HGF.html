@@ -589,11 +589,13 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
     <span class="c1"># Priors</span>
     <span class="c1"># ------</span>
     <span class="n">offset</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
-    <span class="n">omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
+    <span class="n">tonic_volatility_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;tonic_volatility_1&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
 
     <span class="c1"># The multi-HGF distribution</span>
     <span class="c1"># --------------------------</span>
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="o">=-</span><span class="mf">10.0</span><span class="p">))</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span>
+        <span class="n">tonic_volatility_1</span><span class="o">=</span><span class="n">tonic_volatility_1</span><span class="p">,</span> <span class="n">tonic_volatility_2</span><span class="o">=-</span><span class="mf">10.0</span><span class="p">)</span>
+                <span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -605,7 +607,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/80333e18c081702aa2524ba46669174a13775eba505db4050df560c73c2bc71f.svg" src="../_images/80333e18c081702aa2524ba46669174a13775eba505db4050df560c73c2bc71f.svg" /></div>
+<img alt="../_images/fdbabab328fc5335523b02022da2d71f6b6a52d224f769f8a8295f4cff4d8579.svg" src="../_images/fdbabab328fc5335523b02022da2d71f6b6a52d224f769f8a8295f4cff4d8579.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -622,7 +624,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1696248658.622825    2915 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1696279410.692635    2878 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -651,9 +653,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 01:32&lt;00:00 Sampling chain 0, 1 divergences]
+      100.00% [2000/2000 01:08&lt;00:00 Sampling chain 0, 6 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 92 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 69 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -669,7 +671,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7b2be22b53297fb3d2fa1a6252e317c470cf681bf43278d527311a84770ca4e2.png" src="../_images/7b2be22b53297fb3d2fa1a6252e317c470cf681bf43278d527311a84770ca4e2.png" />
+<img alt="../_images/2d0f38918a377a0a6ba9c13d75c92efc5cb7df83a41da7918d8005b12c962a8b.png" src="../_images/2d0f38918a377a0a6ba9c13d75c92efc5cb7df83a41da7918d8005b12c962a8b.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -732,11 +734,11 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
     <span class="c1"># Priors</span>
     <span class="c1"># ------</span>
     <span class="n">offset</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
-    <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
+    <span class="n">tonic_volatility_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;tonic_volatility_2&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
 
     <span class="c1"># The multi-HGF distribution</span>
     <span class="c1"># --------------------------</span>
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">))</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">tonic_volatility_2</span><span class="o">=</span><span class="n">tonic_volatility_2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -750,7 +752,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1e24050d355d8daba3880d5de235ce505deeb7ab01bac8390f22ea7d417c67cc.svg" src="../_images/1e24050d355d8daba3880d5de235ce505deeb7ab01bac8390f22ea7d417c67cc.svg" /></div>
+<img alt="../_images/cc4aab51bbb7404720084226b94e05ea713bb0af0a6881db8634a3cc661d107a.svg" src="../_images/cc4aab51bbb7404720084226b94e05ea713bb0af0a6881db8634a3cc661d107a.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -794,9 +796,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:43&lt;00:00 Sampling chain 0, 137 divergences]
+      100.00% [2000/2000 00:29&lt;00:00 Sampling chain 0, 107 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 44 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 29 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
@@ -812,7 +814,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7e61cf09599e82f1c34fc6c0747f888bf2b8e2a8048a510a78dcba8a0c359764.png" src="../_images/7e61cf09599e82f1c34fc6c0747f888bf2b8e2a8048a510a78dcba8a0c359764.png" />
+<img alt="../_images/5a83629847534d4945aeb3455cc8e339bf86bbf5592d633f17ebe5ab9492a43a.png" src="../_images/5a83629847534d4945aeb3455cc8e339bf86bbf5592d633f17ebe5ab9492a43a.png" />
 </div>
 </div>
 </section>
@@ -839,12 +841,12 @@ pyhgf : 0.0.10
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-jax       : 0.4.16
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 pymc      : 5.8.2
 matplotlib: 3.8.0
 numpy     : 1.22.0
 arviz     : 0.16.1
+jax       : 0.4.16
 
 Watermark: 2.4.3
 </pre></div>

@@ -678,8 +678,8 @@ document.write(`
         <span class="n">hgf</span><span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span>
             <span class="n">children_idxs</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
             <span class="n">value_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">pi</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;pi_1&quot;</span><span class="p">],</span>
-            <span class="n">mu</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;mu_1&quot;</span><span class="p">],</span>
+            <span class="n">precision</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;precision_1&quot;</span><span class="p">],</span>
+            <span class="n">mean</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_1&quot;</span><span class="p">],</span>
         <span class="p">)</span>
 
     <span class="c1"># add the continuous parent node</span>
@@ -688,9 +688,9 @@ document.write(`
             <span class="n">children_idxs</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
             <span class="o">+</span> <span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">],</span>
             <span class="n">value_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">mu</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;mu_2&quot;</span><span class="p">],</span>
-            <span class="n">pi</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;pi_2&quot;</span><span class="p">],</span>
-            <span class="n">omega</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;omega_2&quot;</span><span class="p">],</span>
+            <span class="n">mean</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_2&quot;</span><span class="p">],</span>
+            <span class="n">precision</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;precision_2&quot;</span><span class="p">],</span>
+            <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;tonic_volatility_2&quot;</span><span class="p">],</span>
         <span class="p">)</span>
 
     <span class="c1"># add the higher level volatility parents</span>
@@ -701,9 +701,9 @@ document.write(`
             <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">]</span>
         <span class="p">],</span>
         <span class="n">volatility_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">mu</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;mu_3&quot;</span><span class="p">],</span>
-        <span class="n">pi</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;pi_3&quot;</span><span class="p">],</span>
-        <span class="n">omega</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;omega_3&quot;</span><span class="p">],</span>
+        <span class="n">mean</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_3&quot;</span><span class="p">],</span>
+        <span class="n">precision</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;precision_3&quot;</span><span class="p">],</span>
+        <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;tonic_volatility_3&quot;</span><span class="p">],</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">hgf</span></div>
@@ -923,7 +923,7 @@ document.write(`
             <span class="p">[</span>
                 <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">var</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indexes</span>
-                <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="s2">&quot;pi&quot;</span><span class="p">,</span> <span class="s2">&quot;muhat&quot;</span><span class="p">,</span> <span class="s2">&quot;pihat&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;precision&quot;</span><span class="p">,</span> <span class="s2">&quot;expected_mean&quot;</span><span class="p">,</span> <span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
             <span class="p">]</span>
         <span class="p">)</span>
     <span class="p">)</span>
@@ -940,19 +940,19 @@ document.write(`
         <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">continuous_parents_idxs</span><span class="p">:</span>
             <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
                 <span class="n">x</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-                <span class="n">muhat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">],</span>
-                <span class="n">pihat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">],</span>
+                <span class="n">expected_mean</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">],</span>
+                <span class="n">expected_precision</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">],</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">],</span>
-                <span class="n">muhat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;muhat&quot;</span><span class="p">],</span>
-                <span class="n">pihat</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;pihat&quot;</span><span class="p">],</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+                <span class="n">expected_mean</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">],</span>
+                <span class="n">expected_precision</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">],</span>
             <span class="p">)</span>
 
         <span class="c1"># fill with nans when the model cannot fit</span>
         <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-            <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">surprise</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">surprise</span>
         <span class="p">)</span>
         <span class="n">structure_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">surprise</span>
 

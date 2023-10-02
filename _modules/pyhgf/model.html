@@ -493,8 +493,9 @@ document.write(`
 <span class="sd">        The attributes of the probabilistic nodes.</span>
 <span class="sd">    .. note::</span>
 <span class="sd">        The parameter structure also incorporate the value and volatility coupling</span>
-<span class="sd">        strenght with children and parents (i.e. `&quot;psis_parents&quot;`, `&quot;psis_children&quot;`,</span>
-<span class="sd">        `&quot;kappas_parents&quot;`, `&quot;kappas_children&quot;`).</span>
+<span class="sd">        strenght with children and parents (i.e. `&quot;value_coupling_parents&quot;`,</span>
+<span class="sd">        `&quot;value_coupling_children&quot;`, `&quot;volatility_coupling_parents&quot;`,</span>
+<span class="sd">        `&quot;volatility_coupling_children&quot;`).</span>
 <span class="sd">    verbose : bool</span>
 <span class="sd">        Verbosity level.</span>
 
@@ -504,27 +505,27 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_levels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-        <span class="n">initial_mu</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">initial_mean</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="n">initial_pi</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">initial_precision</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="n">continuous_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e4</span><span class="p">,</span>
-        <span class="n">omega</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">tonic_volatility</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span>
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="n">kappas</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+        <span class="n">volatility_coupling</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
         <span class="n">eta0</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">eta1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">binary_precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-        <span class="n">rho</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">tonic_drift</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -541,43 +542,39 @@ document.write(`
 <span class="sd">        eta1 :</span>
 <span class="sd">            The second categorical value of the binary node. Defaults to `0.0`. Only</span>
 <span class="sd">            relevant if `model_type=&quot;binary&quot;`.</span>
-<span class="sd">        initial_mu :</span>
-<span class="sd">            A dictionary containing the initial values for the :math:`\\mu` parameter at</span>
-<span class="sd">            different levels of the hierarchy. Defaults set to `0.0` at all levels.</span>
-<span class="sd">        initial_pi :</span>
-<span class="sd">            A dictionary containing the initial values for the :math:`\\pi` parameter at</span>
-<span class="sd">            different levels of the hierarchy. Pis values encode the precision of the</span>
-<span class="sd">            values at each level (Var = 1/pi) Defaults are set to `1.0` at all levels.</span>
-<span class="sd">        kappas :</span>
-<span class="sd">            A dictionary containing the initial values for the :math:`\\kappa` parameter</span>
-<span class="sd">            at different levels of the hierarchy. Kappa represents the phasic part of</span>
+<span class="sd">        initial_mean :</span>
+<span class="sd">            A dictionary containing the initial values for the initial mean at</span>
+<span class="sd">            different levels of the hierarchy. Defaults set to `0.0`.</span>
+<span class="sd">        initial_precision :</span>
+<span class="sd">            A dictionary containing the initial values for the initial precision at</span>
+<span class="sd">            different levels of the hierarchy. Defaults set to `1.0`.</span>
+<span class="sd">        volatility_coupling :</span>
+<span class="sd">            A dictionary containing the initial values for the volatility coupling</span>
+<span class="sd">            at different levels of the hierarchy. This represents the phasic part of</span>
 <span class="sd">            the variance (the part that is affected by the parent nodes) and will</span>
 <span class="sd">            define the strength of the connection between the node and the parent</span>
-<span class="sd">            node. Often fixed to `1`. Defaults are set to `1` at all levels.</span>
+<span class="sd">            node. Defaults set to `1.0`.</span>
 <span class="sd">        model_type : str</span>
 <span class="sd">            The model type to use (can be `&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
 <span class="sd">        n_levels :</span>
 <span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
 <span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward.</span>
 <span class="sd">            Defaults to `2` for a 2-level HGF.</span>
-<span class="sd">        omega :</span>
-<span class="sd">            A dictionary containing the initial values for the :math:`\\omega` parameter</span>
-<span class="sd">            at different levels of the hierarchy. :math:`\\omega` represents the tonic</span>
+<span class="sd">        tonic_volatility :</span>
+<span class="sd">            A dictionary containing the initial values for the tonic volatility</span>
+<span class="sd">            at different levels of the hierarchy. This represents the tonic</span>
 <span class="sd">            part of the variance (the part that is not affected by the parent node).</span>
-<span class="sd">            Defaults are set to `-3.0` at all levels. This parameter is only required</span>
-<span class="sd">            for Gaussian Random Walk nodes.</span>
+<span class="sd">            Defaults are set to `-3.0`.</span>
 <span class="sd">        continuous_precision :</span>
 <span class="sd">            The expected precision of the continuous input node. Default to `1e4`. Only</span>
 <span class="sd">            relevant if `model_type=&quot;continuous&quot;`.</span>
 <span class="sd">        binary_precision :</span>
 <span class="sd">            The precision of the binary input node. Default to `jnp.inf`. Only relevant</span>
 <span class="sd">            if `model_type=&quot;binary&quot;`.</span>
-<span class="sd">        rho :</span>
-<span class="sd">            A dictionary containing the initial values for the :math:`\\rho` parameter</span>
-<span class="sd">            at different levels of the hierarchy. Rho represents the drift of the random</span>
-<span class="sd">            walk. This parameter is only required for Gaussian Random Walk nodes.</span>
-<span class="sd">            Defaults set all entries to `0.0` according to the number of required</span>
-<span class="sd">            levels.</span>
+<span class="sd">        tonic_drift :</span>
+<span class="sd">            A dictionary containing the initial values for the tonic drift</span>
+<span class="sd">            at different levels of the hierarchy. This represents the drift of the</span>
+<span class="sd">            random walk. Defaults set all entries to `0.0` (no drift).</span>
 <span class="sd">        verbose :</span>
 <span class="sd">            The verbosity of the methods for model creation and fitting. Defaults to</span>
 <span class="sd">            `True`.</span>
@@ -629,10 +626,14 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span>
                 <span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="n">value_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-                <span class="n">mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-                <span class="n">pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-                <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span> <span class="k">else</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span> <span class="k">else</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="n">mean</span><span class="o">=</span><span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                <span class="n">precision</span><span class="o">=</span><span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span>
+                <span class="k">else</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span>
+                <span class="k">else</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="c1">#########</span>
@@ -641,20 +642,20 @@ document.write(`
             <span class="k">if</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span>
                     <span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">volatility_coupling</span><span class="o">=</span><span class="n">kappas</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-                    <span class="n">mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="n">volatility_coupling</span><span class="o">=</span><span class="n">volatility_coupling</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                    <span class="n">mean</span><span class="o">=</span><span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="n">precision</span><span class="o">=</span><span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span>
                     <span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                     <span class="n">value_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-                    <span class="n">mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="n">mean</span><span class="o">=</span><span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="n">precision</span><span class="o">=</span><span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
                 <span class="p">)</span>
 
             <span class="c1">#########</span>
@@ -663,11 +664,11 @@ document.write(`
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span>
                     <span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                    <span class="n">volatility_coupling</span><span class="o">=</span><span class="n">kappas</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">mu</span><span class="o">=</span><span class="n">initial_mu</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-                    <span class="n">pi</span><span class="o">=</span><span class="n">initial_pi</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-                    <span class="n">omega</span><span class="o">=</span><span class="n">omega</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-                    <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                    <span class="n">volatility_coupling</span><span class="o">=</span><span class="n">volatility_coupling</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="n">mean</span><span class="o">=</span><span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                    <span class="n">precision</span><span class="o">=</span><span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                    <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                    <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
                 <span class="p">)</span>
 
             <span class="c1"># initialize the model so it is ready to receive new observations</span>
@@ -950,14 +951,14 @@ document.write(`
 
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
             <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">continuous_parameters</span><span class="p">[</span><span class="s2">&quot;continuous_precision&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">continuous_parameters</span><span class="p">[</span><span class="s2">&quot;continuous_precision&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
             <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_precision&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_precision&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;eta0&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;eta1&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
@@ -975,7 +976,7 @@ document.write(`
                     <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]]</span>
                     <span class="o">*</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span>
                 <span class="p">),</span>
-                <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                     <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]]</span>
                     <span class="o">*</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span>
                 <span class="p">),</span>
@@ -1016,14 +1017,14 @@ document.write(`
                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">])</span>
                     <span class="p">],</span>
                     <span class="s2">&quot;n_categories&quot;</span><span class="p">:</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">],</span>
-                    <span class="s2">&quot;pi_1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-                    <span class="s2">&quot;pi_2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-                    <span class="s2">&quot;pi_3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-                    <span class="s2">&quot;mu_1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                    <span class="s2">&quot;mu_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;mu_3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                    <span class="s2">&quot;omega_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
-                    <span class="s2">&quot;omega_3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
+                    <span class="s2">&quot;precision_1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                    <span class="s2">&quot;precision_2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                    <span class="s2">&quot;precision_3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                    <span class="s2">&quot;mean_1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">&quot;mean_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">&quot;mean_3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">&quot;tonic_volatility_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
+                    <span class="s2">&quot;tonic_volatility_3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
                 <span class="p">}</span>
                 <span class="n">implied_binary_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">binary_parameters</span><span class="p">)</span>
 
@@ -1039,10 +1040,10 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">children_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">value_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">pi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
-        <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">tonic_volatility</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
+        <span class="n">tonic_drift</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a value parent to a given set of nodes.</span>
@@ -1054,16 +1055,16 @@ document.write(`
 <span class="sd">        value_coupling :</span>
 <span class="sd">            The value_coupling between the child and parent node. This is will be</span>
 <span class="sd">            appended to the `psis` parameters in the parent and child node(s).</span>
-<span class="sd">        mu :</span>
+<span class="sd">        mean :</span>
 <span class="sd">            The mean of the Gaussian distribution. This value is passed both to the</span>
 <span class="sd">            current and expected states.</span>
-<span class="sd">        pi :</span>
-<span class="sd">            The precision of the Gaussian distribution (inverse variance). This</span>
-<span class="sd">            value is passed both to the current and expected states.</span>
-<span class="sd">        omega :</span>
+<span class="sd">        precision :</span>
+<span class="sd">            The precision of the Gaussian distribution (inverse variance). This value is</span>
+<span class="sd">            passed both to the current and expected states.</span>
+<span class="sd">        tonic_volatility :</span>
 <span class="sd">            The tonic part of the variance (the variance that is not inherited from</span>
 <span class="sd">            volatility parent(s)).</span>
-<span class="sd">        rho :</span>
+<span class="sd">        tonic_drift :</span>
 <span class="sd">            The drift of the random walk. Defaults to `0.0` (no drift).</span>
 <span class="sd">        additional_parameters :</span>
 <span class="sd">            Add more custom parameters to the node.</span>
@@ -1078,16 +1079,18 @@ document.write(`
 
         <span class="c1"># parent&#39;s parameter</span>
         <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span>
-            <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span>
-            <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">pi</span><span class="p">,</span>
-            <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pi</span><span class="p">,</span>
-            <span class="s2">&quot;kappas_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;psis_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">value_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))),</span>
-            <span class="s2">&quot;psis_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">,</span>
-            <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">,</span>
+            <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">mean</span><span class="p">,</span>
+            <span class="s2">&quot;expected_mean&quot;</span><span class="p">:</span> <span class="n">mean</span><span class="p">,</span>
+            <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+            <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+            <span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;value_coupling_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span>
+                <span class="n">value_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">tonic_volatility</span><span class="p">,</span>
+            <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># add more parameters (optional)</span>
@@ -1115,7 +1118,7 @@ document.write(`
                     <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set the value coupling strength</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">value_coupling</span><span class="p">,)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">value_coupling</span><span class="p">,)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># append new index</span>
                 <span class="n">new_value_parents_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">parent_idx</span><span class="p">,)</span>
@@ -1126,7 +1129,7 @@ document.write(`
                     <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set the value coupling strength</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">value_coupling</span><span class="p">,)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">value_coupling</span><span class="p">,)</span>
 
         <span class="c1"># convert the list back to a tuple</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">edges_as_list</span><span class="p">)</span>
@@ -1137,10 +1140,10 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">children_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">volatility_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">mu</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">pi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">omega</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
-        <span class="n">rho</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">tonic_volatility</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
+        <span class="n">tonic_drift</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a volatility parent to a given set of nodes.</span>
@@ -1152,16 +1155,16 @@ document.write(`
 <span class="sd">        volatility_coupling :</span>
 <span class="sd">            The volatility coupling between the child and parent node. This is will be</span>
 <span class="sd">            appended to the `kappas` parameters in the parent and child node(s).</span>
-<span class="sd">        mu :</span>
+<span class="sd">        mean :</span>
 <span class="sd">            The mean of the Gaussian distribution. This value is passed both to the</span>
 <span class="sd">            current and expected states.</span>
-<span class="sd">        pi :</span>
+<span class="sd">        precision :</span>
 <span class="sd">            The precision of the Gaussian distribution (inverse variance). This</span>
 <span class="sd">            value is passed both to the current and expected states.</span>
-<span class="sd">        omega :</span>
+<span class="sd">        tonic_volatility :</span>
 <span class="sd">            The tonic part of the variance (the variance that is not inherited from</span>
 <span class="sd">            volatility parent(s)).</span>
-<span class="sd">        rho :</span>
+<span class="sd">        tonic_drift :</span>
 <span class="sd">            The drift of the random walk. Defaults to `0.0` (no drift).</span>
 <span class="sd">        additional_parameters :</span>
 <span class="sd">            Add more custom parameters to the node.</span>
@@ -1176,18 +1179,18 @@ document.write(`
 
         <span class="c1"># parent&#39;s parameter</span>
         <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span>
-            <span class="s2">&quot;muhat&quot;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span>
-            <span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">pi</span><span class="p">,</span>
-            <span class="s2">&quot;pihat&quot;</span><span class="p">:</span> <span class="n">pi</span><span class="p">,</span>
-            <span class="s2">&quot;kappas_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">mean</span><span class="p">,</span>
+            <span class="s2">&quot;expected_mean&quot;</span><span class="p">:</span> <span class="n">mean</span><span class="p">,</span>
+            <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+            <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+            <span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span>
                 <span class="n">volatility_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))</span>
             <span class="p">),</span>
-            <span class="s2">&quot;kappas_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;psis_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;psis_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;omega&quot;</span><span class="p">:</span> <span class="n">omega</span><span class="p">,</span>
-            <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="n">rho</span><span class="p">,</span>
+            <span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;value_coupling_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">tonic_volatility</span><span class="p">,</span>
+            <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># add more parameters (optional)</span>
@@ -1217,7 +1220,9 @@ document.write(`
                     <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set the value coupling strength</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">volatility_coupling</span><span class="p">,)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="n">volatility_coupling</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># append new index</span>
                 <span class="n">new_volatility_parents_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">parent_idx</span><span class="p">,)</span>
@@ -1228,7 +1233,9 @@ document.write(`
                     <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set the value coupling strength</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">volatility_coupling</span><span class="p">,)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">volatility_coupling</span><span class="p">,</span>
+                <span class="p">)</span>
 
         <span class="c1"># convert the list back to a tuple</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">edges_as_list</span><span class="p">)</span>

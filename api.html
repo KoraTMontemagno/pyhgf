@@ -549,7 +549,7 @@ document.write(`
 <td><p>Update the mean and precision of the value parent of a binary input node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.updates.prediction_error.binary/pyhgf.updates.prediction_error.binary.input_surprise_inf.html#pyhgf.updates.prediction_error.binary.input_surprise_inf" title="pyhgf.updates.prediction_error.binary.input_surprise_inf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_surprise_inf</span></code></a>(op)</p></td>
-<td><p>Apply special case if pihat is <cite>jnp.inf</cite> (just pass the value through).</p></td>
+<td><p>Apply special case if expected_precision is <cite>jnp.inf</cite>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.updates.prediction_error.binary/pyhgf.updates.prediction_error.binary.input_surprise_reg.html#pyhgf.updates.prediction_error.binary.input_surprise_reg" title="pyhgf.updates.prediction_error.binary.input_surprise_reg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_surprise_reg</span></code></a>(op)</p></td>
 <td><p>Compute the surprise, mu_value_parent and pi_value_parent.</p></td>
@@ -627,7 +627,7 @@ embedded in models using PyMC&gt;=5.0.0.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.distribution/pyhgf.distribution.hgf_logp.html#pyhgf.distribution.hgf_logp" title="pyhgf.distribution.hgf_logp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hgf_logp</span></code></a>([omega_1, omega_2, omega_3, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.distribution/pyhgf.distribution.hgf_logp.html#pyhgf.distribution.hgf_logp" title="pyhgf.distribution.hgf_logp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hgf_logp</span></code></a>([tonic_volatility_1, ...])</p></td>
 <td><p>HGF log-probability given input data, response function and parameters.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.distribution/pyhgf.distribution.HGFLogpGradOp.html#pyhgf.distribution.HGFLogpGradOp" title="pyhgf.distribution.HGFLogpGradOp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGFLogpGradOp</span></code></a>([input_data, time_steps, ...])</p></td>
@@ -650,7 +650,7 @@ and create a standard node structure for these models.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGF</span></code></a>([n_levels, model_type, initial_mu, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGF</span></code></a>([n_levels, model_type, initial_mean, ...])</p></td>
 <td><p>The two-level and three-level Hierarchical Gaussian Filters (HGF).</p></td>
 </tr>
 </tbody>
@@ -739,16 +739,16 @@ least the HGF instance as input after observation and returning surprise.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.math/pyhgf.math.gaussian_density.html#pyhgf.math.gaussian_density" title="pyhgf.math.gaussian_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_density</span></code></a>(x, mu, pi)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.math/pyhgf.math.gaussian_density.html#pyhgf.math.gaussian_density" title="pyhgf.math.gaussian_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_density</span></code></a>(x, mean, precision)</p></td>
 <td><p>Gaussian density as defined by mean and precision.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.math/pyhgf.math.sigmoid.html#pyhgf.math.sigmoid" title="pyhgf.math.sigmoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sigmoid</span></code></a>(x[, lower_bound, upper_bound])</p></td>
 <td><p>Logistic sigmoid function.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.math/pyhgf.math.binary_surprise.html#pyhgf.math.binary_surprise" title="pyhgf.math.binary_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_surprise</span></code></a>(x, muhat)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.math/pyhgf.math.binary_surprise.html#pyhgf.math.binary_surprise" title="pyhgf.math.binary_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binary_surprise</span></code></a>(x, expected_mean)</p></td>
 <td><p>Surprise at a binary outcome.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.math/pyhgf.math.gaussian_surprise.html#pyhgf.math.gaussian_surprise" title="pyhgf.math.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(x, muhat, pihat)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.math/pyhgf.math.gaussian_surprise.html#pyhgf.math.gaussian_surprise" title="pyhgf.math.gaussian_surprise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_surprise</span></code></a>(x, expected_mean, ...)</p></td>
 <td><p>Surprise at an outcome under a Gaussian prediction.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.math/pyhgf.math.dirichlet_kullback_leibler.html#pyhgf.math.dirichlet_kullback_leibler" title="pyhgf.math.dirichlet_kullback_leibler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dirichlet_kullback_leibler</span></code></a>(alpha_1, alpha_2)</p></td>

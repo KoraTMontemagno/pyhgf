@@ -506,16 +506,16 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_continuous_hgf</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">initial_mu</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
-    <span class="n">initial_pi</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
-    <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">13.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">}</span>
+    <span class="n">initial_mean</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+    <span class="n">initial_precision</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
+    <span class="n">tonic_volatility</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">13.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">}</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1696248542.338627    2636 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1696279330.858827    2662 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -595,12 +595,246 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 <p>Node parameters that are highly correlated across time are likely to indicate that the model did not learn hierarchical structure in the data but instead overfitted on some components. One way to quickly check the parameters nodes correlation is to use the <code class="docutils literal notranslate"><span class="pre">plot_correlation</span></code> function embedded in the HGF class.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_continuous_hgf</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>time_steps</th>
+      <th>time</th>
+      <th>observation_input_0</th>
+      <th>x_1_mean</th>
+      <th>x_1_precision</th>
+      <th>x_1_expected_mean</th>
+      <th>x_1_expected_precision</th>
+      <th>x_2_mean</th>
+      <th>x_2_precision</th>
+      <th>x_2_expected_mean</th>
+      <th>x_2_expected_precision</th>
+      <th>x_1_surprise</th>
+      <th>x_2_surprise</th>
+      <th>surprise</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0357</td>
+      <td>1.035700</td>
+      <td>19778.964844</td>
+      <td>1.035700</td>
+      <td>9778.963867</td>
+      <td>-0.001314</td>
+      <td>4.252140</td>
+      <td>0.000000</td>
+      <td>4.249257</td>
+      <td>-3.675056</td>
+      <td>0.195570</td>
+      <td>-3.479486</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>1.0319</td>
+      <td>1.034387</td>
+      <td>28933.611328</td>
+      <td>1.035700</td>
+      <td>18933.611328</td>
+      <td>-0.003787</td>
+      <td>2.703979</td>
+      <td>-0.001314</td>
+      <td>2.698975</td>
+      <td>-3.868714</td>
+      <td>0.422511</td>
+      <td>-3.446203</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.0</td>
+      <td>3.0</td>
+      <td>1.0359</td>
+      <td>1.034794</td>
+      <td>37163.828125</td>
+      <td>1.034387</td>
+      <td>27163.826172</td>
+      <td>-0.007860</td>
+      <td>1.986858</td>
+      <td>-0.003787</td>
+      <td>1.979568</td>
+      <td>-4.154776</td>
+      <td>0.577515</td>
+      <td>-3.577260</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.0</td>
+      <td>4.0</td>
+      <td>1.0343</td>
+      <td>1.034682</td>
+      <td>44304.710938</td>
+      <td>1.034794</td>
+      <td>34304.710938</td>
+      <td>-0.013363</td>
+      <td>1.574824</td>
+      <td>-0.007860</td>
+      <td>1.565822</td>
+      <td>-4.298397</td>
+      <td>0.694757</td>
+      <td>-3.603640</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.0</td>
+      <td>5.0</td>
+      <td>1.0303</td>
+      <td>1.033811</td>
+      <td>50320.484375</td>
+      <td>1.034682</td>
+      <td>40320.484375</td>
+      <td>-0.019145</td>
+      <td>1.307572</td>
+      <td>-0.013363</td>
+      <td>1.298150</td>
+      <td>-3.996188</td>
+      <td>0.788490</td>
+      <td>-3.207698</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>609</th>
+      <td>1.0</td>
+      <td>610.0</td>
+      <td>0.7885</td>
+      <td>0.800528</td>
+      <td>26619.257812</td>
+      <td>0.807765</td>
+      <td>16619.257812</td>
+      <td>2.387948</td>
+      <td>0.809132</td>
+      <td>2.276093</td>
+      <td>0.765613</td>
+      <td>-0.856241</td>
+      <td>1.057268</td>
+      <td>0.201027</td>
+    </tr>
+    <tr>
+      <th>610</th>
+      <td>1.0</td>
+      <td>611.0</td>
+      <td>0.7889</td>
+      <td>0.796069</td>
+      <td>26081.226562</td>
+      <td>0.800528</td>
+      <td>16081.225586</td>
+      <td>2.372368</td>
+      <td>0.810420</td>
+      <td>2.387948</td>
+      <td>0.729273</td>
+      <td>-2.836663</td>
+      <td>1.076880</td>
+      <td>-1.759783</td>
+    </tr>
+    <tr>
+      <th>611</th>
+      <td>1.0</td>
+      <td>612.0</td>
+      <td>0.7889</td>
+      <td>0.793310</td>
+      <td>25979.875000</td>
+      <td>0.796069</td>
+      <td>15979.875977</td>
+      <td>2.309972</td>
+      <td>0.816933</td>
+      <td>2.372368</td>
+      <td>0.730320</td>
+      <td>-3.509923</td>
+      <td>1.077496</td>
+      <td>-2.432426</td>
+    </tr>
+    <tr>
+      <th>612</th>
+      <td>1.0</td>
+      <td>613.0</td>
+      <td>0.7876</td>
+      <td>0.791141</td>
+      <td>26323.269531</td>
+      <td>0.793310</td>
+      <td>16323.270508</td>
+      <td>2.241168</td>
+      <td>0.818676</td>
+      <td>2.309972</td>
+      <td>0.735605</td>
+      <td>-3.665148</td>
+      <td>1.074211</td>
+      <td>-2.590937</td>
+    </tr>
+    <tr>
+      <th>613</th>
+      <td>1.0</td>
+      <td>614.0</td>
+      <td>0.8241</td>
+      <td>0.803403</td>
+      <td>26878.765625</td>
+      <td>0.791141</td>
+      <td>16878.765625</td>
+      <td>2.798789</td>
+      <td>0.696797</td>
+      <td>2.241168</td>
+      <td>0.737018</td>
+      <td>5.219889</td>
+      <td>1.186095</td>
+      <td>6.405984</td>
+    </tr>
+  </tbody>
+</table>
+<p>614 rows × 14 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_continuous_hgf</span><span class="o">.</span><span class="n">plot_correlations</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d7a142c34f46b99eef97aa0574589a84247fb54096e4023a0ad016dfecc3e597.png" src="../_images/d7a142c34f46b99eef97aa0574589a84247fb54096e4023a0ad016dfecc3e597.png" />
+<img alt="../_images/f00ae33ca92749663621eed1791dff09f4803d0f8a3b3eb2400534e7fb71e8de.png" src="../_images/f00ae33ca92749663621eed1791dff09f4803d0f8a3b3eb2400534e7fb71e8de.png" />
 </div>
 </div>
 </section>
@@ -615,9 +849,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">three_levels_continuous_hgf</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">initial_mu</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.04</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
-    <span class="n">initial_pi</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
-    <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">13.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">}</span>
+    <span class="n">initial_mean</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.04</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+    <span class="n">initial_precision</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
+    <span class="n">tonic_volatility</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">13.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">}</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -695,9 +929,9 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 <span class="n">three_levels_continuous_hgf_bis</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">initial_mu</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.04</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
-    <span class="n">initial_pi</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
-    <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">13.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">},</span>
+    <span class="n">initial_mean</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.04</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+    <span class="n">initial_precision</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
+    <span class="n">tonic_volatility</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">13.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">},</span>
 <span class="p">)</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -783,12 +1017,14 @@ Adding 614 new observations.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_level_hgf</span><span class="p">:</span>
 
     <span class="c1"># Set a prior over the evolution rate at the first level.</span>
-    <span class="n">omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">tonic_volatility_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;tonic_volatility_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
 
     <span class="c1"># Call the pre-parametrized HGF distribution here.</span>
     <span class="c1"># All parameters are set to their default value except omega_1, omega_2 and mu_1.</span>
     <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
-        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">mu_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span>
+            <span class="n">tonic_volatility_1</span><span class="o">=</span><span class="n">tonic_volatility_1</span><span class="p">,</span> <span class="n">tonic_volatility_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">mean_1</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -808,7 +1044,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/be901d153279018d939bb3b2f2ea86560ca727a0d6a30255c8b3e0915025a74c.svg" src="../_images/be901d153279018d939bb3b2f2ea86560ca727a0d6a30255c8b3e0915025a74c.svg" /></div>
+<img alt="../_images/0747ca4d2db1d73075db0036fa2d7adb40e86a06d3c587c73103c1d2a5698bb6.svg" src="../_images/0747ca4d2db1d73075db0036fa2d7adb40e86a06d3c587c73103c1d2a5698bb6.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -830,7 +1066,7 @@ Adding 614 new observations.
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (2 chains in 1 job)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_1]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [tonic_volatility_1]
 </pre></div>
 </div>
 <div class="output text_html">
@@ -852,7 +1088,7 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -873,9 +1109,9 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 13 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 8 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -891,7 +1127,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3beefeea24da60c06392f61e51a6aa0087b8db263a28fc2bafeff187e2c69597.png" src="../_images/3beefeea24da60c06392f61e51a6aa0087b8db263a28fc2bafeff187e2c69597.png" />
+<img alt="../_images/dbe73d3d7b09f723bf485c35688ed3e16d2fa4814f3b414cadad2ab6ee9e81c1.png" src="../_images/dbe73d3d7b09f723bf485c35688ed3e16d2fa4814f3b414cadad2ab6ee9e81c1.png" />
 </div>
 </div>
 </section>
@@ -900,7 +1136,7 @@ Adding 614 new observations.
 <p>We can see from the density distributions that the most probable values for <span class="math notranslate nohighlight">\(\omega_{1}\)</span> are found around <code class="docutils literal notranslate"><span class="pre">-7</span></code>. To get an idea of the belief trajectories that are implied by such parameters, we can fit the model again using the most likely value directly from the sample:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">omega_1</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">)[</span><span class="s2">&quot;mean&quot;</span><span class="p">][</span><span class="s2">&quot;omega_1&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tonic_volatility_1</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">)[</span><span class="s2">&quot;mean&quot;</span><span class="p">][</span><span class="s2">&quot;tonic_volatility_1&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -910,9 +1146,9 @@ Adding 614 new observations.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">initial_mu</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
-    <span class="n">initial_pi</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
-    <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">omega_1</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">})</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
+    <span class="n">initial_mean</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+    <span class="n">initial_precision</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
+    <span class="n">tonic_volatility</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">tonic_volatility_1</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">})</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
         <span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span>
     <span class="p">)</span>
 </pre></div>
@@ -942,7 +1178,7 @@ Adding 614 new observations.
       dtype=object)
 </pre></div>
 </div>
-<img alt="../_images/b72271a09933132a1e9d3cbadb1b8510abc9c0af61a2ce9a6c00b2cc1e551bef.png" src="../_images/b72271a09933132a1e9d3cbadb1b8510abc9c0af61a2ce9a6c00b2cc1e551bef.png" />
+<img alt="../_images/05e9e40cbd35d12c1991cbb81f0b913cae351985ffef28fd29ed6b52fa0a53fa.png" src="../_images/05e9e40cbd35d12c1991cbb81f0b913cae351985ffef28fd29ed6b52fa0a53fa.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -952,7 +1188,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1184.73, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1184.7832, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -978,12 +1214,15 @@ Adding 614 new observations.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">three_level_hgf</span><span class="p">:</span>
 
     <span class="c1"># Set a prior over the evolution rate at the first level.</span>
-    <span class="n">omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">tonic_volatility_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;tonic_volatility_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
 
     <span class="c1"># Call the pre-parametrized HGF distribution here.</span>
     <span class="c1"># All parameters are set to their default value except omega_1, omega_2, omega_3 and mu_1.</span>
     <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
-        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_1</span><span class="o">=</span><span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">omega_3</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">mu_1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span>
+            <span class="n">tonic_volatility_1</span><span class="o">=</span><span class="n">tonic_volatility_1</span><span class="p">,</span> <span class="n">tonic_volatility_2</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span>
+            <span class="n">tonic_volatility_3</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">mean_1</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -999,7 +1238,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/be901d153279018d939bb3b2f2ea86560ca727a0d6a30255c8b3e0915025a74c.svg" src="../_images/be901d153279018d939bb3b2f2ea86560ca727a0d6a30255c8b3e0915025a74c.svg" /></div>
+<img alt="../_images/0747ca4d2db1d73075db0036fa2d7adb40e86a06d3c587c73103c1d2a5698bb6.svg" src="../_images/0747ca4d2db1d73075db0036fa2d7adb40e86a06d3c587c73103c1d2a5698bb6.svg" /></div>
 </div>
 </section>
 <section id="id7">
@@ -1021,7 +1260,7 @@ Adding 614 new observations.
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (2 chains in 1 job)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_1]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [tonic_volatility_1]
 </pre></div>
 </div>
 <div class="output text_html">
@@ -1043,7 +1282,7 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:10&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1064,9 +1303,9 @@ Adding 614 new observations.
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 17 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 10 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -1082,7 +1321,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/dcd8525ade3a1c3869d83f76b92146a58edf2ad8e99f83321f50ca6b04b84e84.png" src="../_images/dcd8525ade3a1c3869d83f76b92146a58edf2ad8e99f83321f50ca6b04b84e84.png" />
+<img alt="../_images/c7ceac47371b99b6bb4e711172fa29d4e5b347286449df023d716a0ca46a003b.png" src="../_images/c7ceac47371b99b6bb4e711172fa29d4e5b347286449df023d716a0ca46a003b.png" />
 </div>
 </div>
 </section>
@@ -1090,7 +1329,7 @@ Adding 614 new observations.
 <h4>Using the learned parameters<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">omega_1</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">three_level_hgf_idata</span><span class="p">)[</span><span class="s2">&quot;mean&quot;</span><span class="p">][</span><span class="s2">&quot;omega_1&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tonic_volatility_1</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">three_level_hgf_idata</span><span class="p">)[</span><span class="s2">&quot;mean&quot;</span><span class="p">][</span><span class="s2">&quot;tonic_volatility_1&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1100,9 +1339,9 @@ Adding 614 new observations.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">initial_mu</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
-    <span class="n">initial_pi</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
-    <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">omega_1</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">})</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
+    <span class="n">initial_mean</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">timeserie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+    <span class="n">initial_precision</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
+    <span class="n">tonic_volatility</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">tonic_volatility_1</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">})</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
         <span class="n">input_data</span><span class="o">=</span><span class="n">timeserie</span>
     <span class="p">)</span>
 </pre></div>
@@ -1127,7 +1366,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7be1df03c99ff2636927f66b7025104ebd781502bc8c487756e39d17201778e5.png" src="../_images/7be1df03c99ff2636927f66b7025104ebd781502bc8c487756e39d17201778e5.png" />
+<img alt="../_images/b7820858fd06c8908d9309a3cdb78af7a2f2f8ad873c6eb6f3dfe941641eb9a0.png" src="../_images/b7820858fd06c8908d9309a3cdb78af7a2f2f8ad873c6eb6f3dfe941641eb9a0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1137,7 +1376,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1166.7188, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1166.7275, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1165,12 +1404,12 @@ pyhgf : 0.0.10
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-jax       : 0.4.16
 seaborn   : 0.13.0
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+jax       : 0.4.16
 arviz     : 0.16.1
-pymc      : 5.8.2
 matplotlib: 3.8.0
+pymc      : 5.8.2
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 
 Watermark: 2.4.3
 </pre></div>

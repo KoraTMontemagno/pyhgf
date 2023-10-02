@@ -479,7 +479,7 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    muhat :</span>
+<span class="sd">    expected_mean :</span>
 <span class="sd">        The expected value for the mean of the value parent (:math:`\\hat{\\mu}`).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -487,21 +487,21 @@ document.write(`
     <span class="n">value_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span>
 
     <span class="c1"># Get the drift rate from the node</span>
-    <span class="n">driftrate</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span>
+    <span class="n">driftrate</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;tonic_drift&quot;</span><span class="p">]</span>
 
     <span class="c1"># Look at the (optional) value parents for this node</span>
     <span class="c1"># and update the drift rate accordingly</span>
     <span class="k">if</span> <span class="n">value_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">value_parent_idx</span><span class="p">,</span> <span class="n">psi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="n">value_parents_idxs</span><span class="p">,</span>
-            <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;psis_parents&quot;</span><span class="p">],</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">],</span>
         <span class="p">):</span>
-            <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+            <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
 
     <span class="c1"># Compute the new expected mean this node</span>
-    <span class="n">muhat</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
+    <span class="n">expected_mean</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
 
-    <span class="k">return</span> <span class="n">muhat</span></div>
+    <span class="k">return</span> <span class="n">expected_mean</span></div>
 
 
 <div class="viewcode-block" id="predict_precision"><a class="viewcode-back" href="../../../../generated/pyhgf.updates.prediction.continuous/pyhgf.updates.prediction.continuous.predict_precision.html#pyhgf.updates.prediction.continuous.predict_precision">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
@@ -525,7 +525,7 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    pihat :</span>
+<span class="sd">    expected_precision :</span>
 <span class="sd">        The expected value for the mean of the value parent (:math:`\\hat{\\pi}`).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -533,25 +533,25 @@ document.write(`
     <span class="n">volatility_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
 
     <span class="c1"># Get the log volatility from the node</span>
-    <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;omega&quot;</span><span class="p">]</span>
+    <span class="n">logvol</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">]</span>
 
     <span class="c1"># Look at the (optional) volatility parents</span>
     <span class="c1"># and update the log volatility accordingly</span>
     <span class="k">if</span> <span class="n">volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">volatility_parents_idx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="n">volatility_parents_idxs</span><span class="p">,</span>
-            <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;kappas_parents&quot;</span><span class="p">],</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">],</span>
         <span class="p">):</span>
-            <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span>
+            <span class="n">logvol</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
 
     <span class="c1"># Estimate new nu</span>
     <span class="n">nu</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvol</span><span class="p">)</span>
     <span class="n">new_nu</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nu</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
     <span class="c1"># Estimate the new expected precision for the node</span>
-    <span class="n">pihat</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">)</span>
+    <span class="n">expected_precision</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_nu</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">pihat</span></div>
+    <span class="k">return</span> <span class="n">expected_precision</span></div>
 </pre></div>
 
                 </article>
