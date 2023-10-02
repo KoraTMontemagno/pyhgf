@@ -520,7 +520,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1696247253.739265    2319 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1696247720.207981    2425 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -730,7 +730,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0d547960d6c0cacb00155a6e657ec6784e1521e51a5fa0e376d8929e28e74702.svg" src="../_images/0d547960d6c0cacb00155a6e657ec6784e1521e51a5fa0e376d8929e28e74702.svg" /></div>
+<img alt="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" src="../_images/1a15384e5f028f47e4d386892b3055a6b0fcef2726014a94595bf012b0ff7162.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -753,6 +753,195 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_2]
+</pre></div>
+</div>
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 1, 0 divergences]
+    </div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 7 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;omega_2&quot;</span><span class="p">]);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/75632e36ffdb4425bc6fedc2e70dc8a45a33d7aa26d019329087fec7be7b4082.png" src="../_images/75632e36ffdb4425bc6fedc2e70dc8a45a33d7aa26d019329087fec7be7b4082.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="using-the-learned-parameters">
+<h3>Using the learned parameters<a class="headerlink" href="#using-the-learned-parameters" title="Permalink to this heading">#</a></h3>
+<p>To visualize how the model would behave under the most probable values, we average the <span class="math notranslate nohighlight">\(\omega_{2}\)</span> samples and use this value in a new model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">omega_2</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">)[</span><span class="s2">&quot;mean&quot;</span><span class="p">][</span><span class="s2">&quot;omega_2&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
+    <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">initial_mu</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+    <span class="n">initial_pi</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+    <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">omega_2</span><span class="p">},</span>
+    <span class="n">rho</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+    <span class="n">kappas</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
+        <span class="n">input_data</span><span class="o">=</span><span class="n">u</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a binary Hierarchical Gaussian Filter with 2 levels.
+... Create the update sequence from the network structure.
+... Create the belief propagation function.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+Adding 320 new observations.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2ee9c8bcfd6f94b42f51123af6cbb584064cf23086e4c0e59ef2f6210d2a7d04.png" src="../_images/2ee9c8bcfd6f94b42f51123af6cbb584064cf23086e4c0e59ef2f6210d2a7d04.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">surprise</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.53, dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="three-level-model">
+<h3>Three-level model<a class="headerlink" href="#three-level-model" title="Permalink to this heading">#</a></h3>
+<section id="id6">
+<h4>Creating the model<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
+    <span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">u</span><span class="p">],</span>
+    <span class="n">response_function</span><span class="o">=</span><span class="n">first_level_binary_surprise</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">three_levels_binary_hgf</span><span class="p">:</span>
+
+     <span class="c1"># Set a prior over the evolution rate at the second and third levels.</span>
+    <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">omega_3</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_3&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Call the pre-parametrized HGF distribution here.</span>
+    <span class="c1"># All parameters are set to their default value except omega_2 and omega_3.</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_3</span><span class="o">=</span><span class="n">omega_3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id7">
+<h4>Visualizing the model<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">three_levels_binary_hgf</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/832aed6f92e9125f90f24905e60d89318a80a5ee6a557f95bdf4ff4a51bec9e7.svg" src="../_images/832aed6f92e9125f90f24905e60d89318a80a5ee6a557f95bdf4ff4a51bec9e7.svg" /></div>
+</div>
+</section>
+<section id="id8">
+<h4>Sampling<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">three_levels_binary_hgf</span><span class="p">:</span>
+    <span class="n">three_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (2 chains in 1 job)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_2, omega_3]
 </pre></div>
 </div>
 <div class="output text_html">
@@ -807,202 +996,13 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;omega_2&quot;</span><span class="p">]);</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/784ad7f7a3ae51185fbb77c69942202c191506159a86a22851b3644365f86cd2.png" src="../_images/784ad7f7a3ae51185fbb77c69942202c191506159a86a22851b3644365f86cd2.png" />
-</div>
-</div>
-</section>
-</section>
-<section id="using-the-learned-parameters">
-<h3>Using the learned parameters<a class="headerlink" href="#using-the-learned-parameters" title="Permalink to this heading">#</a></h3>
-<p>To visualize how the model would behave under the most probable values, we average the <span class="math notranslate nohighlight">\(\omega_{2}\)</span> samples and use this value in a new model.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">omega_2</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">)[</span><span class="s2">&quot;mean&quot;</span><span class="p">][</span><span class="s2">&quot;omega_2&quot;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
-    <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">initial_mu</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
-    <span class="n">initial_pi</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
-    <span class="n">omega</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="n">omega_2</span><span class="p">},</span>
-    <span class="n">rho</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
-    <span class="n">kappas</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
-        <span class="n">input_data</span><span class="o">=</span><span class="n">u</span>
-    <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a binary Hierarchical Gaussian Filter with 2 levels.
-... Create the update sequence from the network structure.
-... Create the belief propagation function.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
-Adding 320 new observations.
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/f5a3d1b9f7165f217f723a03c6a8f3a9b823317d6c4721921014209698be5cba.png" src="../_images/f5a3d1b9f7165f217f723a03c6a8f3a9b823317d6c4721921014209698be5cba.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">surprise</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.53284, dtype=float32)
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="three-level-model">
-<h3>Three-level model<a class="headerlink" href="#three-level-model" title="Permalink to this heading">#</a></h3>
-<section id="id6">
-<h4>Creating the model<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
-    <span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-    <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">u</span><span class="p">],</span>
-    <span class="n">response_function</span><span class="o">=</span><span class="n">first_level_binary_surprise</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">three_levels_binary_hgf</span><span class="p">:</span>
-
-     <span class="c1"># Set a prior over the evolution rate at the second and third levels.</span>
-    <span class="n">omega_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-    <span class="n">omega_3</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega_3&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-
-    <span class="c1"># Call the pre-parametrized HGF distribution here.</span>
-    <span class="c1"># All parameters are set to their default value except omega_2 and omega_3.</span>
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">omega_2</span><span class="o">=</span><span class="n">omega_2</span><span class="p">,</span> <span class="n">omega_3</span><span class="o">=</span><span class="n">omega_3</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="id7">
-<h4>Visualizing the model<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">three_levels_binary_hgf</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/2381f49d4d46a69762c0254ce1e7f1c576e43db63eaf273e254ccd1cd037b1f4.svg" src="../_images/2381f49d4d46a69762c0254ce1e7f1c576e43db63eaf273e254ccd1cd037b1f4.svg" /></div>
-</div>
-</section>
-<section id="id8">
-<h4>Sampling<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">three_levels_binary_hgf</span><span class="p">:</span>
-    <span class="n">three_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (2 chains in 1 job)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_2, omega_3]
-</pre></div>
-</div>
-<div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:10&lt;00:00 Sampling chain 0, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 1, 0 divergences]
-    </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 17 seconds.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">three_level_hgf_idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;omega_2&quot;</span><span class="p">,</span> <span class="s2">&quot;omega_3&quot;</span><span class="p">]);</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9a7721cf227112eef92286cabda9e5765b083e41512d956fdb7e2543784edb60.png" src="../_images/9a7721cf227112eef92286cabda9e5765b083e41512d956fdb7e2543784edb60.png" />
+<img alt="../_images/326e0202d4cc615a5b342f0ef9d67dd2e4fd717209a82c27b164ac95a1da7565.png" src="../_images/326e0202d4cc615a5b342f0ef9d67dd2e4fd717209a82c27b164ac95a1da7565.png" />
 </div>
 </div>
 </section>
@@ -1052,7 +1052,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/87db9adce9fcc0fc5c31b660eda33ea7e4635103779865d8059d4f97c71681fd.png" src="../_images/87db9adce9fcc0fc5c31b660eda33ea7e4635103779865d8059d4f97c71681fd.png" />
+<img alt="../_images/17d95d5e2e2bdf62f02d577bee948e127cd37c86c50b4cc83049c5c7b1cdf304.png" src="../_images/17d95d5e2e2bdf62f02d577bee948e127cd37c86c50b4cc83049c5c7b1cdf304.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1062,7 +1062,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.00638, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.01154, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1090,12 +1090,12 @@ pyhgf : 0.0.10
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-pymc      : 5.8.2
-seaborn   : 0.13.0
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-jax       : 0.4.16
 matplotlib: 3.8.0
+jax       : 0.4.16
+seaborn   : 0.13.0
+pymc      : 5.8.2
 arviz     : 0.16.1
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 
 Watermark: 2.4.3
 </pre></div>
