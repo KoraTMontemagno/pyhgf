@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>An introduction to Hierarchical Gaussian Filters through practical exercises &#8212; pyhgf 0.0.10 documentation</title>
+    <title>An introduction to Hierarchical Gaussian Filters through practical exercises &#8212; pyhgf 0.0.11 documentation</title>
   
   
   
@@ -565,7 +565,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1696285127.585950    3768 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1696285191.914192    3740 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -755,7 +755,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 2 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -776,7 +776,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -797,9 +797,12 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 4 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 17 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 16 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 6 divergences after tuning. Increase `target_accept` or reparameterize.
 </pre></div>
 </div>
 </div>
@@ -811,7 +814,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2fdb6282ce26785eddbf3f76307a14f845cda3b546d1f86ad3d42e9e11c226f7.png" src="../_images/2fdb6282ce26785eddbf3f76307a14f845cda3b546d1f86ad3d42e9e11c226f7.png" />
+<img alt="../_images/ef581a49770a1b5fc8e561729e02b0dc8ce847101002f6be4ce336830ed96b54.png" src="../_images/ef581a49770a1b5fc8e561729e02b0dc8ce847101002f6be4ce336830ed96b54.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -854,13 +857,13 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
     <tr>
       <th>tonic_volatility_1</th>
       <td>-6.551</td>
-      <td>0.837</td>
-      <td>-8.06</td>
-      <td>-5.032</td>
-      <td>0.027</td>
-      <td>0.019</td>
-      <td>1052.0</td>
-      <td>913.0</td>
+      <td>0.897</td>
+      <td>-8.205</td>
+      <td>-4.985</td>
+      <td>0.031</td>
+      <td>0.022</td>
+      <td>1185.0</td>
+      <td>888.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1040,9 +1043,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a continuous Hierarchical Gaussian Filter with 2 levels.
 ... Create the update sequence from the network structure.
 ... Create the belief propagation function.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+... Cache the belief propagation function.
 Adding 720 new observations.
 </pre></div>
 </div>
@@ -1310,7 +1311,7 @@ Adding 720 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e4e7588551788389b539a013d187ad3dbe52ab4c3df078839bec569af3f44074.png" src="../_images/e4e7588551788389b539a013d187ad3dbe52ab4c3df078839bec569af3f44074.png" />
+<img alt="../_images/237841417299c29408eb882091cc469303ed1a5e9e68ae257cc2627682b2a107.png" src="../_images/237841417299c29408eb882091cc469303ed1a5e9e68ae257cc2627682b2a107.png" />
 </div>
 </div>
 <p>Assess model fitting, here using leave-one-out cross-validation from the <a class="reference external" href="https://python.arviz.org/en/stable/api/generated/arviz.loo.html">Arviz</a> library.</p>
@@ -1325,8 +1326,8 @@ Adding 720 new observations.
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -222.42     0.00
-p_loo        0.66        -
+elpd_loo  -222.52     0.00
+p_loo        0.77        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1509,7 +1510,7 @@ Pareto k diagnostic values:
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
       100.00% [2000/2000 00:21&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 87 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 86 seconds.
 </pre></div>
 </div>
 </div>
@@ -1521,7 +1522,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/aa1ba72bc0bf8df3415f0044e40e34a5fd166ccbfa65027335a6df5d32f2152b.png" src="../_images/aa1ba72bc0bf8df3415f0044e40e34a5fd166ccbfa65027335a6df5d32f2152b.png" />
+<img alt="../_images/c97ebd3032a25ea94050158886a01a0b7db614c0fec8fe0fab766305ebda67bb.png" src="../_images/c97ebd3032a25ea94050158886a01a0b7db614c0fec8fe0fab766305ebda67bb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1536,7 +1537,7 @@ Pareto k diagnostic values:
 
          Estimate       SE
 elpd_loo  -103.94     0.00
-p_loo        0.69        -
+p_loo        0.70        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1592,7 +1593,7 @@ Pareto k diagnostic values:
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/df19b68e20da9504678b119237b24d9d8b62418cd3d698b3c4d8b7a87e7f9cd0.png" src="../_images/df19b68e20da9504678b119237b24d9d8b62418cd3d698b3c4d8b7a87e7f9cd0.png" />
+<img alt="../_images/7a79431503389b2ecc81b9bde0df7359f702328b4c55d59b0d768a2437851f36.png" src="../_images/7a79431503389b2ecc81b9bde0df7359f702328b4c55d59b0d768a2437851f36.png" />
 </div>
 </div>
 </section>
@@ -1690,7 +1691,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 1, 1 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1711,7 +1712,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 2, 1 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1734,10 +1735,7 @@ Pareto k diagnostic values:
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
       100.00% [2000/2000 00:02&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 12 seconds.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 2 divergences after tuning. Increase `target_accept` or reparameterize.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 11 seconds.
 </pre></div>
 </div>
 </div>
@@ -1749,7 +1747,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c9478fe34449c22e911cb297413591ba42c9a6c8b390a9a384d8a815816d80ca.png" src="../_images/c9478fe34449c22e911cb297413591ba42c9a6c8b390a9a384d8a815816d80ca.png" />
+<img alt="../_images/d2f5a8ff4b98967ec1ad9cfc1d63f4082be5ce7cfd626b504a037da7e43c1ce0.png" src="../_images/d2f5a8ff4b98967ec1ad9cfc1d63f4082be5ce7cfd626b504a037da7e43c1ce0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1763,8 +1761,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -114.82     0.00
-p_loo        1.52        -
+elpd_loo  -114.09     0.00
+p_loo        0.78        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1773,8 +1771,8 @@ Pareto k diagnostic values:
                          Count   Pct.
 (-Inf, 0.5]   (good)        0    0.0%
  (0.5, 0.7]   (ok)          0    0.0%
-   (0.7, 1]   (bad)         0    0.0%
-   (1, Inf)   (very bad)    1  100.0%
+   (0.7, 1]   (bad)         1  100.0%
+   (1, Inf)   (very bad)    0    0.0%
 </pre></div>
 </div>
 </div>
@@ -1856,7 +1854,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 0, 1 divergences]
+      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 0, 3 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1877,7 +1875,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 2 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1898,7 +1896,7 @@ Pareto k diagnostic values:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 2 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 5 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -1921,10 +1919,10 @@ Pareto k diagnostic values:
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
       100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 5 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 16 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 15 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 8 divergences after tuning. Increase `target_accept` or reparameterize.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 15 divergences after tuning. Increase `target_accept` or reparameterize.
 </pre></div>
 </div>
 </div>
@@ -1937,7 +1935,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6c696654b408b2e3ba390ac0272b5f96ef76bddeb02dada6fa7071288a115738.png" src="../_images/6c696654b408b2e3ba390ac0272b5f96ef76bddeb02dada6fa7071288a115738.png" />
+<img alt="../_images/7eaea4994d2ba114c737137c059408797bf7fc9fff3aa2ca25eef1df1fbf295d.png" src="../_images/7eaea4994d2ba114c737137c059408797bf7fc9fff3aa2ca25eef1df1fbf295d.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1951,8 +1949,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -113.83     0.00
-p_loo        0.88        -
+elpd_loo  -114.02     0.00
+p_loo        1.06        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -2015,8 +2013,8 @@ Pareto k diagnostic values:
     <tr>
       <th>RW</th>
       <td>0</td>
-      <td>-103.938059</td>
-      <td>0.689659</td>
+      <td>-103.935828</td>
+      <td>0.698137</td>
       <td>0.000000</td>
       <td>1.000000e+00</td>
       <td>0.0</td>
@@ -2027,10 +2025,10 @@ Pareto k diagnostic values:
     <tr>
       <th>three-level</th>
       <td>1</td>
-      <td>-113.827338</td>
-      <td>0.884207</td>
-      <td>9.889279</td>
-      <td>0.000000e+00</td>
+      <td>-114.017890</td>
+      <td>1.059916</td>
+      <td>10.082063</td>
+      <td>1.360023e-15</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>True</td>
@@ -2039,9 +2037,9 @@ Pareto k diagnostic values:
     <tr>
       <th>two-level</th>
       <td>2</td>
-      <td>-114.817860</td>
-      <td>1.519234</td>
-      <td>10.879800</td>
+      <td>-114.089032</td>
+      <td>0.784854</td>
+      <td>10.153204</td>
       <td>0.000000e+00</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -2051,10 +2049,10 @@ Pareto k diagnostic values:
     <tr>
       <th>biased_random</th>
       <td>3</td>
-      <td>-222.420057</td>
-      <td>0.662884</td>
-      <td>118.481998</td>
-      <td>3.108624e-15</td>
+      <td>-222.520635</td>
+      <td>0.767857</td>
+      <td>118.584807</td>
+      <td>3.996803e-15</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>True</td>
@@ -2142,7 +2140,7 @@ Pareto k diagnostic values:
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/28cfe4a57703f2a35b227b32924ddf1a779162a741e21a704ff2e6cb9898732f.png" src="../_images/28cfe4a57703f2a35b227b32924ddf1a779162a741e21a704ff2e6cb9898732f.png" />
+<img alt="../_images/95444ea2302f5e1e3be71ec7dd7ee1357328dd56085960ad26cbe356ab29b004.png" src="../_images/95444ea2302f5e1e3be71ec7dd7ee1357328dd56085960ad26cbe356ab29b004.png" />
 </div>
 </div>
 </section>
@@ -2164,19 +2162,19 @@ Python implementation: CPython
 Python version       : 3.10.13
 IPython version      : 8.16.1
 
-pyhgf : 0.0.10
+pyhgf : 0.0.11
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-matplotlib: 3.8.0
-pymc      : 5.8.2
-pandas    : 2.0.3
-seaborn   : 0.13.0
-numpy     : 1.22.0
-pytensor  : 2.16.3
 arviz     : 0.16.1
+matplotlib: 3.8.0
+numpy     : 1.22.0
+seaborn   : 0.13.0
+pandas    : 2.0.3
 jax       : 0.4.16
+pymc      : 5.8.2
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+pytensor  : 2.16.3
 
 Watermark: 2.4.3
 </pre></div>
