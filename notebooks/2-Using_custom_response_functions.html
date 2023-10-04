@@ -508,11 +508,6 @@ In this situation, it is trivial to write such a decision function and generate 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1696284912.624881    3042 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
-No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a binary Hierarchical Gaussian Filter with 2 levels.
 ... Create the update sequence from the network structure.
 ... Create the belief propagation function.
@@ -922,7 +917,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
       100.00% [2000/2000 00:02&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 11 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 12 seconds.
 </pre></div>
 </div>
 </div>
@@ -968,19 +963,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>tonic_volatility_2</th>
-      <td>-3.934</td>
-      <td>0.482</td>
-      <td>-4.8</td>
-      <td>-2.972</td>
+      <td>-3.945</td>
+      <td>0.489</td>
+      <td>-4.79</td>
+      <td>-2.96</td>
       <td>0.012</td>
       <td>0.009</td>
-      <td>1670.0</td>
-      <td>2557.0</td>
+      <td>1569.0</td>
+      <td>2307.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/ad56aeb23ded4fde932c8f167d56bda3cf8a5c79619bb30c282c7fbbdff3c184.png" src="../_images/ad56aeb23ded4fde932c8f167d56bda3cf8a5c79619bb30c282c7fbbdff3c184.png" />
+</div></div><img alt="../_images/07a8d7ccb3906b122254ddad8323b5481f6ff64cce419aff06bed1bdeca9a16c.png" src="../_images/07a8d7ccb3906b122254ddad8323b5481f6ff64cce419aff06bed1bdeca9a16c.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1008,21 +1003,21 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Mon Oct 02 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Oct 04 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
 IPython version      : 8.16.1
 
 pyhgf : 0.0.11
-jax   : 0.4.16
-jaxlib: 0.4.16
+jax   : 0.4.17
+jaxlib: 0.4.17
 
-matplotlib: 3.8.0
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-numpy     : 1.22.0
 arviz     : 0.16.1
-jax       : 0.4.16
+jax       : 0.4.17
+matplotlib: 3.8.0
+numpy     : 1.22.0
 pymc      : 5.8.2
 
 Watermark: 2.4.3

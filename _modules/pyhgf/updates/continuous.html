@@ -636,26 +636,18 @@ document.write(`
             <span class="c1"># if this child is the last one relative to this parent&#39;s family, all the</span>
             <span class="c1"># children will update the parent at once, otherwise just pass and wait</span>
             <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">:</span>
-                <span class="c1"># in the eHGF update step, we use the expected precision here</span>
-                <span class="c1"># as we haven&#39;t computed it yet due to the reverse update order</span>
-                <span class="n">precision_value_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span>
-                    <span class="s2">&quot;expected_precision&quot;</span>
-                <span class="p">]</span>
-
-                <span class="c1"># Estimate the mean of the posterior distribution</span>
-                <span class="n">mean_value_parent</span> <span class="o">=</span> <span class="n">prediction_error_mean_value_parent</span><span class="p">(</span>
-                    <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">value_parent_idx</span><span class="p">,</span> <span class="n">precision_value_parent</span>
-                <span class="p">)</span>
-                <span class="c1"># Update this parent&#39;s parameters</span>
-                <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_value_parent</span>
-
                 <span class="c1"># Estimate the precision of the posterior distribution</span>
                 <span class="n">precision_value_parent</span> <span class="o">=</span> <span class="n">prediction_error_precision_value_parent</span><span class="p">(</span>
                     <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">value_parent_idx</span>
                 <span class="p">)</span>
+                <span class="c1"># Estimate the mean of the posterior distribution</span>
+                <span class="n">mean_value_parent</span> <span class="o">=</span> <span class="n">prediction_error_mean_value_parent</span><span class="p">(</span>
+                    <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">value_parent_idx</span><span class="p">,</span> <span class="n">precision_value_parent</span>
+                <span class="p">)</span>
 
                 <span class="c1"># Update this parent&#39;s parameters</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">precision_value_parent</span>
+                <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_value_parent</span>
 
     <span class="c1">#############################</span>
     <span class="c1"># Update volatility parents #</span>
