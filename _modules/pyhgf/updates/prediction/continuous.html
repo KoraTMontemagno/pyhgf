@@ -498,8 +498,21 @@ document.write(`
         <span class="p">):</span>
             <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
 
-    <span class="c1"># Compute the new expected mean this node</span>
-    <span class="n">expected_mean</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
+    <span class="c1"># New expected mean from the previous value</span>
+    <span class="n">expected_mean</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Take the drift into account</span>
+    <span class="n">expected_mean</span> <span class="o">+=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
+
+    <span class="c1"># Add quatities that come from the autoregressive process if not zero</span>
+    <span class="n">expected_mean</span> <span class="o">+=</span> <span class="p">(</span>
+        <span class="n">time_step</span>
+        <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;autoregressive_coefficient&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="p">(</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;autoregressive_intercept&quot;</span><span class="p">]</span>
+            <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">expected_mean</span></div>
 
