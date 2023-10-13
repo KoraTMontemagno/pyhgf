@@ -496,9 +496,8 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
 </div>
 </div>
 <p>This simple process will be our first building block. Importantly here, the variability of the sensory input is constant across time: even if we don’t know exactly in which direction the time series is going to move in the future, we know that it is unlikely to make certain kinds of big jumps because it is controlled by a fixed parameter, the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</p>
-</section>
 <section id="adding-a-drift-to-the-random-walk">
-<h3>Adding a drift to the random walk<a class="headerlink" href="#adding-a-drift-to-the-random-walk" title="Permalink to this heading">#</a></h3>
+<h4>Adding a drift to the random walk<a class="headerlink" href="#adding-a-drift-to-the-random-walk" title="Permalink to this heading">#</a></h4>
 <p>The Gaussian random walk can be further parametrized by adding a drift over time. This value, often noted <span class="math notranslate nohighlight">\(\rho\)</span>, will be added at each time step:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -530,11 +529,11 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)} + \rho, \sigma^2)
 </div>
 </section>
 <section id="autoregressive-processes">
-<h3>Autoregressive processes<a class="headerlink" href="#autoregressive-processes" title="Permalink to this heading">#</a></h3>
+<h4>Autoregressive processes<a class="headerlink" href="#autoregressive-processes" title="Permalink to this heading">#</a></h4>
 <p>We can also assume that the generative process follows an <a class="reference external" href="https://en.wikipedia.org/wiki/Autoregressive_model">autoregressive model</a>, in which case the value of the next iteration is weighted by a coefficient and called by an intercept, often note <span class="math notranslate nohighlight">\(\phi\)</span> and <span class="math notranslate nohighlight">\(m\)</span> (respectively) in the Matlab toolbox.</p>
 <div class="math notranslate nohighlight">
 \[
-x_1^{(k)} \sim \mathcal{N}(m + \phi * x_1^{(k-1)}, \sigma^2)
+x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)} + \phi(m - x_1^{(k-1)}), \sigma^2)
 \]</div>
 <p>We repeat the same simulation below using <span class="math notranslate nohighlight">\(\phi = .4\)</span> and <span class="math notranslate nohighlight">\(m = 12.0\)</span>.</p>
 <div class="cell tag_hide-input docutils container">
@@ -552,7 +551,7 @@ x_1^{(k)} \sim \mathcal{N}(m + \phi * x_1^{(k-1)}, \sigma^2)
 <span class="n">x_1</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
     <span class="n">x_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">phi</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">x_1</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">x_1</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">x_1</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">phi</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">x_1</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
     <span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
@@ -568,6 +567,7 @@ x_1^{(k)} \sim \mathcal{N}(m + \phi * x_1^{(k-1)}, \sigma^2)
 <img alt="../_images/4a29c1e293bf3a06a20da8804b51b5ba9b93925f3e03d8eb9c69e61e02ac8133.png" src="../_images/4a29c1e293bf3a06a20da8804b51b5ba9b93925f3e03d8eb9c69e61e02ac8133.png" />
 </div>
 </div>
+</section>
 </section>
 <section id="volatility-coupling">
 <h3>Volatility coupling<a class="headerlink" href="#volatility-coupling" title="Permalink to this heading">#</a></h3>
@@ -747,55 +747,68 @@ x_3^{(k)}          \sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\omega_3)) 
 <img alt="../_images/69053f449b34dfc746bc7b8914fd0caa220de7a4323a3b7f5018a62b34b62916.png" src="../_images/69053f449b34dfc746bc7b8914fd0caa220de7a4323a3b7f5018a62b34b62916.png" />
 </div>
 </div>
-<p>Based on these principles, any given state in the world can be modelled as having a volatility parent state, a value parent state, both, or none. When the node is an orphan, it evolves as a Gaussian random walk around its previous value with a fixed step size. Consequently, when inferring on the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and via volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents.</p>
+</section>
+</section>
+<section id="dynamic-beliefs-updating">
+<h2>Dynamic beliefs updating<a class="headerlink" href="#dynamic-beliefs-updating" title="Permalink to this heading">#</a></h2>
+<section id="the-hierarchical-gaussian-filter-in-a-network-of-predictive-nodes">
+<h3>The Hierarchical Gaussian Filter in a network of predictive nodes<a class="headerlink" href="#the-hierarchical-gaussian-filter-in-a-network-of-predictive-nodes" title="Permalink to this heading">#</a></h3>
+<p>The coding examples introduced above illustrated generative models that can simulate data forward from a given volatility structure, with key parameters stochastically fluctuating. Based on these principles, any given latent state in the world can be modelled as having a volatility parent state, a value parent state, both, or none. When the node is an orphan, it evolves as a Gaussian random walk around its previous value with a fixed step size. Consequently, when inferring the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents. Hierarchical Gaussian Filters use this as a model of the environment to make sense of new observations, also referred to as the sensory part of the HGF, or the filtering part. In this situation, new observations are coming in at the network’s root and the model updates the belief structure accordingly (from bottom to top nodes). It is therefore straightforward to describe the standard two-level and three-level Hierarchical Gaussian Filters for continuous and binary inputs as the combination of value and volatility couplings (see <a class="reference internal" href="#hgf-fig"><span class="std std-ref">The two-level and three-level Hierarchical Gaussian Filters for binary or continuous inputs, as described in 2014:mathys,2011:mathys. The binary HGF has the particularity that it uses a sigmoid transform in the input node to convert continuous values into binary probabilities. For both models, volatility coupling is depicted with dashed lines, and value coupling with straight lines. The three-level HGF has one volatility layer more than the two-level HGF, which is used to estimate higher-order uncertainty.</span></a>)</p>
 <figure class="align-default" id="hgf-fig">
 <img alt="../_images/hgf.png" src="../_images/hgf.png" />
 <figcaption>
-<p><span class="caption-text">The two-level and three-level Hierarchical Gaussian Filters for binary or continuous inputs, as described in <span id="id3">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>, <a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>. The binary HGF has the particularity that it uses a sigmoid transform in the input node to convert continuous values into binary probabilities. For both models, volatility coupling is depicted with dashed lines, and value coupling with straight lines. The three-level HGF has one volatility layer more than the two-level HGF.</span><a class="headerlink" href="#hgf-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-text">The two-level and three-level Hierarchical Gaussian Filters for binary or continuous inputs, as described in <span id="id3">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>, <a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>. The binary HGF has the particularity that it uses a sigmoid transform in the input node to convert continuous values into binary probabilities. For both models, volatility coupling is depicted with dashed lines, and value coupling with straight lines. The three-level HGF has one volatility layer more than the two-level HGF, which is used to estimate higher-order uncertainty.</span><a class="headerlink" href="#hgf-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
+<p>Hierarchical Gaussian Filters are inspired by other simpler models for Bayesian filtering and reinforcement learning. These models can be seen for example as generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Kalman_filter">Kalman Filter</a> or the <a class="reference external" href="https://en.wikipedia.org/wiki/Rescorla%E2%80%93Wagner_model">Rescorla-Wagner model</a>. Specifically:</p>
 <ul class="simple">
 <li><p>A one-level HGF for continuous input can be seen as a <a class="reference external" href="https://en.wikipedia.org/wiki/Kalman_filter">Kalman Filter</a>.</p></li>
 <li><p>A two-level binary HGF can be seen as a <a class="reference external" href="https://en.wikipedia.org/wiki/Rescorla%E2%80%93Wagner_model">Rescorla-Wagner</a> model with an adaptive learning rate that depends on the precision of the belief.</p></li>
 </ul>
 </div>
 </section>
-</section>
-<section id="the-propagation-of-prediction-and-prediction-errors-in-a-network-of-probabilistic-nodes">
-<h2>The propagation of prediction and prediction errors in a network of probabilistic nodes<a class="headerlink" href="#the-propagation-of-prediction-and-prediction-errors-in-a-network-of-probabilistic-nodes" title="Permalink to this heading">#</a></h2>
-<p>The coding examples introduced above illustrated generative models that can simulate data forward from a given volatility structure, with key parameters stochastically fluctuating. Hierarchical Gaussian Filters use this as a model of the environment to make sense of new observations, also referred to as the sensory part of the HGF, or the filtering part. In this situation, new observations are coming in at the root of the network and the model updates the belief structure accordingly (from bottom to top nodes).</p>
-<p>In its first description, {cite:p}2011:mathys derived a set of simple, one-step update equations that represent changes in beliefs about the hidden states (i.e. the sufficient statistics of the nodes) specified in the generative model. The update equations for volatility and value coupling in the generalized hierarchical Gaussian filter have been described in <span id="id4">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span>. For each state, a belief is held (and updated for every new input) by the agent and described as a Gaussian distribution, fully characterized by its mean and its inverse variance, or precision,
-on a given trial (this is the notation we have been using in the previous examples). We conceptualize each belief as a node in a network, where belief updates involve computations within nodes as well as message passing between nodes.</p>
-<p>The computations triggered by any observation at each time point can be ordered in time as shown in the <span class="xref myst">belief update algorithm</span>.</p>
+<section id="the-propagation-of-prediction-and-prediction-errors">
+<h3>The propagation of prediction and prediction errors<a class="headerlink" href="#the-propagation-of-prediction-and-prediction-errors" title="Permalink to this heading">#</a></h3>
+<p>Having described the model as a specific configuration of predictive nodes offer many advantages, especially in term of modularity for the user. However, the model itself is not limited to the description of the generative process that we covered in the previous examples. The most interesting, and also the more complex, part of the modelling consists of the capability for the network to update the hierarchical structure in a Bayesian optimal way as new observations are presented. These steps are defined by a set of simple, one-step update equations that represent changes in beliefs about the hidden states (i.e. the sufficient statistics of the nodes) specified in the generative model. These equations were first described in <span id="id4">Mathys [<a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">2011</a>]</span>, and the update equations for volatility and value coupling in the generalized Hierarchical Gaussian filter (on which most of the update functions in <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a> are based) have been described in <span id="id5">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span>. The exact computations in each step especially depend on the nature of the coupling (via <a class="reference internal" href="#term-VAPE"><span class="xref std std-term">VAPE</span></a>s vs. <a class="reference internal" href="#term-VOPE"><span class="xref std std-term">VOPE</span></a>s) between the parent and children nodes. It is beyond the scope of this tutorial to dive into the derivation of these steps and we refer the interested reader to the mentioned papers. Here, we provide a general overview of the dynamic of the update sequence that supports belief updating. The computations triggered by any observation at each time point can be ordered in time as shown in the <span class="xref myst">belief update algorithm</span>.</p>
 <div class="admonition note" id="belief-update">
 <p class="admonition-title">Note</p>
 <p>Belief update</p>
-<p>For <span class="math notranslate nohighlight">\(i\)</span> a <a class="reference internal" href="#term-Node"><span class="xref std std-term">node</span></a> in a probabilistic network at time <span class="math notranslate nohighlight">\(k\)</span>, with children at <span class="math notranslate nohighlight">\(i-1\)</span> and parent at <span class="math notranslate nohighlight">\(i+1\)</span></p>
+<p>Let’s consider a simple network containing <span class="math notranslate nohighlight">\(x_{node}\)</span> be a <a class="reference internal" href="#term-Node"><span class="xref std std-term">node</span></a>, defined at time <span class="math notranslate nohighlight">\(k\)</span>, with children nodes defined at <span class="math notranslate nohighlight">\(x_{children}\)</span> and parent at <span class="math notranslate nohighlight">\(x_{parent}\)</span>. The standard approach to update this network upon the presentation of a new observation is:</p>
 <ol class="arabic simple">
-<li><p><a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a>
-Compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span>
-← receive <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_{i-1}\)</span> from <span class="math notranslate nohighlight">\(\mathrm{node}_{i-1}\)</span></p></li>
-<li><p>Update<br />
-compute <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span><br />
-<strong>given</strong> <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_{i-1}\)</span> and <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span><br />
-→ send <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span> to <span class="math notranslate nohighlight">\(\mathrm{node}_{i-1}\)</span></p></li>
+<li><p><a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a> step
+For <span class="math notranslate nohighlight">\(n\)</span> in the network, starting from the leaves to the roots:<br />
+Given the time elapsed since the last update
+Given the the posterior value of the node <span class="math notranslate nohighlight">\(n\)</span><br />
+Given the prediction from the parent nodes<br />
+- Compute the <em>expected_mean</em> and <em>expected precision</em></p></li>
+<li><p>Beliefs propagation step<br />
+For <span class="math notranslate nohighlight">\(n\)</span> in the network, starting from the roots to the leaves:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#term-Update"><span class="xref std std-term">Update</span></a> step
+Given the prediction errors received from the child nodes</p>
+<ul class="simple">
+<li><p>Compute the new sufficient statistics for node <span class="math notranslate nohighlight">\(n\)</span></p></li>
+</ul>
+</li>
 <li><p><a class="reference internal" href="#term-Prediction-error"><span class="xref std std-term">prediction error</span></a>
-compute <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_i\)</span><br />
-<strong>given</strong> <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k)}_i\)</span> and <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span><br />
-→ send <span class="math notranslate nohighlight">\(\mathrm{PE}^{(k)}_i\)</span> to <span class="math notranslate nohighlight">\(\mathrm{node}_{i+1}\)</span><br />
-← receive <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_{i+1}\)</span> from <span class="math notranslate nohighlight">\(\mathrm{node}_{i+1}\)</span></p></li>
-<li><p><a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a><br />
-compute <span class="math notranslate nohighlight">\(\mathrm{prediction}^{(k+1)}_i\)</span><br />
-<strong>given</strong> <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_i\)</span> and <span class="math notranslate nohighlight">\(\mathrm{posterior}^{(k)}_{i+1}\)</span></p></li>
+Given the new posterior from the update step<br />
+Given the expectation from the prediction step</p>
+<ul class="simple">
+<li><p>Compute a new prediction error (<a class="reference internal" href="#term-VAPE"><span class="xref std std-term">VAPE</span></a> or <a class="reference internal" href="#term-VOPE"><span class="xref std std-term">VOPE</span></a></p></li>
+<li><p>Send it to the parent node</p></li>
+</ul>
+</li>
+</ol>
+</li>
 </ol>
 </div>
-<p>The exact computations in each step depend on the nature of the coupling (via <a class="reference internal" href="#term-VAPE"><span class="xref std std-term">VAPE</span></a>s vs. <a class="reference internal" href="#term-VOPE"><span class="xref std std-term">VOPE</span></a>s) between the parent and children nodes.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>We have placed the <a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a> step at the end of the update loop. This is because usually, we think about the beginning of a timepoint trial as starting with receiving a new input, and of a prediction as being present before that input is received (this is especially relevant to model time points as a trial in an experiment). However, in some variants of the HGF the prediction also depends on the time that has passed in between trials, which is something that can only be evaluated once the new input arrives - hence the additional computation of the (current) prediction at the beginning of the trial. Conceptually, it makes most sense to think of the prediction as happening continuously between trials. For implementational purposes, it is however most convenient to only compute the prediction once the new input (and with it its arrival time) enters. This ensures both that the posterior means of parent nodes have had enough time to be sent back to their children for preparation for the new input, and that the arrival time of the new input can be taken into account appropriately.</p>
+<p>We have placed the <a class="reference internal" href="#term-Prediction"><span class="xref std std-term">Prediction</span></a> step at the beginning of the update loop to account that the prediction depends on the time that has passed in between trials, which is something that can only be evaluated once the new input arrives. This is because we usually think about the beginning of a trial/time point as starting with receiving a new input and of a prediction as being present before that input is received. For implementational purposes, it is most convenient to only compute the prediction once the new input (and with it its arrival time) enters. However, it makes most sense to think of the prediction as happening continuously between the time points, but this is not something that is tracked continuously by the model.</p>
 </div>
+</section>
 </section>
 <section id="glossary">
 <h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this heading">#</a></h2>
@@ -835,9 +848,9 @@ pyhgf : 0.0.11
 jax   : 0.4.18
 jaxlib: 0.4.18
 
-seaborn   : 0.13.0
-matplotlib: 3.8.0
 numpy     : 1.22.0
+matplotlib: 3.8.0
+seaborn   : 0.13.0
 
 Watermark: 2.4.3
 </pre></div>
@@ -873,14 +886,20 @@ Watermark: 2.4.3
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction to the Hierarchical Gaussian Filter</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-generative-model">The generative model</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-random-walks">Gaussian Random Walks</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-drift-to-the-random-walk">Adding a drift to the random walk</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#autoregressive-processes">Autoregressive processes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-random-walks">Gaussian Random Walks</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-drift-to-the-random-walk">Adding a drift to the random walk</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autoregressive-processes">Autoregressive processes</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#volatility-coupling">Volatility coupling</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#value-coupling">Value coupling</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-propagation-of-prediction-and-prediction-errors-in-a-network-of-probabilistic-nodes">The propagation of prediction and prediction errors in a network of probabilistic nodes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-beliefs-updating">Dynamic beliefs updating</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hierarchical-gaussian-filter-in-a-network-of-predictive-nodes">The Hierarchical Gaussian Filter in a network of predictive nodes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-propagation-of-prediction-and-prediction-errors">The propagation of prediction and prediction errors</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#glossary">Glossary</a></li>
 </ul>
 </li>
