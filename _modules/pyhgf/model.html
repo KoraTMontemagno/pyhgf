@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -36,9 +36,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -128,13 +128,14 @@
   
   
   
+  
     
     
       
     
     
-    <img src="../../_static/logo_small.svg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../_static/logo_small.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../_static/logo_small.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../_static/logo_small.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">pyhgf</p>
@@ -480,6 +481,10 @@ document.write(`
 <span class="sd">        network only has one input node.</span>
 <span class="sd">    model_type :</span>
 <span class="sd">        The model implemented (can be `&quot;continuous&quot;`, `&quot;binary&quot;` or `&quot;custom&quot;`).</span>
+<span class="sd">    update_type:</span>
+<span class="sd">        The type of volatility update to perform. Can be `&quot;eHGF&quot;` (default) or</span>
+<span class="sd">        `&quot;standard&quot;`. The eHGF update step tends to be more robust and produce fewer</span>
+<span class="sd">        invalid space errors and is therefore recommended by default.</span>
 <span class="sd">    update_type :</span>
 <span class="sd">        The type of update to perform for volatility coupling. Can be `&quot;eHGF&quot;`</span>
 <span class="sd">        (defaults) or `&quot;standard&quot;`. The eHGF update step was proposed as an alternative</span>
@@ -543,38 +548,42 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        eta0 :</span>
-<span class="sd">            The first categorical value of the binary node. Defaults to `0.0`. Only</span>
-<span class="sd">            relevant if `model_type=&quot;binary&quot;`.</span>
-<span class="sd">        eta1 :</span>
-<span class="sd">            The second categorical value of the binary node. Defaults to `0.0`. Only</span>
-<span class="sd">            relevant if `model_type=&quot;binary&quot;`.</span>
+<span class="sd">        n_levels :</span>
+<span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
+<span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward.</span>
+<span class="sd">            Defaults to `2` for a 2-level HGF.</span>
+<span class="sd">        model_type : str</span>
+<span class="sd">            The model type to use (can be `&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
+<span class="sd">        update_type:</span>
+<span class="sd">            The type of volatility update to perform. Can be `&quot;eHGF&quot;` (default) or</span>
+<span class="sd">            `&quot;standard&quot;`. The eHGF update step tends to be more robust and produce fewer</span>
+<span class="sd">            invalid space errors and is therefore recommended by default.</span>
 <span class="sd">        initial_mean :</span>
 <span class="sd">            A dictionary containing the initial values for the initial mean at</span>
 <span class="sd">            different levels of the hierarchy. Defaults set to `0.0`.</span>
 <span class="sd">        initial_precision :</span>
 <span class="sd">            A dictionary containing the initial values for the initial precision at</span>
 <span class="sd">            different levels of the hierarchy. Defaults set to `1.0`.</span>
+<span class="sd">        continuous_precision :</span>
+<span class="sd">            The expected precision of the continuous input node. Default to `1e4`. Only</span>
+<span class="sd">            relevant if `model_type=&quot;continuous&quot;`.</span>
+<span class="sd">        tonic_volatility :</span>
+<span class="sd">            A dictionary containing the initial values for the tonic volatility</span>
+<span class="sd">            at different levels of the hierarchy. This represents the tonic</span>
+<span class="sd">            part of the variance (the part that is not affected by the parent node).</span>
+<span class="sd">            Defaults are set to `-3.0`.</span>
 <span class="sd">        volatility_coupling :</span>
 <span class="sd">            A dictionary containing the initial values for the volatility coupling</span>
 <span class="sd">            at different levels of the hierarchy. This represents the phasic part of</span>
 <span class="sd">            the variance (the part that is affected by the parent nodes) and will</span>
 <span class="sd">            define the strength of the connection between the node and the parent</span>
 <span class="sd">            node. Defaults set to `1.0`.</span>
-<span class="sd">        model_type : str</span>
-<span class="sd">            The model type to use (can be `&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
-<span class="sd">        n_levels :</span>
-<span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
-<span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward.</span>
-<span class="sd">            Defaults to `2` for a 2-level HGF.</span>
-<span class="sd">        tonic_volatility :</span>
-<span class="sd">            A dictionary containing the initial values for the tonic volatility</span>
-<span class="sd">            at different levels of the hierarchy. This represents the tonic</span>
-<span class="sd">            part of the variance (the part that is not affected by the parent node).</span>
-<span class="sd">            Defaults are set to `-3.0`.</span>
-<span class="sd">        continuous_precision :</span>
-<span class="sd">            The expected precision of the continuous input node. Default to `1e4`. Only</span>
-<span class="sd">            relevant if `model_type=&quot;continuous&quot;`.</span>
+<span class="sd">        eta0 :</span>
+<span class="sd">            The first categorical value of the binary node. Defaults to `0.0`. Only</span>
+<span class="sd">            relevant if `model_type=&quot;binary&quot;`.</span>
+<span class="sd">        eta1 :</span>
+<span class="sd">            The second categorical value of the binary node. Defaults to `0.0`. Only</span>
+<span class="sd">            relevant if `model_type=&quot;binary&quot;`.</span>
 <span class="sd">        binary_precision :</span>
 <span class="sd">            The precision of the binary input node. Default to `jnp.inf`. Only relevant</span>
 <span class="sd">            if `model_type=&quot;binary&quot;`.</span>
@@ -1062,7 +1071,7 @@ document.write(`
         <span class="n">autoregressive_intercept</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a value parent to a given set of nodes.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a value parent to a given set of nodes.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1181,7 +1190,7 @@ document.write(`
         <span class="n">autoregressive_intercept</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a volatility parent to a given set of nodes.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a volatility parent to a given set of nodes.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1338,8 +1347,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1369,7 +1378,7 @@ document.write(`
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
 </p></div>
       
     </div>

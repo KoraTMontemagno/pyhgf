@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -37,9 +37,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -131,13 +131,14 @@
   
   
   
+  
     
     
       
     
     
-    <img src="../../_static/logo_small.svg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../_static/logo_small.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../_static/logo_small.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../_static/logo_small.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">pyhgf</p>
@@ -543,6 +544,10 @@ network only has one input node.</p>
 </dd>
 <dt><strong>model_type</strong></dt><dd><p>The model implemented (can be <cite>“continuous”</cite>, <cite>“binary”</cite> or <cite>“custom”</cite>).</p>
 </dd>
+<dt><strong>update_type:</strong></dt><dd><p>The type of volatility update to perform. Can be <cite>“eHGF”</cite> (default) or
+<cite>“standard”</cite>. The eHGF update step tends to be more robust and produce fewer
+invalid space errors and is therefore recommended by default.</p>
+</dd>
 <dt><strong>update_type</strong></dt><dd><p>The type of update to perform for volatility coupling. Can be <cite>“eHGF”</cite>
 (defaults) or <cite>“standard”</cite>. The eHGF update step was proposed as an alternative
 to the original definition in that it starts by updating the mean and then the
@@ -577,11 +582,15 @@ strenght with children and parents (i.e. <cite>“value_coupling_parents”</cit
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>eta0</strong></dt><dd><p>The first categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
-relevant if <cite>model_type=”binary”</cite>.</p>
+<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
+<cite>None</cite>, the nodes hierarchy is not created and might be provided afterward.
+Defaults to <cite>2</cite> for a 2-level HGF.</p>
 </dd>
-<dt><strong>eta1</strong></dt><dd><p>The second categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
-relevant if <cite>model_type=”binary”</cite>.</p>
+<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be <cite>“continuous”</cite> or <cite>“binary”</cite>).</p>
+</dd>
+<dt><strong>update_type:</strong></dt><dd><p>The type of volatility update to perform. Can be <cite>“eHGF”</cite> (default) or
+<cite>“standard”</cite>. The eHGF update step tends to be more robust and produce fewer
+invalid space errors and is therefore recommended by default.</p>
 </dd>
 <dt><strong>initial_mean</strong></dt><dd><p>A dictionary containing the initial values for the initial mean at
 different levels of the hierarchy. Defaults set to <cite>0.0</cite>.</p>
@@ -589,25 +598,25 @@ different levels of the hierarchy. Defaults set to <cite>0.0</cite>.</p>
 <dt><strong>initial_precision</strong></dt><dd><p>A dictionary containing the initial values for the initial precision at
 different levels of the hierarchy. Defaults set to <cite>1.0</cite>.</p>
 </dd>
-<dt><strong>volatility_coupling</strong></dt><dd><p>A dictionary containing the initial values for the volatility coupling
-at different levels of the hierarchy. This represents the phasic part of
-the variance (the part that is affected by the parent nodes) and will
-define the strength of the connection between the node and the parent
-node. Defaults set to <cite>1.0</cite>.</p>
-</dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>The model type to use (can be <cite>“continuous”</cite> or <cite>“binary”</cite>).</p>
-</dd>
-<dt><strong>n_levels</strong></dt><dd><p>The number of hierarchies in the perceptual model (can be <cite>2</cite> or <cite>3</cite>). If
-<cite>None</cite>, the nodes hierarchy is not created and might be provided afterward.
-Defaults to <cite>2</cite> for a 2-level HGF.</p>
+<dt><strong>continuous_precision</strong></dt><dd><p>The expected precision of the continuous input node. Default to <cite>1e4</cite>. Only
+relevant if <cite>model_type=”continuous”</cite>.</p>
 </dd>
 <dt><strong>tonic_volatility</strong></dt><dd><p>A dictionary containing the initial values for the tonic volatility
 at different levels of the hierarchy. This represents the tonic
 part of the variance (the part that is not affected by the parent node).
 Defaults are set to <cite>-3.0</cite>.</p>
 </dd>
-<dt><strong>continuous_precision</strong></dt><dd><p>The expected precision of the continuous input node. Default to <cite>1e4</cite>. Only
-relevant if <cite>model_type=”continuous”</cite>.</p>
+<dt><strong>volatility_coupling</strong></dt><dd><p>A dictionary containing the initial values for the volatility coupling
+at different levels of the hierarchy. This represents the phasic part of
+the variance (the part that is affected by the parent nodes) and will
+define the strength of the connection between the node and the parent
+node. Defaults set to <cite>1.0</cite>.</p>
+</dd>
+<dt><strong>eta0</strong></dt><dd><p>The first categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
+relevant if <cite>model_type=”binary”</cite>.</p>
+</dd>
+<dt><strong>eta1</strong></dt><dd><p>The second categorical value of the binary node. Defaults to <cite>0.0</cite>. Only
+relevant if <cite>model_type=”binary”</cite>.</p>
 </dd>
 <dt><strong>binary_precision</strong></dt><dd><p>The precision of the binary input node. Default to <cite>jnp.inf</cite>. Only relevant
 if <cite>model_type=”binary”</cite>.</p>
@@ -750,8 +759,8 @@ random walk. Defaults set all entries to <cite>0.0</cite> (no drift).</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -781,7 +790,7 @@ random walk. Defaults set all entries to <cite>0.0</cite> (no drift).</p>
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
 </p></div>
       
     </div>

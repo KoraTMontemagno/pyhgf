@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../../../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
 
   
-  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -36,9 +36,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
 
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
@@ -128,13 +128,14 @@
   
   
   
+  
     
     
       
     
     
-    <img src="../../../../_static/logo_small.svg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../../../_static/logo_small.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../../../_static/logo_small.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../../../_static/logo_small.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">pyhgf</p>
@@ -463,9 +464,9 @@ document.write(`
     <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span>
     <span class="n">value_parent_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">pi_value_parent</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">precision_value_parent</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Send prediction-error and update the mean of a value parent (binary).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send prediction-error and update the mean of a value parent (binary).</span>
 
 <span class="sd">    .. note::</span>
 <span class="sd">       This function has similarities with its continuous counterpart</span>
@@ -483,13 +484,13 @@ document.write(`
 <span class="sd">        For each node, the index list value and volatility parents and children.</span>
 <span class="sd">    value_parent_idx :</span>
 <span class="sd">        Pointer to the node that will be updated.</span>
-<span class="sd">    pi_value_parent :</span>
+<span class="sd">    precision_value_parent :</span>
 <span class="sd">        The precision of the value parent that has already been updated.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    mu_value_parent :</span>
-<span class="sd">        The expected value for the mean of the value parent (:math:`\\mu`).</span>
+<span class="sd">    mean_value_parent :</span>
+<span class="sd">        The expected value for the mean of the value parent.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get the current expected precision for the volatility parent</span>
@@ -499,27 +500,29 @@ document.write(`
 
     <span class="c1"># Gather prediction errors from all child nodes if the parent has many children</span>
     <span class="c1"># This part corresponds to the sum of children for the multi-children situations</span>
-    <span class="n">pe_children</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-        <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+    <span class="n">children_prediction_error</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">value_coupling</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
         <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
-        <span class="n">vape_child</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">child_value_prediction_error</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
         <span class="p">)</span>
-        <span class="n">pe_children</span> <span class="o">+=</span> <span class="p">(</span><span class="n">psi_child</span> <span class="o">*</span> <span class="n">vape_child</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi_value_parent</span>
+        <span class="n">children_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="n">value_coupling</span> <span class="o">*</span> <span class="n">child_value_prediction_error</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">precision_value_parent</span>
 
     <span class="c1"># Estimate the new mean of the value parent</span>
-    <span class="n">mu_value_parent</span> <span class="o">=</span> <span class="n">expected_mean_value_parent</span> <span class="o">+</span> <span class="n">pe_children</span>
+    <span class="n">mean_value_parent</span> <span class="o">=</span> <span class="n">expected_mean_value_parent</span> <span class="o">+</span> <span class="n">children_prediction_error</span>
 
-    <span class="k">return</span> <span class="n">mu_value_parent</span></div>
+    <span class="k">return</span> <span class="n">mean_value_parent</span></div>
 
 
 <div class="viewcode-block" id="prediction_error_precision_value_parent"><a class="viewcode-back" href="../../../../generated/pyhgf.updates.prediction_error.binary/pyhgf.updates.prediction_error.binary.prediction_error_precision_value_parent.html#pyhgf.updates.prediction_error.binary.prediction_error_precision_value_parent">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;value_parent_idx&quot;</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">prediction_error_precision_value_parent</span><span class="p">(</span>
     <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="n">value_parent_idx</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Send prediction-error and update the precision of a value parent (binary).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send prediction-error and update the precision of a value parent (binary).</span>
 
 <span class="sd">    .. note::</span>
 <span class="sd">       This function has similarities with its continuous counterpart</span>
@@ -540,8 +543,8 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    pi_value_parent :</span>
-<span class="sd">        The expected value for the mean of the value parent (:math:`\\pi`).</span>
+<span class="sd">    precision_value_parent :</span>
+<span class="sd">        The expected value for the mean of the value parent.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get the current expected precision for the volatility parent</span>
@@ -553,16 +556,16 @@ document.write(`
     <span class="c1"># This part corresponds to the sum over children for the multi-children situations.</span>
     <span class="n">pi_children</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">psi_child</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-        <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+        <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
         <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
         <span class="n">expected_precision_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
         <span class="n">pi_children</span> <span class="o">+=</span> <span class="n">psi_child</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">expected_precision_child</span><span class="p">)</span>
 
     <span class="c1"># Estimate new value for the precision of the value parent</span>
-    <span class="n">pi_value_parent</span> <span class="o">=</span> <span class="n">expected_precision_value_parent</span> <span class="o">+</span> <span class="n">pi_children</span>
+    <span class="n">precision_value_parent</span> <span class="o">=</span> <span class="n">expected_precision_value_parent</span> <span class="o">+</span> <span class="n">pi_children</span>
 
-    <span class="k">return</span> <span class="n">pi_value_parent</span></div>
+    <span class="k">return</span> <span class="n">precision_value_parent</span></div>
 
 
 <div class="viewcode-block" id="prediction_error_value_parent"><a class="viewcode-back" href="../../../../generated/pyhgf.updates.prediction_error.binary/pyhgf.updates.prediction_error.binary.prediction_error_value_parent.html#pyhgf.updates.prediction_error.binary.prediction_error_value_parent">[docs]</a><span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;value_parent_idx&quot;</span><span class="p">))</span>
@@ -593,9 +596,9 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pi_value_parent :</span>
-<span class="sd">        The precision (:math:`\\pi`) of the value parent.</span>
+<span class="sd">        The precision of the value parent.</span>
 <span class="sd">    mu_value_parent :</span>
-<span class="sd">        The mean (:math:`\\mu`) of the value parent.</span>
+<span class="sd">        The mean of the value parent.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Estimate the new precision of the value parent</span>
@@ -646,7 +649,7 @@ document.write(`
 
     <span class="c1"># Read parameters from the binary input</span>
     <span class="c1"># Currently, only one binary input can be child of the binary node</span>
-    <span class="n">child_node_idx</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">child_node_idx</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
     <span class="n">eta0</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_node_idx</span><span class="p">][</span><span class="s2">&quot;eta0&quot;</span><span class="p">]</span>
     <span class="n">eta1</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_node_idx</span><span class="p">][</span><span class="s2">&quot;eta1&quot;</span><span class="p">]</span>
     <span class="n">expected_precision</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_node_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
@@ -728,8 +731,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -759,7 +762,7 @@ document.write(`
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
 </p></div>
       
     </div>
