@@ -31,10 +31,9 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
@@ -47,14 +46,12 @@
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/thebelab-helper.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/3-Multilevel_HGF';</script>
@@ -161,8 +158,8 @@
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials.html">
-                        Tutorials
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
                       </a>
                     </li>
                 
@@ -309,8 +306,8 @@ document.write(`
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials.html">
-                        Tutorials
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
                       </a>
                     </li>
                 
@@ -450,6 +447,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="multilevel-embeding-of-hierarchical-gaussian-filters">
 <span id="multilevel-hgf"></span><h1>Multilevel embeding of Hierarchical Gaussian Filters<a class="headerlink" href="#multilevel-embeding-of-hierarchical-gaussian-filters" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/3-Multilevel_HGF.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -459,6 +457,17 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
 import sys
+import arviz as az
+import jax.numpy as jnp
+import matplotlib.pyplot as plt
+import numpy as np
+import pymc as pm
+from numpy import loadtxt
+
+from pyhgf import load_data
+from pyhgf.distribution import HGFDistribution, hgf_logp
+from pyhgf.response import first_level_binary_surprise
+
 if &#39;google.colab&#39; in sys.modules:
     ! pip install pyhgf
 </pre></div>
@@ -468,18 +477,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">hgf_logp</span><span class="p">,</span> <span class="n">HGFDistribution</span>
-<span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
-<span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">first_level_binary_surprise</span>
-<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -608,7 +606,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/94d106cf43028aa4c682dab5986e909be971fc4ab7a8cf31a05de096b3a82b39.svg" src="../_images/94d106cf43028aa4c682dab5986e909be971fc4ab7a8cf31a05de096b3a82b39.svg" /></div>
+<img alt="../_images/e121c06d0faee7b4a493c6ec26eb8f79914d264b73c6ea4e03c7970270848611.svg" src="../_images/e121c06d0faee7b4a493c6ec26eb8f79914d264b73c6ea4e03c7970270848611.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -618,18 +616,6 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
-</pre></div>
-</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -649,15 +635,9 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 02:18&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 01:39&lt;00:00 Sampling chain 0, 1 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 139 seconds.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
-</pre></div>
-</div>
-</div>
+    </div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -667,7 +647,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ad35385388a8a4aef66eff7b391d6f603b2a0cf01d572e06304a2ff486bf77bf.png" src="../_images/ad35385388a8a4aef66eff7b391d6f603b2a0cf01d572e06304a2ff486bf77bf.png" />
+<img alt="../_images/2750e891021b0eb634e3bd4a9fd16961e92fe754c419af174921e5a1325672c3.png" src="../_images/2750e891021b0eb634e3bd4a9fd16961e92fe754c419af174921e5a1325672c3.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -748,7 +728,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/06729f219d3f33ccbc8b2dd4e49a048c09bdf5685aa8a1a16f34809168939c04.svg" src="../_images/06729f219d3f33ccbc8b2dd4e49a048c09bdf5685aa8a1a16f34809168939c04.svg" /></div>
+<img alt="../_images/63980474b16a23d6ca073066506df8f83c8bb09e0f1bdb3ebab20aba2dd504c1.svg" src="../_images/63980474b16a23d6ca073066506df8f83c8bb09e0f1bdb3ebab20aba2dd504c1.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -761,18 +741,6 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
-</pre></div>
-</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -792,15 +760,9 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:13&lt;00:00 Sampling chain 0, 999 divergences]
+      100.00% [2000/2000 00:32&lt;00:00 Sampling chain 0, 32 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 13 seconds.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
-</pre></div>
-</div>
-</div>
+    </div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -810,19 +772,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/arviz/stats/density_utils.py:487: UserWarning: Your data appears to have a single value or no finite values
-  warnings.warn(&quot;Your data appears to have a single value or no finite values&quot;)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/arviz/stats/density_utils.py:487: UserWarning: Your data appears to have a single value or no finite values
-  warnings.warn(&quot;Your data appears to have a single value or no finite values&quot;)
-/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/arviz/stats/density_utils.py:487: UserWarning: Your data appears to have a single value or no finite values
-  warnings.warn(&quot;Your data appears to have a single value or no finite values&quot;)
-/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/arviz/stats/density_utils.py:487: UserWarning: Your data appears to have a single value or no finite values
-  warnings.warn(&quot;Your data appears to have a single value or no finite values&quot;)
-</pre></div>
-</div>
-<img alt="../_images/e279fdb6c37dfc6f423fdb9cd6beb9b8d92f60ec65ec54cbc2bb88baabb039c0.png" src="../_images/e279fdb6c37dfc6f423fdb9cd6beb9b8d92f60ec65ec54cbc2bb88baabb039c0.png" />
+<img alt="../_images/c87f5c40f75370a0fa92d98c20fdb3e8ef34b9bf033aace209f2e7a832271eea.png" src="../_images/c87f5c40f75370a0fa92d98c20fdb3e8ef34b9bf033aace209f2e7a832271eea.png" />
 </div>
 </div>
 </section>
@@ -839,7 +789,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 02 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Mon Nov 06 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -849,12 +799,12 @@ pyhgf : 0.0.11
 jax   : 0.4.19
 jaxlib: 0.4.19
 
-jax       : 0.4.19
-matplotlib: 3.8.1
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 numpy     : 1.22.0
+jax       : 0.4.19
 arviz     : 0.16.1
+matplotlib: 3.8.1
 pymc      : 5.9.1
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 
 Watermark: 2.4.3
 </pre></div>

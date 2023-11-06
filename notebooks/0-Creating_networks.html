@@ -31,10 +31,9 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
@@ -47,14 +46,12 @@
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/thebelab-helper.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/0-Creating_networks';</script>
@@ -161,8 +158,8 @@
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials.html">
-                        Tutorials
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
                       </a>
                     </li>
                 
@@ -309,8 +306,8 @@ document.write(`
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials.html">
-                        Tutorials
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
                       </a>
                     </li>
                 
@@ -450,7 +447,26 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="creating-and-manipulating-networks-of-probabilistic-nodes">
 <span id="probabilistic-networks"></span><h1>Creating and manipulating networks of probabilistic nodes<a class="headerlink" href="#creating-and-manipulating-networks-of-probabilistic-nodes" title="Permalink to this heading">#</a></h1>
-<p><a class="reference external" href="https://ilabcode.github.io/pyhgf/index.html#">pyhgf</a> is designed with inspiration from graph neural network libraries that can support message-passing schemes and performs beliefs propagation through networks of probabilistic nodes. Here, this principle is applied to predictive processing and focuses on networks that are structured as <strong>rooted trees</strong> and perform variational message passing to update beliefs about the state of the environment, inferred from the observations at the root of the tree. While this library is optimized to implement the standard two-level and three-level HGF <span id="id1">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>, <a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>, as well as the generalized HGF <span id="id2">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span>, it can also be applied to much larger use cases, with the idea is to generalize belief propagation as it has been described so far to larger and more complex networks that will capture a greater variety of environmental structure. Therefore, the library is also designed to facilitate the creation and manipulation of such probabilistic networks. Importantly, here we consider that a probabilistic network should be defined by the following four variables:</p>
+<p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/0-Creating_networks.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
+import sys
+
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+
+from pyhgf.model import HGF
+from pyhgf.typing import Indexes
+
+if &#39;google.colab&#39; in sys.modules:
+    ! pip install pyhgf
+</pre></div>
+</div>
+</div>
+</div>
+<p><a class="reference external" href="https://ilabcode.github.io/pyhgf/index.html#">pyhgf</a> is designed with inspiration from graph neural network libraries that can support message-passing schemes and perform belief propagation through networks of probabilistic nodes. Here, this principle is applied to predictive processing and focuses on networks that are structured as <strong>rooted trees</strong> and perform variational message passing to update beliefs about the state of the environment, inferred from the observations at the root of the tree. While this library is optimized to implement the standard two-level and three-level HGF <span id="id1">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>, <a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>, as well as the generalized HGF <span id="id2">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span>, it can also be applied to much larger use cases, with the idea is to generalize belief propagation as it has been described so far to larger and more complex networks that will capture a greater variety of environmental structure. Therefore, the library is also designed to facilitate the creation and manipulation of such probabilistic networks. Importantly, here we consider that a probabilistic network should be defined by the following four variables:</p>
 <ol class="arabic simple">
 <li><p>the network parameters</p></li>
 <li><p>the network structure</p></li>
@@ -472,7 +488,7 @@ Splitting the networks this way makes the components easily compatible with JAX 
 <p>The way beliefs are being updated, or the type of generic computation that is performed by the nodes are defined by the set of <span class="math notranslate nohighlight">\(n\)</span> update functions</p>
 <div class="math notranslate nohighlight">
 \[\mathcal{F} = \{f_1, ..., f_n\}\]</div>
-<p>In this set, each update function is linked to a node from the node indexes <span class="math notranslate nohighlight">\(n \in 1, ..., k\)</span> to which the function should apply. The most standard uses of the HGF only require continuous and/or binary update functions for input and states node that can be found in the <span class="xref std std-ref">pyhgf.continuous</span> and <span class="xref std std-ref">pyhgf.binary</span> sub-modules.</p>
+<p>In this set, each update function is linked to a node from the node indexes <span class="math notranslate nohighlight">\(n \in 1, ..., k\)</span> to which the function should apply. The most standard uses of the HGF only require continuous and/or binary update functions for input and states node that can be found in the <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.updates()</span></code> sub-module.</p>
 <p>The dynamic of belief propagation dynamics (which part of the network should be updated and in which order) are controlled by the ordered update sequence</p>
 <div class="math notranslate nohighlight">
 \[\Sigma = [f_1(n_1), ..., f_i(n_j), f \in \mathcal{F}, n \in 1, ..., k ]\]</div>
@@ -485,30 +501,20 @@ One of the advantages of reasoning this way is that it dissociates variables tha
 </div>
 <section id="creating-probabilistic-nodes">
 <h3>Creating probabilistic nodes<a class="headerlink" href="#creating-probabilistic-nodes" title="Permalink to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span>
-<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
-
-<span class="n">attributes</span> <span class="o">=</span> <span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">Indexes</span><span class="p">((</span><span class="mi">1</span><span class="p">,),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
+<p>parameters = {“mean”: 0.0, “precision”: 1.0}</p>
+<p>attributes = (parameters, parameters, parameters)
+edges = (
+Indexes((1,), None, None, None),
+Indexes(None, (2,), (0,), None),
+Indexes(None, None, None, (1,)),
+)</p>
 <p>The code above illustrates creating a probabilistic network of 3 nodes with simple parameter sets <span class="math notranslate nohighlight">\((mean = 0.0, precision = 1.0)\)</span>. Node 2 is the value parent of node 1. Node 3 is the value parent of node 2 and has no parents.</p>
 </section>
 <section id="visualizing-probabilistic-networks">
 <h3>Visualizing probabilistic networks<a class="headerlink" href="#visualizing-probabilistic-networks" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
-
-<span class="c1"># create a three-level HGF using default parameters</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a three-level HGF using default parameters</span>
 <span class="n">hgf</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span><span class="n">n_levels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
 <span class="n">hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
 </pre></div>
@@ -622,13 +628,6 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <p><em>Multivariate descendency</em> refers to situations where a node exerts a predictive influence (and is updated backwards through prediction errors) on multiple children nodes, either via value or volatility coupling.</p>
 <section id="continuous-value-coupling">
 <h5>Continuous value coupling<a class="headerlink" href="#continuous-value-coupling" title="Permalink to this heading">#</a></h5>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</pre></div>
-</div>
-</div>
-</div>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -637,8 +636,8 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># simulate some time series - one Gaussian noise and one noisy in wave</span>
-<span class="n">u_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="n">u_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mi">30</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">u_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">u_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">30</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">u_0</span><span class="p">,</span> <span class="n">u_1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 </pre></div>
@@ -676,7 +675,12 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_value_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_value_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">)</span>
+
+
+<span class="n">many_value_children_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">show_observations</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -684,21 +688,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-
-<span class="n">many_value_children_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">show_observations</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/b9da9958c4f11b2fa616211de459c35ad8cc344363fa75eb6ef8a71d42df1241.png" src="../_images/b9da9958c4f11b2fa616211de459c35ad8cc344363fa75eb6ef8a71d42df1241.png" />
+<img alt="../_images/32ec791726f50386551d804c6240bfdf2b99c9b325b38cd24f0aa3041ed25487.png" src="../_images/32ec791726f50386551d804c6240bfdf2b99c9b325b38cd24f0aa3041ed25487.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -762,7 +752,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -770,18 +760,23 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7f0034381570&gt;
+</pre></div>
+</div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">show_observations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">show_observations</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b8c2c43e5fb964d10d70c33d511d9944dd8a8cdc728c21f29c713d6dcf1db4f8.png" src="../_images/b8c2c43e5fb964d10d70c33d511d9944dd8a8cdc728c21f29c713d6dcf1db4f8.png" />
+<img alt="../_images/995d09ae0c4a8f4d8e297924908c4eddc5c5f8124f35acdecff3f135a2b930b9.png" src="../_images/995d09ae0c4a8f4d8e297924908c4eddc5c5f8124f35acdecff3f135a2b930b9.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -799,10 +794,10 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># simulate two binary outcomes from sinuosidal contingencies</span>
-<span class="n">u_0_prob</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mi">45</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">u_0_prob</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">45</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 <span class="n">u_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">u_0_prob</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">u_1_prob</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mi">90</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">u_1_prob</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">90</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 <span class="n">u_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">u_1_prob</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">u_0</span><span class="p">,</span> <span class="n">u_1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
@@ -844,12 +839,15 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_binary_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_binary_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7f00342f7fd0&gt;
 </pre></div>
 </div>
 </div>
@@ -864,17 +862,17 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">axs</span> <span class="o">=</span> <span class="n">many_binary_children_hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
 
 <span class="c1"># plot the real contingencies</span>
-<span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u_0_prob</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span> <span class="s2">&quot;Contingencies - Input Node 0&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u_1_prob</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span> <span class="s2">&quot;Contingencies - Input Node 1&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u_0_prob</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Contingencies - Input Node 0&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u_1_prob</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Contingencies - Input Node 1&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
 <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/e244c0dd1af3c8a30e6f6df51d4d87aadc9e26b9925099635c1ed2da9369eb01.png" src="../_images/e244c0dd1af3c8a30e6f6df51d4d87aadc9e26b9925099635c1ed2da9369eb01.png" />
+<img alt="../_images/fdf642aa43476f3c074768b37e959d62c9cb837ec1e4d511b0872ff84b9f163e.png" src="../_images/fdf642aa43476f3c074768b37e959d62c9cb837ec1e4d511b0872ff84b9f163e.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -929,7 +927,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>The HGF class include a built-in <span class="xref std std-ref">pyhgf.modeal.HGF.get_update_sequence</span> method to automatically generate the update sequence from the network structure, assuming that we want to propagate the beliefs from the lower part of the tree (the input nodes) to its upper part (nodes that do not have parents).</p>
+<p>The HGF class include a built-in <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.model.HGF.get_update_sequence()</span></code> method to automatically generate the update sequence from the network structure, assuming that we want to propagate the beliefs from the lower part of the tree (the input nodes) to its upper part (nodes that do not have parents).</p>
 </section>
 <section id="time-varying-update-sequences">
 <h2>Time-varying update sequences<a class="headerlink" href="#time-varying-update-sequences" title="Permalink to this heading">#</a></h2>
@@ -959,7 +957,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 02 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Mon Nov 06 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -970,6 +968,7 @@ jax   : 0.4.19
 jaxlib: 0.4.19
 
 seaborn   : 0.13.0
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 numpy     : 1.22.0
 matplotlib: 3.8.1
 

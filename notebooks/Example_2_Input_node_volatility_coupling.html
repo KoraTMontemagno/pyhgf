@@ -31,10 +31,9 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
@@ -47,14 +46,12 @@
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/thebelab-helper.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Example_2_Input_node_volatility_coupling';</script>
     <link rel="shortcut icon" href="../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -159,8 +156,8 @@
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials.html">
-                        Tutorials
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
                       </a>
                     </li>
                 
@@ -307,8 +304,8 @@ document.write(`
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials.html">
-                        Tutorials
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
                       </a>
                     </li>
                 
@@ -448,26 +445,24 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="example-2-estimating-the-mean-and-precision-of-an-input-node">
 <span id="example-2"></span><h1>Example 2: Estimating the mean and precision of an input node<a class="headerlink" href="#example-2-estimating-the-mean-and-precision-of-an-input-node" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/Example_2_Input_node_volatility_coupling.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
 import sys
+
+import arviz as az
+import matplotlib.pyplot as plt
+import numpy as np
+import pymc as pm
+import seaborn as sns
+from scipy.stats import norm
+
+from pyhgf.distribution import HGFDistribution
+from pyhgf.model import HGF
+
 if &#39;google.colab&#39; in sys.modules:
     ! pip install pyhgf
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
-<span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
 </pre></div>
 </div>
 </div>
@@ -503,9 +498,7 @@ if &#39;google.colab&#39; in sys.modules:
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
 ... Create the update sequence from the network structure.
 ... Create the belief propagation function.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+... Cache the belief propagation function.
 Adding 1000 new observations.
 </pre></div>
 </div>
@@ -553,7 +546,7 @@ Adding 1000 new observations.
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/d8376d2a779d97d7660f88d2380706ffa39022dd300b513b8654ca6104ad66c9.png" src="../_images/d8376d2a779d97d7660f88d2380706ffa39022dd300b513b8654ca6104ad66c9.png" />
+<img alt="../_images/6de6b18570b0162e286874558661f010d7df2605a763586f7a9fd4ef1b7bc7dd.png" src="../_images/6de6b18570b0162e286874558661f010d7df2605a763586f7a9fd4ef1b7bc7dd.png" />
 </div>
 </div>
 </section>
@@ -633,7 +626,7 @@ Adding 1000 new observations.
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/596c91d89049807d4c3b33a2d1275085a4e1c546466c0bce98aee7ec1a19e7d2.png" src="../_images/596c91d89049807d4c3b33a2d1275085a4e1c546466c0bce98aee7ec1a19e7d2.png" />
+<img alt="../_images/2be605e77a1b1ac98a580218be0650245cef6ee5c64adbccc72916691269455f.png" src="../_images/2be605e77a1b1ac98a580218be0650245cef6ee5c64adbccc72916691269455f.png" />
 </div>
 </div>
 </section>
@@ -647,7 +640,7 @@ Adding 1000 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 02 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Mon Nov 06 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -657,12 +650,12 @@ pyhgf : 0.0.11
 jax   : 0.4.19
 jaxlib: 0.4.19
 
-matplotlib: 3.8.1
-numpy     : 1.22.0
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-arviz     : 0.16.1
 pymc      : 5.9.1
 seaborn   : 0.13.0
+arviz     : 0.16.1
+numpy     : 1.22.0
+matplotlib: 3.8.1
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 
 Watermark: 2.4.3
 </pre></div>

@@ -31,10 +31,9 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
@@ -47,14 +46,12 @@
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/thebelab-helper.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/4-Parameter_recovery';</script>
@@ -161,8 +158,8 @@
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials.html">
-                        Tutorials
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
                       </a>
                     </li>
                 
@@ -309,8 +306,8 @@ document.write(`
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../tutorials.html">
-                        Tutorials
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
                       </a>
                     </li>
                 
@@ -450,10 +447,22 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="parameters-recovery-prior-predictive-and-posterior-predictive-sampling">
 <span id="parameters-recovery"></span><h1>Parameters recovery, prior predictive and posterior predictive sampling<a class="headerlink" href="#parameters-recovery-prior-predictive-and-posterior-predictive-sampling" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/4-Parameter_recovery.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
 import sys
+
+import arviz as az
+import jax.numpy as jnp
+import matplotlib.pyplot as plt
+import numpy as np
+import pymc as pm
+from numpy import loadtxt
+
+from pyhgf import load_data
+from pyhgf.distribution import HGFDistribution, hgf_logp
+
 if &#39;google.colab&#39; in sys.modules:
     ! pip install pyhgf
 </pre></div>
@@ -462,17 +471,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">hgf_logp</span><span class="p">,</span> <span class="n">HGFDistribution</span>
-<span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
-<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -575,18 +574,6 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (2 chains in 1 job)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_1]
-</pre></div>
-</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -606,7 +593,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:49&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:38&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -627,15 +614,9 @@ if &#39;google.colab&#39; in sys.modules:
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:39&lt;00:00 Sampling chain 1, 0 divergences]
+      100.00% [2000/2000 00:28&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 89 seconds.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
-</pre></div>
-</div>
-</div>
+    </div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -645,7 +626,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d57b803364c84bf0e5f6d23efa226fb02a75fadfa7a6e681c85515e52cb75c82.png" src="../_images/d57b803364c84bf0e5f6d23efa226fb02a75fadfa7a6e681c85515e52cb75c82.png" />
+<img alt="../_images/7d9761f4d41b45415168a5c7cbbfc2014eeea8fa87e6cae9734c428efe30bedf.png" src="../_images/7d9761f4d41b45415168a5c7cbbfc2014eeea8fa87e6cae9734c428efe30bedf.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -687,74 +668,74 @@ if &#39;google.colab&#39; in sys.modules:
   <tbody>
     <tr>
       <th>omega_1[0]</th>
-      <td>-6.526</td>
-      <td>0.558</td>
-      <td>-7.492</td>
-      <td>-5.465</td>
-      <td>0.013</td>
-      <td>0.009</td>
-      <td>1994.0</td>
-      <td>1323.0</td>
+      <td>-6.546</td>
+      <td>0.542</td>
+      <td>-7.551</td>
+      <td>-5.556</td>
+      <td>0.011</td>
+      <td>0.008</td>
+      <td>2376.0</td>
+      <td>1239.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[1]</th>
-      <td>-7.767</td>
-      <td>0.221</td>
-      <td>-8.205</td>
-      <td>-7.367</td>
-      <td>0.005</td>
-      <td>0.003</td>
-      <td>2246.0</td>
-      <td>1573.0</td>
+      <td>-7.739</td>
+      <td>0.306</td>
+      <td>-8.172</td>
+      <td>-7.269</td>
+      <td>0.018</td>
+      <td>0.013</td>
+      <td>1265.0</td>
+      <td>570.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[2]</th>
-      <td>-5.042</td>
-      <td>0.462</td>
-      <td>-5.897</td>
-      <td>-4.212</td>
+      <td>-5.077</td>
+      <td>0.460</td>
+      <td>-5.921</td>
+      <td>-4.199</td>
       <td>0.009</td>
       <td>0.007</td>
-      <td>2506.0</td>
-      <td>1575.0</td>
+      <td>2436.0</td>
+      <td>1369.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[3]</th>
-      <td>-6.645</td>
-      <td>0.744</td>
-      <td>-7.947</td>
-      <td>-5.222</td>
-      <td>0.019</td>
-      <td>0.013</td>
-      <td>1798.0</td>
-      <td>1516.0</td>
+      <td>-6.610</td>
+      <td>0.780</td>
+      <td>-7.881</td>
+      <td>-5.082</td>
+      <td>0.022</td>
+      <td>0.015</td>
+      <td>1584.0</td>
+      <td>1126.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[4]</th>
-      <td>-5.494</td>
-      <td>0.566</td>
-      <td>-6.445</td>
-      <td>-4.375</td>
+      <td>-5.518</td>
+      <td>0.579</td>
+      <td>-6.526</td>
+      <td>-4.429</td>
       <td>0.013</td>
       <td>0.009</td>
-      <td>1895.0</td>
-      <td>1189.0</td>
+      <td>2249.0</td>
+      <td>1195.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[5]</th>
-      <td>-5.357</td>
-      <td>0.560</td>
-      <td>-6.423</td>
-      <td>-4.369</td>
-      <td>0.012</td>
+      <td>-5.352</td>
+      <td>0.545</td>
+      <td>-6.305</td>
+      <td>-4.340</td>
+      <td>0.011</td>
       <td>0.008</td>
-      <td>2223.0</td>
-      <td>1431.0</td>
+      <td>2427.0</td>
+      <td>1543.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -773,7 +754,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 02 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Mon Nov 06 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -783,12 +764,12 @@ pyhgf : 0.0.11
 jax   : 0.4.19
 jaxlib: 0.4.19
 
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-matplotlib: 3.8.1
-pymc      : 5.9.1
 arviz     : 0.16.1
-numpy     : 1.22.0
 jax       : 0.4.19
+numpy     : 1.22.0
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+pymc      : 5.9.1
+matplotlib: 3.8.1
 
 Watermark: 2.4.3
 </pre></div>
