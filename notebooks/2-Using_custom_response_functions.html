@@ -506,6 +506,11 @@ In this situation, it is trivial to write such a decision function and generate 
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1699367026.241635    2893 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a binary Hierarchical Gaussian Filter with 2 levels.
 ... Create the update sequence from the network structure.
 ... Create the belief propagation function.
@@ -829,7 +834,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -871,7 +876,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 2, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -892,7 +897,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
     </div></div>
 </div>
@@ -937,19 +942,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>tonic_volatility_2</th>
-      <td>-3.944</td>
-      <td>0.492</td>
-      <td>-4.823</td>
-      <td>-2.977</td>
+      <td>-3.955</td>
+      <td>0.501</td>
+      <td>-4.89</td>
+      <td>-2.985</td>
       <td>0.012</td>
-      <td>0.008</td>
-      <td>1774.0</td>
-      <td>2410.0</td>
+      <td>0.009</td>
+      <td>1720.0</td>
+      <td>2178.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/58e33ebd9406a8abd670a8e49f57a4636e05b8a5c283055fa7831ceefa9e0be4.png" src="../_images/58e33ebd9406a8abd670a8e49f57a4636e05b8a5c283055fa7831ceefa9e0be4.png" />
+</div></div><img alt="../_images/43d6512a7f6be0db29f0b343aad8e78a8748c90a0db14c6bc25a943f3e392e44.png" src="../_images/43d6512a7f6be0db29f0b343aad8e78a8748c90a0db14c6bc25a943f3e392e44.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -984,15 +989,15 @@ Python version       : 3.10.13
 IPython version      : 8.17.2
 
 pyhgf : 0.0.11
-jax   : 0.4.19
-jaxlib: 0.4.19
+jax   : 0.4.16
+jaxlib: 0.4.16
 
-arviz     : 0.16.1
-jax       : 0.4.19
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-matplotlib: 3.8.1
 pymc      : 5.9.1
 numpy     : 1.22.0
+jax       : 0.4.16
+matplotlib: 3.8.1
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+arviz     : 0.16.1
 
 Watermark: 2.4.3
 </pre></div>
