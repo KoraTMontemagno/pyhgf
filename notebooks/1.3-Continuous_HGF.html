@@ -560,7 +560,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e66c81e4d27c1b56e286132fc0ca1f5ec1d55334c30830b6eda88ba052e9aae5.png" src="../_images/e66c81e4d27c1b56e286132fc0ca1f5ec1d55334c30830b6eda88ba052e9aae5.png" />
+<img alt="../_images/275f5d9aad65308d65b72095727eae95720e7e25ff45a5cce98b0603ab3c320c.png" src="../_images/275f5d9aad65308d65b72095727eae95720e7e25ff45a5cce98b0603ab3c320c.png" />
 </div>
 </div>
 <p>Looking at the volatility level (i.e. the orange line in the first panel), we see that there are two salient events in our time series where volatility shoots up. The first is in April 2010 when the currency markets react to the news that Greece is effectively broke. This leads to a flight into the US dollar (the grey dots rising very quickly), sending the volatility higher. The second is an accelerating increase in the value of the Swiss Franc in August and September 2011, as the Euro crisis drags on. The point where the Swiss central bank intervened and put a floor under how far the Euro could fall with respect to the Franc is visible in Franc’s valuation against the Dollar. This surprising intervention shows up as another spike in volatility.</p>
@@ -572,7 +572,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-886.61523, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-886.617, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -587,240 +587,6 @@ if &#39;google.colab&#39; in sys.modules:
 <section id="plot-correlation">
 <h4>Plot correlation<a class="headerlink" href="#plot-correlation" title="Permalink to this heading">#</a></h4>
 <p>Node parameters that are highly correlated across time are likely to indicate that the model did not learn hierarchical structure in the data but instead overfitted on some components. One way to quickly check the parameters nodes correlation is to use the <code class="docutils literal notranslate"><span class="pre">plot_correlation</span></code> function embedded in the HGF class.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_continuous_hgf</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>time_steps</th>
-      <th>time</th>
-      <th>observation_input_0</th>
-      <th>x_1_mean</th>
-      <th>x_1_precision</th>
-      <th>x_1_expected_mean</th>
-      <th>x_1_expected_precision</th>
-      <th>x_2_mean</th>
-      <th>x_2_precision</th>
-      <th>x_2_expected_mean</th>
-      <th>x_2_expected_precision</th>
-      <th>x_1_surprise</th>
-      <th>x_2_surprise</th>
-      <th>surprise</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0357</td>
-      <td>1.035700</td>
-      <td>19778.964844</td>
-      <td>1.035700</td>
-      <td>9778.963867</td>
-      <td>-0.001315</td>
-      <td>4.254841</td>
-      <td>0.000000</td>
-      <td>4.249257</td>
-      <td>-3.675056</td>
-      <td>0.195570</td>
-      <td>-3.479486</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>1.0319</td>
-      <td>1.034387</td>
-      <td>28933.613281</td>
-      <td>1.035700</td>
-      <td>18933.613281</td>
-      <td>-0.003792</td>
-      <td>2.707093</td>
-      <td>-0.001315</td>
-      <td>2.700063</td>
-      <td>-3.868714</td>
-      <td>0.422309</td>
-      <td>-3.446404</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1.0</td>
-      <td>3.0</td>
-      <td>1.0359</td>
-      <td>1.034794</td>
-      <td>37163.835938</td>
-      <td>1.034387</td>
-      <td>27163.833984</td>
-      <td>-0.007876</td>
-      <td>1.990209</td>
-      <td>-0.003792</td>
-      <td>1.981237</td>
-      <td>-4.154776</td>
-      <td>0.577094</td>
-      <td>-3.577682</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>1.0343</td>
-      <td>1.034682</td>
-      <td>44304.757812</td>
-      <td>1.034794</td>
-      <td>34304.757812</td>
-      <td>-0.013403</td>
-      <td>1.578193</td>
-      <td>-0.007876</td>
-      <td>1.567902</td>
-      <td>-4.298397</td>
-      <td>0.694093</td>
-      <td>-3.604304</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1.0</td>
-      <td>5.0</td>
-      <td>1.0303</td>
-      <td>1.033811</td>
-      <td>50320.671875</td>
-      <td>1.034682</td>
-      <td>40320.671875</td>
-      <td>-0.019216</td>
-      <td>1.310682</td>
-      <td>-0.013403</td>
-      <td>1.300439</td>
-      <td>-3.996188</td>
-      <td>0.787610</td>
-      <td>-3.208579</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>609</th>
-      <td>1.0</td>
-      <td>610.0</td>
-      <td>0.7885</td>
-      <td>0.800689</td>
-      <td>27213.435547</td>
-      <td>0.807770</td>
-      <td>17213.435547</td>
-      <td>2.332373</td>
-      <td>0.796143</td>
-      <td>2.215723</td>
-      <td>0.757856</td>
-      <td>-0.761766</td>
-      <td>1.062725</td>
-      <td>0.300959</td>
-    </tr>
-    <tr>
-      <th>610</th>
-      <td>1.0</td>
-      <td>611.0</td>
-      <td>0.7889</td>
-      <td>0.796267</td>
-      <td>26657.429688</td>
-      <td>0.800689</td>
-      <td>16657.429688</td>
-      <td>2.319057</td>
-      <td>0.796083</td>
-      <td>2.332373</td>
-      <td>0.718705</td>
-      <td>-2.783834</td>
-      <td>1.084155</td>
-      <td>-1.699679</td>
-    </tr>
-    <tr>
-      <th>611</th>
-      <td>1.0</td>
-      <td>612.0</td>
-      <td>0.7889</td>
-      <td>0.793490</td>
-      <td>26531.199219</td>
-      <td>0.796267</td>
-      <td>16531.199219</td>
-      <td>2.253124</td>
-      <td>0.802189</td>
-      <td>2.319057</td>
-      <td>0.718656</td>
-      <td>-3.489017</td>
-      <td>1.085687</td>
-      <td>-2.403330</td>
-    </tr>
-    <tr>
-      <th>612</th>
-      <td>1.0</td>
-      <td>613.0</td>
-      <td>0.7876</td>
-      <td>0.791300</td>
-      <td>26890.753906</td>
-      <td>0.793490</td>
-      <td>16890.753906</td>
-      <td>2.180103</td>
-      <td>0.804085</td>
-      <td>2.253124</td>
-      <td>0.723629</td>
-      <td>-3.655327</td>
-      <td>1.082606</td>
-      <td>-2.572721</td>
-    </tr>
-    <tr>
-      <th>613</th>
-      <td>1.0</td>
-      <td>614.0</td>
-      <td>0.8241</td>
-      <td>0.803233</td>
-      <td>27487.062500</td>
-      <td>0.791300</td>
-      <td>17487.062500</td>
-      <td>2.692787</td>
-      <td>0.674558</td>
-      <td>2.180103</td>
-      <td>0.725171</td>
-      <td>5.441153</td>
-      <td>1.174916</td>
-      <td>6.616069</td>
-    </tr>
-  </tbody>
-</table>
-<p>614 rows × 14 columns</p>
-</div></div></div>
-</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_continuous_hgf</span><span class="o">.</span><span class="n">plot_correlations</span><span class="p">();</span>
@@ -896,7 +662,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/21edd2482cc5ce7be11ae55002a4d94adfabe3a4b8b735865f61dd881e3e3b3e.png" src="../_images/21edd2482cc5ce7be11ae55002a4d94adfabe3a4b8b735865f61dd881e3e3b3e.png" />
+<img alt="../_images/d6d32b54cf4d0be70ea751c94fdfb9f90130e8ef0ccaae5bfca18af5a6fc5e08.png" src="../_images/d6d32b54cf4d0be70ea751c94fdfb9f90130e8ef0ccaae5bfca18af5a6fc5e08.png" />
 </div>
 </div>
 </section>
@@ -910,7 +676,7 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-910.8997, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-910.89966, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -949,7 +715,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0d00460f21e91495d1e32c6c7325f1c7aa151f6f0124a1c637424278bb7462bd.png" src="../_images/0d00460f21e91495d1e32c6c7325f1c7aa151f6f0124a1c637424278bb7462bd.png" />
+<img alt="../_images/44438d1b7800e9ca394a0b11e9c5e4cf96c464709e94ab3c43e9a2e3ccab5ff9.png" src="../_images/44438d1b7800e9ca394a0b11e9c5e4cf96c464709e94ab3c43e9a2e3ccab5ff9.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -959,12 +725,12 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-828.6984, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-828.6985, dtype=float32)
 </pre></div>
 </div>
 </div>
 </div>
-<p>Now we are getting a global surprise of <code class="docutils literal notranslate"><span class="pre">-1011</span></code> with the new model, as compared to a global surprise of <code class="docutils literal notranslate"><span class="pre">-381</span></code> before. It looks like the <span class="math notranslate nohighlight">\(\omega\)</span> value at the second level can play an important role in minimizing surprise for this kind of time series. But how can we decide on which value to choose? Doing this by trial and error would be a bit tedious. Instead, we can use dedicated Bayesian methods that will infer the values of <span class="math notranslate nohighlight">\(\omega\)</span> that minimize the surprise (i.e. that maximize the likelihood of the new observations given parameter priors).</p>
+<p>Now we are getting a global surprise of <code class="docutils literal notranslate"><span class="pre">-828</span></code> with the new model, as compared to a global surprise of <code class="docutils literal notranslate"><span class="pre">-910</span></code> before. It looks like the <span class="math notranslate nohighlight">\(\omega\)</span> value at the second level can play an important role in minimizing surprise for this kind of time series. But how can we decide on which value to choose? Doing this by trial and error would be a bit tedious. Instead, we can use dedicated Bayesian methods that will infer the values of <span class="math notranslate nohighlight">\(\omega\)</span> that minimize the surprise (i.e. that maximize the likelihood of the new observations given parameter priors).</p>
 </section>
 </section>
 </section>
@@ -1093,7 +859,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2cf7cff6b7e9e27305981c8566b62c6d9e083c425718cf64c6946e106c7d1943.png" src="../_images/2cf7cff6b7e9e27305981c8566b62c6d9e083c425718cf64c6946e106c7d1943.png" />
+<img alt="../_images/8928b06e2f2cb1feb492dd264873e73f49c070c22164b473b455fd7df92c6f9a.png" src="../_images/8928b06e2f2cb1feb492dd264873e73f49c070c22164b473b455fd7df92c6f9a.png" />
 </div>
 </div>
 </section>
@@ -1134,17 +900,12 @@ Adding 614 new observations.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: ylabel=&#39;$\\mu_{2}$&#39;&gt;, &lt;Axes: ylabel=&#39;$\\mu_{1}$&#39;&gt;,
-       &lt;Axes: title={&#39;left&#39;: &#39;Continuous Input Node 0&#39;}&gt;, &lt;Axes: &gt;],
-      dtype=object)
-</pre></div>
-</div>
-<img alt="../_images/eb354a232c8c792904f8c5797e092290c8261805318650eadad22992f74aeb28.png" src="../_images/eb354a232c8c792904f8c5797e092290c8261805318650eadad22992f74aeb28.png" />
+<img alt="../_images/9898630cbc6532724e43a2212132c9aeac1fc6f55c2009490ea9cccfc4354cfa.png" src="../_images/9898630cbc6532724e43a2212132c9aeac1fc6f55c2009490ea9cccfc4354cfa.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1154,7 +915,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1106.1301, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1106.1125, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1269,7 +1030,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/42edf86f292053caae3eaabc34390283e6651ecc4da70e1b271dd8cbc8f0b656.png" src="../_images/42edf86f292053caae3eaabc34390283e6651ecc4da70e1b271dd8cbc8f0b656.png" />
+<img alt="../_images/5d12a4eb6de716bbfb2e9cb23d97451a5d7892815efc1804d68b41b2061d5602.png" src="../_images/5d12a4eb6de716bbfb2e9cb23d97451a5d7892815efc1804d68b41b2061d5602.png" />
 </div>
 </div>
 </section>
@@ -1309,12 +1070,12 @@ Adding 614 new observations.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="n">ci</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_mcmc</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/75f180575d6d76c8e630872d1adfdf830ce605f042bb49244315bda8d3f2b5ea.png" src="../_images/75f180575d6d76c8e630872d1adfdf830ce605f042bb49244315bda8d3f2b5ea.png" />
+<img alt="../_images/69731763c59b13b1fb3b907510190c6c019243e7e9974c3bbef29d1eee07b62e.png" src="../_images/69731763c59b13b1fb3b907510190c6c019243e7e9974c3bbef29d1eee07b62e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1324,7 +1085,7 @@ Adding 614 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1117.9801, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-1118.0415, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1352,12 +1113,12 @@ pyhgf : 0.0.11
 jax   : 0.4.19
 jaxlib: 0.4.19
 
-matplotlib: 3.8.1
 pymc      : 5.9.1
-arviz     : 0.16.1
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 seaborn   : 0.13.0
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+arviz     : 0.16.1
 jax       : 0.4.19
+matplotlib: 3.8.1
 
 Watermark: 2.4.3
 </pre></div>
