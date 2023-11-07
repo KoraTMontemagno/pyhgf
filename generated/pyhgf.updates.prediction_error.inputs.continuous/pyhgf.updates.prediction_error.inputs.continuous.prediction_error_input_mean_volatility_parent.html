@@ -538,7 +538,26 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pyhgf.updates.prediction_error.inputs.continuous.prediction_error_input_mean_volatility_parent">
 <span class="sig-prename descclassname"><span class="pre">pyhgf.updates.prediction_error.inputs.continuous.</span></span><span class="sig-name descname"><span class="pre">prediction_error_input_mean_volatility_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.12)"><span class="pre">Dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.12)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Indexes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">volatility_parent_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision_volatility_parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.12)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html#jax.Array" title="(in JAX)"><span class="pre">Array</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.bool_" title="(in NumPy v1.26)"><span class="pre">bool_</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.number" title="(in NumPy v1.26)"><span class="pre">number</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.12)"><span class="pre">complex</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html#jax.Array" title="(in JAX)"><span class="pre">Array</span></a></span></span><a class="reference internal" href="../../_modules/pyhgf/updates/prediction_error/inputs/continuous.html#prediction_error_input_mean_volatility_parent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.updates.prediction_error.inputs.continuous.prediction_error_input_mean_volatility_parent" title="Permalink to this definition">#</a></dt>
-<dd><p>Send prediction-error and update the mean of the volatility parent.</p>
+<dd><p>Update the mean of the volatility parent of a continuous input node.</p>
+<p>The new mean of the volatility parent <span class="math notranslate nohighlight">\(a\)</span> of an input node at time <span class="math notranslate nohighlight">\(k\)</span>
+is given by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mu_a^{(k)} = \hat{\mu}_a^{(k)} + \frac{1}{2\pi_a} \\
+\sum_{j=1}^{N_{children}} \kappa_j\epsilon_j^{(k)}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\kappa_j\)</span> is the volatility coupling strength between the volatility
+parent and the volatility children <span class="math notranslate nohighlight">\(j\)</span> and <span class="math notranslate nohighlight">\(\epsilon_j^{(k)}\)</span> is the
+noise prediction error given by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\epsilon_j^{(k)} = \frac{\hat{\pi}_j^{(k)}}{\pi_{vapa}^{(k)}} + \\
+\hat{\pi}_j^{(k)} \left( u^{(k)} - \mu_{vapa}^{(k)} \right)^2 - 1\end{split}\]</div>
+<p>Note that, because we are working with continuous input nodes,
+<span class="math notranslate nohighlight">\(\epsilon_j^{(k)}\)</span> is not a function of the value prediction error but uses
+the posterior of the value parent(s).</p>
+<p>The expected precision of the input is the sum of the tonic and phasic volatility,
+given by:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\pi}_j^{(k)} = \frac{1}{\zeta} * \frac{1}{e^{\kappa_j \mu_a}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\zeta\)</span> is the continuous input precision (in real space).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -558,7 +577,7 @@ For each node, the index list value and volatility parents and children.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>mean_volatility_parent</dt><dd><p>The updated value for the mean of the value parent (<span class="math notranslate nohighlight">\(\\mu\)</span>).</p>
+<dt>mean_volatility_parent</dt><dd><p>The new mean of the volatility parent.</p>
 </dd>
 </dl>
 </dd>
@@ -566,7 +585,7 @@ For each node, the index list value and volatility parents and children.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">prediction_error_volatility_volatility_parent</span></code></dt><dd></dd>
+<dt><a class="reference internal" href="pyhgf.updates.prediction_error.inputs.continuous.prediction_error_input_precision_volatility_parent.html#pyhgf.updates.prediction_error.inputs.continuous.prediction_error_input_precision_volatility_parent" title="pyhgf.updates.prediction_error.inputs.continuous.prediction_error_input_precision_volatility_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prediction_error_input_precision_volatility_parent</span></code></a></dt><dd></dd>
 </dl>
 </div>
 <p class="rubric">References</p>

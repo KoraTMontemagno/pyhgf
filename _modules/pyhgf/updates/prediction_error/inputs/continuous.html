@@ -458,7 +458,7 @@ document.write(`
 <span class="k">def</span> <span class="nf">prediction_error_input_precision_value_parent</span><span class="p">(</span>
     <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="n">value_parent_idx</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Send prediction-error and update the precision of a continuous value parent.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Update the precision of the value parent of a continuous input node.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -525,7 +525,37 @@ document.write(`
 <span class="k">def</span> <span class="nf">prediction_error_input_precision_volatility_parent</span><span class="p">(</span>
     <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">volatility_parent_idx</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send prediction-error and update the precision of the volatility parent.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Update the precision of the volatility parent.</span>
+
+<span class="sd">    The new mean of the volatility parent :math:`a` of an input node at time :math:`k`</span>
+<span class="sd">    is given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \pi_a^{(k)} = \hat{\pi}_a^{(k)} + \sum_{j=1}^{N_{children}} \frac{1}{2} \\</span>
+<span class="sd">         \kappa_j^2 \left( 1 + \epsilon_j^{(k)} \right)</span>
+
+<span class="sd">    where :math:`\kappa_j` is the volatility coupling strength between the volatility</span>
+<span class="sd">    parent and the volatility children :math:`j` and :math:`\epsilon_j^{(k)}` is the</span>
+<span class="sd">    noise prediction error given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \epsilon_j^{(k)} = \frac{\hat{\pi}_j^{(k)}}{\pi_{vapa}^{(k)}} + \\</span>
+<span class="sd">        \hat{\pi}_j^{(k)} \left( u^{(k)} - \mu_{vapa}^{(k)} \right)^2 - 1</span>
+
+<span class="sd">    Note that, because we are working with continuous input nodes,</span>
+<span class="sd">    :math:`\epsilon_j^{(k)}` is not a function of the value prediction error but uses</span>
+<span class="sd">    the posterior of the value parent(s).</span>
+
+<span class="sd">    The expected precision of the input is the sum of the tonic and phasic volatility,</span>
+<span class="sd">    given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \hat{\pi}_j^{(k)} = \frac{1}{\zeta} * \frac{1}{e^{\kappa_j \mu_a}}</span>
+
+<span class="sd">    where :math:`\zeta` is the continuous input precision (in real space).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -543,7 +573,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    precision_volatility_parent :</span>
-<span class="sd">        The new precision of the value parent.</span>
+<span class="sd">        The new precision of the volatility parent.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -569,22 +599,21 @@ document.write(`
         <span class="n">edges</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
         <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
-        <span class="c1"># retireve the index of the value parent (assuming a unique value parent)</span>
-        <span class="c1"># we need this to compute the value PE, required for the volatility PE</span>
-        <span class="n">this_value_parent_idx</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">child_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
         <span class="c1"># compute the expected precision from the input node</span>
         <span class="n">expected_precision_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
 
         <span class="c1"># add the precision from the volatility parent if any</span>
         <span class="n">expected_precision_child</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-            <span class="n">attributes</span><span class="p">[</span><span class="n">edges</span><span class="p">[</span><span class="n">child_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
-            <span class="o">*</span> <span class="n">volatility_coupling</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">volatility_coupling</span>
         <span class="p">)</span>
+
+        <span class="c1"># retireve the index of the value parent (assuming a unique value parent)</span>
+        <span class="c1"># we need this to compute the value PE, required for the volatility PE</span>
+        <span class="n">this_value_parent_idx</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">child_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># compute the volatility prediction error for this input node</span>
         <span class="n">child_volatility_prediction_error</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">expected_precision_child</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">this_value_parent_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span>
+            <span class="p">(</span><span class="n">expected_precision_child</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">this_value_parent_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">])</span>
             <span class="o">+</span> <span class="n">expected_precision_child</span>
             <span class="o">*</span> <span class="p">(</span>
                 <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
@@ -617,7 +646,37 @@ document.write(`
     <span class="n">volatility_parent_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">precision_volatility_parent</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Send prediction-error and update the mean of the volatility parent.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Update the mean of the volatility parent of a continuous input node.</span>
+
+<span class="sd">    The new mean of the volatility parent :math:`a` of an input node at time :math:`k`</span>
+<span class="sd">    is given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \mu_a^{(k)} = \hat{\mu}_a^{(k)} + \frac{1}{2\pi_a} \\</span>
+<span class="sd">        \sum_{j=1}^{N_{children}} \kappa_j\epsilon_j^{(k)}</span>
+
+<span class="sd">    where :math:`\kappa_j` is the volatility coupling strength between the volatility</span>
+<span class="sd">    parent and the volatility children :math:`j` and :math:`\epsilon_j^{(k)}` is the</span>
+<span class="sd">    noise prediction error given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \epsilon_j^{(k)} = \frac{\hat{\pi}_j^{(k)}}{\pi_{vapa}^{(k)}} + \\</span>
+<span class="sd">        \hat{\pi}_j^{(k)} \left( u^{(k)} - \mu_{vapa}^{(k)} \right)^2 - 1</span>
+
+<span class="sd">    Note that, because we are working with continuous input nodes,</span>
+<span class="sd">    :math:`\epsilon_j^{(k)}` is not a function of the value prediction error but uses</span>
+<span class="sd">    the posterior of the value parent(s).</span>
+
+<span class="sd">    The expected precision of the input is the sum of the tonic and phasic volatility,</span>
+<span class="sd">    given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \hat{\pi}_j^{(k)} = \frac{1}{\zeta} * \frac{1}{e^{\kappa_j \mu_a}}</span>
+
+<span class="sd">    where :math:`\zeta` is the continuous input precision (in real space).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -637,11 +696,11 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    mean_volatility_parent :</span>
-<span class="sd">        The updated value for the mean of the value parent (:math:`\\mu`).</span>
+<span class="sd">        The new mean of the volatility parent.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    prediction_error_volatility_volatility_parent</span>
+<span class="sd">    prediction_error_input_precision_volatility_parent</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -650,31 +709,29 @@ document.write(`
 <span class="sd">       arXiv. https://doi.org/10.48550/ARXIV.2305.10937</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Get the current expected mean for the volatility parent</span>
-    <span class="c1"># The prediction sequence was triggered by the new observation so this value is</span>
-    <span class="c1"># already in the node attributes</span>
+    <span class="c1"># Get the current expected mean for the volatility parent - this assumes that the</span>
+    <span class="c1"># value was computed in the prediction step before</span>
     <span class="n">expected_mean_volatility_parent</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 
     <span class="c1"># Gather volatility prediction errors from the child nodes</span>
-    <span class="n">children_volatility_prediction_error</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">children_noise_prediction_error</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">child_idx</span><span class="p">,</span> <span class="n">volatility_coupling</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
         <span class="n">edges</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
         <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">],</span>
     <span class="p">):</span>
+        <span class="c1"># compute the total volatility at the level of the child node</span>
+        <span class="n">expected_precision_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
+
+        <span class="c1"># add the precision from the volatility parent if any</span>
+        <span class="n">expected_precision_child</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">volatility_coupling</span>
+        <span class="p">)</span>
+
         <span class="c1"># retireve the index of the value parent (assuming a unique value parent)</span>
         <span class="c1"># we need this to compute the value PE, required for the volatility PE</span>
         <span class="n">this_value_parent_idx</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">child_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="c1"># compute the expected precision from the input node</span>
-        <span class="n">expected_precision_child</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
-
-        <span class="c1"># add the precision from the volatility parent if anyu</span>
-        <span class="n">expected_precision_child</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-            <span class="n">attributes</span><span class="p">[</span><span class="n">edges</span><span class="p">[</span><span class="n">child_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
-            <span class="o">*</span> <span class="n">volatility_coupling</span>
-        <span class="p">)</span>
-
-        <span class="c1"># compute the volatility prediction error for this input node</span>
+        <span class="c1"># compute the noise prediction error for this input node (ε)</span>
         <span class="n">child_volatility_prediction_error</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">expected_precision_child</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">this_value_parent_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span>
             <span class="o">+</span> <span class="n">expected_precision_child</span>
@@ -687,15 +744,16 @@ document.write(`
         <span class="p">)</span>
 
         <span class="c1"># sum over all input nodes</span>
-        <span class="n">children_volatility_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="mf">0.5</span>
-            <span class="o">*</span> <span class="n">child_volatility_prediction_error</span>
-            <span class="o">*</span> <span class="p">(</span><span class="n">volatility_coupling</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">])</span>
+        <span class="n">children_noise_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="n">child_volatility_prediction_error</span> <span class="o">*</span> <span class="n">volatility_coupling</span>
         <span class="p">)</span>
+
+    <span class="c1"># scale using the expected precision of the volatility parent</span>
+    <span class="n">children_noise_prediction_error</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">precision_volatility_parent</span><span class="p">)</span>
 
     <span class="c1"># Estimate the new mean of the volatility parent</span>
     <span class="n">mean_volatility_parent</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">expected_mean_volatility_parent</span> <span class="o">+</span> <span class="n">children_volatility_prediction_error</span>
+        <span class="n">expected_mean_volatility_parent</span> <span class="o">+</span> <span class="n">children_noise_prediction_error</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">mean_volatility_parent</span></div>
