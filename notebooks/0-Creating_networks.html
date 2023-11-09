@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Creating and manipulating networks of probabilistic nodes &#8212; pyhgf 0.0.11 documentation</title>
   
@@ -29,33 +28,31 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/0-Creating_networks';</script>
-    <link rel="shortcut icon" href="../_static/logo_small.svg"/>
+    <link rel="icon" href="../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -240,7 +237,7 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+          <a href="https://mastodon.social/@nicolegrand" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-mastodon fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">Twitter</span></a>
         </li>
         <li class="nav-item">
@@ -375,7 +372,7 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+          <a href="https://mastodon.social/@nicolegrand" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-mastodon fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">Twitter</span></a>
         </li>
         <li class="nav-item">
@@ -446,22 +443,22 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="creating-and-manipulating-networks-of-probabilistic-nodes">
-<span id="probabilistic-networks"></span><h1>Creating and manipulating networks of probabilistic nodes<a class="headerlink" href="#creating-and-manipulating-networks-of-probabilistic-nodes" title="Permalink to this heading">#</a></h1>
+<span id="probabilistic-networks"></span><h1>Creating and manipulating networks of probabilistic nodes<a class="headerlink" href="#creating-and-manipulating-networks-of-probabilistic-nodes" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/0-Creating_networks.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
-import sys
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sns
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
-from pyhgf.model import HGF
-from pyhgf.typing import Indexes
+<span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span>
 
-if &#39;google.colab&#39; in sys.modules:
-    ! pip install pyhgf
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
 </pre></div>
 </div>
 </div>
@@ -476,7 +473,7 @@ Splitting the networks this way makes the components easily compatible with JAX 
 </ol>
 <p>In this notebook, we dive into the details of creating such networks and illustrate their modularity by the manipulation of the four main variables.</p>
 <section id="theory-and-implementation-details">
-<h2>Theory and implementation details<a class="headerlink" href="#theory-and-implementation-details" title="Permalink to this heading">#</a></h2>
+<h2>Theory and implementation details<a class="headerlink" href="#theory-and-implementation-details" title="Link to this heading">#</a></h2>
 <p>A let <span class="math notranslate nohighlight">\(\mathcal{N}_{k} = \{\theta, \xi, \mathcal{F}, \Sigma \}\)</span> be a probabilistic network with <span class="math notranslate nohighlight">\(k\)</span> probabilistic nodes. The variable</p>
 <div class="math notranslate nohighlight">
 \[\theta = \{\theta_1, ..., \theta_{k}\}\]</div>
@@ -500,7 +497,7 @@ Splitting the networks this way makes the components easily compatible with JAX 
 One of the advantages of reasoning this way is that it dissociates variables that are transparent to the JAX framework and can be expressed as “PyTress” from variables that should be filtered before transformations. The variable <code class="docutils literal notranslate"><span class="pre">attributes</span></code> (<span class="math notranslate nohighlight">\(\theta\)</span>) is typically expressed as a PyTree while the other variables that contain parametrized functions are filtered. See <a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/thinking_in_jax.html#jit-mechanics-tracing-and-static-variables">the documattion</a> for further details on JAX transformations.</p>
 </div>
 <section id="creating-probabilistic-nodes">
-<h3>Creating probabilistic nodes<a class="headerlink" href="#creating-probabilistic-nodes" title="Permalink to this heading">#</a></h3>
+<h3>Creating probabilistic nodes<a class="headerlink" href="#creating-probabilistic-nodes" title="Link to this heading">#</a></h3>
 <p>parameters = {“mean”: 0.0, “precision”: 1.0}</p>
 <p>attributes = (parameters, parameters, parameters)
 edges = (
@@ -511,7 +508,7 @@ Indexes(None, None, None, (1,)),
 <p>The code above illustrates creating a probabilistic network of 3 nodes with simple parameter sets <span class="math notranslate nohighlight">\((mean = 0.0, precision = 1.0)\)</span>. Node 2 is the value parent of node 1. Node 3 is the value parent of node 2 and has no parents.</p>
 </section>
 <section id="visualizing-probabilistic-networks">
-<h3>Visualizing probabilistic networks<a class="headerlink" href="#visualizing-probabilistic-networks" title="Permalink to this heading">#</a></h3>
+<h3>Visualizing probabilistic networks<a class="headerlink" href="#visualizing-probabilistic-networks" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a three-level HGF using default parameters</span>
@@ -522,7 +519,7 @@ Indexes(None, None, None, (1,)),
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699368812.326509    2678 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1699516197.628039    2420 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -539,7 +536,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </section>
 </section>
 <section id="modifying-the-parameter-structure">
-<h2>Modifying the parameter structure<a class="headerlink" href="#modifying-the-parameter-structure" title="Permalink to this heading">#</a></h2>
+<h2>Modifying the parameter structure<a class="headerlink" href="#modifying-the-parameter-structure" title="Link to this heading">#</a></h2>
 <p>The simpler change we can make on a network is to change the values of some of its parameters. The parameters are stored in the <code class="docutils literal notranslate"><span class="pre">attributes</span></code> variable as a dictionary where the key (integers) are node indexes. Therefore, modifying the expected precision of the third node in the previous example is as simple as:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -556,7 +553,7 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
 </div>
 </section>
 <section id="modifying-the-network-structure">
-<h2>Modifying the network structure<a class="headerlink" href="#modifying-the-network-structure" title="Permalink to this heading">#</a></h2>
+<h2>Modifying the network structure<a class="headerlink" href="#modifying-the-network-structure" title="Link to this heading">#</a></h2>
 <p>The second way we can modify a probabilistic network is by modifying its structure (i.e. the number of nodes, the type of nodes and the way they are connected with each other). Because nodes and connections are modular, a large variety of network structures can be declared. The only restrictions are that the network should be <strong>acyclic</strong> and <strong>rooted</strong> (the roots being input nodes).</p>
 <p>For example, the following networks are valid HGF structures:</p>
 <div class="cell docutils container">
@@ -622,17 +619,17 @@ A probabilistic node can store an arbitrary number of parameters. Parameter valu
 Contrary to standard graph networks, the directed connection between nodes can have multiple forms. The standard HGF is built on combinations of <em>value coupling</em> and <em>volatility coupling</em> bindings, but this can be extended to an arbitrary number of types.</p>
 </div>
 <section id="multivariate-coupling">
-<h3>Multivariate coupling<a class="headerlink" href="#multivariate-coupling" title="Permalink to this heading">#</a></h3>
+<h3>Multivariate coupling<a class="headerlink" href="#multivariate-coupling" title="Link to this heading">#</a></h3>
 <p>As we can see in the examples above, nodes in a valid HGF network can be influenced by multiple parents (either value or volatility parents). Similarly, a single node can be influenced by multiple children. This feature is termed <em>multivariate descendency</em> and <em>multivariate ascendency</em> (respectively) and is a central addition to the generalization of the HGF <span id="id3">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span> that was implemented in this package, as well as in the <a class="reference external" href="https://github.com/ilabcode/HierarchicalGaussianFiltering.jl">Julia counterpart</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Hierarchical Gaussian Filters have often been described in terms of levels. For example, the two-level and three-level HGFs are specific instances of  node structures designed to track the volatility and meta-volatility of binary or continuous processes, respectively. While such models can easily be implemented in this framework, the notion of level itself is now less informative. This is a consequence of the multivariate control and influence properties, which can result in structures in which some nodes have a position in the hierarchy that cannot be clearly disambiguated.</p>
 </div>
 <section id="the-case-of-multivariate-descendency">
-<h4>The case of <em>multivariate descendency</em><a class="headerlink" href="#the-case-of-multivariate-descendency" title="Permalink to this heading">#</a></h4>
+<h4>The case of <em>multivariate descendency</em><a class="headerlink" href="#the-case-of-multivariate-descendency" title="Link to this heading">#</a></h4>
 <p><em>Multivariate descendency</em> refers to situations where a node exerts a predictive influence (and is updated backwards through prediction errors) on multiple children nodes, either via value or volatility coupling.</p>
 <section id="continuous-value-coupling">
-<h5>Continuous value coupling<a class="headerlink" href="#continuous-value-coupling" title="Permalink to this heading">#</a></h5>
+<h5>Continuous value coupling<a class="headerlink" href="#continuous-value-coupling" title="Link to this heading">#</a></h5>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -658,7 +655,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-    <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">mean</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="p">)</span>
 
@@ -692,7 +689,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
-<img alt="../_images/8bbbb4915605012b70556181b12e553a7846876effad11b9fad2cc111ea1c7e8.png" src="../_images/8bbbb4915605012b70556181b12e553a7846876effad11b9fad2cc111ea1c7e8.png" />
+<img alt="../_images/1dd0191104cb1f4ee6bacf24d8bc6f7fd1f084a27a5c9ef679e6b94c68f847cf.png" src="../_images/1dd0191104cb1f4ee6bacf24d8bc6f7fd1f084a27a5c9ef679e6b94c68f847cf.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -701,7 +698,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </section>
 <section id="continuous-volatility-coupling">
-<h5>Continuous volatility coupling<a class="headerlink" href="#continuous-volatility-coupling" title="Permalink to this heading">#</a></h5>
+<h5>Continuous volatility coupling<a class="headerlink" href="#continuous-volatility-coupling" title="Link to this heading">#</a></h5>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -734,7 +731,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">mean</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="p">)</span>
 
@@ -756,12 +753,12 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">[:</span><span class="mi">10</span><span class="p">]);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 10 new observations.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
 </div>
@@ -777,313 +774,8 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b4ba0f9c749fe27013e886cb8cfc583ce744162b3a25c18debe2f5cfc757854c.png" src="../_images/b4ba0f9c749fe27013e886cb8cfc583ce744162b3a25c18debe2f5cfc757854c.png" />
+<img alt="../_images/0a206d428c0f7af5865dd4ff4c3f9bd45f333dec78ca0b1979263a35dbe3ff71.png" src="../_images/0a206d428c0f7af5865dd4ff4c3f9bd45f333dec78ca0b1979263a35dbe3ff71.png" />
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">update_sequence</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((4,
-  &lt;PjitFunction of &lt;function continuous_node_prediction at 0x7f27fab764d0&gt;&gt;),
- (3,
-  &lt;PjitFunction of &lt;function continuous_node_prediction at 0x7f27fab764d0&gt;&gt;),
- (2,
-  &lt;PjitFunction of &lt;function continuous_node_prediction at 0x7f27fab764d0&gt;&gt;),
- (0,
-  &lt;PjitFunction of &lt;function continuous_input_prediction_error at 0x7f27fab76950&gt;&gt;),
- (1,
-  &lt;PjitFunction of &lt;function continuous_input_prediction_error at 0x7f27fab76950&gt;&gt;),
- (3,
-  &lt;PjitFunction of &lt;function ehgf_continuous_node_prediction_error at 0x7f27fab760e0&gt;&gt;))
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>time_steps</th>
-      <th>time</th>
-      <th>observation_input_0</th>
-      <th>observation_input_1</th>
-      <th>x_2_mean</th>
-      <th>x_2_precision</th>
-      <th>x_2_expected_mean</th>
-      <th>x_2_expected_precision</th>
-      <th>x_3_mean</th>
-      <th>x_3_precision</th>
-      <th>x_3_expected_mean</th>
-      <th>x_3_expected_precision</th>
-      <th>x_4_mean</th>
-      <th>x_4_precision</th>
-      <th>x_4_expected_mean</th>
-      <th>x_4_expected_precision</th>
-      <th>x_2_surprise</th>
-      <th>x_3_surprise</th>
-      <th>x_4_surprise</th>
-      <th>surprise</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>-1.543359</td>
-      <td>-1.503665</td>
-      <td>-1.543207</td>
-      <td>10000.982422</td>
-      <td>0.000000</td>
-      <td>0.982014</td>
-      <td>-1.503518</td>
-      <td>10000.982422</td>
-      <td>0.000000</td>
-      <td>0.982014</td>
-      <td>0.023433</td>
-      <td>0.960154</td>
-      <td>0.000000</td>
-      <td>0.982014</td>
-      <td>2.097570</td>
-      <td>2.097570</td>
-      <td>0.928283</td>
-      <td>5.123424e+00</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>-0.224201</td>
-      <td>1.206767</td>
-      <td>-0.231161</td>
-      <td>10053.050781</td>
-      <td>-1.543207</td>
-      <td>53.050728</td>
-      <td>1.192464</td>
-      <td>10053.050781</td>
-      <td>-1.503518</td>
-      <td>53.050728</td>
-      <td>250.354919</td>
-      <td>235.630020</td>
-      <td>0.023433</td>
-      <td>0.943561</td>
-      <td>45.081551</td>
-      <td>42.346104</td>
-      <td>29565.458984</td>
-      <td>2.965289e+04</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1.0</td>
-      <td>3.0</td>
-      <td>1.708630</td>
-      <td>-0.113640</td>
-      <td>1.708630</td>
-      <td>10000.000000</td>
-      <td>-0.231161</td>
-      <td>0.000000</td>
-      <td>-0.113640</td>
-      <td>10000.000000</td>
-      <td>1.192464</td>
-      <td>0.000000</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>250.354919</td>
-      <td>44.327065</td>
-      <td>inf</td>
-      <td>inf</td>
-      <td>NaN</td>
-      <td>inf</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>0.602934</td>
-      <td>0.311154</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>1.708630</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-0.113640</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1.0</td>
-      <td>5.0</td>
-      <td>-1.071528</td>
-      <td>-0.727371</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>1.0</td>
-      <td>6.0</td>
-      <td>-1.017278</td>
-      <td>0.026169</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>1.0</td>
-      <td>7.0</td>
-      <td>0.083799</td>
-      <td>1.695061</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>1.0</td>
-      <td>8.0</td>
-      <td>0.913231</td>
-      <td>-0.574966</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>1.0</td>
-      <td>9.0</td>
-      <td>0.045358</td>
-      <td>-1.625980</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>1.0</td>
-      <td>10.0</td>
-      <td>-0.009700</td>
-      <td>-1.839997</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1091,7 +783,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </section>
 <section id="coupling-with-binary-nodes">
-<h5>Coupling with binary nodes<a class="headerlink" href="#coupling-with-binary-nodes" title="Permalink to this heading">#</a></h5>
+<h5>Coupling with binary nodes<a class="headerlink" href="#coupling-with-binary-nodes" title="Link to this heading">#</a></h5>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -1153,7 +845,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7f27f839bb20&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7f1afc23aa70&gt;
 </pre></div>
 </div>
 </div>
@@ -1178,7 +870,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/68119ced96734690d2053e8a9601a735a64d8d7e22a4595e83b9c5456623833e.png" src="../_images/68119ced96734690d2053e8a9601a735a64d8d7e22a4595e83b9c5456623833e.png" />
+<img alt="../_images/a306a346ae89280c2437ba29c7b0abc9d38d634a6782cac3b5a8ae81670eef78.png" src="../_images/a306a346ae89280c2437ba29c7b0abc9d38d634a6782cac3b5a8ae81670eef78.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -1188,18 +880,18 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </section>
 </section>
 <section id="the-case-of-multivariate-ascendency">
-<h4>The case of <em>multivariate ascendency</em><a class="headerlink" href="#the-case-of-multivariate-ascendency" title="Permalink to this heading">#</a></h4>
+<h4>The case of <em>multivariate ascendency</em><a class="headerlink" href="#the-case-of-multivariate-ascendency" title="Link to this heading">#</a></h4>
 <p><em>Multivariate ascendency</em> refers to situations where a node is influenced (and updates backwards through prediction errors) multiple value or volatility parents.</p>
 </section>
 <section id="value-coupling">
-<h4>Value coupling<a class="headerlink" href="#value-coupling" title="Permalink to this heading">#</a></h4>
+<h4>Value coupling<a class="headerlink" href="#value-coupling" title="Link to this heading">#</a></h4>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Work in progress</p>
 </div>
 </section>
 <section id="volatility-coupling">
-<h4>Volatility coupling<a class="headerlink" href="#volatility-coupling" title="Permalink to this heading">#</a></h4>
+<h4>Volatility coupling<a class="headerlink" href="#volatility-coupling" title="Link to this heading">#</a></h4>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Work in progress</p>
@@ -1208,10 +900,10 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </section>
 </section>
 <section id="creating-custom-update-functions">
-<h2>Creating custom update functions<a class="headerlink" href="#creating-custom-update-functions" title="Permalink to this heading">#</a></h2>
+<h2>Creating custom update functions<a class="headerlink" href="#creating-custom-update-functions" title="Link to this heading">#</a></h2>
 <p>The structure of the network and the node’s parameters are the most static component of the network. Actually, we could consider that the network already exists once those two variables are in place. However in <a class="reference external" href="https://ilabcode.github.io/pyhgf/index.html#">pyhgf</a> we consider that the update functions <span class="math notranslate nohighlight">\(\mathcal{F} = \{f_1, ..., f_n\}\)</span> and the update sequence <span class="math notranslate nohighlight">\(\Sigma = [f_1(n_1), ..., f_i(n_j), f \in \mathcal{F}, n \in 1, ..., k ]\)</span> (the order of update) are also part of the models. This choice was made to explicitly account that there is no one unique way of modelling the way beliefs propagate through the network, and a core task for predictive coding applications is to develop new <em>probabilistic nodes</em> that account for a greater variety of phenomena. This step critically requires modelling beliefs diffusion, and therefore to modify, or creating the underlying update functions.</p>
 <section id="update-functions">
-<h3>Update functions<a class="headerlink" href="#update-functions" title="Permalink to this heading">#</a></h3>
+<h3>Update functions<a class="headerlink" href="#update-functions" title="Link to this heading">#</a></h3>
 <p>Update functions are the heart of the HGF filtering procedure, these functions implement the message-passing and parameter-updating steps between nodes. An update function in its simpler form is a Python function defined as</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update_fn</span><span class="p">(</span><span class="n">node_idx</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
 
@@ -1225,7 +917,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </section>
 </section>
 <section id="creating-custom-update-sequences">
-<h2>Creating custom update sequences<a class="headerlink" href="#creating-custom-update-sequences" title="Permalink to this heading">#</a></h2>
+<h2>Creating custom update sequences<a class="headerlink" href="#creating-custom-update-sequences" title="Link to this heading">#</a></h2>
 <p>Update sequences define the dynamics of beliefs propagation through the probabilistic network. In its simpler form, an update sequence is a sequence of update functions pointing to a node index such as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">update_sequence</span> <span class="o">=</span> <span class="p">(</span>
     <span class="p">(</span><span class="n">update_fn1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -1236,16 +928,16 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <p>The HGF class include a built-in <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.model.HGF.get_update_sequence()</span></code> method to automatically generate the update sequence from the network structure, assuming that we want to propagate the beliefs from the lower part of the tree (the input nodes) to its upper part (nodes that do not have parents).</p>
 </section>
 <section id="time-varying-update-sequences">
-<h2>Time-varying update sequences<a class="headerlink" href="#time-varying-update-sequences" title="Permalink to this heading">#</a></h2>
+<h2>Time-varying update sequences<a class="headerlink" href="#time-varying-update-sequences" title="Link to this heading">#</a></h2>
 <section id="static-assignation-of-update-sequences">
-<h3>Static assignation of update sequences<a class="headerlink" href="#static-assignation-of-update-sequences" title="Permalink to this heading">#</a></h3>
+<h3>Static assignation of update sequences<a class="headerlink" href="#static-assignation-of-update-sequences" title="Link to this heading">#</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Work in progress</p>
 </div>
 </section>
 <section id="dynamic-assignation-of-update-sequences">
-<h3>Dynamic assignation of update sequences<a class="headerlink" href="#dynamic-assignation-of-update-sequences" title="Permalink to this heading">#</a></h3>
+<h3>Dynamic assignation of update sequences<a class="headerlink" href="#dynamic-assignation-of-update-sequences" title="Link to this heading">#</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Work in progress</p>
@@ -1254,7 +946,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="system-configuration">
-<h1>System configuration<a class="headerlink" href="#system-configuration" title="Permalink to this heading">#</a></h1>
+<h1>System configuration<a class="headerlink" href="#system-configuration" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
@@ -1263,7 +955,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Nov 07 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -1273,10 +965,10 @@ pyhgf : 0.0.11
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-matplotlib: 3.8.1
-seaborn   : 0.13.0
 numpy     : 1.22.0
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+seaborn   : 0.13.0
+matplotlib: 3.8.1
 
 Watermark: 2.4.3
 </pre></div>
@@ -1351,7 +1043,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/0-Creating_networks.md.txt">
+    <a href="../_sources/notebooks/0-Creating_networks.ipynb.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
@@ -1389,7 +1081,7 @@ Watermark: 2.4.3
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

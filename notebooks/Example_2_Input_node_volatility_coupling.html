@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Example 2: Estimating the mean and precision of an input node &#8212; pyhgf 0.0.11 documentation</title>
   
@@ -29,31 +28,29 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Example_2_Input_node_volatility_coupling';</script>
-    <link rel="shortcut icon" href="../_static/logo_small.svg"/>
+    <link rel="icon" href="../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -238,7 +235,7 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+          <a href="https://mastodon.social/@nicolegrand" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-mastodon fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">Twitter</span></a>
         </li>
         <li class="nav-item">
@@ -373,7 +370,7 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+          <a href="https://mastodon.social/@nicolegrand" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-mastodon fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">Twitter</span></a>
         </li>
         <li class="nav-item">
@@ -444,32 +441,32 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="example-2-estimating-the-mean-and-precision-of-an-input-node">
-<span id="example-2"></span><h1>Example 2: Estimating the mean and precision of an input node<a class="headerlink" href="#example-2-estimating-the-mean-and-precision-of-an-input-node" title="Permalink to this heading">#</a></h1>
+<span id="example-2"></span><h1>Example 2: Estimating the mean and precision of an input node<a class="headerlink" href="#example-2-estimating-the-mean-and-precision-of-an-input-node" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/Example_2_Input_node_volatility_coupling.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
-import sys
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-import arviz as az
-import matplotlib.pyplot as plt
-import numpy as np
-import pymc as pm
-import seaborn as sns
-from scipy.stats import norm
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
 
-from pyhgf.distribution import HGFDistribution
-from pyhgf.model import HGF
+<span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
+<span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 
-if &#39;google.colab&#39; in sys.modules:
-    ! pip install pyhgf
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
 </pre></div>
 </div>
 </div>
 </div>
 <p>Where the standard continuous HGF assumes a known precision in the input node (usually set to something high), this assumption can be relaxed and the filter can also try to estimate this quantity from the data. In this notebook, we demonstrate how we can infer the value of the mean, of the precision, or both value at the same time, using the appropriate value and volatility coupling parents.</p>
 <section id="unkown-mean-known-precision">
-<h2>Unkown mean, known precision<a class="headerlink" href="#unkown-mean-known-precision" title="Permalink to this heading">#</a></h2>
+<h2>Unkown mean, known precision<a class="headerlink" href="#unkown-mean-known-precision" title="Link to this heading">#</a></h2>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>The <a class="reference internal" href="1.3-Continuous_HGF.html#continuous-hgf"><span class="std std-ref">The continuous Hierarchical Gaussian Filter</span></a> is an example of a model assuming a continuous input with known precision and unknown mean. It is further assumed that the mean is changing overtime, and we want the model to track this rate of change by adding a volatility node on the top of the value parent (two-level continuous HGF), and event track the rate of change of this rate of change by adding another volatility parent (three-level continuous HGF).</p>
@@ -496,14 +493,16 @@ if &#39;google.colab&#39; in sys.modules:
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699369074.997150    3952 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1699516652.466883    3429 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
 ... Create the update sequence from the network structure.
 ... Create the belief propagation function.
-... Cache the belief propagation function.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
 Adding 1000 new observations.
 </pre></div>
 </div>
@@ -551,15 +550,15 @@ Adding 1000 new observations.
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/f637ba4578477e1aa1d0fe21c9ce84d59db9fdef1275f23b38b456e1dfd21039.png" src="../_images/f637ba4578477e1aa1d0fe21c9ce84d59db9fdef1275f23b38b456e1dfd21039.png" />
+<img alt="../_images/501d8209271a08952d14b707b64cbaad69ada066f8fcd5cd890f745d113f1051.png" src="../_images/501d8209271a08952d14b707b64cbaad69ada066f8fcd5cd890f745d113f1051.png" />
 </div>
 </div>
 </section>
 <section id="kown-mean-unknown-precision">
-<h2>Kown mean, unknown precision<a class="headerlink" href="#kown-mean-unknown-precision" title="Permalink to this heading">#</a></h2>
+<h2>Kown mean, unknown precision<a class="headerlink" href="#kown-mean-unknown-precision" title="Link to this heading">#</a></h2>
 </section>
 <section id="unkown-mean-unknown-precision">
-<h2>Unkown mean, unknown precision<a class="headerlink" href="#unkown-mean-unknown-precision" title="Permalink to this heading">#</a></h2>
+<h2>Unkown mean, unknown precision<a class="headerlink" href="#unkown-mean-unknown-precision" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_mean</span><span class="p">,</span> <span class="n">dist_std</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span>
@@ -585,7 +584,9 @@ Adding 1000 new observations.
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
 ... Create the update sequence from the network structure.
 ... Create the belief propagation function.
-... Cache the belief propagation function.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
 Adding 1000 new observations.
 </pre></div>
 </div>
@@ -629,12 +630,12 @@ Adding 1000 new observations.
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/a633041ec5a9239270de93a59ed7881fb77068a18abb8061d79bf4d966740c21.png" src="../_images/a633041ec5a9239270de93a59ed7881fb77068a18abb8061d79bf4d966740c21.png" />
+<img alt="../_images/8472bbecf57c36265bb89fb0f0cc2a4f17c3f72525a46720e81465baf6e78e86.png" src="../_images/8472bbecf57c36265bb89fb0f0cc2a4f17c3f72525a46720e81465baf6e78e86.png" />
 </div>
 </div>
 </section>
 <section id="system-configuration">
-<h2>System configuration<a class="headerlink" href="#system-configuration" title="Permalink to this heading">#</a></h2>
+<h2>System configuration<a class="headerlink" href="#system-configuration" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
@@ -643,7 +644,7 @@ Adding 1000 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Nov 07 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -653,12 +654,12 @@ pyhgf : 0.0.11
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-pymc      : 5.9.1
-matplotlib: 3.8.1
-numpy     : 1.22.0
-arviz     : 0.16.1
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+matplotlib: 3.8.1
+arviz     : 0.16.1
+numpy     : 1.22.0
 seaborn   : 0.13.0
+pymc      : 5.9.1
 
 Watermark: 2.4.3
 </pre></div>
@@ -702,7 +703,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/Example_2_Input_node_volatility_coupling.md.txt">
+    <a href="../_sources/notebooks/Example_2_Input_node_volatility_coupling.ipynb.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
@@ -740,7 +741,7 @@ Watermark: 2.4.3
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>

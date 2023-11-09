@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>An introduction to Hierarchical Gaussian Filters through practical exercises &#8212; pyhgf 0.0.11 documentation</title>
   
@@ -29,33 +28,31 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Exercise_1_Using_the_HGF';</script>
-    <link rel="shortcut icon" href="../_static/logo_small.svg"/>
+    <link rel="icon" href="../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -240,7 +237,7 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+          <a href="https://mastodon.social/@nicolegrand" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-mastodon fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">Twitter</span></a>
         </li>
         <li class="nav-item">
@@ -375,7 +372,7 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/legrandni" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+          <a href="https://mastodon.social/@nicolegrand" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-mastodon fa-lg" aria-hidden="true"></i></span>
             <span class="sr-only">Twitter</span></a>
         </li>
         <li class="nav-item">
@@ -446,7 +443,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="an-introduction-to-hierarchical-gaussian-filters-through-practical-exercises">
-<span id="hgf-exercises"></span><h1>An introduction to Hierarchical Gaussian Filters through practical exercises<a class="headerlink" href="#an-introduction-to-hierarchical-gaussian-filters-through-practical-exercises" title="Permalink to this heading">#</a></h1>
+<span id="hgf-exercises"></span><h1>An introduction to Hierarchical Gaussian Filters through practical exercises<a class="headerlink" href="#an-introduction-to-hierarchical-gaussian-filters-through-practical-exercises" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/Exercise_1_Using_the_HGF.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
@@ -455,26 +452,26 @@ document.write(`
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
-import sys
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-import arviz as az
-import jax.numpy as jnp
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import pymc as pm
-import pytensor.tensor as pt
-import seaborn as sns
-from pytensor import function, scan
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">pytensor.tensor</span> <span class="k">as</span> <span class="nn">pt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">pytensor</span> <span class="kn">import</span> <span class="n">function</span><span class="p">,</span> <span class="n">scan</span>
 
-from pyhgf import load_data
-from pyhgf.distribution import HGFDistribution
-from pyhgf.model import HGF
-from pyhgf.response import binary_softmax, first_level_gaussian_surprise
+<span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
+<span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
+<span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+<span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">binary_softmax</span><span class="p">,</span> <span class="n">first_level_gaussian_surprise</span>
 
-if &#39;google.colab&#39; in sys.modules:
-    ! pip install pyhgf
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
 </pre></div>
 </div>
 </div>
@@ -493,9 +490,9 @@ if &#39;google.colab&#39; in sys.modules:
 <p>In the second part, we apply this model to real-world data (weather dataset) by creating an agent that <em>uses</em> this model to filter sensory information and update internal beliefs about hidden states of the world. We then try to apply Bayesian inference over some of the agent’s parameters.</p>
 <p>In the third part, we introduce the binary Hierarchical Gaussian filter and consider experimental designs familiar in reinforcement learning, where the agent tries to learn the association between stimuli, or the occurrence of binary events. Then again,- we apply Bayesian inference and try to compare the performance of our model with alternative explanations of an agent’s behaviours.</p>
 <section id="belief-updating-under-uncertainty-the-continuous-hierarchical-gaussian-filter">
-<h2>Belief updating under uncertainty: the continuous Hierarchical Gaussian Filter<a class="headerlink" href="#belief-updating-under-uncertainty-the-continuous-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h2>
+<h2>Belief updating under uncertainty: the continuous Hierarchical Gaussian Filter<a class="headerlink" href="#belief-updating-under-uncertainty-the-continuous-hierarchical-gaussian-filter" title="Link to this heading">#</a></h2>
 <section id="gaussian-random-walks">
-<h3>Gaussian random walks<a class="headerlink" href="#gaussian-random-walks" title="Permalink to this heading">#</a></h3>
+<h3>Gaussian random walks<a class="headerlink" href="#gaussian-random-walks" title="Link to this heading">#</a></h3>
 <p>Hierarchical Gaussian Filters are built on a generalisation of the <a class="reference external" href="https://en.wikipedia.org/wiki/Random_walk#Gaussian_random_walk">Gaussian Random Walk</a> (GRW). A GRW is a <a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_process">stochastic process</a> that generate a new observation <span class="math notranslate nohighlight">\(x_1^{(k)}\)</span> at each time step <span class="math notranslate nohighlight">\(k\)</span> from a normal distribution and using the previous observation <span class="math notranslate nohighlight">\(x_1^{(k-1)}\)</span> as its mean such as:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -508,7 +505,7 @@ x_1^{(k)} \sim \mathcal{N}(x_1^{(k-1)}, \sigma^2)
 </div>
 </section>
 <section id="value-and-volatility-coupling-between-probabilistic-nodes">
-<h3>Value and volatility coupling between probabilistic nodes<a class="headerlink" href="#value-and-volatility-coupling-between-probabilistic-nodes" title="Permalink to this heading">#</a></h3>
+<h3>Value and volatility coupling between probabilistic nodes<a class="headerlink" href="#value-and-volatility-coupling-between-probabilistic-nodes" title="Link to this heading">#</a></h3>
 <p>We have simulated above a simple GRW. At each time point, this process is fully described by the probability distribution and the sufficient statistics of this probability distribution (the mean and the variance). Using these values, we can also derive expected values (using the current mean) and expected precision (using the current variance).</p>
 <p>The HGF hierarchically generalize this process by making the parameters of a stochastic process depend on another GRW at a different level. In <a class="reference external" href="https://github.com/ilabcode/pyhgf">PyHGF</a> we use a <em>nodalized</em> version of this framework <span id="id1">[<a class="reference internal" href="../references.html#id13" title="Lilian Aline Weber, Peter Thestrup Waade, Nicolas Legrand, Anna Hedvig Møller, Klaas Enno Stephan, and Christoph Mathys. The generalized hierarchical gaussian filter. 2023. arXiv:2305.10937.">Weber <em>et al.</em>, 2023</a>]</span>, and consider that each stochastic process is a node in a network, connected with other nodes through probabilistic dependencies: <strong>value coupling</strong> (targetting the value <span class="math notranslate nohighlight">\(\mu\)</span> of the child node) or <strong>volatility coupling</strong> (targetting the volatility <span class="math notranslate nohighlight">\(\sigma^2\)</span> of the child node).</p>
 <p>Let’s consider for example a network constituted of two nodes <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>, as it is found in the continuous HGF <span id="id2">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>]</span>. The node <span class="math notranslate nohighlight">\(x_1\)</span> is performing a GRW as previously described. We can add a dependency on the mean of the distribution (<strong>value coupling</strong>) by assuming that <span class="math notranslate nohighlight">\(x_1\)</span> inherits the difference step from <span class="math notranslate nohighlight">\(x_2\)</span>, instead of using only its own previous value. Mathematically, this would write:</p>
@@ -547,7 +544,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 </div>
 </section>
 <section id="the-continuous-hierarchical-gaussian-filter">
-<h3>The continuous Hierarchical Gaussian Filter<a class="headerlink" href="#the-continuous-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h3>
+<h3>The continuous Hierarchical Gaussian Filter<a class="headerlink" href="#the-continuous-hierarchical-gaussian-filter" title="Link to this heading">#</a></h3>
 <p>Hierarchical Filters are built on the notion that we can embed stochastic nodes and make them depend on each other and use this as a generative model of hidden states of the world.</p>
 <p>We therefore want to create agents that can use this principle to filter the sensory inputs they receive. But this time we have to think the other way. We do not want to generate data top-down (as in the function you wrote above), we already have the data in the form of sensory inputs. We want to provide this sensory input to the model and update the probabilistic nodes accordingly so that they continue to predict the next sensory input reasonably well.</p>
 <p>This requires propagating updates on sufficient statistics and sending precision-weighted prediction errors to the parent nodes. The pyhgf package implements this process with the corresponding update equation so the model can take as input a time series and infer the more likely generative structure that created the values. This can be extremely useful if you want to work with time series that have varying levels of volatility (i.e. meta-volatility). In the following example, we illustrate how we can use the Hierarchical Gaussian Filter to filter and predict inputs in a continuous node.</p>
@@ -566,7 +563,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699369080.452612    4054 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1699516660.701302    3513 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -627,7 +624,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 </div>
-<table class="colwidths-auto table">
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>parameter</p></th>
 <th class="head"><p>description</p></th>
@@ -651,7 +648,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </section>
 <section id="parameters-optimization">
-<h3>Parameters optimization<a class="headerlink" href="#parameters-optimization" title="Permalink to this heading">#</a></h3>
+<h3>Parameters optimization<a class="headerlink" href="#parameters-optimization" title="Link to this heading">#</a></h3>
 <p>So far we have been running the HGF forward by fixing the values of the parameters beforehand. This is an important part of the modelling process as we can retrieve the belief trajectories, which indicates how the agent might use sensory information to adapt to the environment, as well as the surprise associated with these observations, which indicates <em>how well</em> the agent adapted to the environment.</p>
 <p>In the context of analysing data from a task, we do not want to fit the data manually and retrieve the trajectories from every possible set of parameters. Instead, we want to perform Bayesian inference over these parameters and estimate the posterior of the probability distribution. Here we are going to perform this step using Hamiltonian Monte Carlo sampling as implemented in PyMC.</p>
 <div class="cell docutils container">
@@ -717,8 +714,71 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:07&lt;00:00 Sampling 4 chains, 1 divergences]
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 1 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 2, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 3, 1 divergences]
     </div>
     </div></div>
 </div>
@@ -729,7 +789,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/eb28d961af9199bd840dc75559ea804401dee93c75ab9ef2c5e85d2bddc150f0.png" src="../_images/eb28d961af9199bd840dc75559ea804401dee93c75ab9ef2c5e85d2bddc150f0.png" />
+<img alt="../_images/05aea7e91314926b569cc3bd4f85df5b2c8248d669f2bc1296e181816672915e.png" src="../_images/05aea7e91314926b569cc3bd4f85df5b2c8248d669f2bc1296e181816672915e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -771,14 +831,14 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
   <tbody>
     <tr>
       <th>tonic_volatility_1</th>
-      <td>-5.95</td>
-      <td>0.939</td>
-      <td>-7.63</td>
-      <td>-4.18</td>
+      <td>-5.964</td>
+      <td>0.936</td>
+      <td>-7.679</td>
+      <td>-4.179</td>
       <td>0.03</td>
       <td>0.022</td>
-      <td>1052.0</td>
-      <td>718.0</td>
+      <td>1075.0</td>
+      <td>903.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -787,7 +847,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </section>
 <section id="practice-filtering-the-worlds-weather">
-<h3>Practice: Filtering the worlds weather<a class="headerlink" href="#practice-filtering-the-worlds-weather" title="Permalink to this heading">#</a></h3>
+<h3>Practice: Filtering the worlds weather<a class="headerlink" href="#practice-filtering-the-worlds-weather" title="Link to this heading">#</a></h3>
 <p>In the previous section, we introduced the computational concept behind the Hierarchical Gaussian Filter and illustrated:</p>
 <ol class="arabic simple">
 <li><p>How to create Gaussian Random Walks with hierarchical dependencies.</p></li>
@@ -898,7 +958,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div></div></div>
 </div>
 <p>The data frame contains the following parameters, recorded every hour over the year of 2019:</p>
-<table class="colwidths-auto table">
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>parameter</p></th>
 <th class="head"><p>description</p></th>
@@ -958,9 +1018,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a continuous Hierarchical Gaussian Filter with 2 levels.
 ... Create the update sequence from the network structure.
 ... Create the belief propagation function.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+... Cache the belief propagation function.
 Adding 720 new observations.
 </pre></div>
 </div>
@@ -977,7 +1035,7 @@ Adding 720 new observations.
 </section>
 </section>
 <section id="bayesian-reinforcement-learning-the-binary-hgf">
-<h2>Bayesian reinforcement learning: the binary HGF<a class="headerlink" href="#bayesian-reinforcement-learning-the-binary-hgf" title="Permalink to this heading">#</a></h2>
+<h2>Bayesian reinforcement learning: the binary HGF<a class="headerlink" href="#bayesian-reinforcement-learning-the-binary-hgf" title="Link to this heading">#</a></h2>
 <p>In the first part of the tutorial, we introduced the continuous Hierarchical Gaussian Filter and detailed how it is built on top of hierarchical GRW. This model is intended to work with continuous input variables. In this regard, it can be seen as a generalization of the Kalman filter. However, several experiments require working with variables that have discrete states.</p>
 <p>The binary HGF can be seen as an extension of the continuous HGF, with the exception that it has a binary input node except one a continuous one. Handling such binary variables can be useful, for example for reinforcement learning paradigms where we want the agent to learn the association between two states in the world. Such experiments, like the <a class="reference external" href="https://en.wikipedia.org/wiki/Multi-armed_bandit">one-armed badit task</a> that we will be using below, generally produce two types of information at each trial:</p>
 <ul class="simple">
@@ -993,7 +1051,7 @@ Adding 720 new observations.
 </div>
 </div>
 <section id="the-binary-hierarchical-gaussian-filter">
-<h3>The binary Hierarchical Gaussian Filter<a class="headerlink" href="#the-binary-hierarchical-gaussian-filter" title="Permalink to this heading">#</a></h3>
+<h3>The binary Hierarchical Gaussian Filter<a class="headerlink" href="#the-binary-hierarchical-gaussian-filter" title="Link to this heading">#</a></h3>
 <p>Fitting data to a binary HGF is quite similar to the continuous one (note that <code class="docutils literal notranslate"><span class="pre">model_type=&quot;binary&quot;</span></code>).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1083,10 +1141,10 @@ Adding 720 new observations.
 </div>
 </section>
 <section id="model-comparison">
-<h3>Model comparison<a class="headerlink" href="#model-comparison" title="Permalink to this heading">#</a></h3>
+<h3>Model comparison<a class="headerlink" href="#model-comparison" title="Link to this heading">#</a></h3>
 <p>When modelling, we always want to control for alternative, simpler explanations. It might be that our subjects are dynamically updating their beliefs in accordance with our assumptions. However, sometimes, they might just be responding rather randomly and not show much learning at all. It might also be that they are using a simple learning model that does not require to use of the HGF to capture higher-order volatility. We want to analyse the data using all these models and compare how well they can explain the participant’s responses.</p>
 <section id="biased-random">
-<h4>Biased random<a class="headerlink" href="#biased-random" title="Permalink to this heading">#</a></h4>
+<h4>Biased random<a class="headerlink" href="#biased-random" title="Link to this heading">#</a></h4>
 <p>To control for this possibility, we define the simpler alternative model below. This model just takes random actions with a single fixed probability. It does not integrate the data from the task at all. Here, we write our models using <a class="reference external" href="https://pytensor.readthedocs.io/en/latest/">PyTensor</a>, which is the tensor library on which <a class="reference external" href="https://www.pymc.io/welcome.html">PyMC</a> is built, and sample the model the same way. We start by creating a log probability function, that measures the model error when observing the response data. Note that we do not need the observation <span class="math notranslate nohighlight">\(u\)</span> here, as our assumption is that the agent is not using it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1138,8 +1196,71 @@ Adding 720 new observations.
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:02&lt;00:00 Sampling 4 chains, 0 divergences]
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 0, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 1, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 2, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
     </div></div>
 </div>
@@ -1150,7 +1271,7 @@ Adding 720 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8872709d99f545ee3cb87b18e10a1c232cd2c5255e386ae76b291c0fd06e27d7.png" src="../_images/8872709d99f545ee3cb87b18e10a1c232cd2c5255e386ae76b291c0fd06e27d7.png" />
+<img alt="../_images/c632b1ada9802182599733033cc2629f4d0a8a547b519f4a6947bfb59be29caf.png" src="../_images/c632b1ada9802182599733033cc2629f4d0a8a547b519f4a6947bfb59be29caf.png" />
 </div>
 </div>
 <p>Assess model fitting, here using leave-one-out cross-validation from the <a class="reference external" href="https://python.arviz.org/en/stable/api/generated/arviz.loo.html">Arviz</a> library.</p>
@@ -1165,8 +1286,8 @@ Adding 720 new observations.
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -222.54     0.00
-p_loo        0.80        -
+elpd_loo  -222.44     0.00
+p_loo        0.68        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1183,7 +1304,7 @@ Pareto k diagnostic values:
 </div>
 </section>
 <section id="rescorla-wagner">
-<h4>Rescorla-Wagner<a class="headerlink" href="#rescorla-wagner" title="Permalink to this heading">#</a></h4>
+<h4>Rescorla-Wagner<a class="headerlink" href="#rescorla-wagner" title="Link to this heading">#</a></h4>
 <p>Another popular model in reinforcement learning is the <a class="reference external" href="https://en.wikipedia.org/wiki/Rescorla%E2%80%93Wagner_model">Rescorla-Wagner model</a>, which assumes that the agent uses prediction errors from the previous observation to update its beliefs. Here we create a simple Rescorla-Wagner and try to optimize the learning rate to predict the agent decisions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1271,8 +1392,71 @@ Pareto k diagnostic values:
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:33&lt;00:00 Sampling 4 chains, 0 divergences]
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:27&lt;00:00 Sampling chain 0, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:27&lt;00:00 Sampling chain 1, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:26&lt;00:00 Sampling chain 2, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:26&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
     </div></div>
 </div>
@@ -1283,7 +1467,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/090c28b59b341c2a6a86a43d502b462eb549feff7898a90e32f31e83139d9013.png" src="../_images/090c28b59b341c2a6a86a43d502b462eb549feff7898a90e32f31e83139d9013.png" />
+<img alt="../_images/a9cce879754a9cbbac24228a0466028e1805fb84109d699afd029316c897df13.png" src="../_images/a9cce879754a9cbbac24228a0466028e1805fb84109d699afd029316c897df13.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1297,8 +1481,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -104.06     0.00
-p_loo        0.81        -
+elpd_loo  -103.98     0.00
+p_loo        0.73        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1354,12 +1538,12 @@ Pareto k diagnostic values:
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/4584205d95783b91310852f61a84d5373cfae01bc23f3b7dd9653184c9142d0e.png" src="../_images/4584205d95783b91310852f61a84d5373cfae01bc23f3b7dd9653184c9142d0e.png" />
+<img alt="../_images/e65dc60f22e664a4f4b95a632352c903ffc09244e80531bb6b14c9768b49d25a.png" src="../_images/e65dc60f22e664a4f4b95a632352c903ffc09244e80531bb6b14c9768b49d25a.png" />
 </div>
 </div>
 </section>
 <section id="two-level-hgf">
-<h4>Two-level HGF<a class="headerlink" href="#two-level-hgf" title="Permalink to this heading">#</a></h4>
+<h4>Two-level HGF<a class="headerlink" href="#two-level-hgf" title="Link to this heading">#</a></h4>
 <p>Finally, we can model the behaviour using the two-level or the three-level HGF. The two-level model should generate prediction similar to what we have with the Rescorla-Wagner model, while the three-level HGF is adding a layer of volatility and therefore could take advantage of higher-level dynamics of volatility.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1418,8 +1602,71 @@ Pareto k diagnostic values:
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:06&lt;00:00 Sampling 4 chains, 1 divergences]
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
     </div></div>
 </div>
@@ -1430,7 +1677,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/cf33e5a22921e8ab47a3a74efa6af4a5ad0d2a76f1c963f90acd9331c7018781.png" src="../_images/cf33e5a22921e8ab47a3a74efa6af4a5ad0d2a76f1c963f90acd9331c7018781.png" />
+<img alt="../_images/afa79ffc05f52ae734f6b8323023c2362f147e72eb411eb276a579aa928ea0d3.png" src="../_images/afa79ffc05f52ae734f6b8323023c2362f147e72eb411eb276a579aa928ea0d3.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1444,8 +1691,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -114.29     0.00
-p_loo        0.99        -
+elpd_loo  -114.25     0.00
+p_loo        0.93        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1462,7 +1709,7 @@ Pareto k diagnostic values:
 </div>
 </section>
 <section id="three-level-hgf">
-<h4>Three-level HGF<a class="headerlink" href="#three-level-hgf" title="Permalink to this heading">#</a></h4>
+<h4>Three-level HGF<a class="headerlink" href="#three-level-hgf" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
@@ -1524,8 +1771,71 @@ Pareto k diagnostic values:
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:08&lt;00:00 Sampling 4 chains, 15 divergences]
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:07&lt;00:00 Sampling chain 0, 0 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 12 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 5 divergences]
+    </div>
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 2 divergences]
     </div>
     </div></div>
 </div>
@@ -1537,7 +1847,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/117dd64e8a7e47a8b017cde417fd8745fe523fcd3556a273e4b93b6d35ee8a4a.png" src="../_images/117dd64e8a7e47a8b017cde417fd8745fe523fcd3556a273e4b93b6d35ee8a4a.png" />
+<img alt="../_images/cfd4c60ce05603f77e279145166e88fb6f2cb98a58cac398455506b463393d8c.png" src="../_images/cfd4c60ce05603f77e279145166e88fb6f2cb98a58cac398455506b463393d8c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1551,8 +1861,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -113.79     0.00
-p_loo        0.81        -
+elpd_loo  -114.22     0.00
+p_loo        1.26        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1561,8 +1871,8 @@ Pareto k diagnostic values:
                          Count   Pct.
 (-Inf, 0.5]   (good)        0    0.0%
  (0.5, 0.7]   (ok)          0    0.0%
-   (0.7, 1]   (bad)         1  100.0%
-   (1, Inf)   (very bad)    0    0.0%
+   (0.7, 1]   (bad)         0    0.0%
+   (1, Inf)   (very bad)    1  100.0%
 </pre></div>
 </div>
 </div>
@@ -1615,8 +1925,8 @@ Pareto k diagnostic values:
     <tr>
       <th>RW</th>
       <td>0</td>
-      <td>-104.059434</td>
-      <td>0.807920</td>
+      <td>-103.978566</td>
+      <td>0.729560</td>
       <td>0.000000</td>
       <td>1.000000e+00</td>
       <td>0.0</td>
@@ -1627,10 +1937,10 @@ Pareto k diagnostic values:
     <tr>
       <th>three-level</th>
       <td>1</td>
-      <td>-113.788229</td>
-      <td>0.805618</td>
-      <td>9.728795</td>
-      <td>8.881784e-16</td>
+      <td>-114.222372</td>
+      <td>1.258987</td>
+      <td>10.243806</td>
+      <td>1.693090e-15</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>True</td>
@@ -1639,9 +1949,9 @@ Pareto k diagnostic values:
     <tr>
       <th>two-level</th>
       <td>2</td>
-      <td>-114.285507</td>
-      <td>0.987874</td>
-      <td>10.226073</td>
+      <td>-114.248825</td>
+      <td>0.928984</td>
+      <td>10.270259</td>
       <td>0.000000e+00</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1651,10 +1961,10 @@ Pareto k diagnostic values:
     <tr>
       <th>biased_random</th>
       <td>3</td>
-      <td>-222.544017</td>
-      <td>0.795899</td>
-      <td>118.484583</td>
-      <td>1.110223e-14</td>
+      <td>-222.436922</td>
+      <td>0.681366</td>
+      <td>118.458356</td>
+      <td>1.443290e-15</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>True</td>
@@ -1667,7 +1977,7 @@ Pareto k diagnostic values:
 </section>
 </section>
 <section id="posterior-predictive-sampling">
-<h3>Posterior predictive sampling<a class="headerlink" href="#posterior-predictive-sampling" title="Permalink to this heading">#</a></h3>
+<h3>Posterior predictive sampling<a class="headerlink" href="#posterior-predictive-sampling" title="Link to this heading">#</a></h3>
 <p>Another way to assess model fitting is to use a posterior predictive check (i.e. we want to ensure that the posterior distribution would be well suited to predict the data at hand). This is usually done by sampling from the posterior distribution and comparing it with the observations. We can do something that approaches this procedure by sampling the parameters of the HGF from the posterior distribution obtained in the previous steps and plotting the resulting trajectories. We can retrieve the parameters of the posterior distributions from our previous fit:</p>
 <p>And use them to sample new parameters from the same distribution and plot the beliefs trajectories accordingly:</p>
 <div class="cell tag_hide-input docutils container">
@@ -1742,14 +2052,14 @@ Pareto k diagnostic values:
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/2c2526ddfe118a75828bed33dcf20932a36526500e344d0b2b0ef81d7c2ba95e.png" src="../_images/2c2526ddfe118a75828bed33dcf20932a36526500e344d0b2b0ef81d7c2ba95e.png" />
+<img alt="../_images/08299780b5fd507f13b0e434c2971cb5e98355a33d59a303b46e7f5cc19f7af3.png" src="../_images/08299780b5fd507f13b0e434c2971cb5e98355a33d59a303b46e7f5cc19f7af3.png" />
 </div>
 </div>
 </section>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="system-configuration">
-<h1>System configuration<a class="headerlink" href="#system-configuration" title="Permalink to this heading">#</a></h1>
+<h1>System configuration<a class="headerlink" href="#system-configuration" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
@@ -1758,7 +2068,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Nov 07 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -1768,14 +2078,14 @@ pyhgf : 0.0.11
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-pymc      : 5.9.1
 pytensor  : 2.17.3
 numpy     : 1.22.0
-arviz     : 0.16.1
 jax       : 0.4.16
-seaborn   : 0.13.0
+arviz     : 0.16.1
 pandas    : 2.0.3
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+seaborn   : 0.13.0
+pymc      : 5.9.1
 matplotlib: 3.8.1
 
 Watermark: 2.4.3
@@ -1840,7 +2150,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/Exercise_1_Using_the_HGF.md.txt">
+    <a href="../_sources/notebooks/Exercise_1_Using_the_HGF.ipynb.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
@@ -1878,7 +2188,7 @@ Watermark: 2.4.3
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>
