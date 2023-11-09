@@ -519,7 +519,7 @@ Indexes(None, None, None, (1,)),
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699516197.628039    2420 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1699516762.288415    2295 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -689,7 +689,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
-<img alt="../_images/1dd0191104cb1f4ee6bacf24d8bc6f7fd1f084a27a5c9ef679e6b94c68f847cf.png" src="../_images/1dd0191104cb1f4ee6bacf24d8bc6f7fd1f084a27a5c9ef679e6b94c68f847cf.png" />
+<img alt="../_images/19d218ebfb08ca5cec31edf93cf5253699843ca58f9cb4ffa55e7fdb8dc81cc2.png" src="../_images/19d218ebfb08ca5cec31edf93cf5253699843ca58f9cb4ffa55e7fdb8dc81cc2.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -706,15 +706,17 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># simulate some time series - sampling from N(0, 1) sometime multiplied by 5</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="c1"># simulate some time series - sampling from N(0, 1) sometime multiplied by 5</span>
 <span class="n">u_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 <span class="n">u_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
-<span class="n">u_0</span><span class="p">[</span><span class="mi">200</span><span class="p">:</span><span class="mi">400</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">5</span>
-<span class="n">u_1</span><span class="p">[</span><span class="mi">600</span><span class="p">:</span><span class="mi">800</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">5</span>
+<span class="n">u_0</span><span class="p">[</span><span class="mi">200</span><span class="p">:</span><span class="mi">400</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">3</span>
+<span class="n">u_1</span><span class="p">[</span><span class="mi">600</span><span class="p">:</span><span class="mi">800</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">3</span>
 
-<span class="n">u_0</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">5</span>
-<span class="n">u_1</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">5</span>
+<span class="n">u_0</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">3</span>
+<span class="n">u_1</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">3</span>
 
 <span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">u_0</span><span class="p">,</span> <span class="n">u_1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 </pre></div>
@@ -766,7 +768,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_children_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span>
-    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">show_observations</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">show_observations</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
@@ -774,7 +776,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0a206d428c0f7af5865dd4ff4c3f9bd45f333dec78ca0b1979263a35dbe3ff71.png" src="../_images/0a206d428c0f7af5865dd4ff4c3f9bd45f333dec78ca0b1979263a35dbe3ff71.png" />
+<img alt="../_images/8825c100ee3ca149b09b85127b6cd568263b083e7e7c311b0fe59268adbc36f7.png" src="../_images/8825c100ee3ca149b09b85127b6cd568263b083e7e7c311b0fe59268adbc36f7.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -791,7 +793,9 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># simulate two binary outcomes from sinuosidal contingencies</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="c1"># simulate two binary outcomes from sinuosidal contingencies</span>
 <span class="n">u_0_prob</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">45</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 <span class="n">u_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">u_0_prob</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -845,7 +849,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7f1afc23aa70&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7f2611005e70&gt;
 </pre></div>
 </div>
 </div>
@@ -870,7 +874,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/a306a346ae89280c2437ba29c7b0abc9d38d634a6782cac3b5a8ae81670eef78.png" src="../_images/a306a346ae89280c2437ba29c7b0abc9d38d634a6782cac3b5a8ae81670eef78.png" />
+<img alt="../_images/9878b16cc9fe9215a8b2bc2d44f3efc74c7b8ebd5597fb24bec478488212b478.png" src="../_images/9878b16cc9fe9215a8b2bc2d44f3efc74c7b8ebd5597fb24bec478488212b478.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -965,9 +969,9 @@ pyhgf : 0.0.11
 jax   : 0.4.16
 jaxlib: 0.4.16
 
+seaborn   : 0.13.0
 numpy     : 1.22.0
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-seaborn   : 0.13.0
 matplotlib: 3.8.1
 
 Watermark: 2.4.3
