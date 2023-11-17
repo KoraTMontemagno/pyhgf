@@ -760,10 +760,11 @@ document.write(`
     <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the input node structure.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send prediction errors to the parents of an input node.</span>
 
-<span class="sd">    This function is the entry-level of the structure updates. It updates the parent</span>
-<span class="sd">    of the input node.</span>
+<span class="sd">    This function is the entry-level of the structure updates. It updates the parents</span>
+<span class="sd">    of the input node. When no observations are provided, the precision of the value</span>
+<span class="sd">    and volatility are reduced accordingly as a function of time elapsed.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

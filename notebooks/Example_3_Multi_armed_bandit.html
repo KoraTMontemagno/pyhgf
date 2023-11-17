@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Example 3: Multi-armed bandit task &#8212; pyhgf 0.0.12 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../_static/documentation_options.js?v=3bbcec59"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Example_3_Multi_armed_bandit';</script>
+    <link rel="icon" href="../_static/logo_small.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_small.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/logo_small.svg" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">pyhgf</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../cite.html">
+                        Cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mastodon.social/@nicolegrand" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-mastodon fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Pypi</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../learn.html">
+                        Learn
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../cite.html">
+                        Cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ilabcode/pyhgf" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mastodon.social/@nicolegrand" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-mastodon fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/pyhgf/" title="Pypi" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Pypi</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Example 3:...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="example-3-multi-armed-bandit-task">
+<span id="example-3"></span><h1>Example 3: Multi-armed bandit task<a class="headerlink" href="#example-3-multi-armed-bandit-task" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/Example_2_Input_node_volatility_coupling.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+
+<span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
+<span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this notebook, we are going to illustrate how to fit behavioural responses from a two-armed bandit task. The task is similar to what was used in <span id="id1">[<a class="reference internal" href="../references.html#id14" title="Erdem Pulcu and Michael Browning. Affective bias as a rational response to the statistics of rewards and punishments. eLife, October 2017. URL: http://dx.doi.org/10.7554/eLife.27879, doi:10.7554/elife.27879.">Pulcu and Browning, 2017</a>]</span>. This is a two-armed bandit task with independent reward and punishment outcomes.</p>
+<section id="a-double-multi-armed-bandit-task">
+<h2>A double multi-armed bandit task<a class="headerlink" href="#a-double-multi-armed-bandit-task" title="Link to this heading">#</a></h2>
+<p>Because the reward and punishments are independent, we simulate the task using four binary HGF.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While the binary HGF is a special case of the categorical HGF where the number of categories is set to 2, the categorical HGF add a volatility coupling between the binary branch (see <a class="reference internal" href="1.2-Categorical_HGF.html#categorical-hgf"><span class="std std-ref">The categorical Hierarchical Gaussian Filter</span></a>). Therefore a categorical HGF would not be suitable here as we want every branch of the network to evelove independently.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_hgf</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1700231637.213410    3660 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
+... Create the update sequence from the network structure.
+... Create the belief propagation function.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+</pre></div>
+</div>
+<img alt="../_images/a6ccd735b503712fad0c8c5a0102a47bccd9ad08874a89e844cb26014e9cd5a1.svg" src="../_images/a6ccd735b503712fad0c8c5a0102a47bccd9ad08874a89e844cb26014e9cd5a1.svg" /></div>
+</div>
+</section>
+<section id="task-structure">
+<h2>Task structure<a class="headerlink" href="#task-structure" title="Link to this heading">#</a></h2>
+<p>We start with a simple task structure where contingencies (i.e. the probability that a given armed bandit is associated with a win/loss) alternate between <code class="docutils literal notranslate"><span class="pre">0.2</span></code>, <code class="docutils literal notranslate"><span class="pre">0.5</span></code> and <code class="docutils literal notranslate"><span class="pre">0.8</span></code>. The rate of change in contingencies can be fast (i.e. high volatility blocks) or slow (i.e. low volatility blocks).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># three levels of probability</span>
+<span class="n">high_prob</span><span class="p">,</span> <span class="n">chance</span><span class="p">,</span> <span class="n">low_prob</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span>
+
+<span class="c1"># create blocks of contingencies</span>
+<span class="n">stable_contingencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">low_prob</span><span class="p">,</span> <span class="n">high_prob</span><span class="p">])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">volatile_contingencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">low_prob</span><span class="p">,</span> <span class="n">high_prob</span><span class="p">])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">chance_contingencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">chance</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create sequences of blocks for the different cases</span>
+<span class="n">win_arm1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">stable_contingencies</span><span class="p">,</span> <span class="n">chance_contingencies</span><span class="p">,</span> <span class="n">volatile_contingencies</span><span class="p">])</span>
+<span class="n">loss_arm1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">volatile_contingencies</span><span class="p">,</span> <span class="n">chance_contingencies</span><span class="p">,</span> <span class="n">stable_contingencies</span><span class="p">])</span>
+<span class="n">win_arm2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">chance_contingencies</span><span class="p">,</span> <span class="n">stable_contingencies</span><span class="p">,</span> <span class="n">volatile_contingencies</span><span class="p">])</span>
+<span class="n">loss_arm2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">chance_contingencies</span><span class="p">,</span> <span class="n">volatile_contingencies</span><span class="p">,</span> <span class="n">stable_contingencies</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sample trial level outcomes from the sequences</span>
+<span class="n">u_win_arm1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">win_arm1</span><span class="p">)</span>
+<span class="n">u_loss_arm1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">loss_arm1</span><span class="p">)</span>
+<span class="n">u_win_arm2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">win_arm2</span><span class="p">)</span>
+<span class="n">u_loss_arm2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">loss_arm2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This gives the following task structure:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># trial numbers</span>
+<span class="n">trials</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win_arm1</span><span class="p">))</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="p">[</span><span class="n">u_win_arm1</span><span class="p">,</span> <span class="n">u_loss_arm1</span><span class="p">,</span> <span class="n">u_win_arm2</span><span class="p">,</span> <span class="n">u_loss_arm2</span><span class="p">],</span> 
+    <span class="p">[</span><span class="n">win_arm1</span><span class="p">,</span> <span class="n">loss_arm1</span><span class="p">,</span> <span class="n">win_arm2</span><span class="p">,</span> <span class="n">loss_arm2</span><span class="p">],</span> 
+    <span class="p">[</span><span class="s2">&quot;Arm 1 - Win&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 1 - Loss&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 2 - Win&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 2 - Loss&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;seagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;seagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">]</span>
+<span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;outcomes&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/fcb30170fe3bd34ebae7c6d38665d6bddaaae9db1cd2f29f15559abf16f8499e.png" src="../_images/fcb30170fe3bd34ebae7c6d38665d6bddaaae9db1cd2f29f15559abf16f8499e.png" />
+</div>
+</div>
+</section>
+<section id="simulate-a-dataset">
+<h2>Simulate a dataset<a class="headerlink" href="#simulate-a-dataset" title="Link to this heading">#</a></h2>
+<p>We can simlate our vector of observation. This is a two dimentional matrix with input observations for the four components of our model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">u_win_arm1</span><span class="p">,</span> <span class="n">u_loss_arm1</span><span class="p">,</span> <span class="n">u_win_arm2</span><span class="p">,</span> <span class="n">u_loss_arm2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>From there, it is straightforward to feed these observations to our four branches HGF to retrieve the trajectories.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here, we are providing all the outcomes from all trials. This is not how the task would work as the participant will only be presented with the outcomes from the armed bandit chosen, and we are not using responses from the participant yet. See also <a class="reference internal" href="2-Using_custom_response_functions.html#custom-response-functions"><span class="std std-ref">Using custom response models</span></a> for details on the observations <code class="docutils literal notranslate"><span class="pre">u</span></code> and the responses <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">T</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 140 new observations.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span><span class="n">node_idxs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span><span class="n">node_idxs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span><span class="n">node_idxs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span><span class="n">node_idxs</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="p">[</span><span class="n">win_arm1</span><span class="p">,</span> <span class="n">loss_arm1</span><span class="p">,</span> <span class="n">win_arm2</span><span class="p">,</span> <span class="n">loss_arm2</span><span class="p">],</span> 
+    <span class="p">[</span><span class="s2">&quot;Arm 1 - Win&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 1 - Loss&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 2 - Win&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 2 - Loss&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;seagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;seagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">]</span>
+<span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e5607f2b4425d203ab1cfe5bf09739882e9ae58905a89f194910d3a91fd3c260.png" src="../_images/e5607f2b4425d203ab1cfe5bf09739882e9ae58905a89f194910d3a91fd3c260.png" />
+</div>
+</div>
+</section>
+<section id="system-configuration">
+<h2>System configuration<a class="headerlink" href="#system-configuration" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -p pyhgf,jax,jaxlib
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Nov 17 2023
+
+Python implementation: CPython
+Python version       : 3.10.13
+IPython version      : 8.17.2
+
+pyhgf : 0.0.12
+jax   : 0.4.16
+jaxlib: 0.4.16
+
+arviz     : 0.16.1
+numpy     : 1.22.0
+matplotlib: 3.8.1
+seaborn   : 0.13.0
+pymc      : 5.9.2
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-double-multi-armed-bandit-task">A double multi-armed bandit task</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-structure">Task structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulate-a-dataset">Simulate a dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-configuration">System configuration</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/notebooks/Example_3_Multi_armed_bandit.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022-2023, Nicolas Legrand.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
