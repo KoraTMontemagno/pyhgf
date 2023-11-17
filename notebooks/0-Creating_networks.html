@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Creating and manipulating networks of probabilistic nodes &#8212; pyhgf 0.0.11 documentation</title>
+    <title>Creating and manipulating networks of probabilistic nodes &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/documentation_options.js?v=3bbcec59"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -449,16 +449,20 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span>
-
-<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-    <span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
 </pre></div>
 </div>
 </div>
@@ -498,13 +502,20 @@ One of the advantages of reasoning this way is that it dissociates variables tha
 </div>
 <section id="creating-probabilistic-nodes">
 <h3>Creating probabilistic nodes<a class="headerlink" href="#creating-probabilistic-nodes" title="Link to this heading">#</a></h3>
-<p>parameters = {“mean”: 0.0, “precision”: 1.0}</p>
-<p>attributes = (parameters, parameters, parameters)
-edges = (
-Indexes((1,), None, None, None),
-Indexes(None, (2,), (0,), None),
-Indexes(None, None, None, (1,)),
-)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+
+<span class="n">attributes</span> <span class="o">=</span> <span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Indexes</span><span class="p">((</span><span class="mi">1</span><span class="p">,),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 <p>The code above illustrates creating a probabilistic network of 3 nodes with simple parameter sets <span class="math notranslate nohighlight">\((mean = 0.0, precision = 1.0)\)</span>. Node 2 is the value parent of node 1. Node 3 is the value parent of node 2 and has no parents.</p>
 </section>
 <section id="visualizing-probabilistic-networks">
@@ -519,7 +530,7 @@ Indexes(None, None, None, (1,)),
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699517987.767657    2423 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1700220943.065664    3360 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -689,7 +700,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
-<img alt="../_images/9e2c621e3db067f45517cfe6f8580f53421efd09395f7a7e59f8f944cb71436f.png" src="../_images/9e2c621e3db067f45517cfe6f8580f53421efd09395f7a7e59f8f944cb71436f.png" />
+<img alt="../_images/d572f7b4619989ebcc0cef80affadf65a8569b1228827b11b3fc6c8399d20f6c.png" src="../_images/d572f7b4619989ebcc0cef80affadf65a8569b1228827b11b3fc6c8399d20f6c.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -849,7 +860,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 1000 new observations.
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7fb9e18f04f0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7f9f9c2bc6a0&gt;
 </pre></div>
 </div>
 </div>
@@ -959,20 +970,20 @@ Contrary to standard graph networks, the directed connection between nodes can h
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Nov 17 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
 IPython version      : 8.17.2
 
-pyhgf : 0.0.11
+pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-numpy     : 1.22.0
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 matplotlib: 3.8.1
 seaborn   : 0.13.0
+numpy     : 1.22.0
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 
 Watermark: 2.4.3
 </pre></div>
@@ -1047,7 +1058,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/0-Creating_networks.ipynb.txt">
+    <a href="../_sources/notebooks/0-Creating_networks.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

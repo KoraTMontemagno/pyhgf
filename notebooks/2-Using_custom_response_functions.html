@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Using custom response models &#8212; pyhgf 0.0.11 documentation</title>
+    <title>Using custom response models &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/documentation_options.js?v=3bbcec59"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -449,7 +449,15 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -458,9 +466,11 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
 <span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
-
-<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-    <span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
 </pre></div>
 </div>
 </div>
@@ -504,7 +514,7 @@ In this situation, it is trivial to write such a decision function and generate 
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699518129.666035    2896 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1700221037.887768    3958 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -812,6 +822,18 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 2 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [tonic_volatility_2]
+</pre></div>
+</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -830,73 +852,13 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [8000/8000 00:06&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 0 divergences]
-    </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 7 seconds.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -939,19 +901,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>tonic_volatility_2</th>
-      <td>-3.949</td>
-      <td>0.491</td>
-      <td>-4.893</td>
-      <td>-3.026</td>
-      <td>0.012</td>
-      <td>0.008</td>
-      <td>1789.0</td>
-      <td>2486.0</td>
+      <td>-3.97</td>
+      <td>0.497</td>
+      <td>-4.933</td>
+      <td>-3.065</td>
+      <td>0.013</td>
+      <td>0.009</td>
+      <td>1555.0</td>
+      <td>2618.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/d2de34fd2863d225ff7e796c328bb20cbd1db2935bb168e49509d19590c5402a.png" src="../_images/d2de34fd2863d225ff7e796c328bb20cbd1db2935bb168e49509d19590c5402a.png" />
+</div></div><img alt="../_images/c364011a0011ac2ce9e502dec49111c58940fe6e40263a3f7322227942cc0996.png" src="../_images/c364011a0011ac2ce9e502dec49111c58940fe6e40263a3f7322227942cc0996.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -979,22 +941,22 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Nov 17 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
 IPython version      : 8.17.2
 
-pyhgf : 0.0.11
+pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-pymc      : 5.9.1
-jax       : 0.4.16
-arviz     : 0.16.1
-numpy     : 1.22.0
 matplotlib: 3.8.1
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+jax       : 0.4.16
+arviz     : 0.16.1
+pymc      : 5.9.2
+numpy     : 1.22.0
 
 Watermark: 2.4.3
 </pre></div>
@@ -1042,7 +1004,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/2-Using_custom_response_functions.ipynb.txt">
+    <a href="../_sources/notebooks/2-Using_custom_response_functions.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

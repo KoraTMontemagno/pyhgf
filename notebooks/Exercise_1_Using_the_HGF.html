@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>An introduction to Hierarchical Gaussian Filters through practical exercises &#8212; pyhgf 0.0.11 documentation</title>
+    <title>An introduction to Hierarchical Gaussian Filters through practical exercises &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/documentation_options.js?v=3bbcec59"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -445,6 +445,16 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="an-introduction-to-hierarchical-gaussian-filters-through-practical-exercises">
 <span id="hgf-exercises"></span><h1>An introduction to Hierarchical Gaussian Filters through practical exercises<a class="headerlink" href="#an-introduction-to-hierarchical-gaussian-filters-through-practical-exercises" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/Exercise_1_Using_the_HGF.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -452,10 +462,7 @@ document.write(`
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -469,9 +476,11 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
 <span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 <span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">binary_softmax</span><span class="p">,</span> <span class="n">first_level_gaussian_surprise</span>
-
-<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-    <span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
 </pre></div>
 </div>
 </div>
@@ -563,7 +572,7 @@ x_2^{(k)} \sim \mathcal{N}(x_2^{(k-1)}, \, \exp(\omega_2))
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699518412.213003    3504 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1700221199.102902    4685 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -696,6 +705,18 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 2 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [tonic_volatility_1]
+</pre></div>
+</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -714,73 +735,13 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 1 divergences]
+      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [8000/8000 00:07&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 2, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 3, 1 divergences]
-    </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 8 seconds.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -789,7 +750,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/38f771039722baf0d997742ab8de44c10323ecd87bd4bc9cc6b8dc4b53196020.png" src="../_images/38f771039722baf0d997742ab8de44c10323ecd87bd4bc9cc6b8dc4b53196020.png" />
+<img alt="../_images/d76c3bd06176f32ba2327ce5f587e03eee2bc09ad8a6cc3eaaa04493f1154c48.png" src="../_images/d76c3bd06176f32ba2327ce5f587e03eee2bc09ad8a6cc3eaaa04493f1154c48.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -831,14 +792,14 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
   <tbody>
     <tr>
       <th>tonic_volatility_1</th>
-      <td>-6.01</td>
-      <td>0.886</td>
-      <td>-7.621</td>
-      <td>-4.376</td>
-      <td>0.025</td>
-      <td>0.018</td>
-      <td>1344.0</td>
-      <td>948.0</td>
+      <td>-5.942</td>
+      <td>0.936</td>
+      <td>-7.527</td>
+      <td>-4.068</td>
+      <td>0.03</td>
+      <td>0.021</td>
+      <td>1071.0</td>
+      <td>918.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1180,6 +1141,18 @@ Adding 720 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 2 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [bias]
+</pre></div>
+</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -1198,73 +1171,13 @@ Adding 720 new observations.
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 0, 0 divergences]
+      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [8000/8000 00:02&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 1, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 2, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:01&lt;00:00 Sampling chain 3, 0 divergences]
-    </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 3 seconds.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1273,7 +1186,7 @@ Adding 720 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b43d8e994b1c3e6d18793f8d7322d72dbb31ce285bf4c12a9e0c7c9ac4d39d57.png" src="../_images/b43d8e994b1c3e6d18793f8d7322d72dbb31ce285bf4c12a9e0c7c9ac4d39d57.png" />
+<img alt="../_images/b82830a31c760e5728a82e94528af2e57f85ec4a96c88523894128a7a59bf0de.png" src="../_images/b82830a31c760e5728a82e94528af2e57f85ec4a96c88523894128a7a59bf0de.png" />
 </div>
 </div>
 <p>Assess model fitting, here using leave-one-out cross-validation from the <a class="reference external" href="https://python.arviz.org/en/stable/api/generated/arviz.loo.html">Arviz</a> library.</p>
@@ -1288,7 +1201,7 @@ Adding 720 new observations.
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -222.43     0.00
+elpd_loo  -222.41     0.00
 p_loo        0.67        -
 
 There has been a warning during the calculation. Please check the results.
@@ -1376,6 +1289,18 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 2 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [lr]
+</pre></div>
+</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -1394,73 +1319,13 @@ Pareto k diagnostic values:
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 0, 0 divergences]
+      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [8000/8000 00:33&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 1, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:23&lt;00:00 Sampling chain 2, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 3, 0 divergences]
-    </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 33 seconds.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1469,7 +1334,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/50d81bbfa4a54d45aadb1430b057681c87e9382f3b63d67aad86b3536319e27a.png" src="../_images/50d81bbfa4a54d45aadb1430b057681c87e9382f3b63d67aad86b3536319e27a.png" />
+<img alt="../_images/244d8534afae2d7c568b2487e8470cc6ab8bef6776520e709bad602e9f7235fb.png" src="../_images/244d8534afae2d7c568b2487e8470cc6ab8bef6776520e709bad602e9f7235fb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1483,8 +1348,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -104.01     0.00
-p_loo        0.77        -
+elpd_loo  -104.42     0.00
+p_loo        1.16        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1493,8 +1358,8 @@ Pareto k diagnostic values:
                          Count   Pct.
 (-Inf, 0.5]   (good)        0    0.0%
  (0.5, 0.7]   (ok)          0    0.0%
-   (0.7, 1]   (bad)         1  100.0%
-   (1, Inf)   (very bad)    0    0.0%
+   (0.7, 1]   (bad)         0    0.0%
+   (1, Inf)   (very bad)    1  100.0%
 </pre></div>
 </div>
 </div>
@@ -1540,7 +1405,7 @@ Pareto k diagnostic values:
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/147513ecdcc0af8b8fb6f7967f53f2920574f2a4fc236c826a7dfd627df25422.png" src="../_images/147513ecdcc0af8b8fb6f7967f53f2920574f2a4fc236c826a7dfd627df25422.png" />
+<img alt="../_images/e65dc60f22e664a4f4b95a632352c903ffc09244e80531bb6b14c9768b49d25a.png" src="../_images/e65dc60f22e664a4f4b95a632352c903ffc09244e80531bb6b14c9768b49d25a.png" />
 </div>
 </div>
 </section>
@@ -1586,6 +1451,18 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 2 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [tonic_volatility_2]
+</pre></div>
+</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -1604,73 +1481,13 @@ Pareto k diagnostic values:
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [8000/8000 00:06&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 1, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 2, 1 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 3, 0 divergences]
-    </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 7 seconds.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1679,7 +1496,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5c03b8b8210dd592598bafcc180c708e81828752aa72ca1840bcf48e97cbf648.png" src="../_images/5c03b8b8210dd592598bafcc180c708e81828752aa72ca1840bcf48e97cbf648.png" />
+<img alt="../_images/d634aca39b493bfabba1cea0abae34221acc3efabc3b65f4b346c1073686e334.png" src="../_images/d634aca39b493bfabba1cea0abae34221acc3efabc3b65f4b346c1073686e334.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1693,8 +1510,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -114.32     0.00
-p_loo        1.00        -
+elpd_loo  -114.38     0.00
+p_loo        1.06        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1755,6 +1572,18 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 2 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [tonic_volatility_2]
+</pre></div>
+</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -1773,73 +1602,16 @@ Pareto k diagnostic values:
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:06&lt;00:00 Sampling chain 0, 5 divergences]
+      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [8000/8000 00:09&lt;00:00 Sampling 4 chains, 20 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 2 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 2, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 3, 8 divergences]
-    </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 9 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 20 divergences after tuning. Increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1849,7 +1621,7 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/df0d23f6fb73e43a029cec72cf3288377a18f3aadffc2905298685b7bcf1fe3f.png" src="../_images/df0d23f6fb73e43a029cec72cf3288377a18f3aadffc2905298685b7bcf1fe3f.png" />
+<img alt="../_images/c7cc93d52ba3c862a013c26464f29aefb5d8f04cada2ce21bc51b0e55c4007c4.png" src="../_images/c7cc93d52ba3c862a013c26464f29aefb5d8f04cada2ce21bc51b0e55c4007c4.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1863,8 +1635,8 @@ Pareto k diagnostic values:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 4000 posterior samples and 1.0 observations log-likelihood matrix.
 
          Estimate       SE
-elpd_loo  -113.97     0.00
-p_loo        1.00        -
+elpd_loo  -113.65     0.00
+p_loo        0.71        -
 
 There has been a warning during the calculation. Please check the results.
 ------
@@ -1927,8 +1699,8 @@ Pareto k diagnostic values:
     <tr>
       <th>RW</th>
       <td>0</td>
-      <td>-104.012339</td>
-      <td>0.769891</td>
+      <td>-104.415685</td>
+      <td>1.161210</td>
       <td>0.000000</td>
       <td>1.000000e+00</td>
       <td>0.0</td>
@@ -1939,10 +1711,10 @@ Pareto k diagnostic values:
     <tr>
       <th>three-level</th>
       <td>1</td>
-      <td>-113.965186</td>
-      <td>0.995552</td>
-      <td>9.952848</td>
-      <td>1.942890e-16</td>
+      <td>-113.648038</td>
+      <td>0.706313</td>
+      <td>9.232353</td>
+      <td>2.192690e-15</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>True</td>
@@ -1951,9 +1723,9 @@ Pareto k diagnostic values:
     <tr>
       <th>two-level</th>
       <td>2</td>
-      <td>-114.315697</td>
-      <td>1.004426</td>
-      <td>10.303359</td>
+      <td>-114.380774</td>
+      <td>1.061842</td>
+      <td>9.965089</td>
       <td>0.000000e+00</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1963,10 +1735,10 @@ Pareto k diagnostic values:
     <tr>
       <th>biased_random</th>
       <td>3</td>
-      <td>-222.431408</td>
-      <td>0.674613</td>
-      <td>118.419070</td>
-      <td>7.771561e-15</td>
+      <td>-222.405095</td>
+      <td>0.669615</td>
+      <td>117.989410</td>
+      <td>2.664535e-15</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>True</td>
@@ -2054,7 +1826,7 @@ Pareto k diagnostic values:
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/cd6003dc30847b2bd8f1369561443f24f19f0062f7c34cb5cfa4b0a782aa2e7b.png" src="../_images/cd6003dc30847b2bd8f1369561443f24f19f0062f7c34cb5cfa4b0a782aa2e7b.png" />
+<img alt="../_images/c6734e4f026ec9a6cd62f90e6d6912f6567c30e504ce4250ccaf6afd920ef72f.png" src="../_images/c6734e4f026ec9a6cd62f90e6d6912f6567c30e504ce4250ccaf6afd920ef72f.png" />
 </div>
 </div>
 </section>
@@ -2070,25 +1842,25 @@ Pareto k diagnostic values:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Nov 17 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
 IPython version      : 8.17.2
 
-pyhgf : 0.0.11
+pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-pymc      : 5.9.1
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-numpy     : 1.22.0
 jax       : 0.4.16
+pymc      : 5.9.2
 pandas    : 2.0.3
-matplotlib: 3.8.1
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 seaborn   : 0.13.0
+numpy     : 1.22.0
+pytensor  : 2.17.4
+matplotlib: 3.8.1
 arviz     : 0.16.1
-pytensor  : 2.17.3
 
 Watermark: 2.4.3
 </pre></div>
@@ -2152,7 +1924,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/Exercise_1_Using_the_HGF.ipynb.txt">
+    <a href="../_sources/notebooks/Exercise_1_Using_the_HGF.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

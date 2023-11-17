@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Multilevel embeding of Hierarchical Gaussian Filters &#8212; pyhgf 0.0.11 documentation</title>
+    <title>Multilevel embeding of Hierarchical Gaussian Filters &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/documentation_options.js?v=3bbcec59"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -445,6 +445,16 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="multilevel-embeding-of-hierarchical-gaussian-filters">
 <span id="multilevel-hgf"></span><h1>Multilevel embeding of Hierarchical Gaussian Filters<a class="headerlink" href="#multilevel-embeding-of-hierarchical-gaussian-filters" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/3-Multilevel_HGF.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -452,9 +462,7 @@ document.write(`
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -464,9 +472,11 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span><span class="p">,</span> <span class="n">hgf_logp</span>
 <span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">first_level_binary_surprise</span>
-
-<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-    <span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
 </pre></div>
 </div>
 </div>
@@ -603,7 +613,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/94d106cf43028aa4c682dab5986e909be971fc4ab7a8cf31a05de096b3a82b39.svg" src="../_images/94d106cf43028aa4c682dab5986e909be971fc4ab7a8cf31a05de096b3a82b39.svg" /></div>
+<img alt="../_images/051de4f631fe25c7c2fbe13db92ad326ddbac83747d6471420cf2a922d1978ca.svg" src="../_images/051de4f631fe25c7c2fbe13db92ad326ddbac83747d6471420cf2a922d1978ca.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -613,9 +623,21 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699518172.320227    2980 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1700221065.590021    4083 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
 </pre></div>
 </div>
 <div class="output text_html">
@@ -637,9 +659,15 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 01:16&lt;00:00 Sampling chain 0, 2 divergences]
+      100.00% [2000/2000 00:44&lt;00:00 Sampling chain 0, 5 divergences]
     </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 45 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -649,7 +677,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9beeb58a5fe077d84921dabe4e99a423efe7381f07d0f55db8df021dfd685b78.png" src="../_images/9beeb58a5fe077d84921dabe4e99a423efe7381f07d0f55db8df021dfd685b78.png" />
+<img alt="../_images/edb1c8a83e3417b4dd308126610de6ac64555b9437b593f9c3a006e394cebcb6.png" src="../_images/edb1c8a83e3417b4dd308126610de6ac64555b9437b593f9c3a006e394cebcb6.png" />
 </div>
 </div>
 <p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
@@ -730,7 +758,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/06729f219d3f33ccbc8b2dd4e49a048c09bdf5685aa8a1a16f34809168939c04.svg" src="../_images/06729f219d3f33ccbc8b2dd4e49a048c09bdf5685aa8a1a16f34809168939c04.svg" /></div>
+<img alt="../_images/24e7d24fbeec070c32b902d8c0381d6926a8b2fc93b068277c73a8f2e20739a1.svg" src="../_images/24e7d24fbeec070c32b902d8c0381d6926a8b2fc93b068277c73a8f2e20739a1.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -743,6 +771,18 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
+</pre></div>
+</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -762,9 +802,15 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:40&lt;00:00 Sampling chain 0, 12 divergences]
+      100.00% [2000/2000 00:23&lt;00:00 Sampling chain 0, 42 divergences]
     </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 24 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -774,7 +820,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9385866885e507f4fa3ee6948cb2b38ff581b7b76f6ec974cc3155484dc8e3fb.png" src="../_images/9385866885e507f4fa3ee6948cb2b38ff581b7b76f6ec974cc3155484dc8e3fb.png" />
+<img alt="../_images/dedf4c79a3fd9c28fb0b8602f9eaa22c3a573c00d78cac92e8027fb6d068efb9.png" src="../_images/dedf4c79a3fd9c28fb0b8602f9eaa22c3a573c00d78cac92e8027fb6d068efb9.png" />
 </div>
 </div>
 </section>
@@ -791,22 +837,22 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Nov 17 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
 IPython version      : 8.17.2
 
-pyhgf : 0.0.11
+pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-pymc      : 5.9.1
-matplotlib: 3.8.1
-arviz     : 0.16.1
-numpy     : 1.22.0
 jax       : 0.4.16
+pymc      : 5.9.2
+numpy     : 1.22.0
+arviz     : 0.16.1
+matplotlib: 3.8.1
 
 Watermark: 2.4.3
 </pre></div>
@@ -864,7 +910,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/3-Multilevel_HGF.ipynb.txt">
+    <a href="../_sources/notebooks/3-Multilevel_HGF.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

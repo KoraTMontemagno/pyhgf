@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The binary Hierarchical Gaussian Filter &#8212; pyhgf 0.0.11 documentation</title>
+    <title>The binary Hierarchical Gaussian Filter &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/documentation_options.js?v=3bbcec59"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -445,6 +445,16 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="the-binary-hierarchical-gaussian-filter">
 <span id="binary-hgf"></span><h1>The binary Hierarchical Gaussian Filter<a class="headerlink" href="#the-binary-hierarchical-gaussian-filter" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/1.1-Binary_HGF.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -452,10 +462,7 @@ document.write(`
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
@@ -465,9 +472,11 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
 <span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
 <span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">first_level_binary_surprise</span>
-
-<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-    <span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
 </pre></div>
 </div>
 </div>
@@ -486,7 +495,8 @@ document.write(`
 <p>We import a time series of binary observations from the decision task described in <span id="id2">[<a class="reference internal" href="../references.html#id7" title="Sandra Iglesias, Lars Kasper, Samuel J. Harrison, Robert Manka, Christoph Mathys, and Klaas E. Stephan. Cholinergic and dopaminergic effects on prediction error and uncertainty responses during sensory associative learning. NeuroImage, 226:117590, February 2021. URL: https://doi.org/10.1016/j.neuroimage.2020.117590, doi:10.1016/j.neuroimage.2020.117590.">Iglesias <em>et al.</em>, 2021</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
+<span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -498,10 +508,10 @@ document.write(`
 <h3>The two-level binary Hierarchical Gaussian Filter<a class="headerlink" href="#the-two-level-binary-hierarchical-gaussian-filter" title="Link to this heading">#</a></h3>
 <section id="create-the-model">
 <h4>Create the model<a class="headerlink" href="#create-the-model" title="Link to this heading">#</a></h4>
-<p>The node structure corresponding to the two-level and three-level Hierarchical Gaussian Filters are automatically generated from <code class="docutils literal notranslate"><span class="pre">model_type</span></code> and <code class="docutils literal notranslate"><span class="pre">n_levels</span></code> using the nodes parameters provided in the dictionaries. Here we are not performing any optimization so those parameters are fixed to reasonable values.</p>
+<p>The node structure corresponding to the two-level and three-level Hierarchical Gaussian Filters are automatically generated from <code class="docutils literal notranslate"><span class="pre">model_type</span></code> and <code class="docutils literal notranslate"><span class="pre">n_levels</span></code> using the node parameters provided in the dictionaries. Here we are not performing any optimization so those parameters are fixed to reasonable values.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The response function used is the binary surprise at each time point (<a class="reference internal" href="../generated/pyhgf.response/pyhgf.response.first_level_binary_surprise.html#pyhgf.response.first_level_binary_surprise" title="pyhgf.response.first_level_binary_surprise"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.response.first_level_binary_surprise()</span></code></a>). In other words, at each time point the model try to update its hierarchy to minimize the discrepancy between the expected and real next binary observation. See also <a class="reference internal" href="2-Using_custom_response_functions.html#custom-response-functions"><span class="std std-ref">this tutorial</span></a> to see how to create a custom response function.</p>
+<p>The response function used is the binary surprise at each time point (<a class="reference internal" href="../generated/pyhgf.response/pyhgf.response.first_level_binary_surprise.html#pyhgf.response.first_level_binary_surprise" title="pyhgf.response.first_level_binary_surprise"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.response.first_level_binary_surprise()</span></code></a>). In other words, at each time point the model tries to update its hierarchy to minimize the discrepancy between the expected and real next binary observation. See also <a class="reference internal" href="2-Using_custom_response_functions.html#custom-response-functions"><span class="std std-ref">this tutorial</span></a> to see how to create a custom response function.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -517,7 +527,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699517984.407038    2342 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1700220940.422432    3274 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -560,7 +570,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </section>
 <section id="plot-trajectories">
 <h4>Plot trajectories<a class="headerlink" href="#plot-trajectories" title="Link to this heading">#</a></h4>
-<p>A Hierarchical Gaussian Filter is acting as a Bayesian filter when presented with new observation, and by running the update equation forward, we can observe the trajectories of the parameters of the node that are being updated after each new observation (i.e. the mean <span class="math notranslate nohighlight">\(\mu\)</span> and the precision <span class="math notranslate nohighlight">\(\pi\)</span>). The <code class="docutils literal notranslate"><span class="pre">plot_trajectories</span></code> function automatically extracts the relevant parameters given the model structure and will plot their evolution together with the input data.</p>
+<p>A Hierarchical Gaussian Filter acts as a Bayesian filter when presented with new observation, and by running the update equation forward, we can observe the trajectories of the parameters of the node that are being updated after each new observation (i.e. the mean <span class="math notranslate nohighlight">\(\mu\)</span> and the precision <span class="math notranslate nohighlight">\(\pi\)</span>). The <code class="docutils literal notranslate"><span class="pre">plot_trajectories</span></code> function automatically extracts the relevant parameters given the model structure and plots their evolution together with the input data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
@@ -574,7 +584,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </section>
 <section id="surprise">
 <h4>Surprise<a class="headerlink" href="#surprise" title="Link to this heading">#</a></h4>
-<p>We can see that the surprise will increase when the time series exhibit more unexpected behaviours. The degree to which a given observation is expected will depend on the expected value and volatility in the input node, which is influenced by the values of higher-order nodes. One way to assess model fit is to look at the total binary surprise for each observation. These values can be returned from the fitted model using the <code class="docutils literal notranslate"><span class="pre">surprise</span></code> method:</p>
+<p>We can see that the surprise will increase when the time series exhibits more unexpected behaviours. The degree to which a given observation is expected will depend on the expected value and volatility in the input node, which is influenced by the values of higher-order nodes. One way to assess model fit is to look at the total binary surprise for each observation. These values can be returned from the fitted model using the <code class="docutils literal notranslate"><span class="pre">surprise</span></code> method:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_levels_hgf</span><span class="o">.</span><span class="n">surprise</span><span class="p">()</span>
@@ -745,6 +755,18 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (2 chains in 2 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [tonic_volatility_2]
+</pre></div>
+</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -763,31 +785,16 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 0, 0 divergences]
+      <progress value='4000' class='' max='4000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [4000/4000 00:03&lt;00:00 Sampling 2 chains, 0 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:04&lt;00:00 Sampling chain 1, 0 divergences]
-    </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 4 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -797,7 +804,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/cd1c0eb16ffbb370c6a8e5bb55f50956144c011513346166a9c9e411083d7269.png" src="../_images/cd1c0eb16ffbb370c6a8e5bb55f50956144c011513346166a9c9e411083d7269.png" />
+<img alt="../_images/004ca0a2472bf95252e5d0992a3d66552b4d9d7fb99c73c22c2a72a38bd74efd.png" src="../_images/004ca0a2472bf95252e5d0992a3d66552b4d9d7fb99c73c22c2a72a38bd74efd.png" />
 </div>
 </div>
 </section>
@@ -844,7 +851,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f042f232e748e39266e3c3310079021e995a8a4801823c5c0efccb89d006e08c.png" src="../_images/f042f232e748e39266e3c3310079021e995a8a4801823c5c0efccb89d006e08c.png" />
+<img alt="../_images/5fd53c7c5778fa8fe6ac55255f6e0551fcb5e5d27236f096adfd23b02ab882e4.png" src="../_images/5fd53c7c5778fa8fe6ac55255f6e0551fcb5e5d27236f096adfd23b02ab882e4.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -854,7 +861,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.52966, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(202.52975, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -906,7 +913,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e3093df40c606a365fce51328bb90c832e9b204e89fed0d0688e3e2fdb1677dd.svg" src="../_images/e3093df40c606a365fce51328bb90c832e9b204e89fed0d0688e3e2fdb1677dd.svg" /></div>
+<img alt="../_images/e23b939a310486df3afa5ada7aac1a37266da7c16855b27f94e2ecf820ea7441.svg" src="../_images/e23b939a310486df3afa5ada7aac1a37266da7c16855b27f94e2ecf820ea7441.svg" /></div>
 </div>
 </section>
 <section id="id9">
@@ -919,6 +926,18 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (2 chains in 2 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [tonic_volatility_2, tonic_volatility_3]
+</pre></div>
+</div>
 <div class="output text_html">
 <style>
     /* Turns off some styling */
@@ -937,31 +956,16 @@ Adding 320 new observations.
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:08&lt;00:00 Sampling chain 0, 0 divergences]
+      <progress value='4000' class='' max='4000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [4000/4000 00:05&lt;00:00 Sampling 2 chains, 0 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:05&lt;00:00 Sampling chain 1, 0 divergences]
-    </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 6 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -971,7 +975,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/394ed222ed347d6038d6fbb1311b7d9f7874ae19d580e9803ed82af73afbdb6e.png" src="../_images/394ed222ed347d6038d6fbb1311b7d9f7874ae19d580e9803ed82af73afbdb6e.png" />
+<img alt="../_images/d4462589246aedac4591d076540921ef612ebcf32b272dd41f5251089b8b7b55.png" src="../_images/d4462589246aedac4591d076540921ef612ebcf32b272dd41f5251089b8b7b55.png" />
 </div>
 </div>
 </section>
@@ -1021,7 +1025,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f7922f0ee23d8d19313f55eab07edfc5a3a34cf0575457fa0fccfabe078e74f2.png" src="../_images/f7922f0ee23d8d19313f55eab07edfc5a3a34cf0575457fa0fccfabe078e74f2.png" />
+<img alt="../_images/15de323fbbf4064ed7f5f7d67e08d14016239d0be514173122ad00a72dde871e.png" src="../_images/15de323fbbf4064ed7f5f7d67e08d14016239d0be514173122ad00a72dde871e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1031,7 +1035,7 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.00981, dtype=float32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(203.01239, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -1049,22 +1053,22 @@ Adding 320 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Nov 17 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
 IPython version      : 8.17.2
 
-pyhgf : 0.0.11
+pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-pymc      : 5.9.1
 seaborn   : 0.13.0
 matplotlib: 3.8.1
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 arviz     : 0.16.1
 jax       : 0.4.16
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+pymc      : 5.9.2
 
 Watermark: 2.4.3
 </pre></div>
@@ -1143,7 +1147,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/1.1-Binary_HGF.ipynb.txt">
+    <a href="../_sources/notebooks/1.1-Binary_HGF.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

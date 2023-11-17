@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to the Hierarchical Gaussian Filter &#8212; pyhgf 0.0.11 documentation</title>
+    <title>Introduction to the Hierarchical Gaussian Filter &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/documentation_options.js?v=3bbcec59"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -744,11 +744,14 @@ x_3^{(k)}          \sim \mathcal{N}(x_3^{(k)} | x_3^{(k-1)}, \, \exp(\omega_3)) 
 <h2>Dynamic beliefs updating<a class="headerlink" href="#dynamic-beliefs-updating" title="Link to this heading">#</a></h2>
 <section id="the-hierarchical-gaussian-filter-in-a-network-of-predictive-nodes">
 <h3>The Hierarchical Gaussian Filter in a network of predictive nodes<a class="headerlink" href="#the-hierarchical-gaussian-filter-in-a-network-of-predictive-nodes" title="Link to this heading">#</a></h3>
-<p>The coding examples introduced above illustrated generative models that can simulate data forward from a given volatility structure, with key parameters stochastically fluctuating. Based on these principles, any given latent state in the world can be modelled as having a volatility parent state, a value parent state, both, or none. When the node is an orphan, it evolves as a Gaussian random walk around its previous value with a fixed step size. Consequently, when inferring the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents. Hierarchical Gaussian Filters use this as a model of the environment to make sense of new observations, also referred to as the sensory part of the HGF, or the filtering part. In this situation, new observations are coming in at the network’s root and the model updates the belief structure accordingly (from bottom to top nodes). It is therefore straightforward to describe the standard two-level and three-level Hierarchical Gaussian Filters for continuous and binary inputs as the combination of value and volatility couplings (see <a class="reference internal" href="#hgf-fig"><span class="std std-ref">The two-level and three-level Hierarchical Gaussian Filters for binary or continuous inputs, as described in 2014:mathys,2011:mathys. The binary HGF has the particularity that it uses a sigmoid transform in the input node to convert continuous values into binary probabilities. For both models, volatility coupling is depicted with dashed lines, and value coupling with straight lines. The three-level HGF has one volatility layer more than the two-level HGF, which is used to estimate higher-order uncertainty.</span></a>)</p>
+<p>The coding examples introduced above illustrated generative models that can simulate data forward from a given volatility structure, with key parameters stochastically fluctuating. Based on these principles, any given latent state in the world can be modelled as having a volatility parent state, a value parent state, both, or none. When the node is an orphan, it evolves as a Gaussian random walk around its previous value with a fixed step size. Consequently, when inferring the evolution of these states, the exact belief update equations (which include the computation of new predictions, posterior values, and prediction errors, and represent an approximate inversion of this generative model, see <span id="id2">[<a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span> depend on the nature of the coupling of a given state with its parent and children states. In particular, the nodes that implement the belief updates will communicate with their value parents via value prediction errors, or <strong>VAPE</strong>s, and volatility prediction errors, or <strong>VOPE</strong>s, with their volatility parents. Hierarchical Gaussian Filters use this as a model of the environment to make sense of new observations, also referred to as the sensory part of the HGF, or the filtering part. In this situation, new observations are coming in at the network’s root and the model updates the belief structure accordingly (from bottom to top nodes). It is therefore straightforward to describe the standard two-level and three-level Hierarchical Gaussian Filters for continuous and binary inputs as the combination of value and volatility couplings (see <a class="reference internal" href="#hgf-fig"><span class="std std-ref">The two-level and three-level Hierarchical Gaussian Filters for binary or continuous inputs.</span></a>)</p>
 <figure class="align-default" id="hgf-fig">
 <img alt="../_images/hgf.png" src="../_images/hgf.png" />
 <figcaption>
-<p><span class="caption-text">The two-level and three-level Hierarchical Gaussian Filters for binary or continuous inputs, as described in <span id="id3">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>, <a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>. The binary HGF has the particularity that it uses a sigmoid transform in the input node to convert continuous values into binary probabilities. For both models, volatility coupling is depicted with dashed lines, and value coupling with straight lines. The three-level HGF has one volatility layer more than the two-level HGF, which is used to estimate higher-order uncertainty.</span><a class="headerlink" href="#hgf-fig" title="Link to this image">#</a></p>
+<p><span class="caption-text">The two-level and three-level Hierarchical Gaussian Filters for binary or continuous inputs.</span><a class="headerlink" href="#hgf-fig" title="Link to this image">#</a></p>
+<div class="legend">
+<p>These models were described in <span id="id3">[<a class="reference internal" href="../references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>, <a class="reference internal" href="../references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>. The binary HGF has the particularity that it uses a sigmoid transform in the input node to convert continuous values into binary probabilities. For both models, volatility coupling is depicted with dashed lines, and value coupling with straight lines. The three-level HGF has one volatility layer more than the two-level HGF, which is used to estimate higher-order uncertainty.</p>
+</div>
 </figcaption>
 </figure>
 <div class="admonition hint">
@@ -829,18 +832,18 @@ Given the expectation from the prediction step</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Nov 17 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
 IPython version      : 8.17.2
 
-pyhgf : 0.0.11
+pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-numpy     : 1.22.0
 seaborn   : 0.13.0
+numpy     : 1.22.0
 matplotlib: 3.8.1
 
 Watermark: 2.4.3
@@ -901,7 +904,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/0-Theory.ipynb.txt">
+    <a href="../_sources/notebooks/0-Theory.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Parameters recovery, prior predictive and posterior predictive sampling &#8212; pyhgf 0.0.11 documentation</title>
+    <title>Parameters recovery, prior predictive and posterior predictive sampling &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../_static/documentation_options.js?v=3bbcec59"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -449,8 +449,15 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+    <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -459,9 +466,11 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span><span class="p">,</span> <span class="n">hgf_logp</span>
-
-<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-    <span class="err">!</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
 </pre></div>
 </div>
 </div>
@@ -571,9 +580,21 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1699518314.918928    3223 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1700221153.026894    4379 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (2 chains in 2 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega_1]
 </pre></div>
 </div>
 <div class="output text_html">
@@ -594,31 +615,16 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:31&lt;00:00 Sampling chain 0, 0 divergences]
+      <progress value='4000' class='' max='4000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [4000/4000 00:20&lt;00:00 Sampling 2 chains, 0 divergences]
     </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 1, 0 divergences]
-    </div>
-    </div></div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 20 seconds.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -628,7 +634,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b304f01a40eafeb8134c1e23e216ac85ac9959d25a8c656d353c84e3965373b1.png" src="../_images/b304f01a40eafeb8134c1e23e216ac85ac9959d25a8c656d353c84e3965373b1.png" />
+<img alt="../_images/8c367afe80abb955550bb8a7e0ec5e0a4979a7159d440c6805dc3cbb32a051e0.png" src="../_images/8c367afe80abb955550bb8a7e0ec5e0a4979a7159d440c6805dc3cbb32a051e0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -670,74 +676,74 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
   <tbody>
     <tr>
       <th>omega_1[0]</th>
-      <td>-5.999</td>
-      <td>0.686</td>
-      <td>-7.194</td>
-      <td>-4.649</td>
-      <td>0.014</td>
+      <td>-6.006</td>
+      <td>0.665</td>
+      <td>-7.170</td>
+      <td>-4.696</td>
+      <td>0.015</td>
       <td>0.010</td>
-      <td>2435.0</td>
-      <td>1241.0</td>
+      <td>2115.0</td>
+      <td>1305.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[1]</th>
-      <td>-5.955</td>
-      <td>0.594</td>
-      <td>-7.011</td>
-      <td>-4.831</td>
-      <td>0.013</td>
-      <td>0.009</td>
-      <td>2162.0</td>
-      <td>1534.0</td>
+      <td>-5.957</td>
+      <td>0.589</td>
+      <td>-6.980</td>
+      <td>-4.838</td>
+      <td>0.015</td>
+      <td>0.011</td>
+      <td>1550.0</td>
+      <td>1325.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[2]</th>
-      <td>-4.961</td>
-      <td>0.550</td>
-      <td>-5.978</td>
-      <td>-3.944</td>
+      <td>-4.955</td>
+      <td>0.554</td>
+      <td>-6.002</td>
+      <td>-3.941</td>
       <td>0.011</td>
       <td>0.008</td>
-      <td>2630.0</td>
-      <td>1782.0</td>
+      <td>2522.0</td>
+      <td>1526.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[3]</th>
-      <td>-6.532</td>
-      <td>0.737</td>
-      <td>-7.716</td>
-      <td>-5.022</td>
-      <td>0.020</td>
-      <td>0.014</td>
-      <td>1517.0</td>
-      <td>1095.0</td>
+      <td>-6.495</td>
+      <td>0.714</td>
+      <td>-7.712</td>
+      <td>-5.116</td>
+      <td>0.018</td>
+      <td>0.012</td>
+      <td>1792.0</td>
+      <td>1438.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[4]</th>
-      <td>-5.350</td>
-      <td>0.595</td>
-      <td>-6.424</td>
-      <td>-4.275</td>
+      <td>-5.328</td>
+      <td>0.620</td>
+      <td>-6.441</td>
+      <td>-4.101</td>
       <td>0.013</td>
-      <td>0.009</td>
-      <td>2361.0</td>
-      <td>1641.0</td>
+      <td>0.010</td>
+      <td>2312.0</td>
+      <td>1276.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>omega_1[5]</th>
-      <td>-5.262</td>
-      <td>0.576</td>
-      <td>-6.252</td>
-      <td>-4.073</td>
-      <td>0.011</td>
-      <td>0.008</td>
-      <td>2725.0</td>
-      <td>1638.0</td>
+      <td>-5.302</td>
+      <td>0.577</td>
+      <td>-6.355</td>
+      <td>-4.190</td>
+      <td>0.013</td>
+      <td>0.009</td>
+      <td>2164.0</td>
+      <td>1541.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -756,22 +762,22 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 09 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Nov 17 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
 IPython version      : 8.17.2
 
-pyhgf : 0.0.11
+pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-arviz     : 0.16.1
-matplotlib: 3.8.1
-pymc      : 5.9.1
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-numpy     : 1.22.0
 jax       : 0.4.16
+arviz     : 0.16.1
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+matplotlib: 3.8.1
+pymc      : 5.9.2
+numpy     : 1.22.0
 
 Watermark: 2.4.3
 </pre></div>
@@ -820,7 +826,7 @@ Watermark: 2.4.3
 
   <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/4-Parameter_recovery.ipynb.txt">
+    <a href="../_sources/notebooks/4-Parameter_recovery.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding &#8212; pyhgf 0.0.11 documentation</title>
+    <title>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="_static/documentation_options.js?v=0c446633"></script>
+    <script src="_static/documentation_options.js?v=3bbcec59"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -419,7 +419,7 @@ document.write(`
 <p><a class="reference external" href="https://github.com/pre-commit/pre-commit"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" /></a> <a class="reference external" href="https://github.com/ilabcode/pyhgf/blob/master/LICENSE"><img alt="license" src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" /></a> <a class="reference external" href="https://codecov.io/gh/ilabcode/pyhgf"><img alt="codecov" src="https://codecov.io/gh/ilabcode/pyhgf/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://github.com/psf/black"><img alt="black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a> <a class="reference external" href="http://mypy-lang.org/"><img alt="mypy" src="http://www.mypy-lang.org/static/mypy_badge.svg" /></a> <a class="reference external" href="https://pycqa.github.io/isort/"><img alt="Imports: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336" /></a> <a class="reference external" href="https://badge.fury.io/py/pyhgf"><img alt="pip" src="https://badge.fury.io/py/pyhgf.svg" /></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding">
 <h1>The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding<a class="headerlink" href="#the-multilevel-generalized-and-nodalized-hierarchical-gaussian-filter-for-predictive-coding" title="Link to this heading">#</a></h1>
-<p>pyhgf is a Python library that implements the generalized, nodalized and multilevel Hierarchical Gaussian Filters for predictive coding written on top of <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax.html">JAX</a>. The library can create and manipulate graph neural networks that perform beliefs update throught the diffusion of precision-weighted prediction errors under new observations. The core functions are derivable, JIT-able, and are designed to interface smoothly with other libraries in the JAX ecosystem for Bayesian inference.</p>
+<p>PyHGF is a Python library that implements the generalized, nodalized and multilevel Hierarchical Gaussian Filters for predictive coding written on top of <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax.html">JAX</a>. The library can create and manipulate graph neural networks that perform belief update through the diffusion of precision-weighted prediction errors under new observations. The core functions are derivable, JIT-able, and are designed to interface smoothly with other libraries in the JAX ecosystem for neural networks, reinforcement leanring, Bayesian inference or optimization.</p>
 <ul class="simple">
 <li><p>📖 <a class="reference external" href="https://ilabcode.github.io/pyhgf/">API Documentation</a></p></li>
 <li><p>✏️ <a class="reference external" href="https://ilabcode.github.io/pyhgf/tutorials.html">Tutorials and examples</a></p></li>
@@ -484,21 +484,33 @@ document.write(`
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model&#39;s surprise = </span><span class="si">{</span><span class="n">surprise</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="c1"># visualization of the belief trajectories</span>
-<span class="n">hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">()</span>
+<span class="n">hgf</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">();</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">Creating</span> <span class="pre">a</span> <span class="pre">binary</span> <span class="pre">Hierarchical</span> <span class="pre">Gaussian</span> <span class="pre">Filter</span> <span class="pre">with</span> <span class="pre">2</span> <span class="pre">levels.</span></code><br />
-<code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">320</span> <span class="pre">new</span> <span class="pre">binary</span> <span class="pre">observations.</span></code><br />
-<code class="docutils literal notranslate"><span class="pre">Model's</span> <span class="pre">surprise</span> <span class="pre">=</span> <span class="pre">203.29249572753906</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">Creating</span> <span class="pre">a</span> <span class="pre">binary</span> <span class="pre">Hierarchical</span> <span class="pre">Gaussian</span> <span class="pre">Filter</span> <span class="pre">with</span> <span class="pre">2</span> <span class="pre">levels.</span></code>
+<code class="docutils literal notranslate"><span class="pre">...</span> <span class="pre">Create</span> <span class="pre">the</span> <span class="pre">update</span> <span class="pre">sequence</span> <span class="pre">from</span> <span class="pre">the</span> <span class="pre">network</span> <span class="pre">structure.</span></code>
+<code class="docutils literal notranslate"><span class="pre">...</span> <span class="pre">Create</span> <span class="pre">the</span> <span class="pre">belief</span> <span class="pre">propagation</span> <span class="pre">function.</span></code>
+<code class="docutils literal notranslate"><span class="pre">...</span> <span class="pre">Cache</span> <span class="pre">the</span> <span class="pre">belief</span> <span class="pre">propagation</span> <span class="pre">function.</span></code>
+<code class="docutils literal notranslate"><span class="pre">Adding</span> <span class="pre">320</span> <span class="pre">new</span> <span class="pre">observations.</span></code>
+<code class="docutils literal notranslate"><span class="pre">Model's</span> <span class="pre">surprise</span> <span class="pre">=</span> <span class="pre">203.6395263671875</span></code></p>
 <p><img alt="png" src="_images/trajectories.png" /></p>
 </section>
 </section>
+<section id="acknoledgements">
+<h2>Acknoledgements<a class="headerlink" href="#acknoledgements" title="Link to this heading">#</a></h2>
+<p>This implementation of the Hierarchical Gaussian Filter was largely inspired by the original <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">Matlab version</a>. A Julia implementation of the generalized, nodalised and multilevel HGF is also available <a class="reference external" href="https://github.com/ilabcode/HGF.jl">here</a>.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="acknowledgements">
-<h1>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Link to this heading">#</a></h1>
-<p>This implementation of the Hierarchical Gaussian Filter was largely inspired by the original <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">Matlab version</a>. A Julia equivalent of the generalised, nodalised and multilevel HGF is also available <a class="reference external" href="https://github.com/ilabcode/HGF.jl">here</a>.</p>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Mathys, C. (2011). A Bayesian foundation for individual learning under uncertainty. In Frontiers in Human Neuroscience (Vol. 5). Frontiers Media SA. https://doi.org/10.3389/fnhum.2011.00039</p></li>
+<li><p>Mathys, C. D., Lomakina, E. I., Daunizeau, J., Iglesias, S., Brodersen, K. H., Friston, K. J., &amp; Stephan, K. E. (2014). Uncertainty in perception and the hierarchical Gaussian filter. Frontiers in Human Neuroscience, 8. https://doi.org/10.3389/fnhum.2014.00825</p></li>
+<li><p>Weber, L. A., Waade, P. T., Legrand, N., Møller, A. H., Stephan, K. E., &amp; Mathys, C. (2023). The generalized Hierarchical Gaussian Filter (Version 1). arXiv. https://doi.org/10.48550/ARXIV.2305.10937</p></li>
+<li><p>Frässle, S., Aponte, E. A., Bollmann, S., Brodersen, K. H., Do, C. T., Harrison, O. K., Harrison, S. J., Heinzle, J., Iglesias, S., Kasper, L., Lomakina, E. I., Mathys, C., Müller-Schrader, M., Pereira, I., Petzschner, F. H., Raman, S., Schöbi, D., Toussaint, B., Weber, L. A., … Stephan, K. E. (2021). TAPAS: An Open-Source Software Package for Translational Neuromodeling and Computational Psychiatry. In Frontiers in Psychiatry (Vol. 12). Frontiers Media SA. https://doi.org/10.3389/fpsyt.2021.680811</p></li>
+</ol>
 <div class="toctree-wrapper compound">
 </div>
+</section>
 </section>
 
 
@@ -535,7 +547,6 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The multilevel, generalized and nodalized Hierarchical Gaussian Filter for predictive coding</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting started</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-it-works">How does it works?</a></li>
@@ -543,11 +554,9 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-fitting">Model fitting</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acknoledgements">Acknoledgements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#acknowledgements">Acknowledgements</a></li>
-</ul>
-
   </nav></div>
 
   <div class="sidebar-secondary-item">
