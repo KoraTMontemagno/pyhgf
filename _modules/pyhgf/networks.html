@@ -454,8 +454,10 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span><span class="p">,</span> <span class="n">UpdateSequence</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.binary</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">binary_input_prediction_error</span><span class="p">,</span>
+    <span class="n">binary_input_prediction_error_missing_input</span><span class="p">,</span>
     <span class="n">binary_node_prediction</span><span class="p">,</span>
     <span class="n">binary_node_prediction_error</span><span class="p">,</span>
+    <span class="n">binary_node_prediction_error_missing_input</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.categorical</span> <span class="kn">import</span> <span class="n">categorical_input_update</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.continuous</span> <span class="kn">import</span> <span class="p">(</span>
@@ -525,7 +527,7 @@ document.write(`
 
         <span class="c1"># if we are updating an input node, select the value that should be passed</span>
         <span class="c1"># otherwise, just pass 0.0 and the value will be ignored</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">)</span> <span class="o">*</span> <span class="n">values</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">),</span> <span class="n">values</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
 
         <span class="n">attributes</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
             <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span>
@@ -806,7 +808,10 @@ document.write(`
                 <span class="k">if</span> <span class="n">idx_</span> <span class="o">==</span> <span class="n">node_idx</span>
             <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">model_kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-                <span class="n">update_fn</span> <span class="o">=</span> <span class="n">binary_input_prediction_error</span>
+                <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">allow_missing_inputs</span><span class="p">:</span>
+                    <span class="n">update_fn</span> <span class="o">=</span> <span class="n">binary_input_prediction_error_missing_input</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">update_fn</span> <span class="o">=</span> <span class="n">binary_input_prediction_error</span>
             <span class="k">elif</span> <span class="n">model_kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
                 <span class="n">update_fn</span> <span class="o">=</span> <span class="n">continuous_input_prediction_error</span>
             <span class="k">elif</span> <span class="n">model_kind</span> <span class="o">==</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
@@ -825,7 +830,10 @@ document.write(`
                         <span class="k">if</span> <span class="n">idx_</span> <span class="o">==</span> <span class="n">child_idx</span>
                     <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                     <span class="k">if</span> <span class="n">model_kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-                        <span class="n">update_fn</span> <span class="o">=</span> <span class="n">binary_node_prediction_error</span>
+                        <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">allow_missing_inputs</span><span class="p">:</span>
+                            <span class="n">update_fn</span> <span class="o">=</span> <span class="n">binary_node_prediction_error_missing_input</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">update_fn</span> <span class="o">=</span> <span class="n">binary_node_prediction_error</span>
                         <span class="n">prediction_fn</span> <span class="o">=</span> <span class="n">binary_node_prediction</span>
 
         <span class="c1"># create a new update and prediction sequence step and add it to the list</span>

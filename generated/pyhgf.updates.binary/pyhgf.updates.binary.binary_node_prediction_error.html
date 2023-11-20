@@ -537,25 +537,25 @@ document.write(`
 <span class="sig-prename descclassname"><span class="pre">pyhgf.updates.binary.</span></span><span class="sig-name descname"><span class="pre">binary_node_prediction_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Indexes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../../_modules/pyhgf/updates/binary.html#binary_node_prediction_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.updates.binary.binary_node_prediction_error" title="Link to this definition">#</a></dt>
 <dd><p>Update the value parent(s) of a binary state node.</p>
 <p>In a three-level HGF, this step will update the node <span class="math notranslate nohighlight">\(x_2\)</span>.</p>
-<p>Then returns the new node tuple <cite>(parameters, value_parents, volatility_parents)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>attributes</strong></dt><dd><p>The attributes of the probabilistic nodes.</p>
 </dd>
-<dt><strong>.. note::</strong></dt><dd><p>The parameter structure also incorporate the value and volatility coupling
-strenght with children and parents (i.e. <cite>“value_coupling_parents”</cite>,
+<dt><strong>.. note::</strong></dt><dd><p>The parameter structure also incorporates the value and volatility coupling
+strength with children and parents (i.e. <cite>“value_coupling_parents”</cite>,
 <cite>“value_coupling_children”</cite>, <cite>“volatility_coupling_parents”</cite>,
 <cite>“volatility_coupling_children”</cite>).</p>
 </dd>
-<dt><strong>time_step</strong></dt><dd><p>Interval between the previous time point and the current time point.</p>
+<dt><strong>time_step</strong></dt><dd><p>The interval between the previous time point and the current time point.</p>
 </dd>
 <dt><strong>node_idx</strong></dt><dd><p>Pointer to the node that needs to be updated. After continuous updates, the
 parameters of value and volatility parents (if any) will be different.</p>
 </dd>
 <dt><strong>edges</strong></dt><dd><p>The edges of the probabilistic nodes as a tuple of
-<code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code>. The tuple has the same length as node number.
-For each node, the index list value and volatility parents and children.</p>
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code>. The tuple has the same length as the node
+number. For each node, the index lists the value and volatility of parents and
+children.</p>
 </dd>
 </dl>
 </dd>

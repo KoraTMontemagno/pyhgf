@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example 3: Multi-armed bandit task &#8212; pyhgf 0.0.12 documentation</title>
+    <title>Example 3: A multi-armed bandit task with independent reward and punishments &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -49,6 +49,8 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js?v=36754332"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Example_3_Multi_armed_bandit';</script>
     <link rel="icon" href="../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -440,8 +442,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="example-3-multi-armed-bandit-task">
-<span id="example-3"></span><h1>Example 3: Multi-armed bandit task<a class="headerlink" href="#example-3-multi-armed-bandit-task" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="example-3-a-multi-armed-bandit-task-with-independent-reward-and-punishments">
+<span id="example-3"></span><h1>Example 3: A multi-armed bandit task with independent reward and punishments<a class="headerlink" href="#example-3-a-multi-armed-bandit-task-with-independent-reward-and-punishments" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/Example_2_Input_node_volatility_coupling.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -473,13 +475,11 @@ document.write(`
 </div>
 </div>
 </div>
-<p>In this notebook, we are going to illustrate how to fit behavioural responses from a two-armed bandit task. The task is similar to what was used in <span id="id1">[<a class="reference internal" href="../references.html#id14" title="Erdem Pulcu and Michael Browning. Affective bias as a rational response to the statistics of rewards and punishments. eLife, October 2017. URL: http://dx.doi.org/10.7554/eLife.27879, doi:10.7554/elife.27879.">Pulcu and Browning, 2017</a>]</span>. This is a two-armed bandit task with independent reward and punishment outcomes.</p>
-<section id="a-double-multi-armed-bandit-task">
-<h2>A double multi-armed bandit task<a class="headerlink" href="#a-double-multi-armed-bandit-task" title="Link to this heading">#</a></h2>
-<p>Because the reward and punishments are independent, we simulate the task using four binary HGF.</p>
+<p>In this notebook, we are going to illustrate how to fit behavioural responses from a two-armed bandit task when the rewards and punishments are independent. The task is similar to what was used in <span id="id1">[<a class="reference internal" href="../references.html#id14" title="Erdem Pulcu and Michael Browning. Affective bias as a rational response to the statistics of rewards and punishments. eLife, October 2017. URL: http://dx.doi.org/10.7554/eLife.27879, doi:10.7554/elife.27879.">Pulcu and Browning, 2017</a>]</span>. This will also illustrate how to use missing observations and the impact it has on the belief trajectories.</p>
+<p>Because the rewards and punishments are independent, we simulate the task using four binary HGFs, assuming that on both arms, both rewards and punishments are evolving independently.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>While the binary HGF is a special case of the categorical HGF where the number of categories is set to 2, the categorical HGF add a volatility coupling between the binary branch (see <a class="reference internal" href="1.2-Categorical_HGF.html#categorical-hgf"><span class="std std-ref">The categorical Hierarchical Gaussian Filter</span></a>). Therefore a categorical HGF would not be suitable here as we want every branch of the network to evelove independently.</p>
+<p>While the binary HGF is a special case of the categorical HGF where the number of categories is set to 2, the categorical HGF adds a volatility coupling between the binary branch (see <a class="reference internal" href="1.2-Categorical_HGF.html#categorical-hgf"><span class="std std-ref">The categorical Hierarchical Gaussian Filter</span></a>). Therefore a categorical HGF would not be suitable here as we want every branch of the network to evolve independently.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -505,7 +505,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1700231637.213410    3660 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1700496498.876591    3643 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -519,7 +519,6 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 <img alt="../_images/a6ccd735b503712fad0c8c5a0102a47bccd9ad08874a89e844cb26014e9cd5a1.svg" src="../_images/a6ccd735b503712fad0c8c5a0102a47bccd9ad08874a89e844cb26014e9cd5a1.svg" /></div>
 </div>
-</section>
 <section id="task-structure">
 <h2>Task structure<a class="headerlink" href="#task-structure" title="Link to this heading">#</a></h2>
 <p>We start with a simple task structure where contingencies (i.e. the probability that a given armed bandit is associated with a win/loss) alternate between <code class="docutils literal notranslate"><span class="pre">0.2</span></code>, <code class="docutils literal notranslate"><span class="pre">0.5</span></code> and <code class="docutils literal notranslate"><span class="pre">0.8</span></code>. The rate of change in contingencies can be fast (i.e. high volatility blocks) or slow (i.e. low volatility blocks).</p>
@@ -582,7 +581,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fcb30170fe3bd34ebae7c6d38665d6bddaaae9db1cd2f29f15559abf16f8499e.png" src="../_images/fcb30170fe3bd34ebae7c6d38665d6bddaaae9db1cd2f29f15559abf16f8499e.png" />
+<img alt="../_images/1cad52e195d930ae55b43b9608575bcbdd8965c9af673dfe4f628e0aa6c159f0.png" src="../_images/1cad52e195d930ae55b43b9608575bcbdd8965c9af673dfe4f628e0aa6c159f0.png" />
 </div>
 </div>
 </section>
@@ -637,9 +636,119 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e5607f2b4425d203ab1cfe5bf09739882e9ae58905a89f194910d3a91fd3c260.png" src="../_images/e5607f2b4425d203ab1cfe5bf09739882e9ae58905a89f194910d3a91fd3c260.png" />
+<img alt="../_images/852a6f6fff7d3550e94e5d2185a848625e0a367eb6c794ccd6e3a0919490fa78.png" src="../_images/852a6f6fff7d3550e94e5d2185a848625e0a367eb6c794ccd6e3a0919490fa78.png" />
 </div>
 </div>
+</section>
+<section id="simulate-responses-from-a-participant">
+<h2>Simulate responses from a participant<a class="headerlink" href="#simulate-responses-from-a-participant" title="Link to this heading">#</a></h2>
+<p>Using the beliefs trajectories recovered from the model fits above, we can simulate responses from a participant that would use the same parametrisation of beliefs update (especially the same <code class="docutils literal notranslate"><span class="pre">tonic_volatility</span></code> here).</p>
+<section id="decision-rule">
+<h3>Decision rule<a class="headerlink" href="#decision-rule" title="Link to this heading">#</a></h3>
+<p>The probability of chosing the arm <span class="math notranslate nohighlight">\(A\)</span> given the probability of wining on both arms <span class="math notranslate nohighlight">\({W_a; W_b}\)</span> and the probability of loosing on both arms <span class="math notranslate nohighlight">\({L_a; L_b}\)</span>, is given by the following softmax decision function:</p>
+<div class="math notranslate nohighlight">
+\[
+p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the inverse temperature parameter.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">w_a</span> <span class="o">=</span> <span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
+<span class="n">l_a</span> <span class="o">=</span> <span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
+<span class="n">w_b</span> <span class="o">=</span> <span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
+<span class="n">l_b</span> <span class="o">=</span> <span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
+
+<span class="n">p_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_a</span><span class="o">-</span><span class="n">l_a</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_a</span><span class="o">-</span><span class="n">l_a</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_b</span><span class="o">-</span><span class="n">l_b</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Using these probabilities, we can infer which arm was selected at each trial and filter the inputs that are presented to the participant. Because it would be too chaotic to provide the information about the four hidden states at each trial, here the participant is only presented with the information about the arm that was selected. Therefore, when arm <span class="math notranslate nohighlight">\(A\)</span> is selected, the inputs from arm <span class="math notranslate nohighlight">\(B\)</span> are set to <code class="docutils literal notranslate"><span class="pre">jnp.nan</span></code> and will be ignored during the node update.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">u</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_a</span><span class="o">&lt;=</span><span class="mf">.5</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="n">p_a</span><span class="o">&gt;</span><span class="mf">.5</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Missing inputs are used to indicate an absence of observation from the agent’s point of view and should not be used for missing records or excluded trials. When an input is labelled as missing, we use the total volatility at the parents’ level to decrease their precision as a function of time elapsed, but the means are still the same. Because this functionality implies an overhead of checks, it is deactivated by default. To activate it, we need to set <code class="docutils literal notranslate"><span class="pre">allow_missing_iputs</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code> upon model creation.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_missing_inputs_hgf</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_missing_inputs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
+... Create the update sequence from the network structure.
+... Create the belief propagation function.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
+</pre></div>
+</div>
+<img alt="../_images/a6ccd735b503712fad0c8c5a0102a47bccd9ad08874a89e844cb26014e9cd5a1.svg" src="../_images/a6ccd735b503712fad0c8c5a0102a47bccd9ad08874a89e844cb26014e9cd5a1.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">T</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 140 new observations.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span><span class="n">node_idxs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span><span class="n">node_idxs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span><span class="n">node_idxs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span><span class="n">node_idxs</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/34936f2d6017dcc662e11aa839b9dc87e7a980ae8d71402f08a566a9aa596abc.png" src="../_images/34936f2d6017dcc662e11aa839b9dc87e7a980ae8d71402f08a566a9aa596abc.png" />
+</div>
+</div>
+<p>We can now see from the plot above that the branches of the networks are now only updated if the participant actually chose the corresponding arm. Otherwise the expected probability remains the same but the uncertainty will increase over time.</p>
+</section>
+</section>
+<section id="parameter-recovery">
+<h2>Parameter recovery<a class="headerlink" href="#parameter-recovery" title="Link to this heading">#</a></h2>
+</section>
+<section id="hierarchical-modelling">
+<h2>Hierarchical modelling<a class="headerlink" href="#hierarchical-modelling" title="Link to this heading">#</a></h2>
 </section>
 <section id="system-configuration">
 <h2>System configuration<a class="headerlink" href="#system-configuration" title="Link to this heading">#</a></h2>
@@ -651,7 +760,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Nov 17 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Mon Nov 20 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -661,12 +770,12 @@ pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
-arviz     : 0.16.1
-numpy     : 1.22.0
-matplotlib: 3.8.1
 seaborn   : 0.13.0
+matplotlib: 3.8.2
+arviz     : 0.16.1
 pymc      : 5.9.2
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+numpy     : 1.22.0
 
 Watermark: 2.4.3
 </pre></div>
@@ -701,9 +810,14 @@ Watermark: 2.4.3
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-double-multi-armed-bandit-task">A double multi-armed bandit task</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-structure">Task structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulate-a-dataset">Simulate a dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulate-responses-from-a-participant">Simulate responses from a participant</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-rule">Decision rule</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-recovery">Parameter recovery</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hierarchical-modelling">Hierarchical modelling</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-configuration">System configuration</a></li>
 </ul>
   </nav></div>
