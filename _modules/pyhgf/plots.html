@@ -866,7 +866,9 @@ document.write(`
         <span class="c1"># plotting an input node</span>
         <span class="c1"># ----------------------</span>
         <span class="k">if</span> <span class="n">node_idx</span> <span class="ow">in</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
-            <span class="n">input_type</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span> <span class="o">==</span> <span class="n">node_idx</span><span class="p">]</span>
+            <span class="n">input_type</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">[</span>
+                <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">node_idx</span><span class="p">)</span>
+            <span class="p">]</span>
             <span class="k">if</span> <span class="n">input_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
                 <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
                     <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
