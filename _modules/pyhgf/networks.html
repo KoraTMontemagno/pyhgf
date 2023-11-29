@@ -490,7 +490,7 @@ document.write(`
 <span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;update_sequence&quot;</span><span class="p">,</span> <span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;input_nodes_idx&quot;</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">beliefs_propagation</span><span class="p">(</span>
     <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
     <span class="n">update_sequence</span><span class="p">:</span> <span class="n">UpdateSequence</span><span class="p">,</span>
     <span class="n">edges</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
     <span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span>
@@ -508,7 +508,7 @@ document.write(`
 <span class="sd">    attributes :</span>
 <span class="sd">        The dictionaries of nodes&#39; parameters. This variable is updated and returned</span>
 <span class="sd">        after the beliefs propagation step.</span>
-<span class="sd">    data :</span>
+<span class="sd">    input_data :</span>
 <span class="sd">        An array containing the new observation(s) as well as the time steps. The new</span>
 <span class="sd">        observations can be a single value or a vector of observation with a length</span>
 <span class="sd">        matching the length `input_nodes_idx`. `input_nodes_idx` is used to index the</span>
@@ -530,9 +530,8 @@ document.write(`
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># extract value(s) and time steps from the data</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">time_step</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># extract value(s) and time steps</span>
+    <span class="n">values</span><span class="p">,</span> <span class="n">time_step</span> <span class="o">=</span> <span class="n">input_data</span>
 
     <span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">)</span>
     <span class="c1"># Fit the model with the current time and value variables, given the model structure</span>
@@ -545,7 +544,7 @@ document.write(`
 
         <span class="n">attributes</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
             <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span>
-            <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
+            <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
             <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>

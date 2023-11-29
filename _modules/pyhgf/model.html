@@ -745,7 +745,10 @@ document.write(`
         <span class="n">_</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span>
-            <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]),</span>
+            <span class="p">(</span>
+                <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">))),</span>
+                <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="p">),</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Cache the belief propagation function.&quot;</span><span class="p">)</span>
@@ -772,19 +775,18 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">((</span><span class="sa">f</span><span class="s2">&quot;Adding </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> new observations.&quot;</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">time_steps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">))</span>  <span class="c1"># time steps vector</span>
-
-        <span class="c1"># concatenate data and time</span>
-        <span class="n">time_steps</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+            <span class="n">time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># time steps vector</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">time_steps</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">input_data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">input_data</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-
-        <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># this is where the model loop over the whole input time series</span>
         <span class="c1"># at each time point, the node structure is traversed and beliefs are updated</span>
         <span class="c1"># using precision-weighted prediction errors</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># trajectories of the network attributes a each time point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">node_trajectories</span>
@@ -830,10 +832,12 @@ document.write(`
             <span class="n">time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">))</span>  <span class="c1"># time steps vector</span>
 
         <span class="c1"># concatenate data and time</span>
-        <span class="n">time_steps</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">time_steps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># time steps vector</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">time_steps</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">input_data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">input_data</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># create the update functions that will be scanned</span>
         <span class="n">branches_fn</span> <span class="o">=</span> <span class="p">[</span>
@@ -852,7 +856,7 @@ document.write(`
             <span class="k">return</span> <span class="n">switch</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">branches_fn</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
         <span class="c1"># wrap the inputs</span>
-        <span class="n">scan_input</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">branches_idx</span>
+        <span class="n">scan_input</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">),</span> <span class="n">branches_idx</span>
 
         <span class="c1"># scan over the input data and apply the switching belief propagation functions</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">switching_propagation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">scan_input</span><span class="p">)</span>
@@ -863,7 +867,7 @@ document.write(`
         <span class="c1"># because some of the input node might not have been updated, here we manually</span>
         <span class="c1"># insert the input data to the input node (without triggering updates)</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">inp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[:,</span> <span class="n">inp</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="n">inp</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 
