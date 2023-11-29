@@ -480,6 +480,9 @@ document.write(`
         <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
     <span class="p">)</span>
 
+    <span class="c1"># cancel the prediction error if the value was not observed</span>
+    <span class="n">value_prediction_error</span> <span class="o">*=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;observed&quot;</span><span class="p">]</span>
+
     <span class="c1"># scale the prediction error so it can be used in the posterior update</span>
     <span class="c1"># (eq. 98, Weber et al., v1)</span>
     <span class="n">value_prediction_error</span> <span class="o">/=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>

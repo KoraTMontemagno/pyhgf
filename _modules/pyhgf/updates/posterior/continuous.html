@@ -573,9 +573,9 @@ document.write(`
             <span class="n">value_prediction_error</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_child_idx</span><span class="p">][</span><span class="s2">&quot;temp&quot;</span><span class="p">][</span>
                 <span class="s2">&quot;value_prediction_error&quot;</span>
             <span class="p">]</span>
-            <span class="n">value_prediction_error</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">value_prediction_error</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">value_prediction_error</span>
-            <span class="p">)</span>
+
+            <span class="c1"># cancel the prediction error if the child value was not observed</span>
+            <span class="n">value_prediction_error</span> <span class="o">*=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_child_idx</span><span class="p">][</span><span class="s2">&quot;observed&quot;</span><span class="p">]</span>
 
             <span class="c1"># expected precisions from the value children</span>
             <span class="c1"># sum the precision weigthed prediction errors over all children</span>
@@ -596,9 +596,6 @@ document.write(`
             <span class="n">volatility_prediction_error</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_child_idx</span><span class="p">][</span><span class="s2">&quot;temp&quot;</span><span class="p">][</span>
                 <span class="s2">&quot;volatility_prediction_error&quot;</span>
             <span class="p">]</span>
-            <span class="n">volatility_prediction_error</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">volatility_prediction_error</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">volatility_prediction_error</span>
-            <span class="p">)</span>
 
             <span class="c1"># retrieve the effective precision (γ) computed during the prediction step</span>
             <span class="n">effective_precision</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_child_idx</span><span class="p">][</span><span class="s2">&quot;temp&quot;</span><span class="p">][</span>
@@ -612,6 +609,11 @@ document.write(`
 
             <span class="c1"># weight using the node&#39;s precision</span>
             <span class="n">precision_weigthed_prediction_error</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node_precision</span><span class="p">)</span>
+
+            <span class="c1"># cancel the prediction error if the child value was not observed</span>
+            <span class="n">precision_weigthed_prediction_error</span> <span class="o">*=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_child_idx</span><span class="p">][</span>
+                <span class="s2">&quot;observed&quot;</span>
+            <span class="p">]</span>
 
     <span class="c1"># Compute the new posterior mean</span>
     <span class="c1"># using value prediction errors from both value and volatility coupling</span>
@@ -630,6 +632,7 @@ document.write(`
     <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span>
     <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Update the precision of a state node using the volatility prediction errors.</span>
 
@@ -694,6 +697,8 @@ document.write(`
 <span class="sd">        For each node, the index list value and volatility parents and children.</span>
 <span class="sd">    node_idx :</span>
 <span class="sd">        Pointer to the value parent node that will be updated.</span>
+<span class="sd">    time_step :</span>
+<span class="sd">        The time elapsed between this observation and the previous one.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -731,16 +736,10 @@ document.write(`
                 <span class="n">value_coupling</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
             <span class="p">)</span>
 
-            <span class="c1"># get the value prediction error (VAPE)</span>
-            <span class="c1"># if this is jnp.nan (no observation) set the VAPE to 0.0</span>
-            <span class="n">value_prediction_error</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_child_idx</span><span class="p">][</span><span class="s2">&quot;temp&quot;</span><span class="p">][</span>
-                <span class="s2">&quot;value_prediction_error&quot;</span>
+            <span class="c1"># cancel the prediction error if the child value was not observed</span>
+            <span class="n">precision_weigthed_prediction_error</span> <span class="o">*=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_child_idx</span><span class="p">][</span>
+                <span class="s2">&quot;observed&quot;</span>
             <span class="p">]</span>
-            <span class="n">precision_weigthed_prediction_error</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">value_prediction_error</span><span class="p">),</span>
-                <span class="mf">0.0</span><span class="p">,</span>
-                <span class="n">precision_weigthed_prediction_error</span><span class="p">,</span>
-            <span class="p">)</span>
 
     <span class="c1"># Volatility coupling updates - update the precision of a volatility parent</span>
     <span class="c1"># -------------------------------------------------------------------------</span>
@@ -758,9 +757,6 @@ document.write(`
             <span class="n">volatility_prediction_error</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_child_idx</span><span class="p">][</span><span class="s2">&quot;temp&quot;</span><span class="p">][</span>
                 <span class="s2">&quot;volatility_prediction_error&quot;</span>
             <span class="p">]</span>
-            <span class="n">volatility_prediction_error</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">volatility_prediction_error</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">volatility_prediction_error</span>
-            <span class="p">)</span>
 
             <span class="c1"># sum over all volatility children</span>
             <span class="n">precision_weigthed_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
@@ -773,6 +769,11 @@ document.write(`
                 <span class="o">*</span> <span class="n">volatility_prediction_error</span>
             <span class="p">)</span>
 
+            <span class="c1"># cancel the prediction error if the child value was not observed</span>
+            <span class="n">precision_weigthed_prediction_error</span> <span class="o">*=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_child_idx</span><span class="p">][</span>
+                <span class="s2">&quot;observed&quot;</span>
+            <span class="p">]</span>
+
     <span class="c1"># Compute the new posterior precision</span>
     <span class="c1"># using value prediction errors from both value and volatility coupling</span>
     <span class="n">posterior_precision</span> <span class="o">=</span> <span class="p">(</span>
@@ -780,8 +781,54 @@ document.write(`
     <span class="p">)</span>
 
     <span class="c1"># ensure the new precision is greater than 0</span>
-    <span class="n">posterior_precision</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">posterior_precision</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">posterior_precision</span>
+    <span class="n">observed_posterior_precision</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">posterior_precision</span> <span class="o">&gt;</span> <span class="mf">1e-128</span><span class="p">,</span> <span class="n">posterior_precision</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+    <span class="p">)</span>
+
+    <span class="c1"># additionnal steps for unobserved values</span>
+    <span class="c1"># ----------------------------------------------------------------------------------</span>
+
+    <span class="c1"># List the node&#39;s volatility parents</span>
+    <span class="n">volatility_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>
+
+    <span class="c1"># Get the tonic volatility from the node</span>
+    <span class="n">total_volatility</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Look at the (optional) volatility parents and add their value to the tonic</span>
+    <span class="c1"># volatility to get the total volatility</span>
+    <span class="k">if</span> <span class="n">volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">volatility_parents_idx</span><span class="p">,</span> <span class="n">volatility_coupling</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="n">volatility_parents_idxs</span><span class="p">,</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">],</span>
+        <span class="p">):</span>
+            <span class="n">total_volatility</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="n">volatility_coupling</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+    <span class="c1"># compute the predicted_volatility from the total volatility</span>
+    <span class="n">predicted_volatility</span> <span class="o">=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">total_volatility</span><span class="p">)</span>
+
+    <span class="c1"># Estimate the new precision for the continuous state node</span>
+    <span class="n">unobserved_posterior_precision</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">predicted_volatility</span>
+    <span class="p">)</span>
+
+    <span class="c1"># if</span>
+
+    <span class="c1"># for all children, look at the values of VAPE</span>
+    <span class="c1"># if all these values are NaNs, the node has not received observations</span>
+    <span class="n">observations</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">children_idx</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+            <span class="n">observations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">children_idx</span><span class="p">][</span><span class="s2">&quot;observed&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">children_idx</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+            <span class="n">observations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">children_idx</span><span class="p">][</span><span class="s2">&quot;observed&quot;</span><span class="p">])</span>
+    <span class="n">observations</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">observations</span><span class="p">))</span>
+
+    <span class="n">posterior_precision</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">unobserved_posterior_precision</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">observations</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="o">+</span> <span class="n">observed_posterior_precision</span> <span class="o">*</span> <span class="n">observations</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">posterior_precision</span></div>
@@ -792,7 +839,7 @@ document.write(`
 <a class="viewcode-back" href="../../../../generated/pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.continuous_node_update.html#pyhgf.updates.posterior.continuous.continuous_node_update">[docs]</a>
 <span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">continuous_node_update</span><span class="p">(</span>
-    <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span>
+    <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the posterior of a continuous node using the standard HGF update.</span>
 
@@ -812,6 +859,8 @@ document.write(`
 <span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
 <span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
 <span class="sd">        For each node, the index list value and volatility parents and children.</span>
+<span class="sd">    time_step :</span>
+<span class="sd">        The time elapsed between this observation and the previous one.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -831,7 +880,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># update the posterior mean and precision</span>
     <span class="n">posterior_precision</span> <span class="o">=</span> <span class="n">posterior_update_precision_continuous_node</span><span class="p">(</span>
-        <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">node_idx</span>
+        <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">,</span> <span class="n">time_step</span>
     <span class="p">)</span>
     <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">posterior_precision</span>
 
@@ -848,7 +897,7 @@ document.write(`
 <a class="viewcode-back" href="../../../../generated/pyhgf.updates.posterior.continuous/pyhgf.updates.posterior.continuous.continuous_node_update_ehgf.html#pyhgf.updates.posterior.continuous.continuous_node_update_ehgf">[docs]</a>
 <span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;node_idx&quot;</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">continuous_node_update_ehgf</span><span class="p">(</span>
-    <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span>
+    <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span> <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the posterior of a continuous node using the eHGF update.</span>
 
@@ -874,6 +923,8 @@ document.write(`
 <span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
 <span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
 <span class="sd">        For each node, the index list value and volatility parents and children.</span>
+<span class="sd">    time_step :</span>
+<span class="sd">        The time elapsed between this observation and the previous one.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -902,7 +953,7 @@ document.write(`
     <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">posterior_mean</span>
 
     <span class="n">posterior_precision</span> <span class="o">=</span> <span class="n">posterior_update_precision_continuous_node</span><span class="p">(</span>
-        <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">node_idx</span>
+        <span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">,</span> <span class="n">time_step</span>
     <span class="p">)</span>
     <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">posterior_precision</span>
 

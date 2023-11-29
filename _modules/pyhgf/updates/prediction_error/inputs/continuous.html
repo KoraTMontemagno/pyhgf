@@ -634,6 +634,7 @@ document.write(`
     <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">observed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Store prediction errors in an input node.</span>
 
@@ -657,6 +658,8 @@ document.write(`
 <span class="sd">        children.</span>
 <span class="sd">    value :</span>
 <span class="sd">        The new observed value.</span>
+<span class="sd">    observed :</span>
+<span class="sd">        Whether value was observed or not.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -676,6 +679,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># store value and time step in the node&#39;s parameters</span>
     <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;observed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">observed</span>
     <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_step</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>

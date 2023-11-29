@@ -669,11 +669,9 @@ document.write(`
                 <span class="n">precision</span><span class="o">=</span><span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
                 <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span>
-                <span class="k">else</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span>
-                <span class="k">else</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;binary_expected_precision&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">}</span>
+                <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;binary_expected_precision&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span>
                 <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="p">)</span>
@@ -748,6 +746,7 @@ document.write(`
             <span class="p">(</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">))),</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -759,6 +758,7 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
         <span class="n">time_steps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_observed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;HGF&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new observations.</span>
 
@@ -770,6 +770,8 @@ document.write(`
 <span class="sd">            Time vector (optional). If `None`, the time vector will default to</span>
 <span class="sd">            `np.ones(len(input_data))`. This vector is automatically transformed</span>
 <span class="sd">            into a time steps vector.</span>
+<span class="sd">        is_observed :</span>
+<span class="sd">            A 2d boolean array masking `input_data`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -781,11 +783,15 @@ document.write(`
         <span class="k">if</span> <span class="n">input_data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">input_data</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 
+        <span class="c1"># is it observation or missing inputs</span>
+        <span class="k">if</span> <span class="n">is_observed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">is_observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
         <span class="c1"># this is where the model loop over the whole input time series</span>
         <span class="c1"># at each time point, the node structure is traversed and beliefs are updated</span>
         <span class="c1"># using precision-weighted prediction errors</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">,</span> <span class="n">is_observed</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="c1"># trajectories of the network attributes a each time point</span>
@@ -1001,9 +1007,10 @@ document.write(`
                 <span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="s2">&quot;input_noise&quot;</span><span class="p">:</span> <span class="n">continuous_parameters</span><span class="p">[</span><span class="s2">&quot;continuous_precision&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">continuous_parameters</span><span class="p">[</span><span class="s2">&quot;continuous_precision&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;observed&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
                 <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;effective_precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># should be fixed to 1 for input nodes</span>
                     <span class="s2">&quot;value_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -1015,9 +1022,10 @@ document.write(`
                 <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_precision&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;eta0&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;eta1&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;observed&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
             <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
@@ -1170,6 +1178,7 @@ document.write(`
             <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">,</span>
             <span class="s2">&quot;autoregressive_coefficient&quot;</span><span class="p">:</span> <span class="n">autoregressive_coefficient</span><span class="p">,</span>
             <span class="s2">&quot;autoregressive_intercept&quot;</span><span class="p">:</span> <span class="n">autoregressive_intercept</span><span class="p">,</span>
+            <span class="s2">&quot;observed&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
             <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;effective_precision&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;value_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -1295,6 +1304,7 @@ document.write(`
             <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">,</span>
             <span class="s2">&quot;autoregressive_coefficient&quot;</span><span class="p">:</span> <span class="n">autoregressive_coefficient</span><span class="p">,</span>
             <span class="s2">&quot;autoregressive_intercept&quot;</span><span class="p">:</span> <span class="n">autoregressive_intercept</span><span class="p">,</span>
+            <span class="s2">&quot;observed&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
             <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;effective_precision&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;value_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>

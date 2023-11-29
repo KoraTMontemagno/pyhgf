@@ -491,6 +491,13 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tonic_volatility</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -501,10 +508,10 @@ document.write(`
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
     <span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="p">)</span>
 <span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
@@ -513,7 +520,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1701265462.082430    3846 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1701273531.078829    3656 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -589,7 +596,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c3f64c5ec166ec38068a982549a5cb0418b14ac07b4072658cc4403f322f22d7.png" src="../_images/c3f64c5ec166ec38068a982549a5cb0418b14ac07b4072658cc4403f322f22d7.png" />
+<img alt="../_images/be0c80171b3842d722a13519513c0c067fe83a986fe3ff4e9365c10a671e59de.png" src="../_images/be0c80171b3842d722a13519513c0c067fe83a986fe3ff4e9365c10a671e59de.png" />
 </div>
 </div>
 </section>
@@ -644,7 +651,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a2a8a8c96061c3b073c5082d6de5350a526567f1901c3749d8424d2711e51c36.png" src="../_images/a2a8a8c96061c3b073c5082d6de5350a526567f1901c3749d8424d2711e51c36.png" />
+<img alt="../_images/2a8a0b1f996ea23694ac9895384ea85422d885402ebd6c50998f55e81e7e4fd6.png" src="../_images/2a8a0b1f996ea23694ac9895384ea85422d885402ebd6c50998f55e81e7e4fd6.png" />
 </div>
 </div>
 </section>
@@ -675,10 +682,12 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <p>Using these probabilities, we can infer which arm was selected at each trial and filter the inputs that are presented to the participant. Because it would be too chaotic to provide the information about the four hidden states at each trial, here the participant is only presented with the information about the arm that was selected. Therefore, when arm <span class="math notranslate nohighlight">\(A\)</span> is selected, the inputs from arm <span class="math notranslate nohighlight">\(B\)</span> are set to <code class="docutils literal notranslate"><span class="pre">jnp.nan</span></code> and will be ignored during the node update.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># filter the input sequence using the agent&#39;s decisions</span>
-<span class="n">missing_inputs_u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-<span class="n">missing_inputs_u</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_a</span><span class="o">&lt;=</span><span class="mf">.5</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-<span class="n">missing_inputs_u</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="n">p_a</span><span class="o">&gt;</span><span class="mf">.5</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missing_inputs_u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="c1"># filter the input sequence using the agent&#39;s decisions</span>
+<span class="n">is_observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">is_observed</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_a</span><span class="o">&lt;=</span><span class="mf">.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">is_observed</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="n">p_a</span><span class="o">&gt;</span><span class="mf">.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </div>
@@ -690,7 +699,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_missing_inputs_hgf</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_missing_inputs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -699,10 +708,10 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
     <span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="p">)</span>
 <span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
@@ -722,7 +731,10 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">missing_inputs_u</span><span class="o">.</span><span class="n">T</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="n">missing_inputs_u</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+    <span class="n">is_observed</span><span class="o">=</span><span class="n">is_observed</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+<span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -747,7 +759,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e42eea0f4c2e5b77363ebdd3b45d209b62ba670a547992f6679ec567d1d13b75.png" src="../_images/e42eea0f4c2e5b77363ebdd3b45d209b62ba670a547992f6679ec567d1d13b75.png" />
+<img alt="../_images/8b7b7f6b8a43fe200eb0ff7965a8561c225017152ffccfe001c6ff411bf77f9b.png" src="../_images/8b7b7f6b8a43fe200eb0ff7965a8561c225017152ffccfe001c6ff411bf77f9b.png" />
 </div>
 </div>
 <p>We can now see from the plot above that the branches of the networks are now only updated if the participant actually chose the corresponding arm. Otherwise the expected probability remains the same but the uncertainty will increase over time.</p>
@@ -768,27 +780,34 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tv</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.0</span>
-
-<span class="n">two_armed_bandit_missing_inputs_hgf</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_missing_inputs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_missing_inputs_hgf</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="n">input_idxs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">},</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tv</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tv</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tv</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tv</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;binary_expected_precision&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
     <span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a6ccd735b503712fad0c8c5a0102a47bccd9ad08874a89e844cb26014e9cd5a1.svg" src="../_images/a6ccd735b503712fad0c8c5a0102a47bccd9ad08874a89e844cb26014e9cd5a1.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -810,6 +829,8 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <span class="n">responses</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 1: arm A - 0: arm B</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
 
+    <span class="n">observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
     <span class="c1"># expectations about the outcomes</span>
     <span class="n">w_a</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
     <span class="n">l_a</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
@@ -819,22 +840,25 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
     <span class="c1"># decision function</span>
     <span class="n">p_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_a</span><span class="o">-</span><span class="n">l_a</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_a</span><span class="o">-</span><span class="n">l_a</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_b</span><span class="o">-</span><span class="n">l_b</span><span class="p">)))</span>
 
+    <span class="c1"># response</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">.4</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
     <span class="c1"># hide the observations that were not selected</span>
-    <span class="k">if</span> <span class="n">p_a</span> <span class="o">&gt;</span> <span class="mf">.5</span><span class="p">:</span>
-        <span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-        <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">response</span><span class="p">:</span>
+        <span class="n">observed</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-        <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">observed</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
     <span class="n">time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># update the probabilistic network</span>
     <span class="n">attributes</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">beliefs_propagation</span><span class="p">(</span>
         <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span>
-        <span class="n">input_data</span><span class="o">=</span><span class="p">(</span><span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">time_steps</span><span class="p">),</span>
+        <span class="n">input_data</span><span class="o">=</span><span class="p">(</span><span class="n">input_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">time_steps</span><span class="p">,</span> <span class="n">observed</span><span class="p">),</span>
         <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
         <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
-        <span class="n">input_nodes_idx</span><span class="o">=</span><span class="n">input_nodes_idx</span>
+        <span class="n">input_nodes_idx</span><span class="o">=</span><span class="n">input_nodes_idx</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="n">responses</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
 </pre></div>
@@ -845,6 +869,16 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <section id="bayesian-inference">
 <h3>Bayesian inference<a class="headerlink" href="#bayesian-inference" title="Link to this heading">#</a></h3>
 <p>First, we start by creating the response function we want to optimize (see also <a class="reference internal" href="2-Using_custom_response_functions.html#custom-response-functions"><span class="std std-ref">Using custom response models</span></a> on how to create such functions).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a mask to hide the observations from the arm that was not selected</span>
+<span class="n">observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">observed</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="n">responses</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">observed</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="o">~</span><span class="n">responses</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf.math</span> <span class="kn">import</span> <span class="n">binary_surprise</span>
@@ -863,7 +897,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
     <span class="n">hgf</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="mi">11</span><span class="p">][</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tonic_volatility</span>
 
     <span class="c1"># run the model forward</span>
-    <span class="n">hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">)</span>
+    <span class="n">hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span> <span class="n">is_observed</span><span class="o">=</span><span class="n">observed</span><span class="p">)</span>
 
     <span class="c1"># probabilities of choosing arm A</span>
     <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -878,11 +912,11 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 
     <span class="c1"># the surprise of the model is the sum of binary surprise at all input level</span>
     <span class="c1"># plus the binary surprise for the agent decision</span>
-    <span class="c1">#surprise_1 = jnp.sum(jnp.where(jnp.isnan(input_data[:, 2]), 0.0, hgf.node_trajectories[0][&quot;surprise&quot;]))</span>
-    <span class="c1">#surprise_2 = jnp.sum(jnp.where(jnp.isnan(input_data[:, 2]), 0.0, hgf.node_trajectories[1][&quot;surprise&quot;]))</span>
-    <span class="c1">#surprise_3 = jnp.sum(jnp.where(jnp.isnan(input_data[:, 0]), 0.0, hgf.node_trajectories[2][&quot;surprise&quot;]))</span>
-    <span class="c1">#surprise_4 = jnp.sum(jnp.where(jnp.isnan(input_data[:, 0]), 0.0, hgf.node_trajectories[3][&quot;surprise&quot;]))</span>
-    <span class="c1">#surprise = surprise_1 + surprise_2 + surprise_3 + surprise_4 + surprise</span>
+    <span class="n">surprise_1</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]))</span>
+    <span class="n">surprise_2</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]))</span>
+    <span class="n">surprise_3</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]))</span>
+    <span class="n">surprise_4</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]))</span>
+    <span class="n">surprise</span> <span class="o">=</span> <span class="n">surprise_1</span> <span class="o">+</span> <span class="n">surprise_2</span> <span class="o">+</span> <span class="n">surprise_3</span> <span class="o">+</span> <span class="n">surprise_4</span> <span class="o">+</span> <span class="n">surprise</span>
 
     <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
         <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">surprise</span><span class="p">),</span>
@@ -902,18 +936,6 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
     <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
     <span class="n">responses</span><span class="o">=</span><span class="n">responses</span>
 <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logp_fn</span><span class="p">(</span><span class="o">-</span><span class="mf">6.0</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(-88.06501, dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -994,8 +1016,8 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">model</span><span class="p">:</span>
-    <span class="n">tonic_volatility</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf&quot;</span><span class="p">,</span> <span class="n">custom_op</span><span class="p">(</span><span class="n">tonic_volatility</span><span class="p">))</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf&quot;</span><span class="p">,</span> <span class="n">custom_op</span><span class="p">(</span><span class="n">omega</span><span class="p">))</span>
     <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1010,7 +1032,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (2 chains in 2 jobs)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [tonic_volatility]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [omega]
 </pre></div>
 </div>
 <div class="output text_html">
@@ -1032,9 +1054,9 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div><div class="output text_html">
     <div>
       <progress value='4000' class='' max='4000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [4000/4000 00:09&lt;00:00 Sampling 2 chains, 2,000 divergences]
+      100.00% [4000/4000 00:08&lt;00:00 Sampling 2 chains, 8 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 9 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 8 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -1046,13 +1068,13 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;hist&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">tv</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Tonic volatility&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">tonic_volatility</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Tonic volatility&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/169c65e79de6df51c9533b3d328fa9c26857919c25f1211e990adfc482ed2174.png" src="../_images/169c65e79de6df51c9533b3d328fa9c26857919c25f1211e990adfc482ed2174.png" />
+<img alt="../_images/611cfa8b0f51d556db275960c9b6faaa2b0efd5cc06fc3d2d365e322a9dc5931.png" src="../_images/611cfa8b0f51d556db275960c9b6faaa2b0efd5cc06fc3d2d365e322a9dc5931.png" />
 </div>
 </div>
 </section>
@@ -1078,13 +1100,13 @@ jax   : 0.4.16
 jaxlib: 0.4.16
 
 pymc      : 5.10.0
+seaborn   : 0.13.0
+matplotlib: 3.8.2
 numpy     : 1.22.0
 jax       : 0.4.16
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-seaborn   : 0.13.0
-pytensor  : 2.18.1
 arviz     : 0.16.1
-matplotlib: 3.8.2
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+pytensor  : 2.18.1
 
 Watermark: 2.4.3
 </pre></div>

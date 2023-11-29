@@ -539,7 +539,7 @@ document.write(`
 <h1>pyhgf.updates.posterior.categorical.categorical_input_update<a class="headerlink" href="#pyhgf-updates-posterior-categorical-categorical-input-update" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyhgf.updates.posterior.categorical.categorical_input_update">
-<span class="sig-prename descclassname"><span class="pre">pyhgf.updates.posterior.categorical.</span></span><span class="sig-name descname"><span class="pre">categorical_input_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Indexes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../../_modules/pyhgf/updates/posterior/categorical.html#categorical_input_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.updates.posterior.categorical.categorical_input_update" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyhgf.updates.posterior.categorical.</span></span><span class="sig-name descname"><span class="pre">categorical_input_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Indexes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../../_modules/pyhgf/updates/posterior/categorical.html#categorical_input_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.updates.posterior.categorical.categorical_input_update" title="Link to this definition">#</a></dt>
 <dd><p>Update the categorical input node given an array of binary observations.</p>
 <p>This function should be called <strong>after</strong> the update of the implied binary HGFs. It
 receives a <cite>None</cite> as the boolean observations are passed to the binary inputs
@@ -548,23 +548,20 @@ an implied Dirichlet distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>value</strong></dt><dd><p>The new observed value. This here is ignored as the observed values are passed
-to the binary inputs directly.</p>
-</dd>
-<dt><strong>time_step</strong></dt><dd><p>The interval between the previous time point and the current time point.</p>
-</dd>
 <dt><strong>attributes</strong></dt><dd><p>The attributes of the probabilistic nodes.</p>
 </dd>
 <dt><strong>.. note::</strong></dt><dd><p><cite>“psis”</cite> is the value coupling strength. It should have the same length as the
 volatility parents’ indexes. <cite>“volatility_coupling”</cite> is the volatility coupling
 strength. It should have the same length as the volatility parents’ indexes.</p>
 </dd>
+<dt><strong>time_step</strong></dt><dd><p>The interval between the previous time point and the current time point.</p>
+</dd>
+<dt><strong>node_idx</strong></dt><dd><p>Pointer to the node that needs to be updated.</p>
+</dd>
 <dt><strong>edges</strong></dt><dd><p>The edges of the probabilistic nodes as a tuple of
 <code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code>. The tuple has the same length as the node
 number. For each node, the index lists the value and volatility parents and
 children.</p>
-</dd>
-<dt><strong>node_idx</strong></dt><dd><p>Pointer to the node that needs to be updated.</p>
 </dd>
 </dl>
 </dd>
