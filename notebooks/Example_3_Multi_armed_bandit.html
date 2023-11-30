@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example 3: A multi-armed bandit task with independent reward and punishments &#8212; pyhgf 0.0.12 documentation</title>
+    <title>Example 3: A multi-armed bandit task with independent rewards and punishments &#8212; pyhgf 0.0.12 documentation</title>
   
   
   
@@ -449,8 +449,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="example-3-a-multi-armed-bandit-task-with-independent-reward-and-punishments">
-<span id="example-3"></span><h1>Example 3: A multi-armed bandit task with independent reward and punishments<a class="headerlink" href="#example-3-a-multi-armed-bandit-task-with-independent-reward-and-punishments" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="example-3-a-multi-armed-bandit-task-with-independent-rewards-and-punishments">
+<span id="example-3"></span><h1>Example 3: A multi-armed bandit task with independent rewards and punishments<a class="headerlink" href="#example-3-a-multi-armed-bandit-task-with-independent-rewards-and-punishments" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/Example_2_Input_node_volatility_coupling.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -471,9 +471,16 @@ document.write(`
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-
+<span class="kn">from</span> <span class="nn">pyhgf.math</span> <span class="kn">import</span> <span class="n">binary_surprise</span>
+<span class="kn">from</span> <span class="nn">jax.tree_util</span> <span class="kn">import</span> <span class="n">Partial</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
+<span class="kn">from</span> <span class="nn">pytensor.graph</span> <span class="kn">import</span> <span class="n">Apply</span><span class="p">,</span> <span class="n">Op</span>
+<span class="kn">import</span> <span class="nn">pytensor.tensor</span> <span class="k">as</span> <span class="nn">pt</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">grad</span><span class="p">,</span> <span class="n">jit</span><span class="p">,</span> <span class="n">vjp</span>
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
 <span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -483,19 +490,27 @@ document.write(`
 </div>
 </div>
 </div>
-<p>In this notebook, we are going to illustrate how to fit behavioural responses from a two-armed bandit task when the rewards and punishments are independent. The task is similar to what was used in <span id="id1">[<a class="reference internal" href="../references.html#id14" title="Erdem Pulcu and Michael Browning. Affective bias as a rational response to the statistics of rewards and punishments. eLife, October 2017. URL: http://dx.doi.org/10.7554/eLife.27879, doi:10.7554/elife.27879.">Pulcu and Browning, 2017</a>]</span>. This will also illustrate how to use missing observations and the impact it has on the belief trajectories.</p>
-<p>Because the rewards and punishments are independent, we simulate the task using four binary HGFs, assuming that on both arms, both rewards and punishments are evolving independently, and how to deal with models where the decisions of the agent influence the observations.</p>
+<p>In this notebook, we are going to illustrate how to fit behavioural responses from a two-armed bandit task when the rewards and punishments are independent using a task similar to what was used in <span id="id1">[<a class="reference internal" href="../references.html#id14" title="Erdem Pulcu and Michael Browning. Affective bias as a rational response to the statistics of rewards and punishments. eLife, October 2017. URL: http://dx.doi.org/10.7554/eLife.27879, doi:10.7554/elife.27879.">Pulcu and Browning, 2017</a>]</span> (see <a class="reference internal" href="#task"><span class="std std-ref">In the task considered here, two armed bandits are presented to the participant on each trial, and the participant has to select one of them to get the reward and punishments associated. In our simulation, we generalize further and consider that for both arms, the rewards and punishments are independent, which means that the participant has to infer four probabilities: \{P(reward|A), P(loss|A), P(reward|B), P(loss|B)\}. Because the rewards and punishments are independent, we simulate the task using four binary HGFs. Figure from Pulcu2017.</span></a>). This will also illustrate how we can use missing/unobserved values in an input node, the impact this has on the belief trajectories, and how to deal with models where the decisions of the agent influence the observations.</p>
+<figure class="align-default" id="task">
+<img alt="https://iiif.elifesciences.org/lax/27879%2Felife-27879-fig1-v3.tif/full/1500,/0/default.jpg" src="https://iiif.elifesciences.org/lax/27879%2Felife-27879-fig1-v3.tif/full/1500,/0/default.jpg" />
+<figcaption>
+<p><span class="caption-text">In the task considered here, two armed bandits are presented to the participant on each trial, and the participant has to select one of them to get the reward and punishments associated. In our simulation, we generalize further and consider that for both arms, the rewards and punishments are independent, which means that the participant has to infer four probabilities: <span class="math notranslate nohighlight">\(\{P(reward|A), P(loss|A), P(reward|B), P(loss|B)\}\)</span>. Because the rewards and punishments are independent, we simulate the task using four binary HGFs. Figure from <span id="id2">[<a class="reference internal" href="../references.html#id14" title="Erdem Pulcu and Michael Browning. Affective bias as a rational response to the statistics of rewards and punishments. eLife, October 2017. URL: http://dx.doi.org/10.7554/eLife.27879, doi:10.7554/elife.27879.">Pulcu and Browning, 2017</a>]</span>.</span><a class="headerlink" href="#task" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>While the binary HGF is a special case of the categorical HGF where the number of categories is set to 2, the categorical HGF adds a volatility coupling between the binary branch (see <a class="reference internal" href="1.2-Categorical_HGF.html#categorical-hgf"><span class="std std-ref">The categorical Hierarchical Gaussian Filter</span></a>). Therefore a categorical HGF would not be suitable here as we want every branch of the network to evolve independently.</p>
+<p>While the binary HGF is a special case of the categorical HGF where the number of categories is set to 2, the categorical HGF assumes that only one category is presented on every trial, which is different from what we have here as on some trials, we could have both reward and loss on both arms. Also, a categorical HGF adds a volatility coupling between the binary branch (see <a class="reference internal" href="1.2-Categorical_HGF.html#categorical-hgf"><span class="std std-ref">The categorical Hierarchical Gaussian Filter</span></a>). Therefore, this model would not be suitable here as we want every branch of the network to evolve independently.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tonic_volatility</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the tonic volatility used across the tutorial</span>
+<span class="c1"># this value is the same for four branches of the network</span>
+<span class="n">tonic_volatility</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.5</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>We start by creating a network that consists in four two-levels HGF. Each branch is evolving independently and is not affecting the beliefs trajectories of other branches.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_hgf</span> <span class="o">=</span> <span class="p">(</span>
@@ -520,7 +535,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1701273531.078829    3656 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1701338453.601363    3791 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -539,20 +554,20 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 <p>We start with a simple task structure where contingencies (i.e. the probability that a given armed bandit is associated with a win/loss) alternate between <code class="docutils literal notranslate"><span class="pre">0.2</span></code>, <code class="docutils literal notranslate"><span class="pre">0.5</span></code> and <code class="docutils literal notranslate"><span class="pre">0.8</span></code>. The rate of change in contingencies can be fast (i.e. high volatility blocks) or slow (i.e. low volatility blocks).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># three levels of probability</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># three levels of contingencies</span>
 <span class="n">high_prob</span><span class="p">,</span> <span class="n">chance</span><span class="p">,</span> <span class="n">low_prob</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span>
 
 <span class="c1"># create blocks of contingencies</span>
-<span class="n">stable_contingencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">low_prob</span><span class="p">,</span> <span class="n">high_prob</span><span class="p">])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">volatile_contingencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">low_prob</span><span class="p">,</span> <span class="n">high_prob</span><span class="p">])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">chance_contingencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">chance</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">stable_contingencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">low_prob</span><span class="p">,</span> <span class="n">high_prob</span><span class="p">])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">volatile_contingencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">low_prob</span><span class="p">,</span> <span class="n">high_prob</span><span class="p">])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">chance_contingencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">chance</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create sequences of blocks for the different cases</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create sequences of blocks for each arm/rewards</span>
 <span class="n">win_arm1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">stable_contingencies</span><span class="p">,</span> <span class="n">chance_contingencies</span><span class="p">,</span> <span class="n">volatile_contingencies</span><span class="p">])</span>
 <span class="n">loss_arm1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">volatile_contingencies</span><span class="p">,</span> <span class="n">chance_contingencies</span><span class="p">,</span> <span class="n">stable_contingencies</span><span class="p">])</span>
 <span class="n">win_arm2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">chance_contingencies</span><span class="p">,</span> <span class="n">stable_contingencies</span><span class="p">,</span> <span class="n">volatile_contingencies</span><span class="p">])</span>
@@ -573,36 +588,44 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <p>This gives the following task structure:</p>
-<div class="cell docutils container">
+<div class="cell tag_hide-input tag_full-width docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># trial numbers</span>
 <span class="n">trials</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win_arm1</span><span class="p">))</span>
 
-<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
     <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
     <span class="p">[</span><span class="n">u_win_arm1</span><span class="p">,</span> <span class="n">u_loss_arm1</span><span class="p">,</span> <span class="n">u_win_arm2</span><span class="p">,</span> <span class="n">u_loss_arm2</span><span class="p">],</span> 
     <span class="p">[</span><span class="n">win_arm1</span><span class="p">,</span> <span class="n">loss_arm1</span><span class="p">,</span> <span class="n">win_arm2</span><span class="p">,</span> <span class="n">loss_arm2</span><span class="p">],</span> 
-    <span class="p">[</span><span class="s2">&quot;Arm 1 - Win&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 1 - Loss&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 2 - Win&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 2 - Loss&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;P(Reward|A)&quot;</span><span class="p">,</span> <span class="s2">&quot;P(Loss|A)&quot;</span><span class="p">,</span> <span class="s2">&quot;P(Reward|B)&quot;</span><span class="p">,</span> <span class="s2">&quot;P(Loss|B)&quot;</span><span class="p">],</span>
     <span class="p">[</span><span class="s2">&quot;seagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;seagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">]</span>
 <span class="p">):</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;outcomes&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;outcomes&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.05</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
-<img alt="../_images/be0c80171b3842d722a13519513c0c067fe83a986fe3ff4e9365c10a671e59de.png" src="../_images/be0c80171b3842d722a13519513c0c067fe83a986fe3ff4e9365c10a671e59de.png" />
+<img alt="../_images/6f017de8fd86f7f2fc112d2ea576ca4a0a0a84ebbc33a95f0a293c581e82db94.png" src="../_images/6f017de8fd86f7f2fc112d2ea576ca4a0a0a84ebbc33a95f0a293c581e82db94.png" />
 </div>
 </div>
 </section>
 <section id="simulate-a-dataset">
 <h2>Simulate a dataset<a class="headerlink" href="#simulate-a-dataset" title="Link to this heading">#</a></h2>
-<p>We can simlate our vector of observation. This is a two dimentional matrix with input observations for the four components of our model.</p>
+<p>We can simulate a vector of observation. This is a two-dimensional matrix with input observations for the four components of our model.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">u_win_arm1</span><span class="p">,</span> <span class="n">u_loss_arm1</span><span class="p">,</span> <span class="n">u_win_arm2</span><span class="p">,</span> <span class="n">u_loss_arm2</span><span class="p">])</span>
@@ -610,7 +633,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 </div>
-<p>From there, it is straightforward to feed these observations to our four branches HGF to retrieve the trajectories.</p>
+<p>From there, it is straightforward to feed these observations to our four branches to get an estimate of the trajectories.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Here, we are providing all the outcomes from all trials. This is not how the task would work as the participant will only be presented with the outcomes from the armed bandit chosen, and we are not using responses from the participant yet. See also <a class="reference internal" href="2-Using_custom_response_functions.html#custom-response-functions"><span class="std std-ref">Using custom response models</span></a> for details on the observations <code class="docutils literal notranslate"><span class="pre">u</span></code> and the responses <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
@@ -622,7 +645,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 140 new observations.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 280 new observations.
 </pre></div>
 </div>
 </div>
@@ -639,11 +662,11 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
     <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
     <span class="p">[</span><span class="n">win_arm1</span><span class="p">,</span> <span class="n">loss_arm1</span><span class="p">,</span> <span class="n">win_arm2</span><span class="p">,</span> <span class="n">loss_arm2</span><span class="p">],</span> 
-    <span class="p">[</span><span class="s2">&quot;Arm 1 - Win&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 1 - Loss&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 2 - Win&quot;</span><span class="p">,</span> <span class="s2">&quot;Arm 2 - Loss&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;P(Reward|A)&quot;</span><span class="p">,</span> <span class="s2">&quot;P(Loss|A)&quot;</span><span class="p">,</span> <span class="s2">&quot;P(Reward|B)&quot;</span><span class="p">,</span> <span class="s2">&quot;P(Loss|B)&quot;</span><span class="p">],</span>
     <span class="p">[</span><span class="s2">&quot;seagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">,</span> <span class="s2">&quot;seagreen&quot;</span><span class="p">,</span> <span class="s2">&quot;firebrick&quot;</span><span class="p">]</span>
 <span class="p">):</span>
     <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
@@ -651,7 +674,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2a8a0b1f996ea23694ac9895384ea85422d885402ebd6c50998f55e81e7e4fd6.png" src="../_images/2a8a0b1f996ea23694ac9895384ea85422d885402ebd6c50998f55e81e7e4fd6.png" />
+<img alt="../_images/b221b694c6dff36d73d85b92d8cc582622d3d9e1925b6048a2a76b31b1f86684.png" src="../_images/b221b694c6dff36d73d85b92d8cc582622d3d9e1925b6048a2a76b31b1f86684.png" />
 </div>
 </div>
 </section>
@@ -660,7 +683,7 @@ No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for
 <p>Using the beliefs trajectories recovered from the model fits above, we can simulate responses from a participant that would use the same parametrisation of beliefs update (especially the same <code class="docutils literal notranslate"><span class="pre">tonic_volatility</span></code> here).</p>
 <section id="decision-rule">
 <h3>Decision rule<a class="headerlink" href="#decision-rule" title="Link to this heading">#</a></h3>
-<p>The probability of chosing the arm <span class="math notranslate nohighlight">\(A\)</span> given the probability of wining on both arms <span class="math notranslate nohighlight">\({W_a; W_b}\)</span> and the probability of loosing on both arms <span class="math notranslate nohighlight">\({L_a; L_b}\)</span>, is given by the following softmax decision function:</p>
+<p>The probability of chosing the arm <span class="math notranslate nohighlight">\(A\)</span> given the expected probabilities of wining on both arms <span class="math notranslate nohighlight">\({W_a; W_b}\)</span> and the expected probabilities of loosing on both arms <span class="math notranslate nohighlight">\({L_a; L_b}\)</span>, is given by the following softmax decision function:</p>
 <div class="math notranslate nohighlight">
 \[
 p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
@@ -668,7 +691,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the inverse temperature parameter.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># temperature parameter</span>
 <span class="n">w_a</span> <span class="o">=</span> <span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 <span class="n">l_a</span> <span class="o">=</span> <span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 <span class="n">w_b</span> <span class="o">=</span> <span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
@@ -679,22 +702,19 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 </div>
 </div>
-<p>Using these probabilities, we can infer which arm was selected at each trial and filter the inputs that are presented to the participant. Because it would be too chaotic to provide the information about the four hidden states at each trial, here the participant is only presented with the information about the arm that was selected. Therefore, when arm <span class="math notranslate nohighlight">\(A\)</span> is selected, the inputs from arm <span class="math notranslate nohighlight">\(B\)</span> are set to <code class="docutils literal notranslate"><span class="pre">jnp.nan</span></code> and will be ignored during the node update.</p>
+<p>Using these probabilities, we can infer which arm was selected at each trial and filter the inputs that are presented to the participant. Because it would be too chaotic to provide the information about the four hidden states at each trial, here the participant is only presented with the information about the arm that was selected. Therefore, when arm <span class="math notranslate nohighlight">\(A\)</span> is selected, the inputs from arm <span class="math notranslate nohighlight">\(B\)</span> are hidden.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missing_inputs_u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a new matrix of observations</span>
+<span class="n">missing_inputs_u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
-<span class="c1"># filter the input sequence using the agent&#39;s decisions</span>
+<span class="c1"># create a mask to filter the observations using the agent&#39;s decisions</span>
 <span class="n">is_observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">is_observed</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_a</span><span class="o">&lt;=</span><span class="mf">.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">is_observed</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="n">p_a</span><span class="o">&gt;</span><span class="mf">.5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Missing inputs are used to indicate an absence of observation from the agent’s point of view and should not be used for missing records or excluded trials. When an input is labelled as missing, we use the total volatility at the parents’ level to decrease their precision as a function of time elapsed, but the means are still the same. Because this functionality implies an overhead of checks, it is deactivated by default. To activate it, we need to set <code class="docutils literal notranslate"><span class="pre">allow_missing_iputs</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code> upon model creation.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -714,7 +734,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
     <span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span><span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">)</span>
     <span class="o">.</span><span class="n">init</span><span class="p">()</span>
 <span class="p">)</span>
-<span class="n">two_armed_bandit_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+<span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -731,7 +751,8 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># note that we are providing the mask as parameter of the input function</span>
+<span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span>
     <span class="n">input_data</span><span class="o">=</span><span class="n">missing_inputs_u</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
     <span class="n">is_observed</span><span class="o">=</span><span class="n">is_observed</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
 <span class="p">);</span>
@@ -739,7 +760,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 140 new observations.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding 280 new observations.
 </pre></div>
 </div>
 </div>
@@ -759,15 +780,15 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8b7b7f6b8a43fe200eb0ff7965a8561c225017152ffccfe001c6ff411bf77f9b.png" src="../_images/8b7b7f6b8a43fe200eb0ff7965a8561c225017152ffccfe001c6ff411bf77f9b.png" />
+<img alt="../_images/bd5cba90ee4d4a89cf171cc4c0dea65a5d24686fa5fa0dc069af1b04e0cd17f3.png" src="../_images/bd5cba90ee4d4a89cf171cc4c0dea65a5d24686fa5fa0dc069af1b04e0cd17f3.png" />
 </div>
 </div>
-<p>We can now see from the plot above that the branches of the networks are now only updated if the participant actually chose the corresponding arm. Otherwise the expected probability remains the same but the uncertainty will increase over time.</p>
+<p>We can now see from the plot above that the branches of the networks are only updated if the participant actually chose the corresponding arm. Otherwise, the expected probability remains the same but the uncertainty will increase over time.</p>
 </section>
 </section>
 <section id="parameter-recovery">
 <h2>Parameter recovery<a class="headerlink" href="#parameter-recovery" title="Link to this heading">#</a></h2>
-<p>Now that we have set a model with the required number of branches, and allowed this model to observe missing inputs, we can simulate responses from a participant and try to recover the parameters. It should be noted here that this kind of model implies that the decisions of the agent directly influence the observations, as only the outcomes from the selected armed bandit are presented to the participant. This implies that - for simulations - we cannot iterate over the whole set of observations before estimating the decision function, and should every step sequentially in a for loop. This is an important difference as most of the models discussed in the other tutorials filter all the observations first, and then compute the response costs, as the two processes are not influencing each other.</p>
+<p>Now that we have set a model with the required number of branches, and allowed this model to observe missing inputs, we can simulate responses from a participant and try to recover the parameters of interest (here focusing on the tonic volatility at the second level). It should be noted here that this kind of model implies that the decisions of the agent directly influence the observations, as only the outcomes from the selected armed bandit are presented to the participant. This implies that - in the context of simulations - we cannot iterate over the whole batch of observations before estimating the decision function, and should instead compute every step sequentially in a for loop. This is an important difference as most of the models discussed in the other tutorials filter all the observations first, and then compute the response costs, as the two processes are not influencing each other.</p>
 <section id="real-time-decision-and-belief-updating">
 <h3>Real-time decision and belief updating<a class="headerlink" href="#real-time-decision-and-belief-updating" title="Link to this heading">#</a></h3>
 <p>We can implement this process using the <a class="reference internal" href="../generated/pyhgf.networks/pyhgf.networks.beliefs_propagation.html#pyhgf.networks.beliefs_propagation" title="pyhgf.networks.beliefs_propagation"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.networks.beliefs_propagation()</span></code></a> function. In other models, this step is called sequentially in a <code class="xref py py-func docutils literal notranslate"><span class="pre">jax.lax.scan()</span></code> loop, but we can also use it for a single-step update.</p>
@@ -816,9 +837,6 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <span class="n">update_sequence</span> <span class="o">=</span> <span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">update_sequence</span>
 <span class="n">edges</span> <span class="o">=</span> <span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">edges</span>
 <span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
-
-<span class="c1"># temperature parameter for decision softmax</span>
-<span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span>
 </pre></div>
 </div>
 </div>
@@ -827,21 +845,27 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">input_data</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 <span class="n">responses</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 1: arm A - 0: arm B</span>
+
+<span class="c1"># for each observation</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
 
+    <span class="c1"># the observation mask - default to 1</span>
     <span class="n">observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 
-    <span class="c1"># expectations about the outcomes</span>
+    <span class="c1"># the time elapsed between two trials - defaults to 1</span>
+    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># the expectations about the outcomes</span>
     <span class="n">w_a</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
     <span class="n">l_a</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
     <span class="n">w_b</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
     <span class="n">l_b</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 
-    <span class="c1"># decision function</span>
+    <span class="c1"># the decision function</span>
     <span class="n">p_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_a</span><span class="o">-</span><span class="n">l_a</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_a</span><span class="o">-</span><span class="n">l_a</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">w_b</span><span class="o">-</span><span class="n">l_b</span><span class="p">)))</span>
 
-    <span class="c1"># response</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">.4</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># sample a decision using the probability</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p_a</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
     <span class="c1"># hide the observations that were not selected</span>
@@ -849,8 +873,6 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
         <span class="n">observed</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">observed</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="n">time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># update the probabilistic network</span>
     <span class="n">attributes</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">beliefs_propagation</span><span class="p">(</span>
@@ -860,7 +882,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
         <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
         <span class="n">input_nodes_idx</span><span class="o">=</span><span class="n">input_nodes_idx</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="n">responses</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
+<span class="n">responses</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>  <span class="c1"># vector of responses</span>
 </pre></div>
 </div>
 </div>
@@ -868,10 +890,10 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </section>
 <section id="bayesian-inference">
 <h3>Bayesian inference<a class="headerlink" href="#bayesian-inference" title="Link to this heading">#</a></h3>
-<p>First, we start by creating the response function we want to optimize (see also <a class="reference internal" href="2-Using_custom_response_functions.html#custom-response-functions"><span class="std std-ref">Using custom response models</span></a> on how to create such functions).</p>
+<p>Using the responses simulated above, we can try to recover the value of the tonic volatility. First, we start by creating the response function we want to optimize (see also <a class="reference internal" href="2-Using_custom_response_functions.html#custom-response-functions"><span class="std std-ref">Using custom response models</span></a> on how to create such functions).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a mask to hide the observations from the arm that was not selected</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a mask to hide the observations from the arm that was not selected by the participant</span>
 <span class="n">observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">observed</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="n">responses</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">observed</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="o">~</span><span class="n">responses</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -881,14 +903,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyhgf.math</span> <span class="kn">import</span> <span class="n">binary_surprise</span>
-<span class="kn">from</span> <span class="nn">jax.tree_util</span> <span class="kn">import</span> <span class="n">Partial</span>
-<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
-<span class="kn">from</span> <span class="nn">pytensor.graph</span> <span class="kn">import</span> <span class="n">Apply</span><span class="p">,</span> <span class="n">Op</span>
-<span class="kn">import</span> <span class="nn">pytensor.tensor</span> <span class="k">as</span> <span class="nn">pt</span>
-<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">grad</span><span class="p">,</span> <span class="n">jit</span><span class="p">,</span> <span class="n">vjp</span>
-
-<span class="k">def</span> <span class="nf">two_bandits_logp</span><span class="p">(</span><span class="n">tonic_volatility</span><span class="p">,</span> <span class="n">hgf</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">responses</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">two_bandits_logp</span><span class="p">(</span><span class="n">tonic_volatility</span><span class="p">,</span> <span class="n">hgf</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">responses</span><span class="p">,</span> <span class="n">observed</span><span class="p">):</span>
 
     <span class="c1"># replace with a new omega in the model</span>
     <span class="n">hgf</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tonic_volatility</span>
@@ -912,11 +927,10 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 
     <span class="c1"># the surprise of the model is the sum of binary surprise at all input level</span>
     <span class="c1"># plus the binary surprise for the agent decision</span>
-    <span class="n">surprise_1</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]))</span>
-    <span class="n">surprise_2</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]))</span>
-    <span class="n">surprise_3</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]))</span>
-    <span class="n">surprise_4</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]))</span>
-    <span class="n">surprise</span> <span class="o">=</span> <span class="n">surprise_1</span> <span class="o">+</span> <span class="n">surprise_2</span> <span class="o">+</span> <span class="n">surprise_3</span> <span class="o">+</span> <span class="n">surprise_4</span> <span class="o">+</span> <span class="n">surprise</span>
+    <span class="n">surprise</span> <span class="o">+=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">])</span>
+    <span class="n">surprise</span> <span class="o">+=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">])</span>
+    <span class="n">surprise</span> <span class="o">+=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">])</span>
+    <span class="n">surprise</span> <span class="o">+=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">])</span>
 
     <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
         <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">surprise</span><span class="p">),</span>
@@ -928,19 +942,20 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 </div>
 </div>
+<p>We create both a jitted version of this function and the vector-jacobian product (gradient) requiered for a custom Op in PyTensor:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logp_fn</span> <span class="o">=</span> <span class="n">Partial</span><span class="p">(</span>
     <span class="n">two_bandits_logp</span><span class="p">,</span> 
     <span class="n">hgf</span><span class="o">=</span><span class="n">two_armed_bandit_missing_inputs_hgf</span><span class="p">,</span> 
     <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
-    <span class="n">responses</span><span class="o">=</span><span class="n">responses</span>
+    <span class="n">responses</span><span class="o">=</span><span class="n">responses</span><span class="p">,</span>
+    <span class="n">observed</span><span class="o">=</span><span class="n">observed</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>We create both jitted and the vector-jacobian product requiered for a custom Op in PyTensor:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jitted_custom_op_jax</span> <span class="o">=</span> <span class="n">jit</span><span class="p">(</span><span class="n">logp_fn</span><span class="p">)</span>
@@ -954,6 +969,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 </div>
 </div>
+<p>The log probability function and the gradient of this function are then passed to a new <code class="docutils literal notranslate"><span class="pre">Op</span></code>, which is a class that can be manipulated inside PyMC graphs.</p>
 <div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -1013,10 +1029,11 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 </details>
 </div>
+<p>We are now ready to sample the model and estimate the value of tonic volatility.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">model</span><span class="p">:</span>
-    <span class="n">omega</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;omega&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
     <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf&quot;</span><span class="p">,</span> <span class="n">custom_op</span><span class="p">(</span><span class="n">omega</span><span class="p">))</span>
     <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
@@ -1054,9 +1071,9 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div><div class="output text_html">
     <div>
       <progress value='4000' class='' max='4000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [4000/4000 00:08&lt;00:00 Sampling 2 chains, 8 divergences]
+      100.00% [4000/4000 00:08&lt;00:00 Sampling 2 chains, 1 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 8 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 9 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -1066,7 +1083,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;hist&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">tonic_volatility</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Tonic volatility&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
@@ -1074,7 +1091,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/611cfa8b0f51d556db275960c9b6faaa2b0efd5cc06fc3d2d365e322a9dc5931.png" src="../_images/611cfa8b0f51d556db275960c9b6faaa2b0efd5cc06fc3d2d365e322a9dc5931.png" />
+<img alt="../_images/6c5319f4ca475aa8a480429e95e641e5b356c25c7a7987e0882a4a29e3be5b01.png" src="../_images/6c5319f4ca475aa8a480429e95e641e5b356c25c7a7987e0882a4a29e3be5b01.png" />
 </div>
 </div>
 </section>
@@ -1089,7 +1106,7 @@ p(A) = \frac{e^{\beta(W_a-L_a)}}{e^{\beta(W_a-L_a)} + e^{\beta(W_b-L_b)}}
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Nov 29 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 30 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -1099,14 +1116,14 @@ pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
+numpy     : 1.22.0
+arviz     : 0.16.1
+jax       : 0.4.16
+pytensor  : 2.18.1
 pymc      : 5.10.0
 seaborn   : 0.13.0
 matplotlib: 3.8.2
-numpy     : 1.22.0
-jax       : 0.4.16
-arviz     : 0.16.1
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-pytensor  : 2.18.1
 
 Watermark: 2.4.3
 </pre></div>

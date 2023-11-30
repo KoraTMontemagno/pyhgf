@@ -805,6 +805,7 @@ document.write(`
         <span class="n">branches_idx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
         <span class="n">time_steps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_observed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new observations with custom update sequences.</span>
 
@@ -830,6 +831,8 @@ document.write(`
 <span class="sd">            Time vector (optional). If `None`, the time vector will default to</span>
 <span class="sd">            `np.ones(len(input_data))`. This vector is automatically transformed</span>
 <span class="sd">            into a time steps vector.</span>
+<span class="sd">        is_observed :</span>
+<span class="sd">            A 2d boolean array masking `input_data`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -844,6 +847,10 @@ document.write(`
             <span class="n">time_steps</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">input_data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">input_data</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+        <span class="c1"># is it observation or missing inputs</span>
+        <span class="k">if</span> <span class="n">is_observed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">is_observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
         <span class="c1"># create the update functions that will be scanned</span>
         <span class="n">branches_fn</span> <span class="o">=</span> <span class="p">[</span>
@@ -862,7 +869,7 @@ document.write(`
             <span class="k">return</span> <span class="n">switch</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">branches_fn</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
         <span class="c1"># wrap the inputs</span>
-        <span class="n">scan_input</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">),</span> <span class="n">branches_idx</span>
+        <span class="n">scan_input</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">,</span> <span class="n">is_observed</span><span class="p">),</span> <span class="n">branches_idx</span>
 
         <span class="c1"># scan over the input data and apply the switching belief propagation functions</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">switching_propagation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">scan_input</span><span class="p">)</span>
