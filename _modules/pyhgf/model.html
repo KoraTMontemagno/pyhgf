@@ -480,17 +480,6 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    attributes :</span>
 <span class="sd">        The attributes of the probabilistic nodes.</span>
-<span class="sd">    allow_missing_inputs :</span>
-<span class="sd">        If `False` (default), all the observation provided to the input nodes should be</span>
-<span class="sd">        real or integer. If `True`, missing inputs are allowed as `jnp.nan`. In case of</span>
-<span class="sd">        missing inputs, the continuous parents are updated by decreasing the precision</span>
-<span class="sd">        as a function of time. Allowing for missing inputs add a conditional check for</span>
-<span class="sd">        `jnp.nan` at every time step and should therefore be avoided if the input time</span>
-<span class="sd">        series is certified without missing inputs.</span>
-<span class="sd">    .. warning::</span>
-<span class="sd">        Missing inputs are missing observation from the agent perspective and should</span>
-<span class="sd">        not be used to handle missing data point that are only missing in the event</span>
-<span class="sd">        log, or rejected trials.</span>
 <span class="sd">    edges :</span>
 <span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
 <span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
@@ -561,7 +550,6 @@ document.write(`
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="n">allow_missing_inputs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Parameterization of the HGF model.</span>
 
@@ -613,8 +601,6 @@ document.write(`
 <span class="sd">        verbose :</span>
 <span class="sd">            The verbosity of the methods for model creation and fitting. Defaults to</span>
 <span class="sd">            `True`.</span>
-<span class="sd">        allow_missing_inputs :</span>
-<span class="sd">            Whether the network should handle missing inputs. Defaults to `False`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">=</span> <span class="n">model_type</span>
@@ -626,7 +612,6 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UpdateSequence</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">allow_missing_inputs</span> <span class="o">=</span> <span class="n">allow_missing_inputs</span>
 
         <span class="k">if</span> <span class="n">model_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -771,7 +756,17 @@ document.write(`
 <span class="sd">            `np.ones(len(input_data))`. This vector is automatically transformed</span>
 <span class="sd">            into a time steps vector.</span>
 <span class="sd">        is_observed :</span>
-<span class="sd">            A 2d boolean array masking `input_data`.</span>
+<span class="sd">            A 2d boolean array masking `input_data`. In case of missing inputs, (i.e.</span>
+<span class="sd">            `is_observed` is `0`), the input node will have value and volatility set to</span>
+<span class="sd">            `0.0`. If the parent(s) of this input receive prediction error from other</span>
+<span class="sd">            children, they simply ignore this one. If they are not receiving other</span>
+<span class="sd">            prediction errors, they are updated by keeping the same mean be decreasing</span>
+<span class="sd">            the precision as a function of time to reflect the evolution of the</span>
+<span class="sd">            underlying Gaussian Random Walk.</span>
+<span class="sd">        .. warning::</span>
+<span class="sd">            Missing inputs are missing observations from the agent&#39;s perspective and</span>
+<span class="sd">            should not be used to handle missing data points that were observed (e.g.</span>
+<span class="sd">            missing in the event log, or rejected trials).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -832,7 +827,17 @@ document.write(`
 <span class="sd">            `np.ones(len(input_data))`. This vector is automatically transformed</span>
 <span class="sd">            into a time steps vector.</span>
 <span class="sd">        is_observed :</span>
-<span class="sd">            A 2d boolean array masking `input_data`.</span>
+<span class="sd">            A 2d boolean array masking `input_data`. In case of missing inputs, (i.e.</span>
+<span class="sd">            `is_observed` is `0`), the input node will have value and volatility set to</span>
+<span class="sd">            `0.0`. If the parent(s) of this input receive prediction error from other</span>
+<span class="sd">            children, they simply ignore this one. If they are not receiving other</span>
+<span class="sd">            prediction errors, they are updated by keeping the same mean be decreasing</span>
+<span class="sd">            the precision as a function of time to reflect the evolution of the</span>
+<span class="sd">            underlying Gaussian Random Walk.</span>
+<span class="sd">        .. warning::</span>
+<span class="sd">            Missing inputs are missing observations from the agent&#39;s perspective and</span>
+<span class="sd">            should not be used to handle missing data points that were observed (e.g.</span>
+<span class="sd">            missing in the event log, or rejected trials).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>

@@ -464,7 +464,6 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyhgf.updates.posterior.continuous</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">continuous_node_update</span><span class="p">,</span>
     <span class="n">continuous_node_update_ehgf</span><span class="p">,</span>
-    <span class="n">continuous_node_update_missing_observations</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.prediction.binary</span> <span class="kn">import</span> <span class="n">binary_state_node_prediction</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.prediction.continuous</span> <span class="kn">import</span> <span class="n">continuous_node_prediction</span>
@@ -778,22 +777,6 @@ document.write(`
             <span class="n">update_fn</span> <span class="o">=</span> <span class="n">continuous_input_prediction_error</span>
             <span class="n">update_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">input_idx</span><span class="p">,</span> <span class="n">update_fn</span><span class="p">))</span>
 
-            <span class="c1"># special case: the network should handle missing inputs</span>
-            <span class="c1"># the continuous parent of the input node node is also updated here</span>
-            <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">allow_missing_inputs</span><span class="p">:</span>
-                <span class="n">continuous_parent_idx</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">input_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span>
-                    <span class="mi">0</span>
-                <span class="p">]</span>  <span class="c1"># type: ignore</span>
-                <span class="n">update_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="p">(</span><span class="n">continuous_parent_idx</span><span class="p">,</span> <span class="n">continuous_node_update_missing_observations</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">node_without_update</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">continuous_parent_idx</span><span class="p">)</span>
-
-                <span class="c1"># the prediction sequence is the update sequence in reverse order</span>
-                <span class="n">prediction_sequence</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-                    <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">continuous_parent_idx</span><span class="p">,</span> <span class="n">continuous_node_prediction</span><span class="p">)</span>
-                <span class="p">)</span>
-
         <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
             <span class="c1"># add the update steps for the binary state node as well</span>
             <span class="n">binary_state_idx</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">input_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
@@ -818,22 +801,6 @@ document.write(`
             <span class="n">prediction_sequence</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
                 <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">binary_state_idx</span><span class="p">,</span> <span class="n">binary_state_node_prediction</span><span class="p">)</span>
             <span class="p">)</span>
-
-            <span class="c1"># special case: the network should handle missing inputs</span>
-            <span class="c1"># the continuous parent of the binary state node is also updated here</span>
-            <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">allow_missing_inputs</span><span class="p">:</span>
-                <span class="n">continuous_parent_idx</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">binary_state_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span>
-                    <span class="mi">0</span>
-                <span class="p">]</span>  <span class="c1"># type: ignore</span>
-                <span class="n">update_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="p">(</span><span class="n">continuous_parent_idx</span><span class="p">,</span> <span class="n">continuous_node_update_missing_observations</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">node_without_update</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">continuous_parent_idx</span><span class="p">)</span>
-
-                <span class="c1"># the prediction sequence is the update sequence in reverse order</span>
-                <span class="n">prediction_sequence</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-                    <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">continuous_parent_idx</span><span class="p">,</span> <span class="n">continuous_node_prediction</span><span class="p">)</span>
-                <span class="p">)</span>
 
         <span class="c1"># add the PE step to the sequence</span>
         <span class="n">node_without_pe</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">input_idx</span><span class="p">)</span>
