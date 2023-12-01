@@ -691,8 +691,8 @@ document.write(`
 <span class="sd">    hgf :</span>
 <span class="sd">        An instance of the HGF model containing a node structure.</span>
 
-<span class="sd">    Note</span>
-<span class="sd">    ----</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    This function requires [Graphviz](https://github.com/xflr6/graphviz) to be</span>
 <span class="sd">    installed to work correctly.</span>
 
@@ -1055,26 +1055,34 @@ document.write(`
             <span class="k">if</span> <span class="n">show_surprise</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
                     <span class="n">surprise_ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
-                    <span class="n">surprise_ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                        <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                        <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">],</span>
-                        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a2a2a&quot;</span><span class="p">,</span>
-                        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                        <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-                        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surprise&quot;</span><span class="p">,</span>
+
+                    <span class="n">node_surprise</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+                    <span class="n">sp</span> <span class="o">=</span> <span class="n">node_surprise</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                    <span class="n">surprise_ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Node </span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2"> - Surprise: </span><span class="si">{</span><span class="n">sp</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="n">surprise_ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
                         <span class="n">x</span><span class="o">=</span><span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
-                        <span class="n">y1</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">],</span>
-                        <span class="n">y2</span><span class="o">=</span><span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                        <span class="n">y1</span><span class="o">=</span><span class="n">node_surprise</span><span class="p">,</span>
+                        <span class="n">y2</span><span class="o">=</span><span class="n">node_surprise</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                        <span class="n">where</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;observed&quot;</span><span class="p">],</span>
                         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#7f7f7f&quot;</span><span class="p">,</span>
                         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                         <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                     <span class="p">)</span>
-                    <span class="n">sp</span> <span class="o">=</span> <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-                    <span class="n">surprise_ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Node </span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2"> - Surprise: </span><span class="si">{</span><span class="n">sp</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                        <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+
+                    <span class="c1"># hide surprise if the input was not observed</span>
+                    <span class="n">node_surprise</span><span class="p">[</span>
+                        <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;observed&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+                    <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                    <span class="n">surprise_ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                        <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                        <span class="n">node_surprise</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a2a2a&quot;</span><span class="p">,</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                        <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Surprise&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="n">surprise_ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Surprise&quot;</span><span class="p">)</span>
                     <span class="n">surprise_ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>

@@ -452,7 +452,12 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="using-custom-response-models">
 <span id="custom-response-functions"></span><h1>Using custom response models<a class="headerlink" href="#using-custom-response-models" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/2-Using_custom_response_functions.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -461,6 +466,7 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -521,7 +527,7 @@ In this situation, it is trivial to write such a decision function and generate 
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1701340885.811058    2362 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+I0000 00:00:1701454810.524162    2402 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
 No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
 </pre></div>
 </div>
@@ -866,7 +872,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:09&lt;00:00 Sampling 4 chains, 0 divergences]
+      100.00% [8000/8000 00:08&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
     </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 9 seconds.
 </pre></div>
@@ -914,19 +920,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>tonic_volatility_2</th>
-      <td>-3.945</td>
-      <td>0.489</td>
-      <td>-4.851</td>
-      <td>-3.02</td>
-      <td>0.011</td>
-      <td>0.008</td>
-      <td>1813.0</td>
-      <td>3065.0</td>
+      <td>-3.951</td>
+      <td>0.5</td>
+      <td>-4.845</td>
+      <td>-2.976</td>
+      <td>0.013</td>
+      <td>0.009</td>
+      <td>1422.0</td>
+      <td>2189.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/11d20f224c49e9a4860dfea0ba2f2c011b5f9acfd7d529d0206cd8afa7e619ff.png" src="../_images/11d20f224c49e9a4860dfea0ba2f2c011b5f9acfd7d529d0206cd8afa7e619ff.png" />
+</div></div><img alt="../_images/ab1809b804c47b27b16471063dde09b5322e1c1d98b6a9158318a307075fa2b9.png" src="../_images/ab1809b804c47b27b16471063dde09b5322e1c1d98b6a9158318a307075fa2b9.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -954,7 +960,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Nov 30 2023
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Dec 01 2023
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -964,12 +970,12 @@ pyhgf : 0.0.12
 jax   : 0.4.16
 jaxlib: 0.4.16
 
+jax       : 0.4.16
 pymc      : 5.10.0
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+numpy     : 1.22.0
 matplotlib: 3.8.2
 arviz     : 0.16.1
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-jax       : 0.4.16
-numpy     : 1.22.0
 
 Watermark: 2.4.3
 </pre></div>
