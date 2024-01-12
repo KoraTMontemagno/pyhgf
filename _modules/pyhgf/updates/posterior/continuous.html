@@ -465,7 +465,7 @@ document.write(`
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Update the mean of a state node using the value prediction errors.</span>
 
-<span class="sd">    #. Mean update from value coupling.</span>
+<span class="sd">    1. Mean update from value coupling.</span>
 
 <span class="sd">    The new mean of a state node :math:`b` value coupled with other input and/or state</span>
 <span class="sd">    nodes :math:`j` at time :math:`k` is given by:</span>
@@ -482,7 +482,7 @@ document.write(`
 <span class="sd">    If the child node is a state node, this value was computed by</span>
 <span class="sd">    :py:func:`pyhgf.updates.prediction_errors.nodes.continuous.continuous_node_value_prediction_error`.</span>
 
-<span class="sd">    #. Mean update from volatility coupling.</span>
+<span class="sd">    2. Mean update from volatility coupling.</span>
 
 <span class="sd">    The new mean of a state node :math:`b` volatility coupled with other input and/or</span>
 <span class="sd">    state nodes :math:`j` at time :math:`k` is given by:</span>
@@ -557,7 +557,10 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># sum the prediction errors from both value and volatility coupling</span>
-    <span class="n">precision_weigthed_prediction_error</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="p">(</span>
+        <span class="n">value_precision_weigthed_prediction_error</span><span class="p">,</span>
+        <span class="n">volatility_precision_weigthed_prediction_error</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
     <span class="c1"># Value coupling updates - update the mean of a value parent</span>
     <span class="c1"># ----------------------------------------------------------</span>
@@ -577,7 +580,7 @@ document.write(`
 
             <span class="c1"># expected precisions from the value children</span>
             <span class="c1"># sum the precision weigthed prediction errors over all children</span>
-            <span class="n">precision_weigthed_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="n">value_precision_weigthed_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="p">(</span><span class="n">value_coupling</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_child_idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">])</span>
                 <span class="o">/</span> <span class="n">node_precision</span>
             <span class="p">)</span> <span class="o">*</span> <span class="n">value_prediction_error</span>
@@ -589,8 +592,7 @@ document.write(`
             <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
             <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">],</span>
         <span class="p">):</span>
-            <span class="c1"># get the value prediction error (VAPE)</span>
-            <span class="c1"># if this is jnp.nan (no observation) set the VAPE to 0.0</span>
+            <span class="c1"># get the volatility prediction error (VOPE)</span>
             <span class="n">volatility_prediction_error</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_child_idx</span><span class="p">][</span><span class="s2">&quot;temp&quot;</span><span class="p">][</span>
                 <span class="s2">&quot;volatility_prediction_error&quot;</span>
             <span class="p">]</span>
@@ -601,7 +603,7 @@ document.write(`
             <span class="p">]</span>
 
             <span class="c1"># the precision weigthed prediction error</span>
-            <span class="n">precision_weigthed_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="n">precision_weigthed_prediction_error</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">volatility_coupling</span> <span class="o">*</span> <span class="n">effective_precision</span> <span class="o">*</span> <span class="n">volatility_prediction_error</span>
             <span class="p">)</span>
 
@@ -613,10 +615,17 @@ document.write(`
                 <span class="s2">&quot;observed&quot;</span>
             <span class="p">]</span>
 
+            <span class="c1"># aggregate over volatility children</span>
+            <span class="n">volatility_precision_weigthed_prediction_error</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="n">precision_weigthed_prediction_error</span>
+            <span class="p">)</span>
+
     <span class="c1"># Compute the new posterior mean</span>
     <span class="c1"># using value prediction errors from both value and volatility coupling</span>
     <span class="n">posterior_mean</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">precision_weigthed_prediction_error</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">value_precision_weigthed_prediction_error</span>
+        <span class="o">+</span> <span class="n">volatility_precision_weigthed_prediction_error</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">posterior_mean</span></div>
@@ -810,8 +819,6 @@ document.write(`
     <span class="n">unobserved_posterior_precision</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span>
         <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">predicted_volatility</span>
     <span class="p">)</span>
-
-    <span class="c1"># if</span>
 
     <span class="c1"># for all children, look at the values of VAPE</span>
     <span class="c1"># if all these values are NaNs, the node has not received observations</span>
