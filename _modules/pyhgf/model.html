@@ -624,76 +624,80 @@ document.write(`
                         <span class="sa">f</span><span class="s2">&quot;with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span><span class="si">}</span><span class="s2"> levels.&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
-            <span class="c1">#########</span>
-            <span class="c1"># Input #</span>
-            <span class="c1">#########</span>
             <span class="k">if</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span>
-                    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-                    <span class="n">continuous_parameters</span><span class="o">=</span><span class="p">{</span>
-                        <span class="s2">&quot;continuous_precision&quot;</span><span class="p">:</span> <span class="n">continuous_precision</span>
+                <span class="c1"># Input</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+                    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span>
+                    <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;continuous_precision&quot;</span><span class="p">:</span> <span class="n">continuous_precision</span><span class="p">},</span>
+                <span class="p">)</span>
+
+                <span class="c1"># X-1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+                    <span class="n">value_children</span><span class="o">=</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]),</span>
+                    <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
                     <span class="p">},</span>
                 <span class="p">)</span>
+
+                <span class="c1"># X-2</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+                    <span class="n">volatility_children</span><span class="o">=</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="n">volatility_coupling</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]]),</span>
+                    <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="p">},</span>
+                <span class="p">)</span>
+
             <span class="k">elif</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span>
-                    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-                    <span class="n">binary_parameters</span><span class="o">=</span><span class="p">{</span>
+                <span class="c1"># Input</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+                    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary-input&quot;</span><span class="p">,</span>
+                    <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
                         <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="n">eta0</span><span class="p">,</span>
                         <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="n">eta1</span><span class="p">,</span>
                         <span class="s2">&quot;binary_precision&quot;</span><span class="p">:</span> <span class="n">binary_precision</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">)</span>
 
-            <span class="c1">#########</span>
-            <span class="c1"># x - 1 #</span>
-            <span class="c1">#########</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span>
-                <span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">value_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-                <span class="n">mean</span><span class="o">=</span><span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-                <span class="n">precision</span><span class="o">=</span><span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-                <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span>
-                <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">!=</span> <span class="s2">&quot;binary&quot;</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;binary_expected_precision&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span>
-                <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="p">)</span>
-
-            <span class="c1">#########</span>
-            <span class="c1"># x - 2 #</span>
-            <span class="c1">#########</span>
-            <span class="k">if</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span>
-                    <span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">volatility_coupling</span><span class="o">=</span><span class="n">volatility_coupling</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
-                    <span class="n">mean</span><span class="o">=</span><span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">precision</span><span class="o">=</span><span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                <span class="c1"># X -1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+                    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary-state&quot;</span><span class="p">,</span>
+                    <span class="n">value_children</span><span class="o">=</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]),</span>
+                    <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">],</span>
+                    <span class="p">},</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span>
-                    <span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">value_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-                    <span class="n">mean</span><span class="o">=</span><span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">precision</span><span class="o">=</span><span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+
+                <span class="c1"># X -2</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+                    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-state&quot;</span><span class="p">,</span>
+                    <span class="n">value_children</span><span class="o">=</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]),</span>
+                    <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
+                    <span class="p">},</span>
                 <span class="p">)</span>
 
             <span class="c1">#########</span>
             <span class="c1"># x - 3 #</span>
             <span class="c1">#########</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span>
-                    <span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                    <span class="n">volatility_coupling</span><span class="o">=</span><span class="n">volatility_coupling</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">],</span>
-                    <span class="n">mean</span><span class="o">=</span><span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-                    <span class="n">precision</span><span class="o">=</span><span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-                    <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
-                    <span class="n">tonic_drift</span><span class="o">=</span><span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+                    <span class="n">volatility_children</span><span class="o">=</span><span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="n">volatility_coupling</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">]]),</span>
+                    <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">initial_mean</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">initial_precision</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">tonic_volatility</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">],</span>
+                    <span class="p">},</span>
                 <span class="p">)</span>
 
             <span class="c1"># initialize the model so it is ready to receive new observations</span>
@@ -954,71 +958,148 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">add_input_node</span><span class="p">(</span>
+    <span class="k">def</span> <span class="nf">add_nodes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">input_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="n">continuous_parameters</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;continuous_precision&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">},</span>
-        <span class="n">binary_parameters</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-            <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-            <span class="s2">&quot;binary_precision&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="n">categorical_parameters</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;n_categories&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
-        <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;continuous-state&quot;</span><span class="p">,</span>
+        <span class="n">n_nodes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">node_parameters</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">value_children</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">value_parents</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">volatility_children</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">volatility_parents</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an input node.</span>
-
-<span class="sd">        Three types of input nodes are supported:</span>
-
-<span class="sd">        - `continuous`: receive a continuous observation as input. The parameter</span>
-<span class="sd">        `continuous_precision` is required.</span>
-<span class="sd">        - `binary` receive a single boolean as observation. The parameters</span>
-<span class="sd">        `binary_precision`, `eta0` and `eta1` are required.</span>
-<span class="sd">        - `categorical` receive a boolean array as observation. The parameters are</span>
-<span class="sd">        `n_categories` required.</span>
-
-<span class="sd">        .. note:</span>
-<span class="sd">           When using `categorical`, the implied `n` binary HGFs are automatically</span>
-<span class="sd">           created with a shared volatility parent at the third level, resulting in a</span>
-<span class="sd">           network with `3n + 2` nodes in total.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new input/state node(s) to the neural network.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        kind :</span>
-<span class="sd">            The kind of input that should be created (can be `&quot;continuous&quot;`, `&quot;binary&quot;`</span>
-<span class="sd">            or `&quot;categorical&quot;`).</span>
-<span class="sd">        input_idxs :</span>
-<span class="sd">            The index of the new input (defaults to `0`).</span>
-<span class="sd">        continuous_parameters :</span>
-<span class="sd">            Parameters provided to the continuous input node. Contains:</span>
-<span class="sd">            - `continuous_precision` (the precision of the observations), which</span>
-<span class="sd">              defaults to `1e4`.</span>
-<span class="sd">        binary_parameters :</span>
-<span class="sd">            Parameters provided to the binary input node. Contains:</span>
-<span class="sd">            - `binary_precision`, the binary input precision, which defaults to</span>
-<span class="sd">            `jnp.inf`.</span>
-<span class="sd">            - `eta0`, the lower bound of the binary process. Defaults to `0.0`.</span>
-<span class="sd">            - `eta1`, the higher bound of the binary process. Defaults to `1.0`.</span>
-<span class="sd">        categorical_parameters :</span>
-<span class="sd">            Parameters provided to the categorical input node. Contains:</span>
-<span class="sd">            - `n_categories`, the number of categories implied by the categorical state</span>
-<span class="sd">            node(s).</span>
-<span class="sd">            .. note::</span>
-<span class="sd">               When using a categorical state node, the `binary_parameters` can be used</span>
-<span class="sd">               to parametrize the implied collection of binray HGFs.</span>
-<span class="sd">        additional_parameters :</span>
-<span class="sd">            Add more custom parameters to the input node.</span>
+<span class="sd">            The kind of node to create. If `&quot;continuous-state&quot;` (default), the node will</span>
+<span class="sd">            be a regular state node that can have value and/or volatility</span>
+<span class="sd">            parents/children. The hierarchical dependencies are specified using the</span>
+<span class="sd">            corresponding parameters below. If `&quot;binary-state&quot;`, the node should be the</span>
+<span class="sd">            value parent of a binary input. To create an input node, three types of</span>
+<span class="sd">            inputs are supported:</span>
+<span class="sd">            - `continuous-input`: receive a continuous observation as input.</span>
+<span class="sd">            - `binary-input` receive a single boolean as observation. The parameters</span>
+<span class="sd">            provided to the binary input node contain: 1. `binary_precision`, the binary</span>
+<span class="sd">            input precision, which defaults to `jnp.inf`. 2. `eta0`, the lower bound of</span>
+<span class="sd">            the binary process, which defaults to `0.0`. 3. `eta1`, the higher bound of</span>
+<span class="sd">            the binary process, which defaults to `1.0`.</span>
+<span class="sd">            - `categorical-input` receive a boolean array as observation. The parameters</span>
+<span class="sd">            provided to the categorical input node contain: 1. `n_categories`, the</span>
+<span class="sd">            number of categories implied by the categorical state.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">           When using a categorical state node, the `binary_parameters` can be used to</span>
+<span class="sd">           parametrize the implied collection of binray HGFs.</span>
+
+<span class="sd">        .. note:</span>
+<span class="sd">           When using `categorical-input`, the implied `n` binary HGFs are automatically</span>
+<span class="sd">           created with a shared volatility parent at the third level, resulting in a</span>
+<span class="sd">           network with `3n + 2` nodes in total.</span>
+
+<span class="sd">        n_nodes :</span>
+<span class="sd">            The number of nodes to create (defaults to `1`).</span>
+<span class="sd">        node_parameters :</span>
+<span class="sd">            Dictionary of parameters. The default values are automatically infered</span>
+<span class="sd">            from the node type. Different values can be provided by passing them in the</span>
+<span class="sd">            dictionary, whcih will overwrite the defaults.</span>
+<span class="sd">        value_children:</span>
+<span class="sd">            Indexes to the node&#39;s value children. The index can be passed as an integer</span>
+<span class="sd">            or a list of integers, in case of multiple children. The coupling stregth</span>
+<span class="sd">            can be controlled by passing a tuple, where the first item is the list of</span>
+<span class="sd">            indexes, and the second item is the list of coupling strenghts.</span>
+<span class="sd">        value_parents:</span>
+<span class="sd">            Indexes to the node&#39;s value parents. The index can be passed as an integer</span>
+<span class="sd">            or a list of integers, in case of multiple children. The coupling stregth</span>
+<span class="sd">            can be controlled by passing a tuple, where the first item is the list of</span>
+<span class="sd">            indexes, and the second item is the list of coupling strenghts.</span>
+<span class="sd">        volatility_children:</span>
+<span class="sd">            Indexes to the node&#39;s volatility children. The index can be passed as an</span>
+<span class="sd">            integer or a list of integers, in case of multiple children. The coupling</span>
+<span class="sd">            stregth can be controlled by passing a tuple, where the first item is the</span>
+<span class="sd">            list of indexes, and the second item is the list of coupling strenghts.</span>
+<span class="sd">        volatility_parents:</span>
+<span class="sd">            Indexes to the node&#39;s volatility parents. The index can be passed as an</span>
+<span class="sd">            integer or a list of integers, in case of multiple children. The coupling</span>
+<span class="sd">            stregth can be controlled by passing a tuple, where the first item is the</span>
+<span class="sd">            list of indexes, and the second item is the list of coupling strenghts.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_idxs</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">input_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_idxs</span><span class="p">]</span>
+        <span class="c1"># extract the node coupling indexes and coupling strengths</span>
+        <span class="n">couplings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">indexes</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">value_children</span><span class="p">,</span>
+            <span class="n">value_parents</span><span class="p">,</span>
+            <span class="n">volatility_children</span><span class="p">,</span>
+            <span class="n">volatility_parents</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="k">if</span> <span class="n">indexes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indexes</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                    <span class="n">coupling_idxs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">indexes</span><span class="p">])</span>
+                    <span class="n">coupling_strengths</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indexes</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">coupling_idxs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">indexes</span><span class="p">)</span>
+                    <span class="n">coupling_strengths</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">coupling_idxs</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indexes</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="n">coupling_idxs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">indexes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">coupling_strengths</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">indexes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">coupling_idxs</span><span class="p">,</span> <span class="n">coupling_strengths</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="n">couplings</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">coupling_idxs</span><span class="p">,</span> <span class="n">coupling_strengths</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
-            <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># create the default parameters set accroding to the node type</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous-state&quot;</span><span class="p">:</span>
+            <span class="n">default_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;expected_mean&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                <span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">:</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">:</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;value_coupling_children&quot;</span><span class="p">:</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">:</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
+                <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;autoregressive_coefficient&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;autoregressive_intercept&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;observed&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;effective_precision&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">&quot;value_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">&quot;volatility_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">&quot;expected_precision_children&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">}</span>
+        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;binary-state&quot;</span><span class="p">:</span>
+            <span class="n">default_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;expected_mean&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                <span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">:</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">:</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;value_coupling_children&quot;</span><span class="p">:</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">:</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;autoregressive_coefficient&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;autoregressive_intercept&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;observed&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s2">&quot;binary_expected_precision&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;effective_precision&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">&quot;value_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">&quot;volatility_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">&quot;expected_precision_children&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">}</span>
+        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous-input&quot;</span><span class="p">:</span>
+            <span class="n">default_parameters</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s2">&quot;input_noise&quot;</span><span class="p">:</span> <span class="n">continuous_parameters</span><span class="p">[</span><span class="s2">&quot;continuous_precision&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">continuous_parameters</span><span class="p">[</span><span class="s2">&quot;continuous_precision&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;input_noise&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span>
+                <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span>
                 <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -1029,348 +1110,180 @@ document.write(`
                     <span class="s2">&quot;volatility_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">}</span>
-        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-            <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_precision&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;eta0&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;eta1&quot;</span><span class="p">],</span>
+        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;binary-input&quot;</span><span class="p">:</span>
+            <span class="n">default_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+                <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
                 <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;observed&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
                 <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
             <span class="p">}</span>
-        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
-            <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;categorical-input&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;n_categories&quot;</span> <span class="ow">in</span> <span class="n">node_parameters</span><span class="p">:</span>
+                <span class="n">n_categories</span> <span class="o">=</span> <span class="n">node_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">n_categories</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">binary_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                <span class="s2">&quot;binary_precision&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+                <span class="s2">&quot;n_categories&quot;</span><span class="p">:</span> <span class="n">n_categories</span><span class="p">,</span>
+                <span class="s2">&quot;precision_1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                <span class="s2">&quot;precision_2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                <span class="s2">&quot;precision_3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                <span class="s2">&quot;mean_1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;mean_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n_categories</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="s2">&quot;mean_3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;tonic_volatility_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
+                <span class="s2">&quot;tonic_volatility_3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">binary_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="mi">1</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_categories</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">default_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;binary_idxs&quot;</span><span class="p">:</span> <span class="n">binary_idxs</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+                <span class="s2">&quot;n_categories&quot;</span><span class="p">:</span> <span class="n">n_categories</span><span class="p">,</span>
                 <span class="s2">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;kl_divergence&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]),</span>
-                <span class="s2">&quot;pe&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]),</span>
-                <span class="s2">&quot;xi&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-                    <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]]</span>
-                    <span class="o">*</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span>
-                <span class="p">),</span>
-                <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-                    <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]]</span>
-                    <span class="o">*</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span>
-                <span class="p">),</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]),</span>
+                <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_categories</span><span class="p">),</span>
+                <span class="s2">&quot;pe&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_categories</span><span class="p">),</span>
+                <span class="s2">&quot;xi&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">n_categories</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_categories</span><span class="p">),</span>
+                <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">n_categories</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_categories</span><span class="p">),</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_categories</span><span class="p">),</span>
+                <span class="s2">&quot;binary_parameters&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">,</span>
             <span class="p">}</span>
 
-        <span class="c1"># add more parameters (optional)</span>
-        <span class="k">if</span> <span class="n">additional_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">input_node_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">input_node_parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">additional_parameters</span><span class="p">}</span>
+        <span class="c1"># update the defaults using the provided parameters</span>
+        <span class="n">default_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node_parameters</span><span class="p">)</span>
+        <span class="n">node_parameters</span> <span class="o">=</span> <span class="n">default_parameters</span>
 
-        <span class="k">for</span> <span class="n">input_idx</span> <span class="ow">in</span> <span class="n">input_idxs</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">input_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;A node with index </span><span class="si">{</span><span class="n">input_idx</span><span class="si">}</span><span class="s2"> already exists in the HGF network.&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;input&quot;</span> <span class="ow">in</span> <span class="n">kind</span><span class="p">:</span>
+            <span class="n">input_type</span> <span class="o">=</span> <span class="n">kind</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">input_type</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># convert the structure to a list to modify it</span>
+        <span class="n">edges_as_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Indexes</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+            <span class="n">node_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>  <span class="c1"># the index of the new node</span>
+
+            <span class="c1"># add a new edge</span>
+            <span class="n">edges_as_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Indexes</span><span class="p">(</span>
+                    <span class="n">couplings</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="p">)</span>
+            <span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">input_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># this is the first node, create the node structure</span>
-
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span><span class="n">input_idx</span><span class="p">:</span> <span class="n">input_node_parameters</span><span class="p">}</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">((</span><span class="n">input_idx</span><span class="p">,),</span> <span class="p">(</span><span class="n">kind</span><span class="p">,))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span><span class="n">node_idx</span><span class="p">:</span> <span class="n">node_parameters</span><span class="p">}</span>
+                <span class="k">if</span> <span class="n">input_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">((</span><span class="n">node_idx</span><span class="p">,),</span> <span class="p">(</span><span class="n">input_type</span><span class="p">,))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># update the node structure</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">input_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_node_parameters</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_parameters</span>
 
-                <span class="c1"># add information about the new input node in the indexes</span>
-                <span class="n">new_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
-                <span class="n">new_idx</span> <span class="o">+=</span> <span class="p">(</span><span class="n">input_idx</span><span class="p">,)</span>
-                <span class="n">new_kind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span>
-                <span class="n">new_kind</span> <span class="o">+=</span> <span class="p">(</span><span class="n">kind</span><span class="p">,)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">(</span><span class="n">new_idx</span><span class="p">,</span> <span class="n">new_kind</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">input_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># add information about the new input node in the indexes</span>
+                    <span class="n">new_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
+                    <span class="n">new_idx</span> <span class="o">+=</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
+                    <span class="n">new_kind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span>
+                    <span class="n">new_kind</span> <span class="o">+=</span> <span class="p">(</span><span class="n">input_type</span><span class="p">,)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">(</span><span class="n">new_idx</span><span class="p">,</span> <span class="n">new_kind</span><span class="p">)</span>
 
-            <span class="c1"># if we are creating a categorical state or state-transition node</span>
-            <span class="c1"># we have to generate the implied binary network(s) here</span>
-            <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
-                <span class="n">implied_binary_parameters</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s2">&quot;eta0&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                    <span class="s2">&quot;eta1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-                    <span class="s2">&quot;binary_precision&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
-                    <span class="s2">&quot;binary_idxs&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
-                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">])</span>
-                    <span class="p">],</span>
-                    <span class="s2">&quot;n_categories&quot;</span><span class="p">:</span> <span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">],</span>
-                    <span class="s2">&quot;precision_1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-                    <span class="s2">&quot;precision_2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-                    <span class="s2">&quot;precision_3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-                    <span class="s2">&quot;mean_1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                    <span class="s2">&quot;mean_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">categorical_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;mean_3&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                    <span class="s2">&quot;tonic_volatility_2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
-                    <span class="s2">&quot;tonic_volatility_3&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
-                <span class="p">}</span>
-                <span class="n">implied_binary_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">binary_parameters</span><span class="p">)</span>
+            <span class="c1"># update the existing edge structure so it link to the new node as well</span>
+            <span class="k">for</span> <span class="n">coupling</span><span class="p">,</span> <span class="n">edge_type</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="n">couplings</span><span class="p">,</span>
+                <span class="p">[</span>
+                    <span class="s2">&quot;value_children&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value_parents&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;volatility_children&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;volatility_parents&quot;</span><span class="p">,</span>
+                <span class="p">],</span>
+            <span class="p">):</span>
+                <span class="k">if</span> <span class="n">coupling</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">coupling_idxs</span><span class="p">,</span> <span class="n">coupling_strengths</span> <span class="o">=</span> <span class="n">coupling</span>
+                    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">coupling_strength</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                        <span class="n">coupling_idxs</span><span class="p">,</span> <span class="n">coupling_strengths</span>  <span class="c1"># type: ignore</span>
+                    <span class="p">):</span>
+                        <span class="c1"># unpack this node&#39;s edges</span>
+                        <span class="p">(</span>
+                            <span class="n">value_parents</span><span class="p">,</span>
+                            <span class="n">volatility_parents</span><span class="p">,</span>
+                            <span class="n">value_children</span><span class="p">,</span>
+                            <span class="n">volatility_children</span><span class="p">,</span>
+                        <span class="p">)</span> <span class="o">=</span> <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
 
-                <span class="bp">self</span> <span class="o">=</span> <span class="n">fill_categorical_state_node</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="p">,</span>
-                    <span class="n">node_idx</span><span class="o">=</span><span class="n">input_idx</span><span class="p">,</span>
-                    <span class="n">implied_binary_parameters</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">,</span>
-                <span class="p">)</span>
+                        <span class="c1"># update the parents/children&#39;s edges depending on the coupling</span>
+                        <span class="k">if</span> <span class="n">edge_type</span> <span class="o">==</span> <span class="s2">&quot;value_parents&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">value_children</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                                <span class="n">value_children</span> <span class="o">=</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_children&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="n">coupling_strength</span><span class="p">,</span>
+                                <span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">value_children</span> <span class="o">=</span> <span class="n">value_children</span> <span class="o">+</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_children&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+                                    <span class="n">coupling_strength</span><span class="p">,</span>
+                                <span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">edge_type</span> <span class="o">==</span> <span class="s2">&quot;volatility_parents&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">volatility_children</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                                <span class="n">volatility_children</span> <span class="o">=</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="n">coupling_strength</span><span class="p">,</span>
+                                <span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">volatility_children</span> <span class="o">=</span> <span class="n">volatility_children</span> <span class="o">+</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span>
+                                    <span class="s2">&quot;volatility_coupling_children&quot;</span>
+                                <span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">coupling_strength</span><span class="p">,)</span>
+                        <span class="k">elif</span> <span class="n">edge_type</span> <span class="o">==</span> <span class="s2">&quot;value_children&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">value_parents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                                <span class="n">value_parents</span> <span class="o">=</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="n">coupling_strength</span><span class="p">,</span>
+                                <span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">value_parents</span> <span class="o">=</span> <span class="n">value_parents</span> <span class="o">+</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+                                    <span class="n">coupling_strength</span><span class="p">,</span>
+                                <span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">edge_type</span> <span class="o">==</span> <span class="s2">&quot;volatility_children&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">volatility_parents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                                <span class="n">volatility_parents</span> <span class="o">=</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="n">coupling_strength</span><span class="p">,</span>
+                                <span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">volatility_parents</span> <span class="o">=</span> <span class="n">volatility_parents</span> <span class="o">+</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+                                    <span class="n">coupling_strength</span><span class="p">,</span>
+                                <span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="nf">add_value_parent</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">children_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
-        <span class="n">value_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">tonic_volatility</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
-        <span class="n">tonic_drift</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">autoregressive_coefficient</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">autoregressive_intercept</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a value parent to a given set of nodes.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        children_idxs :</span>
-<span class="sd">            The child(s) node index(es).</span>
-<span class="sd">        value_coupling :</span>
-<span class="sd">            The value coupling between the child and parent node. This is will be</span>
-<span class="sd">            appended to the `value_coupling_children` parameters in the parent node,</span>
-<span class="sd">            and to the `value_coupling_parents` in the child node(s).</span>
-<span class="sd">        mean :</span>
-<span class="sd">            The mean of the Gaussian distribution. This value is passed both to the</span>
-<span class="sd">            current and expected states.</span>
-<span class="sd">        precision :</span>
-<span class="sd">            The precision of the Gaussian distribution (inverse variance). This value is</span>
-<span class="sd">            passed both to the current and expected states.</span>
-<span class="sd">        tonic_volatility :</span>
-<span class="sd">            The tonic part of the variance (the variance that is not inherited from</span>
-<span class="sd">            volatility parent(s)).</span>
-<span class="sd">        tonic_drift :</span>
-<span class="sd">            The drift of the random walk. Defaults to `0.0` (no drift).</span>
-<span class="sd">        autoregressive_coefficient :</span>
-<span class="sd">            The autoregressive coefficient is only used to parametrize the AR1 process</span>
-<span class="sd">            and represents the autoregressive coefficient. If</span>
-<span class="sd">            :math:`-1 \\le \\phi \\le 1`, the process is stationary and will revert to</span>
-<span class="sd">            the autoregressive intercept.</span>
-<span class="sd">        autoregressive_intercept :</span>
-<span class="sd">            The parameter `m` is only used to parametrize the AR1 process and represents</span>
-<span class="sd">            the autoregressive intercept. If :math:`-1 \\le \\phi \\le 1`, this is the</span>
-<span class="sd">            value to which the process will revert to.</span>
-<span class="sd">        additional_parameters :</span>
-<span class="sd">            Add more custom parameters to the node.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">children_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">children_idxs</span><span class="p">]</span>
-
-        <span class="c1"># how many nodes in structure</span>
-        <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
-        <span class="n">parent_idx</span> <span class="o">=</span> <span class="n">n_nodes</span>  <span class="c1"># append a new parent in the structure</span>
-
-        <span class="k">if</span> <span class="n">parent_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;A node with index </span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2"> already exists in the HGF network.&quot;</span>
-            <span class="p">)</span>
-
-        <span class="c1"># parent&#39;s parameter</span>
-        <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">mean</span><span class="p">,</span>
-            <span class="s2">&quot;expected_mean&quot;</span><span class="p">:</span> <span class="n">mean</span><span class="p">,</span>
-            <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
-            <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
-            <span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;value_coupling_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span>
-                <span class="n">value_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))</span>
-            <span class="p">),</span>
-            <span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">tonic_volatility</span><span class="p">,</span>
-            <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">,</span>
-            <span class="s2">&quot;autoregressive_coefficient&quot;</span><span class="p">:</span> <span class="n">autoregressive_coefficient</span><span class="p">,</span>
-            <span class="s2">&quot;autoregressive_intercept&quot;</span><span class="p">:</span> <span class="n">autoregressive_intercept</span><span class="p">,</span>
-            <span class="s2">&quot;observed&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;effective_precision&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;value_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;volatility_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;expected_precision_children&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-            <span class="p">},</span>
-        <span class="p">}</span>
-
-        <span class="c1"># add more parameters (optional)</span>
-        <span class="k">if</span> <span class="n">additional_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">node_parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">additional_parameters</span><span class="p">}</span>
-
-        <span class="c1"># add a new node to connection structure with no parents</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">),</span> <span class="kc">None</span><span class="p">),)</span>
-
-        <span class="c1"># add a new parameters to parameters structure</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_parameters</span>
-
-        <span class="c1"># convert the structure to a list to modify it</span>
-        <span class="n">edges_as_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Indexes</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">children_idxs</span><span class="p">:</span>
-            <span class="c1"># add this node as parent and set value coupling</span>
-            <span class="k">if</span> <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># append new index</span>
-                <span class="n">new_value_parents_idx</span> <span class="o">=</span> <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span> <span class="o">+</span> <span class="p">(</span><span class="n">parent_idx</span><span class="p">,)</span>
-                <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
-                    <span class="n">new_value_parents_idx</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="c1"># set the value coupling strength</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">value_coupling</span><span class="p">,)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># append new index</span>
-                <span class="n">new_value_parents_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">parent_idx</span><span class="p">,)</span>
-                <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
-                    <span class="n">new_value_parents_idx</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="c1"># set the value coupling strength</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">value_coupling</span><span class="p">,)</span>
+                        <span class="c1"># save the updated edges back</span>
+                        <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
+                            <span class="n">value_parents</span><span class="p">,</span>
+                            <span class="n">volatility_parents</span><span class="p">,</span>
+                            <span class="n">value_children</span><span class="p">,</span>
+                            <span class="n">volatility_children</span><span class="p">,</span>
+                        <span class="p">)</span>
 
         <span class="c1"># convert the list back to a tuple</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">edges_as_list</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="nf">add_volatility_parent</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">children_idxs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
-        <span class="n">volatility_coupling</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">tonic_volatility</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
-        <span class="n">tonic_drift</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">autoregressive_coefficient</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">autoregressive_intercept</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">additional_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a volatility parent to a given set of nodes.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        children_idxs :</span>
-<span class="sd">            The child(s) node index(es).</span>
-<span class="sd">        volatility_coupling :</span>
-<span class="sd">            The volatility coupling between the child and parent node. This is will be</span>
-<span class="sd">            appended to the `volatility_coupling_children` parameters in the parent</span>
-<span class="sd">            node, and to the `volatility_coupling_parents` in the child node(s).</span>
-<span class="sd">        mean :</span>
-<span class="sd">            The mean of the Gaussian distribution. This value is passed both to the</span>
-<span class="sd">            current and expected states.</span>
-<span class="sd">        precision :</span>
-<span class="sd">            The precision of the Gaussian distribution (inverse variance). This</span>
-<span class="sd">            value is passed both to the current and expected states.</span>
-<span class="sd">        tonic_volatility :</span>
-<span class="sd">            The tonic part of the variance (the variance that is not inherited from</span>
-<span class="sd">            volatility parent(s)).</span>
-<span class="sd">        tonic_drift :</span>
-<span class="sd">            The drift of the random walk. Defaults to `0.0` (no drift).</span>
-<span class="sd">        autoregressive_coefficient :</span>
-<span class="sd">            The autoregressive coefficient is only used to parametrize the AR1 process</span>
-<span class="sd">            and represents the autoregressive coefficient. If</span>
-<span class="sd">            :math:`-1 \\le \\phi \\le 1`, the process is stationary and will revert to</span>
-<span class="sd">            the autoregressive intercept.</span>
-<span class="sd">        autoregressive_intercept :</span>
-<span class="sd">            The parameter `m` is only used to parametrize the AR1 process and represents</span>
-<span class="sd">            the autoregressive intercept. If :math:`-1 \\le \\phi \\le 1`, this is the</span>
-<span class="sd">            value to which the process will revert to.</span>
-<span class="sd">        additional_parameters :</span>
-<span class="sd">            Add more custom parameters to the node.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">children_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">children_idxs</span><span class="p">]</span>
-
-        <span class="c1"># how many nodes in structure</span>
-        <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
-        <span class="n">parent_idx</span> <span class="o">=</span> <span class="n">n_nodes</span>  <span class="c1"># append a new parent in the structure</span>
-
-        <span class="k">if</span> <span class="n">parent_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;A node with index </span><span class="si">{</span><span class="n">parent_idx</span><span class="si">}</span><span class="s2"> already exists in the HGF network.&quot;</span>
+        <span class="c1"># if we are creating a categorical state or state-transition node</span>
+        <span class="c1"># we have to generate the implied binary network(s) here</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;categorical-input&quot;</span><span class="p">:</span>
+            <span class="bp">self</span> <span class="o">=</span> <span class="n">fill_categorical_state_node</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
+                <span class="n">binary_input_idxs</span><span class="o">=</span><span class="n">node_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
+                <span class="n">binary_parameters</span><span class="o">=</span><span class="n">binary_parameters</span><span class="p">,</span>
             <span class="p">)</span>
-
-        <span class="c1"># parent&#39;s parameter</span>
-        <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">mean</span><span class="p">,</span>
-            <span class="s2">&quot;expected_mean&quot;</span><span class="p">:</span> <span class="n">mean</span><span class="p">,</span>
-            <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
-            <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
-            <span class="s2">&quot;volatility_coupling_children&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span>
-                <span class="n">volatility_coupling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">))</span>
-            <span class="p">),</span>
-            <span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;value_coupling_children&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;value_coupling_parents&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">tonic_volatility</span><span class="p">,</span>
-            <span class="s2">&quot;tonic_drift&quot;</span><span class="p">:</span> <span class="n">tonic_drift</span><span class="p">,</span>
-            <span class="s2">&quot;autoregressive_coefficient&quot;</span><span class="p">:</span> <span class="n">autoregressive_coefficient</span><span class="p">,</span>
-            <span class="s2">&quot;autoregressive_intercept&quot;</span><span class="p">:</span> <span class="n">autoregressive_intercept</span><span class="p">,</span>
-            <span class="s2">&quot;observed&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;effective_precision&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;value_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;volatility_prediction_error&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;expected_precision_children&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-            <span class="p">},</span>
-        <span class="p">}</span>
-
-        <span class="c1"># add more parameters (optional)</span>
-        <span class="k">if</span> <span class="n">additional_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">node_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">node_parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">additional_parameters</span><span class="p">}</span>
-
-        <span class="c1"># add a new node to the connection structure with no parents</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">children_idxs</span><span class="p">)),)</span>
-
-        <span class="c1"># add a new parameter to the parameters structure</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">parent_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_parameters</span>
-
-        <span class="c1"># convert the structure to a list to modify it</span>
-        <span class="n">edges_as_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Indexes</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">children_idxs</span><span class="p">:</span>
-            <span class="c1"># add this node as a parent and set value coupling</span>
-            <span class="k">if</span> <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># append new index</span>
-                <span class="n">new_volatility_parents_idx</span> <span class="o">=</span> <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span> <span class="o">+</span> <span class="p">(</span>
-                    <span class="n">parent_idx</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
-                    <span class="n">new_volatility_parents_idx</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="c1"># set the value coupling strength</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
-                    <span class="n">volatility_coupling</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># append new index</span>
-                <span class="n">new_volatility_parents_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">parent_idx</span><span class="p">,)</span>
-                <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
-                    <span class="n">new_volatility_parents_idx</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="c1"># set the value coupling strength</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">volatility_coupling</span><span class="p">,</span>
-                <span class="p">)</span>
-
-        <span class="c1"># convert the list back to a tuple</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">edges_as_list</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 

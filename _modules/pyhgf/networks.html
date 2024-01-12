@@ -659,7 +659,7 @@ document.write(`
 <div class="viewcode-block" id="fill_categorical_state_node">
 <a class="viewcode-back" href="../../generated/pyhgf.networks/pyhgf.networks.fill_categorical_state_node.html#pyhgf.networks.fill_categorical_state_node">[docs]</a>
 <span class="k">def</span> <span class="nf">fill_categorical_state_node</span><span class="p">(</span>
-    <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">implied_binary_parameters</span><span class="p">:</span> <span class="n">Dict</span>
+    <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">binary_input_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">binary_parameters</span><span class="p">:</span> <span class="n">Dict</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;HGF&quot;</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a binary network implied by categorical state(-transition) nodes.</span>
 
@@ -669,7 +669,9 @@ document.write(`
 <span class="sd">        Instance of a HGF model.</span>
 <span class="sd">    node_idx :</span>
 <span class="sd">        Index to the categorical state node.</span>
-<span class="sd">    implied_binary_parameters :</span>
+<span class="sd">    binary_input_idxs :</span>
+<span class="sd">        The idexes of the binary input nodes.</span>
+<span class="sd">    binary_parameters :</span>
 <span class="sd">        Parameters for the set of implied binary HGFs.</span>
 
 <span class="sd">    Returns</span>
@@ -678,58 +680,56 @@ document.write(`
 <span class="sd">        The updated instance of the HGF model.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># add thew binary inputs</span>
-    <span class="n">hgf</span><span class="o">.</span><span class="n">add_input_node</span><span class="p">(</span>
-        <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-        <span class="n">input_idxs</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">],</span>
-        <span class="n">binary_parameters</span><span class="o">=</span><span class="p">{</span>
-            <span class="n">key</span><span class="p">:</span> <span class="n">implied_binary_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;eta0&quot;</span><span class="p">,</span> <span class="s2">&quot;eta1&quot;</span><span class="p">,</span> <span class="s2">&quot;binary_precision&quot;</span><span class="p">]</span>
+    <span class="c1"># add the binary inputs - one for each category</span>
+    <span class="n">hgf</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+        <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary-input&quot;</span><span class="p">,</span>
+        <span class="n">n_nodes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">binary_input_idxs</span><span class="p">),</span>
+        <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">key</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;eta0&quot;</span><span class="p">,</span> <span class="s2">&quot;eta1&quot;</span><span class="p">,</span> <span class="s2">&quot;binary_precision&quot;</span><span class="p">]</span>
         <span class="p">},</span>
     <span class="p">)</span>
 
     <span class="c1"># add the value dependency between the categorical and binary nodes</span>
     <span class="n">edges_as_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Indexes</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
-    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
-        <span class="nb">tuple</span><span class="p">(</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">]),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-    <span class="p">)</span>
-    <span class="k">for</span> <span class="n">binary_idx</span> <span class="ow">in</span> <span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">]:</span>
+    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">binary_input_idxs</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">binary_idx</span> <span class="ow">in</span> <span class="n">binary_input_idxs</span><span class="p">:</span>
         <span class="n">edges_as_list</span><span class="p">[</span><span class="n">binary_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,),</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">edges_as_list</span><span class="p">)</span>
 
     <span class="c1"># loop over the number of categories and create as many second-levels binary HGF</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]):</span>
         <span class="c1"># binary state node</span>
-        <span class="n">hgf</span><span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span>
-            <span class="n">children_idxs</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-            <span class="n">value_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">precision</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;precision_1&quot;</span><span class="p">],</span>
-            <span class="n">mean</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_1&quot;</span><span class="p">],</span>
-            <span class="n">additional_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;binary_expected_precision&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">},</span>
+        <span class="n">hgf</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+            <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary-state&quot;</span><span class="p">,</span>
+            <span class="n">value_children</span><span class="o">=</span><span class="n">binary_input_idxs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_1&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;precision_1&quot;</span><span class="p">],</span>
+            <span class="p">},</span>
         <span class="p">)</span>
 
     <span class="c1"># add the continuous parent node</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]):</span>
-        <span class="n">hgf</span><span class="o">.</span><span class="n">add_value_parent</span><span class="p">(</span>
-            <span class="n">children_idxs</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="o">+</span> <span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">],</span>
-            <span class="n">value_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">mean</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_2&quot;</span><span class="p">],</span>
-            <span class="n">precision</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;precision_2&quot;</span><span class="p">],</span>
-            <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;tonic_volatility_2&quot;</span><span class="p">],</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]):</span>
+        <span class="n">hgf</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+            <span class="n">value_children</span><span class="o">=</span><span class="n">binary_input_idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">],</span>
+            <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_2&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;precision_2&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;tonic_volatility_2&quot;</span><span class="p">],</span>
+            <span class="p">},</span>
         <span class="p">)</span>
 
     <span class="c1"># add the higher level volatility parents</span>
     <span class="c1"># as a shared parents between the second level nodes</span>
-    <span class="n">hgf</span><span class="o">.</span><span class="n">add_volatility_parent</span><span class="p">(</span>
-        <span class="n">children_idxs</span><span class="o">=</span><span class="p">[</span>
-            <span class="n">idx</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;binary_idxs&quot;</span><span class="p">]</span>
+    <span class="n">hgf</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+        <span class="n">volatility_children</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">idx</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">binary_input_idxs</span>
         <span class="p">],</span>
-        <span class="n">volatility_coupling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">mean</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_3&quot;</span><span class="p">],</span>
-        <span class="n">precision</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;precision_3&quot;</span><span class="p">],</span>
-        <span class="n">tonic_volatility</span><span class="o">=</span><span class="n">implied_binary_parameters</span><span class="p">[</span><span class="s2">&quot;tonic_volatility_3&quot;</span><span class="p">],</span>
+        <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_3&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;precision_3&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;tonic_volatility_3&quot;</span><span class="p">],</span>
+        <span class="p">},</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">hgf</span></div>
