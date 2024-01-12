@@ -473,7 +473,7 @@ document.write(`
 <span class="k">class</span> <span class="nc">HGF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The two-level and three-level Hierarchical Gaussian Filters (HGF).</span>
 
-<span class="sd">    This class uses pre-made nodes structures that correspond to the most widely used</span>
+<span class="sd">    This class uses pre-made node structures that correspond to the most widely used</span>
 <span class="sd">    HGF. The inputs can be continuous or binary.</span>
 
 <span class="sd">    Attributes</span>
@@ -482,8 +482,8 @@ document.write(`
 <span class="sd">        The attributes of the probabilistic nodes.</span>
 <span class="sd">    edges :</span>
 <span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
-<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as node number.</span>
-<span class="sd">        For each node, the index list value and volatility parents and children.</span>
+<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as the node</span>
+<span class="sd">        number. For each node, the index lists the value/volatility parents/children.</span>
 <span class="sd">    input_nodes_idx :</span>
 <span class="sd">        Indexes of the input nodes with input types</span>
 <span class="sd">        :py:class:`pyhgf.typing.InputIndexes`. The default input node is `0` if the</span>
@@ -491,12 +491,12 @@ document.write(`
 <span class="sd">    model_type :</span>
 <span class="sd">        The model implemented (can be `&quot;continuous&quot;`, `&quot;binary&quot;` or `&quot;custom&quot;`).</span>
 <span class="sd">    n_levels :</span>
-<span class="sd">        The number of hierarchies in the model, including the input vector. Cannot be</span>
+<span class="sd">        The number of hierarchies in the model, including the input vector. It cannot be</span>
 <span class="sd">        less than 2.</span>
 <span class="sd">    node_trajectories :</span>
 <span class="sd">        The dynamic of the node&#39;s beliefs after updating.</span>
 <span class="sd">    update_sequence :</span>
-<span class="sd">        The sequence of update functions that are applied during the beliefs propagation</span>
+<span class="sd">        The sequence of update functions that are applied during the belief propagation</span>
 <span class="sd">        step.</span>
 <span class="sd">    update_type :</span>
 <span class="sd">        The type of update to perform for volatility coupling. Can be `&quot;eHGF&quot;`</span>
@@ -505,8 +505,8 @@ document.write(`
 <span class="sd">        precision of the parent node, which generally reduces the errors associated with</span>
 <span class="sd">        impossible parameter space and improves sampling.</span>
 <span class="sd">    .. note::</span>
-<span class="sd">        The parameter structure also incorporate the value and volatility coupling</span>
-<span class="sd">        strenght with children and parents (i.e. `&quot;value_coupling_parents&quot;`,</span>
+<span class="sd">        The parameter structure also incorporates the value and volatility coupling</span>
+<span class="sd">        strength with children and parents (i.e. `&quot;value_coupling_parents&quot;`,</span>
 <span class="sd">        `&quot;value_coupling_children&quot;`, `&quot;volatility_coupling_parents&quot;`,</span>
 <span class="sd">        `&quot;volatility_coupling_children&quot;`).</span>
 <span class="sd">    scan_fn :</span>
@@ -557,12 +557,12 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        n_levels :</span>
 <span class="sd">            The number of hierarchies in the perceptual model (can be `2` or `3`). If</span>
-<span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterward.</span>
+<span class="sd">            `None`, the nodes hierarchy is not created and might be provided afterwards.</span>
 <span class="sd">            Defaults to `2` for a 2-level HGF.</span>
 <span class="sd">        model_type : str</span>
 <span class="sd">            The model type to use (can be `&quot;continuous&quot;` or `&quot;binary&quot;`).</span>
 <span class="sd">        update_type:</span>
-<span class="sd">            The type of volatility update to perform. Can be `&quot;eHGF&quot;` (default) or</span>
+<span class="sd">            The type of volatility update to perform. It can be `&quot;eHGF&quot;` (default) or</span>
 <span class="sd">            `&quot;standard&quot;`. The eHGF update step tends to be more robust and produce fewer</span>
 <span class="sd">            invalid space errors and is therefore recommended by default.</span>
 <span class="sd">        initial_mean :</span>
@@ -717,7 +717,7 @@ document.write(`
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Create the update sequence from the network structure.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># create the belief propagation function that will be scaned</span>
+        <span class="c1"># create the belief propagation function that will be scanned</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="o">=</span> <span class="n">Partial</span><span class="p">(</span>
                 <span class="n">beliefs_propagation</span><span class="p">,</span>
@@ -764,7 +764,7 @@ document.write(`
 <span class="sd">            `observed` is `0`), the input node will have value and volatility set to</span>
 <span class="sd">            `0.0`. If the parent(s) of this input receive prediction error from other</span>
 <span class="sd">            children, they simply ignore this one. If they are not receiving other</span>
-<span class="sd">            prediction errors, they are updated by keeping the same mean be decreasing</span>
+<span class="sd">            prediction errors, they are updated by keeping the same mean by decreasing</span>
 <span class="sd">            the precision as a function of time to reflect the evolution of the</span>
 <span class="sd">            underlying Gaussian Random Walk.</span>
 <span class="sd">        .. warning::</span>
@@ -786,7 +786,7 @@ document.write(`
         <span class="k">if</span> <span class="n">observed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">observed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
-        <span class="c1"># this is where the model loop over the whole input time series</span>
+        <span class="c1"># this is where the model loops over the whole input time series</span>
         <span class="c1"># at each time point, the node structure is traversed and beliefs are updated</span>
         <span class="c1"># using precision-weighted prediction errors</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span>
@@ -883,10 +883,10 @@ document.write(`
         <span class="c1"># scan over the input data and apply the switching belief propagation functions</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span><span class="n">switching_propagation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">scan_input</span><span class="p">)</span>
 
-        <span class="c1"># the node structure at each value update</span>
+        <span class="c1"># the node structure at each value updates</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span> <span class="o">=</span> <span class="n">node_trajectories</span>
 
-        <span class="c1"># because some of the input node might not have been updated, here we manually</span>
+        <span class="c1"># because some of the input nodes might not have been updated, here we manually</span>
         <span class="c1"># insert the input data to the input node (without triggering updates)</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">inp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="n">inp</span><span class="p">]</span>
@@ -1001,29 +1001,29 @@ document.write(`
 <span class="sd">        n_nodes :</span>
 <span class="sd">            The number of nodes to create (defaults to `1`).</span>
 <span class="sd">        node_parameters :</span>
-<span class="sd">            Dictionary of parameters. The default values are automatically infered</span>
+<span class="sd">            Dictionary of parameters. The default values are automatically inferred</span>
 <span class="sd">            from the node type. Different values can be provided by passing them in the</span>
-<span class="sd">            dictionary, whcih will overwrite the defaults.</span>
+<span class="sd">            dictionary, which will overwrite the defaults.</span>
 <span class="sd">        value_children:</span>
 <span class="sd">            Indexes to the node&#39;s value children. The index can be passed as an integer</span>
-<span class="sd">            or a list of integers, in case of multiple children. The coupling stregth</span>
+<span class="sd">            or a list of integers, in case of multiple children. The coupling strength</span>
 <span class="sd">            can be controlled by passing a tuple, where the first item is the list of</span>
-<span class="sd">            indexes, and the second item is the list of coupling strenghts.</span>
+<span class="sd">            indexes, and the second item is the list of coupling strengths.</span>
 <span class="sd">        value_parents:</span>
 <span class="sd">            Indexes to the node&#39;s value parents. The index can be passed as an integer</span>
-<span class="sd">            or a list of integers, in case of multiple children. The coupling stregth</span>
+<span class="sd">            or a list of integers, in case of multiple children. The coupling strength</span>
 <span class="sd">            can be controlled by passing a tuple, where the first item is the list of</span>
-<span class="sd">            indexes, and the second item is the list of coupling strenghts.</span>
+<span class="sd">            indexes, and the second item is the list of coupling strengths.</span>
 <span class="sd">        volatility_children:</span>
 <span class="sd">            Indexes to the node&#39;s volatility children. The index can be passed as an</span>
 <span class="sd">            integer or a list of integers, in case of multiple children. The coupling</span>
-<span class="sd">            stregth can be controlled by passing a tuple, where the first item is the</span>
-<span class="sd">            list of indexes, and the second item is the list of coupling strenghts.</span>
+<span class="sd">            strength can be controlled by passing a tuple, where the first item is the</span>
+<span class="sd">            list of indexes, and the second item is the list of coupling strengths.</span>
 <span class="sd">        volatility_parents:</span>
 <span class="sd">            Indexes to the node&#39;s volatility parents. The index can be passed as an</span>
 <span class="sd">            integer or a list of integers, in case of multiple children. The coupling</span>
-<span class="sd">            stregth can be controlled by passing a tuple, where the first item is the</span>
-<span class="sd">            list of indexes, and the second item is the list of coupling strenghts.</span>
+<span class="sd">            strength can be controlled by passing a tuple, where the first item is the</span>
+<span class="sd">            list of indexes, and the second item is the list of coupling strengths.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># extract the node coupling indexes and coupling strengths</span>
@@ -1048,7 +1048,7 @@ document.write(`
                 <span class="n">coupling_idxs</span><span class="p">,</span> <span class="n">coupling_strengths</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
             <span class="n">couplings</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">coupling_idxs</span><span class="p">,</span> <span class="n">coupling_strengths</span><span class="p">))</span>
 
-        <span class="c1"># create the default parameters set accroding to the node type</span>
+        <span class="c1"># create the default parameters set according to the node type</span>
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous-state&quot;</span><span class="p">:</span>
             <span class="n">default_parameters</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -1195,7 +1195,7 @@ document.write(`
                     <span class="n">new_kind</span> <span class="o">+=</span> <span class="p">(</span><span class="n">input_type</span><span class="p">,)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">(</span><span class="n">new_idx</span><span class="p">,</span> <span class="n">new_kind</span><span class="p">)</span>
 
-            <span class="c1"># update the existing edge structure so it link to the new node as well</span>
+            <span class="c1"># update the existing edge structure so it links to the new node as well</span>
             <span class="k">for</span> <span class="n">coupling</span><span class="p">,</span> <span class="n">edge_type</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
                 <span class="n">couplings</span><span class="p">,</span>
                 <span class="p">[</span>
