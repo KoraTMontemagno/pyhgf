@@ -630,18 +630,18 @@ def add_edges(
         )
     if isinstance(children_idxs, int):
         children_idxs = [children_idxs]
-    assert isinstance(children_idxs, list)
+    assert isinstance(children_idxs, (list, tuple))
 
     if isinstance(parent_idxs, int):
         parent_idxs = [parent_idxs]
-    assert isinstance(parent_idxs, list)
+    assert isinstance(parent_idxs, (list, tuple))
 
     if isinstance(coupling_strengths, int):
         coupling_strengths = [float(coupling_strengths)]
     if isinstance(coupling_strengths, float):
         coupling_strengths = [coupling_strengths]
 
-    assert isinstance(coupling_strengths, list)
+    assert isinstance(coupling_strengths, (list, tuple))
 
     edges_as_list = list(edges)
     # update the parent nodes
