@@ -28,7 +28,5 @@ class DirichletNode(NamedTuple):
     """Static arguments of a Dirichlet node."""
 
     base_network: Type
-    create_cluster_fn: Callable
     likelihood_fn: Callable
-    parametrize_cluster_fn: Callable
     cluster_input_idxs: Tuple

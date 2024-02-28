@@ -19,6 +19,7 @@ from pyhgf.networks import (
 from pyhgf.plots import plot_correlations, plot_network, plot_nodes, plot_trajectories
 from pyhgf.response import first_level_binary_surprise, first_level_gaussian_surprise
 from pyhgf.typing import DirichletNode, Edges, Indexes, InputIndexes, UpdateSequence
+from pyhgf.updates.prediction_error.inputs.dirichlet import create_cluster_fn
 
 
 class HGF(object):
@@ -730,17 +731,13 @@ class HGF(object):
         elif kind == "dirichlet-input":
             self.dirichlet_node = DirichletNode(
                 base_network=node_parameters["base_network"],
-                create_cluster_fn=node_parameters["create_cluster_fn"],
                 likelihood_fn=node_parameters["log_likelihood_fn"],
-                parametrize_cluster_fn=node_parameters["parametrize_cluster_fn"],
                 cluster_input_idxs=(),
             )
 
             # drop static arguments from the dictionary
             node_parameters.pop("base_network")
-            node_parameters.pop("create_cluster_fn")
             node_parameters.pop("log_likelihood_fn")
-            node_parameters.pop("parametrize_cluster_fn")
 
             default_parameters = {
                 "n": [],  # type: ignore
@@ -829,11 +826,11 @@ class HGF(object):
                 edges,
                 input_nodes_idx,
                 dirichlet_node,
-            ) = self.dirichlet_node.create_cluster_fn(
+            ) = create_cluster_fn(
                 attributes=self.attributes,
                 edges=self.edges,
                 input_nodes_idx=self.input_nodes_idx,
-                base_network=self.dirichlet_node.base_network,
+                base_network=self.dirichlet_node.base_network,  # type:ignore
                 dirichlet_node_idx=node_idx,
                 dirichlet_node=self.dirichlet_node,
             )
