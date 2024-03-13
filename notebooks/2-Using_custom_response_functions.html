@@ -480,7 +480,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>The probabilistic networks we have been creating so far with the continuous and the binary Hierarchical Gaussian Filter (HGF) are often referred to as <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a>. This branch of the model acts as a <a class="reference external" href="https://en.wikipedia.org/wiki/Recursive_Bayesian_estimation">Bayesian filter</a> as it tries to predict the next observation(s) given current and past observations (often noted <span class="math notranslate nohighlight">\(u\)</span>). In that sense, the HGF is sometimes described as a generalization of Bayesian filters (e.g. a one-level continuous HGF is equivalent to a Kalman filter). Complex probabilistic networks can handle more complex environments for example with nested volatility, with multiple inputs, or with time-varying inputs that dynamically change how beliefs propagate through the structure (see <a class="reference internal" href="0-Creating_networks.html#probabilistic-networks"><span class="std std-ref">Creating and manipulating networks of probabilistic nodes</span></a> for a tutorial on probabilistic networks).</p>
+<p>The probabilistic networks we have been creating so far with the continuous and the binary Hierarchical Gaussian Filter (HGF) are often referred to as <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a>. This branch of the model acts as a <a class="reference external" href="https://en.wikipedia.org/wiki/Recursive_Bayesian_estimation">Bayesian filter</a> as it tries to predict the next observation(s) given current and past observations (often noted <span class="math notranslate nohighlight">\(u\)</span>). In that sense, the HGF is sometimes described as a generalization of Bayesian filters (e.g. a one-level continuous HGF is equivalent to a Kalman filter). Complex probabilistic networks can handle more complex environments for example with nested volatility, with multiple inputs, or with time-varying inputs that dynamically change how beliefs propagate through the structure (see <a class="reference internal" href="0.1-Creating_networks.html#probabilistic-networks"><span class="std std-ref">Creating and manipulating networks of probabilistic nodes</span></a> for a tutorial on probabilistic networks).</p>
 <p>But no matter how complex those networks are, they are only the <em>perceptual</em> side of the model. If we want our agent to be able to act according to the beliefs he/she is having about the environment and evaluate its performances from these actions, we need  what is traditionally called a <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> (also sometimes referred to as <em>decision model</em> or <em>observation model</em>). In a nutshell, a <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> describe how we think the agent decide to perform some action at time <span class="math notranslate nohighlight">\(t\)</span>, and how we can measure the “goodness of fit” of our perceptual model given the observed actions. It critically incorporates a <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a>, which is the function that, given the sufficient statistics of the network’s beliefs sample an action from the possible actions at hand.</p>
 <p>Being able to write and modify such <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> is critical for practical applications of the HGF as it allows users to adapt the models to their specific experimental designs. In this notebook, we will demonstrate how it is possible to write custom response models for a given probabilistic network.</p>
 <figure class="align-default" id="response-models-fig">
@@ -970,19 +970,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>tonic_volatility_2</th>
-      <td>-3.959</td>
-      <td>0.496</td>
-      <td>-4.949</td>
-      <td>-3.069</td>
+      <td>-3.964</td>
+      <td>0.488</td>
+      <td>-4.838</td>
+      <td>-3.006</td>
       <td>0.012</td>
-      <td>0.008</td>
-      <td>1778.0</td>
-      <td>2753.0</td>
+      <td>0.009</td>
+      <td>1697.0</td>
+      <td>2544.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/4508907fb6bb659f8eff1b384d778e9a2b07eacc534230c6da500af7d3f9452a.png" src="../_images/4508907fb6bb659f8eff1b384d778e9a2b07eacc534230c6da500af7d3f9452a.png" />
+</div></div><img alt="../_images/4ebbbe49b1b64d40624c8b723880db5aa5c4f00b1cb2da7c192f3093be7208b0.png" src="../_images/4ebbbe49b1b64d40624c8b723880db5aa5c4f00b1cb2da7c192f3093be7208b0.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1020,12 +1020,12 @@ pyhgf : 0.0.15
 jax   : 0.4.19
 jaxlib: 0.4.19
 
+arviz     : 0.17.0
+jax       : 0.4.19
 numpy     : 1.22.0
 matplotlib: 3.8.3
-arviz     : 0.17.0
 pymc      : 5.10.4
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-jax       : 0.4.19
 
 Watermark: 2.4.3
 </pre></div>
