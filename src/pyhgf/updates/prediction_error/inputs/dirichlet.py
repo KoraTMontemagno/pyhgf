@@ -4,7 +4,6 @@ import copy
 from functools import partial
 from typing import TYPE_CHECKING, Dict, Tuple
 
-import jax.numpy as jnp
 import numpy as np
 from jax.typing import ArrayLike
 from scipy.optimize import minimize
@@ -65,6 +64,8 @@ def dirichlet_input_prediction_error(
         Static parameters of the Dirichlet process node.
 
     """
+    print(f"Step 1 - {attributes[1]['expected_precision']}")
+
     # unpack static parameters from the Dirichlet node
     (
         base_network,
@@ -83,13 +84,26 @@ def dirichlet_input_prediction_error(
 
     # parametrize the temporary branch given the current observed value
     # this will get a cluster proposal given the new observation
-    attributes = parametrize_cluster_fn(
-        value=value,
-        input_idx=temp_idx,
-        attributes=attributes,
-        edges=edges,
-        cluster_input_idxs=cluster_input_idxs,
-    )
+    if len(cluster_input_idxs) == 1:
+        # we only have one cluster - set the mean and precision
+        vapa = edges[cluster_input_idxs[0]].value_parents[0]
+        vopa = edges[cluster_input_idxs[0]].volatility_parents[0]
+
+        attributes[vapa]["mean"] = value
+        attributes[vapa]["expected_mean"] = value
+        attributes[vopa]["mean"] = 1.0
+        attributes[vopa]["expected_mean"] = 1.0
+    else:
+        print(f"Step 2 - {attributes[1]['expected_precision']}")
+        # other clusters exist
+        attributes = parametrize_cluster_fn(
+            value=value,
+            input_idx=temp_idx,
+            attributes=attributes,
+            edges=edges,
+            cluster_input_idxs=cluster_input_idxs,
+        )
+        print(f"Step 3 - {attributes[1]['expected_precision']}")
 
     # evaluate the likelihood of the current observation under all available branches
     # i.e. pre-existing cluster and temporary one
@@ -112,13 +126,12 @@ def dirichlet_input_prediction_error(
     pi_clusters[-1] = pi_new
 
     # the joint log-likelihoods (evidence + probability)
-    clusters_log_likelihood = jnp.array(clusters_log_likelihood) + jnp.log(
-        jnp.array(pi_clusters)
+    clusters_log_likelihood = np.array(clusters_log_likelihood) + np.log(
+        np.array(pi_clusters)
     )
 
-    print(f"Clusters log likelihoods: {clusters_log_likelihood}")
     # decide which branch should be updated
-    update_idx = jnp.argmax(clusters_log_likelihood)
+    update_idx = np.argmax(clusters_log_likelihood)
 
     # belief propagation step
     # -----------------------
@@ -145,7 +158,6 @@ def dirichlet_input_prediction_error(
         # otherwise, pass the new observation and
         # ensure that the beliefs will propagate in the branch
         update_branch_idx = cluster_input_idxs[int(update_idx)]
-        print(f"Updating branch {update_branch_idx}")
         attributes[update_branch_idx]["observed"] = 1.0
         attributes[update_branch_idx]["value"] = value
 
@@ -171,7 +183,7 @@ def candidate_likelihood(
     value :
         The value of the new observation.
     cluster_parameters :
-        The sufficient statistics and nunber of observation from the existing clusters.
+        The sufficient statistics and number of observation from the existing clusters.
     N :
         Number of observations in each cluster.
     alpha :
@@ -333,7 +345,7 @@ def create_cluster_fn(
     # merge the new branch with the existing one
     attributes, edges = concatenate_networks(
         attributes_1=base_.attributes,
-        attributes_2=attributes,
+        attributes_2=copy.deepcopy(attributes),
         edges_1=base_.edges,
         edges_2=edges,
     )
