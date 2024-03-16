@@ -677,11 +677,12 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># the expected values at the first level of the HGF</span>
-    <span class="n">beliefs</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span>
-        <span class="mi">1</span>
-        <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-            <span class="o">-</span><span class="n">response_function_parameters</span> <span class="o">*</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
+    <span class="n">beliefs</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="n">response_function_parameters</span>
+    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="n">response_function_parameters</span>
+        <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">])</span>
+        <span class="o">**</span> <span class="n">response_function_parameters</span>
     <span class="p">)</span>
 
     <span class="c1"># the sum of the binary surprises</span>

@@ -473,6 +473,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
 <span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span><span class="p">,</span> <span class="n">hgf_logp</span>
@@ -522,16 +523,38 @@ document.write(`
 <p>This produces belief trajectories that can be used to infer propensity for decision at each time point. Moreover, we will assume that the decision function incorporates the possibility of a bias in the link between the belief and the decision in the form of the inverse temperature parameter, such as:</p>
 <div class="math notranslate nohighlight">
 \[
-P(A|\hat{\mu}_1^{(k)}, t) = \frac{1}{1+e^{-t\hat{\mu}_1^{(k)}}}
+P(A|\mu, t) = \frac{\mu^t}{\mu^t + (1-\mu)^t}
 \]</div>
-<p>Where <span class="math notranslate nohighlight">\(A\)</span> is a positive association between the stimulus and the outcome and <span class="math notranslate nohighlight">\(t\)</span> is the temperature parameter.</p>
+<p>Where <span class="math notranslate nohighlight">\(A\)</span> is a positive association between the stimulus and the outcome, <span class="math notranslate nohighlight">\(\mu = \hat{\mu}_1^{(k)}\)</span>, the expected probability from the first level and <span class="math notranslate nohighlight">\(t\)</span> is the temperature parameter.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The sigmoid response function with inverse temperature parameter.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">temperature</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="n">temperature</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="n">temperature</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="n">temperature</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_palette</span><span class="p">(</span><span class="s2">&quot;rocket&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">temp</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">64.0</span><span class="p">]:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temp</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;$\lambda  = </span><span class="si">{</span><span class="n">temp</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;The unit square sigmoid function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../_images/ceb976ba1e81a04e44768e549055b4df9f49113aef45b03f5de73adb326acbe1.png" src="../_images/ceb976ba1e81a04e44768e549055b4df9f49113aef45b03f5de73adb326acbe1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -548,7 +571,7 @@ P(A|\hat{\mu}_1^{(k)}, t) = \frac{1}{1+e^{-t\hat{\mu}_1^{(k)}}}
     <span class="n">tonic_volatility</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">},</span>
 <span class="p">)</span>
 
-<span class="c1"># observations (always the same), simulated decisions, samples values for temperature and volatility</span>
+<span class="c1"># observations (always the same), simulated decisions, sample values for temperature and volatility</span>
 <span class="n">inputs</span><span class="p">,</span> <span class="n">responses</span><span class="p">,</span> <span class="n">temperatures</span><span class="p">,</span> <span class="n">volatilities</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
     <span class="c1"># sample one new value of the tonic volatility at the second level and fit to observations</span>
@@ -630,7 +653,7 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0b97b076146b6fa4943dcd3dec35240d123dfd9ae79c99489d37f4c1181370f8.svg" src="../_images/0b97b076146b6fa4943dcd3dec35240d123dfd9ae79c99489d37f4c1181370f8.svg" /></div>
+<img alt="../_images/d1f98b4b571fec3645bd6893ddc4193f11aa91b6830ed48ef02d7d7b7e4845f9.svg" src="../_images/d1f98b4b571fec3645bd6893ddc4193f11aa91b6830ed48ef02d7d7b7e4845f9.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -674,7 +697,7 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:44&lt;00:00 Sampling chain 0, 89 divergences]
+      100.00% [2000/2000 00:34&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -695,21 +718,12 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:30&lt;00:00 Sampling chain 1, 76 divergences]
+      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 1, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 75 seconds.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 165 divergences after tuning. Increase `target_accept` or reparameterize.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 59 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details
 </pre></div>
 </div>
 </div>
@@ -725,9 +739,10 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5cf07284d7395a38e7bdd813358e9ca1e6029fb6713de2a20ecb25080107c8b9.png" src="../_images/5cf07284d7395a38e7bdd813358e9ca1e6029fb6713de2a20ecb25080107c8b9.png" />
+<img alt="../_images/ad595c2b3069a3c62b829151a85d9bb80a4ec71e2f6e6ecb5a97077513049a0f.png" src="../_images/ad595c2b3069a3c62b829151a85d9bb80a4ec71e2f6e6ecb5a97077513049a0f.png" />
 </div>
 </div>
+<p>The reference values on both posterior distributions indicate the mean of the distribution used for simulation.</p>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="system-configuration">
@@ -750,13 +765,14 @@ pyhgf : 0.0.15
 jax   : 0.4.19
 jaxlib: 0.4.19
 
-pymc      : 5.11.0
-matplotlib: 3.8.3
-pytensor  : 2.18.6
-jax       : 0.4.19
-numpy     : 1.22.0
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 arviz     : 0.17.1
+numpy     : 1.22.0
+pymc      : 5.11.0
+seaborn   : 0.13.2
+pytensor  : 2.18.6
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+jax       : 0.4.19
+matplotlib: 3.8.3
 
 Watermark: 2.4.3
 </pre></div>
