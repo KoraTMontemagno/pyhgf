@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Multilevel embeding of Hierarchical Gaussian Filters &#8212; pyhgf 0.0.15 documentation</title>
+    <title>Embeding Hierarchical Gaussian Filters in a multilevel Bayesian model &#8212; pyhgf 0.0.15 documentation</title>
   
   
   
@@ -424,7 +424,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Multilevel...</li>
+    <li class="breadcrumb-item active" aria-current="page">Embeding...</li>
   </ul>
 </nav>
 </div>
@@ -441,8 +441,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="multilevel-embeding-of-hierarchical-gaussian-filters">
-<span id="multilevel-hgf"></span><h1>Multilevel embeding of Hierarchical Gaussian Filters<a class="headerlink" href="#multilevel-embeding-of-hierarchical-gaussian-filters" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="embeding-hierarchical-gaussian-filters-in-a-multilevel-bayesian-model">
+<span id="multilevel-hgf"></span><h1>Embeding Hierarchical Gaussian Filters in a multilevel Bayesian model<a class="headerlink" href="#embeding-hierarchical-gaussian-filters-in-a-multilevel-bayesian-model" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/3-Multilevel_HGF.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
@@ -453,6 +453,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+
 <span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
     <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyhgf</span> <span class="n">watermark</span>
 </pre></div>
@@ -473,10 +474,11 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
-
 <span class="kn">from</span> <span class="nn">pyhgf</span> <span class="kn">import</span> <span class="n">load_data</span>
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span><span class="p">,</span> <span class="n">hgf_logp</span>
-<span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">first_level_binary_surprise</span>
+<span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+<span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">binary_softmax_inverse_temperature</span>
+<span class="kn">import</span> <span class="nn">pytensor.tensor</span> <span class="k">as</span> <span class="nn">tt</span>
 </pre></div>
 </div>
 </div>
@@ -494,235 +496,94 @@ document.write(`
 </div>
 </div>
 </div>
-<p>In the previous tutorials, we discussed the use of binary and continuous Hierarchical Gaussian Filters (HGF) with 2 or 3 levels of volatility. The way we presented those models was by operating at the agent level (i.e. the observations were made by one agent, and we estimated the posterior density distribution of parameters for that agent). However, many situations in computational psychiatry and cognitive modelling will require making inferences at the population level, therefore fitting many models at the same time and estimating the density distribution of hyper-priors (see for example case studies from <span id="id1">[<a class="reference internal" href="../references.html#id8" title="Michael D. Lee and Eric-Jan Wagenmakers. Bayesian Cognitive Modeling. Cambridge University Press, April 2014. URL: https://doi.org/10.1017/cbo9781139087759, doi:10.1017/cbo9781139087759.">Lee and Wagenmakers, 2014</a>]</span>).</p>
-<p>Luckily, we already have all the components in place to do that. We have already embedded the HGF model in a Bayesian network, where prior distributions were set over some parameters of interest. We just need to extend this approach a bit, and explicitly state that we want to fit many models (participants) at the same time, and draw their parameter values from a hyper-prior (i.e. the group-level distribution).</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
-<p>Using automatic broadcasting
-To estimate group-level parameters, we will have to fit multiple models at the same time, either on different input data, or on the same data with different parameters, or on different datasets with different parameters. This steps is handled natively both by the <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.hgf_logp.html#pyhgf.distribution.hgf_logp" title="pyhgf.distribution.hgf_logp"><span class="xref myst py py-func">log probability function</span></a> and the <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.HGFDistribution.html#pyhgf.distribution.HGFDistribution" title="pyhgf.distribution.HGFDistribution"><span class="xref myst py py-class">HGFDistribution class</span></a> using a pseudo <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a> approach. When a list of <em>n</em> input time series is provided, the function will automatically apply <em>n</em> models using the provided parameters. If for some parameters an array of length <em>n</em> is provided, each model will use the n-th value as parameter. Here, we are going to rely on this feature to compute the log probability of <em>n</em> model, using <em>n</em> time series as input and <em>n</em> different parameters to test.</p>
-</div>
-<section id="a-multilevel-continuous-hgf">
-<h2>A multilevel continuous HGF<a class="headerlink" href="#a-multilevel-continuous-hgf" title="Link to this heading">#</a></h2>
+<p>In the previous tutorials, we discussed using binary, categorical and continuous Hierarchical Gaussian Filters (HGF) with different levels of volatility. By creating HGF networks this way, we were simulating computations occurring at the agent level (i.e. both the observations and actions were made by one agent, and we estimated the posterior density distribution of parameters for that agent). However, many situations in experimental neuroscience and computational psychiatry will require us to go one step further and to make inferences at the population level, therefore fitting many models at the same time and estimating the density distribution of hyper-priors (see for example case studies from <span id="id1">[<a class="reference internal" href="../references.html#id8" title="Michael D. Lee and Eric-Jan Wagenmakers. Bayesian Cognitive Modeling. Cambridge University Press, April 2014. URL: https://doi.org/10.1017/cbo9781139087759, doi:10.1017/cbo9781139087759.">Lee and Wagenmakers, 2014</a>]</span>).</p>
+<p>Luckily, we already have all the components in place to do that. We already used Bayesian networks in the previous sections when we were inferring the distribution of some parameters. Here, we only had one agent (i.e. one participant), and therefore did not need any hyperprior. We need to extend this approach a bit, and explicitly state that we want to fit many models (participants) simultaneously, and draw the values of some parameters from a hyper-prior (i.e. the group-level distribution).</p>
+<p>But before we move forward, maybe it is worth clarifying some of the terminology we use, especially as, starting from now, many things are called <strong>networks</strong> but are pointing to different parts of the workflow. We can indeed distinguish two kinds:</p>
+<ol class="arabic simple">
+<li><p>The predictive coding neural networks. This is the kind of network that <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a> is designed to handle (see <span class="xref std std-ref">#probabilistic_networks</span>). Every HGF model is an instance of such a network.</p></li>
+<li><p>The Bayesian (multilevel) network is the computational graph that is created with tools like <a class="reference external" href="https://www.pymc.io/welcome.html">pymc</a>. This graph will represent the dependencies between our variables and the way they are transformed.</p></li>
+</ol>
+<p>In this notebook, we are going to create the second type of network and incorporate many networks of the first type in it as custom distribution.</p>
 <section id="simulate-a-dataset">
-<h3>Simulate a dataset<a class="headerlink" href="#simulate-a-dataset" title="Link to this heading">#</a></h3>
-<p>Using the example of a hierarchical Gaussian Random Walk that we depicted in the <a class="reference internal" href="0.2-Theory.html#theory"><span class="std std-ref">Introduction to the Hierarchical Gaussian Filter</span></a> section, we are going to us this generative model to simulate 8 random walks using known parameters and infer afterhand the group-level value of <span class="math notranslate nohighlight">\(\omega_1\)</span> from this dataset. The generative model is given by:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\omega_1, \omega_2 = -10.0  \\
-\mu_1, \mu_2 = 0.0  \\
-u^{(k)} \sim \mathcal{N}(x_1^{(k)} , 1e-4) \\
-x_1^{(k)} \sim \mathcal{N}(x_1^{(k)} | x_1^{(k-1)}, \exp(\kappa_1 x_2^{(k)} + \omega_1)) \\
-x_2^{(k)} \sim \mathcal{N}(x_2^{(k)} | x_2^{(k-1)}, \exp(\omega_2)) \\
-\end{split}\]</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Here we are usig a noisy input node.</p>
-</div>
+<h2>Simulate a dataset<a class="headerlink" href="#simulate-a-dataset" title="Link to this heading">#</a></h2>
+<p>We start by simulating a dataset that would containt the decisions from a group of participants undergoing a standard one-armed bandit task. We use the same binary time series as reference than from the previous tutorials. This would represent the association between the stimuli and the outcome, this is controlled by the experimenter and here we assume all participants are presented with the same sequence of association.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
-<span class="n">n_data</span> <span class="o">=</span> <span class="mi">8</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">participant</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_data</span><span class="p">):</span>
-    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">kappa_1</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">omega_1</span><span class="p">,</span> <span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span>
-    <span class="n">mu_1</span><span class="p">,</span> <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
-        
-        <span class="c1"># x2</span>
-        <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
-        <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
-
-        <span class="c1"># x1</span>
-        <span class="n">pi_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">kappa_1</span> <span class="o">*</span> <span class="n">mu_2</span> <span class="o">+</span> <span class="n">omega_1</span><span class="p">)</span>
-        <span class="n">mu_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_1</span><span class="p">,</span> <span class="n">pi_1</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
-        
-        <span class="c1"># input node</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_1</span><span class="p">,</span> <span class="mf">1e-4</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
-        <span class="n">input_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-
-    <span class="n">dataset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">input_data</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Using the same reasoning as in the previous tutorial <span class="xref std std-ref">#custom_response_functions</span>, we simulate the trajectories of beliefs from participants being presented with this sequence of observation. Here, we vary one parameter in the perceptual model, we assume that the tonic volatility from the second level is sampled from a population distribution such as:</p>
+<div class="math notranslate nohighlight">
+\[
+\omega_{2_i} \sim \mathcal{N}(-4.0, 1.0)
+\]</div>
+<p>This produces belief trajectories that can be used to infer propensity for decision at each time point. Moreover, we will assume that the decision function incorporates the possibility of a bias in the link between the belief and the decision in the form of the inverse temperature parameter, such as:</p>
+<div class="math notranslate nohighlight">
+\[
+P(A|\hat{\mu}_1^{(k)}, t) = \frac{1}{1+e^{-t\hat{\mu}_1^{(k)}}}
+\]</div>
+<p>Where <span class="math notranslate nohighlight">\(A\)</span> is a positive association between the stimulus and the outcome and <span class="math notranslate nohighlight">\(t\)</span> is the temperature parameter.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The sigmoid response function with inverse temperature parameter.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">temperature</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">rw</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
-    <span class="n">axs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.6</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/34f7597772a34531fb60d9029ab7aa449eddd703bb33b3838b0f4f466e5df8e1.png" src="../_images/34f7597772a34531fb60d9029ab7aa449eddd703bb33b3838b0f4f466e5df8e1.png" />
-</div>
-</div>
-</section>
-<section id="model">
-<h3>Model<a class="headerlink" href="#model" title="Link to this heading">#</a></h3>
-<p>Here, we want to estimate the group-level value of <span class="math notranslate nohighlight">\(\omega_1\)</span> parameter. For each <em>participant</em>, the value will be drawn from a hyper-prior using this structure:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\mu_1 \sim \mathcal{N}(\mu=0.0, \sigma=10.0)  \\
-\sigma_1 \sim \mathcal{HalfCauchy}(\beta=2.0)  \\
-\lambda \sim \mathcal{N}(\mu=0.0, \sigma=1.0) \\
-\omega_i = \mu_1 + \sigma_1 * \lambda  \\
-u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
-\end{split}\]</div>
-<p>with <span class="math notranslate nohighlight">\(i \in {1,...,8}\)</span>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>We are using a non-centered parametriztion to avoid invalid samples caused by <a class="reference external" href="https://num.pyro.ai/en/stable/examples/funnel.html">Neal’s funnel</a> <span id="id2">[<a class="reference internal" href="../references.html#id9" title="Radford M. Neal. Slice sampling. The Annals of Statistics, June 2003. URL: https://doi.org/10.1214/aos/1056562461, doi:10.1214/aos/1056562461.">Neal, 2003</a>]</span>.</p>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># number of agents/participants in the study</span>
+
+<span class="c1"># create just one default network - we will simply change the values of interest before fitting to save time</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="n">initial_mean</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+    <span class="n">initial_precision</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
+    <span class="n">tonic_volatility</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">},</span>
 <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">model</span><span class="p">:</span>
-    
-    <span class="c1"># Hypterpriors</span>
-    <span class="c1"># ------------</span>
-    <span class="n">mu_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
-    <span class="n">sigma_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfCauchy</span><span class="p">(</span><span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    
-    <span class="c1"># Priors</span>
-    <span class="c1"># ------</span>
-    <span class="n">offset</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
-    <span class="n">tonic_volatility_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;tonic_volatility_1&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
 
-    <span class="c1"># The multi-HGF distribution</span>
-    <span class="c1"># --------------------------</span>
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span>
-        <span class="n">tonic_volatility_1</span><span class="o">=</span><span class="n">tonic_volatility_1</span><span class="p">,</span> <span class="n">tonic_volatility_2</span><span class="o">=-</span><span class="mf">10.0</span><span class="p">)</span>
-                <span class="p">)</span>
+<span class="c1"># observations (always the same), simulated decisions, samples values for temperature and volatility</span>
+<span class="n">inputs</span><span class="p">,</span> <span class="n">responses</span><span class="p">,</span> <span class="n">temperatures</span><span class="p">,</span> <span class="n">volatilities</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="c1"># sample one new value of the tonic volatility at the second level and fit to observations</span>
+    <span class="n">volatility</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">agent</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">volatility</span>
+    <span class="n">agent</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">u</span><span class="p">)</span>
+
+    <span class="c1"># sample one value for the inverse temperature (here in log space) and simulate responses</span>
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">.5</span><span class="p">,</span> <span class="mf">.5</span><span class="p">))</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">agent</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">],</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">)</span>
+
+    <span class="c1"># store observations and decisions separately</span>
+    <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/9570e5f7b5bedd5932d8eeb27d5e380d54db3403f797e4a489bcb031f86e2cc4.svg" src="../_images/9570e5f7b5bedd5932d8eeb27d5e380d54db3403f797e4a489bcb031f86e2cc4.svg" /></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
-    <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
-</pre></div>
-</div>
-<div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:57&lt;00:00 Sampling chain 0, 3 divergences]
-    </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 58 seconds.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/9d43cc569bf6415ab426bd90d2d22345aaa2c0eaeb34d237040da371e066d70c.png" src="../_images/9d43cc569bf6415ab426bd90d2d22345aaa2c0eaeb34d237040da371e066d70c.png" />
-</div>
-</div>
-<p>As expected, the highest density aroud the group-level mean estimate inlcude <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, the real value.</p>
-</section>
 </section>
 <section id="a-multilevel-binary-hgf">
 <h2>A multilevel binary HGF<a class="headerlink" href="#a-multilevel-binary-hgf" title="Link to this heading">#</a></h2>
-<section id="id3">
-<h3>Simulate a dataset<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
-<span class="n">n_data</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">participant</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_data</span><span class="p">):</span>
-    <span class="n">input_data</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">omega_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span>
-    <span class="n">mu_2</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
-        
-        <span class="c1"># x2</span>
-        <span class="n">pi_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">omega_2</span><span class="p">)</span>
-        <span class="n">mu_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu_2</span><span class="p">,</span> <span class="n">pi_2</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
-
-        <span class="c1"># x1</span>
-        <span class="n">s2</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">mu_2</span><span class="p">))</span>  <span class="c1"># sigmoid function</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">s2</span><span class="p">)</span>       
-        <span class="n">input_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
-
-    <span class="n">dataset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">input_data</span><span class="p">))</span>
-</pre></div>
+<p>In this part, we start embedding the HGF in a multilevel model using PyMC. We use the same core distribution (the <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.HGFDistribution.html#pyhgf.distribution.HGFDistribution" title="pyhgf.distribution.HGFDistribution"><span class="xref myst py py-class">HGFDistribution class</span></a>) and leverage the possibility of automatic broadcasting (see below) to apply the same procedure to multiple HGF models in parallel. Note that the list of observations and decisions from all participants is provided and stored when we create the <a class="reference external" href="https://pytensor.readthedocs.io">PyTensor</a> Op instance so it is not necessary to provide it thereafter.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Using automatic broadcasting
+To estimate group-level parameters, we will have to fit multiple models at the same time, either on different input data, on the same data with different parameters or on different datasets with different parameters. This step is handled natively both by the <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.hgf_logp.html#pyhgf.distribution.hgf_logp" title="pyhgf.distribution.hgf_logp"><span class="xref myst py py-func">log probability function</span></a> and the <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.HGFDistribution.html#pyhgf.distribution.HGFDistribution" title="pyhgf.distribution.HGFDistribution"><span class="xref myst py py-class">HGFDistribution class</span></a> using a pseudo <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a> approach. When a list of <em>n</em> input time series is provided, the function will automatically apply <em>n</em> models using the provided parameters. If for some parameters an array of length <em>n</em> is provided, each model will use the n-th value as a parameter. Here, we are going to rely on this feature to compute the log probability of <em>n</em> model, using <em>n</em> time series as input and <em>n</em> different parameters to test.</p>
 </div>
-</div>
-</div>
-</section>
-<section id="without-hyper-priors">
-<h3>Without hyper-priors<a class="headerlink" href="#without-hyper-priors" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-    <span class="n">response_function</span><span class="o">=</span><span class="n">first_level_binary_surprise</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
+    <span class="n">response_function</span><span class="o">=</span><span class="n">binary_softmax_inverse_temperature</span><span class="p">,</span>
+    <span class="n">response_function_inputs</span><span class="o">=</span><span class="n">responses</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -731,26 +592,37 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
-    
-    <span class="c1"># Hypterpriors</span>
-    <span class="c1"># ------------</span>
-    <span class="n">mu_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;mu_omega_1&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">sigma_omega_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfCauchy</span><span class="p">(</span><span class="s2">&quot;sigma_omega_1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    
-    <span class="c1"># Priors</span>
-    <span class="c1"># ------</span>
-    <span class="n">offset</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">n_data</span><span class="p">)</span>
-    <span class="n">tonic_volatility_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;tonic_volatility_2&quot;</span><span class="p">,</span> <span class="n">mu_omega_1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">sigma_omega_1</span><span class="p">)</span>
+
+    <span class="c1"># tonic volatility</span>
+    <span class="n">mu_volatility</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;mu_volatility&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">sigma_volatility</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="s2">&quot;sigma_volatility&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">volatility</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;volatility&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu_volatility</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma_volatility</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="c1"># inverse temperature</span>
+    <span class="n">mu_temperature</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;mu_temperature&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sigma_temperature</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="s2">&quot;sigma_temperature&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">inverse_temperature</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">LogNormal</span><span class="p">(</span><span class="s2">&quot;inverse_temperature&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu_temperature</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma_temperature</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
 
     <span class="c1"># The multi-HGF distribution</span>
     <span class="c1"># --------------------------</span>
-    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> <span class="n">hgf_logp_op</span><span class="p">(</span><span class="n">tonic_volatility_2</span><span class="o">=</span><span class="n">tonic_volatility_2</span><span class="p">))</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span><span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span> 
+             <span class="n">hgf_logp_op</span><span class="p">(</span>
+                 <span class="n">tonic_volatility_2</span><span class="o">=</span><span class="n">volatility</span><span class="p">,</span>
+                 <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">inverse_temperature</span>
+             <span class="p">)</span>
+        <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<section id="visualizing-the-model">
-<h4>Visualizing the model<a class="headerlink" href="#visualizing-the-model" title="Link to this heading">#</a></h4>
+</section>
+<section id="plot-the-computational-graph">
+<h2>Plot the computational graph<a class="headerlink" href="#plot-the-computational-graph" title="Link to this heading">#</a></h2>
+<p>The multilevel model includes hyperpriors over the mean and standard deviation of both the inverse temperature and the tonic volatility of the second level.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We are sampling the inverse temperature in log space to ensure it will always be higher than 0, while being able to use normal hyper-priors at the group level.</p>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">two_levels_binary_hgf</span><span class="p">)</span>
@@ -758,15 +630,15 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d4d364498324b48bf674f3e87b2a36d4f3a77aca1f0200a859bd267179aa2ec5.svg" src="../_images/d4d364498324b48bf674f3e87b2a36d4f3a77aca1f0200a859bd267179aa2ec5.svg" /></div>
+<img alt="../_images/0b97b076146b6fa4943dcd3dec35240d123dfd9ae79c99489d37f4c1181370f8.svg" src="../_images/0b97b076146b6fa4943dcd3dec35240d123dfd9ae79c99489d37f4c1181370f8.svg" /></div>
 </div>
 </section>
 <section id="sampling">
-<h4>Sampling<a class="headerlink" href="#sampling" title="Link to this heading">#</a></h4>
+<h2>Sampling<a class="headerlink" href="#sampling" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
-    <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">two_level_hgf_idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -777,10 +649,10 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (1 chains in 1 job)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (2 chains in 1 job)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_omega_1, sigma_omega_1, offset]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_volatility, sigma_volatility, volatility, mu_temperature, sigma_temperature, inverse_temperature]
 </pre></div>
 </div>
 <div class="output text_html">
@@ -802,29 +674,60 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:16&lt;00:00 Sampling chain 0, 130 divergences]
+      100.00% [2000/2000 00:44&lt;00:00 Sampling chain 0, 89 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 1 chain for 1_000 tune and 1_000 draw iterations (1_000 + 1_000 draws total) took 17 seconds.
+    </div><div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [2000/2000 00:30&lt;00:00 Sampling chain 1, 76 divergences]
+    </div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 75 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only one chain was sampled, this makes it impossible to run some convergence checks
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 165 divergences after tuning. Increase `target_accept` or reparameterize.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="visualization-of-the-posterior-distributions">
+<h2>Visualization of the posterior distributions<a class="headerlink" href="#visualization-of-the-posterior-distributions" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mu_temperature&quot;</span><span class="p">,</span> <span class="s2">&quot;mu_volatility&quot;</span><span class="p">],</span> <span class="n">ref_val</span><span class="o">=</span><span class="p">[</span><span class="mf">.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/41912ca7eb2934a07e7f175f323cce0afbcad4a4fb652abfe2eadb06f31ae60a.png" src="../_images/41912ca7eb2934a07e7f175f323cce0afbcad4a4fb652abfe2eadb06f31ae60a.png" />
+<img alt="../_images/5cf07284d7395a38e7bdd813358e9ca1e6029fb6713de2a20ecb25080107c8b9.png" src="../_images/5cf07284d7395a38e7bdd813358e9ca1e6029fb6713de2a20ecb25080107c8b9.png" />
 </div>
 </div>
-</section>
-</section>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="system-configuration">
@@ -837,7 +740,7 @@ u_{i} \sim \mathcal{HGF}(\omega_1=\omega_i, \omega_2=-10.0)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 15 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sat Mar 16 2024
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -847,10 +750,11 @@ pyhgf : 0.0.15
 jax   : 0.4.19
 jaxlib: 0.4.19
 
+pymc      : 5.11.0
+matplotlib: 3.8.3
+pytensor  : 2.18.6
 jax       : 0.4.19
 numpy     : 1.22.0
-pymc      : 5.10.4
-matplotlib: 3.8.3
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 arviz     : 0.17.1
 
@@ -889,21 +793,12 @@ Watermark: 2.4.3
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Multilevel embeding of Hierarchical Gaussian Filters</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-multilevel-continuous-hgf">A multilevel continuous HGF</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulate-a-dataset">Simulate a dataset</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model">Model</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-multilevel-binary-hgf">A multilevel binary HGF</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Simulate a dataset</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#without-hyper-priors">Without hyper-priors</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-model">Visualizing the model</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling">Sampling</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Embeding Hierarchical Gaussian Filters in a multilevel Bayesian model</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulate-a-dataset">Simulate a dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-multilevel-binary-hgf">A multilevel binary HGF</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-the-computational-graph">Plot the computational graph</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling">Sampling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-of-the-posterior-distributions">Visualization of the posterior distributions</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#system-configuration">System configuration</a></li>

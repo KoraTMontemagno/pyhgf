@@ -53,7 +53,7 @@
     <link rel="icon" href="../../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pyhgf.networks.beliefs_propagation" href="../pyhgf.networks/pyhgf.networks.beliefs_propagation.html" />
+    <link rel="next" title="pyhgf.response.binary_softmax" href="pyhgf.response.binary_softmax.html" />
     <link rel="prev" title="pyhgf.response.total_gaussian_surprise" href="pyhgf.response.total_gaussian_surprise.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -426,9 +426,6 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.prediction_error.inputs.continuous/pyhgf.updates.prediction_error.inputs.continuous.continuous_input_prediction_error.html">pyhgf.updates.prediction_error.inputs.continuous.continuous_input_prediction_error</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.prediction_error.inputs.continuous/pyhgf.updates.prediction_error.inputs.dirichlet.dirichlet_input_prediction_error.html">pyhgf.updates.prediction_error.inputs.dirichlet.dirichlet_input_prediction_error</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.updates.prediction_error.nodes.binary/pyhgf.updates.prediction_error.nodes.binary.binary_state_node_prediction_error.html">pyhgf.updates.prediction_error.nodes.binary.binary_state_node_prediction_error</a></li>
 </ul>
 <ul class="nav bd-sidenav">
@@ -454,6 +451,8 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="pyhgf.response.first_level_gaussian_surprise.html">pyhgf.response.first_level_gaussian_surprise</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyhgf.response.total_gaussian_surprise.html">pyhgf.response.total_gaussian_surprise</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">pyhgf.response.first_level_binary_surprise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyhgf.response.binary_softmax.html">pyhgf.response.binary_softmax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyhgf.response.binary_softmax_inverse_temperature.html">pyhgf.response.binary_softmax_inverse_temperature</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.networks/pyhgf.networks.beliefs_propagation.html">pyhgf.networks.beliefs_propagation</a></li>
@@ -461,8 +460,6 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.networks/pyhgf.networks.list_branches.html">pyhgf.networks.list_branches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.networks/pyhgf.networks.fill_categorical_state_node.html">pyhgf.networks.fill_categorical_state_node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.networks/pyhgf.networks.get_update_sequence.html">pyhgf.networks.get_update_sequence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.networks/pyhgf.networks.concatenate_networks.html">pyhgf.networks.concatenate_networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pyhgf.networks/pyhgf.networks.add_edges.html">pyhgf.networks.add_edges</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../pyhgf.math/pyhgf.math.gaussian_density.html">pyhgf.math.gaussian_density</a></li>
@@ -532,7 +529,7 @@ document.write(`
 <h1>pyhgf.response.first_level_binary_surprise<a class="headerlink" href="#pyhgf-response-first-level-binary-surprise" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyhgf.response.first_level_binary_surprise">
-<span class="sig-prename descclassname"><span class="pre">pyhgf.response.</span></span><span class="sig-name descname"><span class="pre">first_level_binary_surprise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hgf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><span class="pre">HGF</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_function_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Array</span></span></span><a class="reference internal" href="../../_modules/pyhgf/response.html#first_level_binary_surprise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.response.first_level_binary_surprise" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyhgf.response.</span></span><span class="sig-name descname"><span class="pre">first_level_binary_surprise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hgf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><span class="pre">HGF</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_function_inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_function_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Array</span></span></span><a class="reference internal" href="../../_modules/pyhgf/response.html#first_level_binary_surprise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.response.first_level_binary_surprise" title="Link to this definition">#</a></dt>
 <dd><p>Sum of the binary surprise along the time series (binary HGF).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -545,7 +542,9 @@ valid time points, and <cite>jnp.inf</cite> if the model could not fit.</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>hgf</strong></dt><dd><p>An instance of the HGF model.</p>
 </dd>
-<dt><strong>response_function_parameters</strong></dt><dd><p>No additional parameters are required to compute the binary surprise.</p>
+<dt><strong>response_function_inputs</strong></dt><dd><p>The inputs to the response functions, not required here.</p>
+</dd>
+<dt><strong>response_function_parameters</strong></dt><dd><p>Additionnal parameters for the response function, not required here.</p>
 </dd>
 </dl>
 </dd>
@@ -580,11 +579,11 @@ valid time points, and <cite>jnp.inf</cite> if the model could not fit.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../pyhgf.networks/pyhgf.networks.beliefs_propagation.html"
+       href="pyhgf.response.binary_softmax.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">pyhgf.networks.beliefs_propagation</p>
+        <p class="prev-next-title">pyhgf.response.binary_softmax</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

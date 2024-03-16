@@ -723,7 +723,7 @@ Adding 320 new observations.
 <p class="admonition-title">Hint</p>
 <p>What is a <em>response function</em>?
 Most of the work around HGFs consists in creating and adapting <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> to work with a given experimental design. There is no limit in terms of what can be used as a <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a>, provided that the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> and the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a> are clearly defined.</p>
-<p>In <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a>, the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> is the probabilistic network created with the main <a class="reference internal" href="../generated/pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.model.HGF</span></code></a> and <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.HGFDistribution.html#pyhgf.distribution.HGFDistribution" title="pyhgf.distribution.HGFDistribution"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.distribution.HGFDistribution</span></code></a> classes. The <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> is something that is implicitly defined when we create the <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a>, a Python function that computes the negative of the log-likelihood of the actions given the perceptual model. This <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> can be passed as an argument to the main classes using the keywords arguments <code class="docutils literal notranslate"><span class="pre">response_function</span></code> and <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code>. The <code class="docutils literal notranslate"><span class="pre">response_function</span></code> can be any callable that returns the surprise <span class="math notranslate nohighlight">\(S\)</span> of observing action <span class="math notranslate nohighlight">\(y\)</span> given this model, and the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a>. The <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code> is where additional parameters or observations can be provided. Critically, this is where the actions <span class="math notranslate nohighlight">\(y\)</span> should be provided.</p>
+<p>In <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a>, the <a class="reference internal" href="#term-Perceptual-model"><span class="xref std std-term">Perceptual model</span></a> is the probabilistic network created with the main <a class="reference internal" href="../generated/pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.model.HGF</span></code></a> and <a class="reference internal" href="../generated/pyhgf.distribution/pyhgf.distribution.HGFDistribution.html#pyhgf.distribution.HGFDistribution" title="pyhgf.distribution.HGFDistribution"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.distribution.HGFDistribution</span></code></a> classes. The <a class="reference internal" href="#term-Response-model"><span class="xref std std-term">Response model</span></a> is something that is implicitly defined when we create the <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a>, a Python function that computes the negative of the log-likelihood of the actions given the perceptual model. This <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> can be passed as an argument to the main classes using the keywords arguments <code class="docutils literal notranslate"><span class="pre">response_function</span></code>, <code class="docutils literal notranslate"><span class="pre">response_function_inputs</span></code> and <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code>. The <code class="docutils literal notranslate"><span class="pre">response_function</span></code> can be any callable that returns the surprise <span class="math notranslate nohighlight">\(S\)</span> of observing action <span class="math notranslate nohighlight">\(y\)</span> given this model, and the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a>. The <code class="docutils literal notranslate"><span class="pre">response_function_inputs</span></code> are the additional data to the response function (optional) while <code class="docutils literal notranslate"><span class="pre">response_function_parameters</span></code> are the additional parameters (optional). The <code class="docutils literal notranslate"><span class="pre">response_function_inputs</span></code> is where the actions <span class="math notranslate nohighlight">\(y\)</span> should be provided.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>A <em>response function</em> should not return the actions given perceptual inputs <span class="math notranslate nohighlight">\(y | u\)</span> (this is what the <a class="reference internal" href="#term-Decision-rule"><span class="xref std std-term">Decision rule</span></a> does), but the <a class="reference external" href="https://en.wikipedia.org/wiki/Information_content">surprise</a> <span class="math notranslate nohighlight">\(S\)</span> associated with the observation of actions given the perceptual inputs <span class="math notranslate nohighlight">\(S(y | u)\)</span>, which is defined by:</p>
@@ -747,21 +747,22 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 <p>We can write such a response function in Python as:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">response_function</span><span class="p">(</span><span class="n">hgf</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">response_function</span><span class="p">(</span><span class="n">hgf</span><span class="p">,</span> <span class="n">response_function_inputs</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A simple response function returning the binary surprise.&quot;&quot;&quot;</span>
 
-    <span class="c1"># get the responses from the additional parameters tuple</span>
-    <span class="n">responses</span> <span class="o">=</span> <span class="n">response_function_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># response_function_parameters can be used to parametrize the response function (e.g. inverse temperature)</span>
+    <span class="c1"># ...&lt;</span>
 
     <span class="c1"># the expected values at the first level of the HGF</span>
     <span class="n">beliefs</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">responses</span><span class="p">,</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">beliefs</span><span class="p">),</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">beliefs</span><span class="p">)))</span>
+    <span class="c1"># get the decision from the inputs to the response function</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">response_function_inputs</span><span class="p">,</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">beliefs</span><span class="p">),</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">beliefs</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>This function takes the expected probability from the binary node and uses it to predict the participant’s decision. The surprise is computed using the binary surprise (see <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.update.binary.binary_surprise()</span></code>). This corresponds to the standard binary softmax response function that is also accessible from the <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.response.binary_softmax()</span></code> function.</p>
+<p>This function takes the expected probability from the binary node and uses it to predict the participant’s decision. The surprise is computed using the binary surprise (see <code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.update.binary.binary_surprise()</span></code>). This corresponds to the standard binary softmax response function that is also accessible from the <a class="reference internal" href="../generated/pyhgf.response/pyhgf.response.binary_softmax.html#pyhgf.response.binary_softmax" title="pyhgf.response.binary_softmax"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyhgf.response.binary_softmax()</span></code></a> function.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Note here that our <a class="reference internal" href="#term-Response-function"><span class="xref std std-term">Response function</span></a> has a structure that is the standard way to write response functions in <a class="reference external" href="https://github.com/ilabcode/pyhgf">pyhgf</a>, that is with two input arguments:</p>
@@ -774,7 +775,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># return the overall surprise</span>
-<span class="n">response_function</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="n">agent</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="p">(</span><span class="n">responses</span><span class="p">,</span> <span class="p">))</span>
+<span class="n">response_function</span><span class="p">(</span><span class="n">hgf</span><span class="o">=</span><span class="n">agent</span><span class="p">,</span> <span class="n">response_function_inputs</span><span class="o">=</span><span class="n">responses</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -797,7 +798,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
     <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">u</span><span class="p">],</span>
     <span class="n">response_function</span><span class="o">=</span><span class="n">response_function</span><span class="p">,</span>
-    <span class="n">response_function_parameters</span><span class="o">=</span><span class="p">[(</span><span class="n">responses</span><span class="p">,</span> <span class="p">)]</span>
+    <span class="n">response_function_inputs</span><span class="o">=</span><span class="p">[</span><span class="n">responses</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -970,19 +971,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>tonic_volatility_2</th>
-      <td>-3.945</td>
-      <td>0.499</td>
-      <td>-4.869</td>
-      <td>-2.987</td>
-      <td>0.013</td>
-      <td>0.009</td>
-      <td>1603.0</td>
-      <td>2959.0</td>
+      <td>-3.951</td>
+      <td>0.482</td>
+      <td>-4.889</td>
+      <td>-3.033</td>
+      <td>0.012</td>
+      <td>0.008</td>
+      <td>1631.0</td>
+      <td>2530.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/04a8d8fff5c7ebc6fbdedaedcd4be1cf217183ae812f74762dd904d647013db4.png" src="../_images/04a8d8fff5c7ebc6fbdedaedcd4be1cf217183ae812f74762dd904d647013db4.png" />
+</div></div><img alt="../_images/1e2f1b1c197be0d6988feeaeea5f3b998a966ed208302d7986945c2468a6d033.png" src="../_images/1e2f1b1c197be0d6988feeaeea5f3b998a966ed208302d7986945c2468a6d033.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1010,7 +1011,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 15 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sat Mar 16 2024
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -1020,12 +1021,12 @@ pyhgf : 0.0.15
 jax   : 0.4.19
 jaxlib: 0.4.19
 
-matplotlib: 3.8.3
 jax       : 0.4.19
+pymc      : 5.11.0
 sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-pymc      : 5.10.4
-numpy     : 1.22.0
 arviz     : 0.17.1
+numpy     : 1.22.0
+matplotlib: 3.8.3
 
 Watermark: 2.4.3
 </pre></div>

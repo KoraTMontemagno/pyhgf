@@ -455,7 +455,7 @@ document.write(`
 <div class="viewcode-block" id="first_level_gaussian_surprise">
 <a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.first_level_gaussian_surprise.html#pyhgf.response.first_level_gaussian_surprise">[docs]</a>
 <span class="k">def</span> <span class="nf">first_level_gaussian_surprise</span><span class="p">(</span>
-    <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gaussian surprise at the first level of a probabilistic network.</span>
 
@@ -468,8 +468,10 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    hgf :</span>
 <span class="sd">        An instance of the HGF model.</span>
+<span class="sd">    response_function_inputs :</span>
+<span class="sd">        The inputs to the response functions, not required here.</span>
 <span class="sd">    response_function_parameters :</span>
-<span class="sd">        No additional parameters are required to compute the Gaussian surprise.</span>
+<span class="sd">        Additionnal parameters for the response function, not required here.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -496,7 +498,9 @@ document.write(`
 
 <div class="viewcode-block" id="total_gaussian_surprise">
 <a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.total_gaussian_surprise.html#pyhgf.response.total_gaussian_surprise">[docs]</a>
-<span class="k">def</span> <span class="nf">total_gaussian_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">total_gaussian_surprise</span><span class="p">(</span>
+    <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of the Gaussian surprise across the probabilistic network.</span>
 
 <span class="sd">    .. note::</span>
@@ -506,8 +510,10 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    hgf :</span>
 <span class="sd">        An instance of the HGF model.</span>
+<span class="sd">    response_function_inputs :</span>
+<span class="sd">        The inputs to the response functions, not required here.</span>
 <span class="sd">    response_function_parameters :</span>
-<span class="sd">        No additional parameters are required to compute the Gaussian surprise.</span>
+<span class="sd">        Additionnal parameters for the response function, not required here.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -552,7 +558,9 @@ document.write(`
 
 <div class="viewcode-block" id="first_level_binary_surprise">
 <a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.first_level_binary_surprise.html#pyhgf.response.first_level_binary_surprise">[docs]</a>
-<span class="k">def</span> <span class="nf">first_level_binary_surprise</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">first_level_binary_surprise</span><span class="p">(</span>
+    <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of the binary surprise along the time series (binary HGF).</span>
 
 <span class="sd">    .. note::</span>
@@ -564,8 +572,10 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    hgf :</span>
 <span class="sd">        An instance of the HGF model.</span>
+<span class="sd">    response_function_inputs :</span>
+<span class="sd">        The inputs to the response functions, not required here.</span>
 <span class="sd">    response_function_parameters :</span>
-<span class="sd">        No additional parameters are required to compute the binary surprise.</span>
+<span class="sd">        Additionnal parameters for the response function, not required here.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -591,16 +601,24 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">binary_softmax</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<div class="viewcode-block" id="binary_softmax">
+<a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.binary_softmax.html#pyhgf.response.binary_softmax">[docs]</a>
+<span class="k">def</span> <span class="nf">binary_softmax</span><span class="p">(</span>
+    <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span>
+    <span class="n">response_function_inputs</span><span class="o">=</span><span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">ArrayLike</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surprise under the binary sofmax model.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    hgf :</span>
 <span class="sd">        An instance of the HGF model.</span>
+<span class="sd">    response_function_inputs :</span>
+<span class="sd">        The inputs to the response functions, here containing the decision from the</span>
+<span class="sd">        paraticipant at time *k* [0 or 1].</span>
 <span class="sd">    response_function_parameters :</span>
-<span class="sd">        The additionnal parameters should include the vector of decisions at time *k*</span>
-<span class="sd">        [0 or 1].</span>
+<span class="sd">        Additionnal parameters for the response function, not required here.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -613,13 +631,69 @@ document.write(`
 
     <span class="c1"># the sum of the binary surprises</span>
     <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
-        <span class="n">binary_surprise</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">response_function_parameters</span><span class="p">,</span> <span class="n">expected_mean</span><span class="o">=</span><span class="n">beliefs</span><span class="p">)</span>
+        <span class="n">binary_surprise</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">response_function_inputs</span><span class="p">,</span> <span class="n">expected_mean</span><span class="o">=</span><span class="n">beliefs</span><span class="p">)</span>
     <span class="p">)</span>
 
     <span class="c1"># ensure that inf is returned if the model cannot fit</span>
     <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">surprise</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">surprise</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">surprise</span>
+    <span class="k">return</span> <span class="n">surprise</span></div>
+
+
+
+<div class="viewcode-block" id="binary_softmax_inverse_temperature">
+<a class="viewcode-back" href="../../generated/pyhgf.response/pyhgf.response.binary_softmax_inverse_temperature.html#pyhgf.response.binary_softmax_inverse_temperature">[docs]</a>
+<span class="k">def</span> <span class="nf">binary_softmax_inverse_temperature</span><span class="p">(</span>
+    <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span>
+    <span class="n">response_function_inputs</span><span class="o">=</span><span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">ArrayLike</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Surprise from a binary sofmax parametrized by the inverse temperature.</span>
+
+<span class="sd">    The probability of chosing A is given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">       P(A|\hat{\mu}^{(k)_{1}, t) = \frac{1}{1+e^{-t\hat{\mu}^{(k)_{1}}}</span>
+
+<span class="sd">    Where :math:`\hat{mu}^{(k)_{1}` is the expected probability of A at the firt level,</span>
+<span class="sd">    and :math:`t` is the temperature parameter.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hgf :</span>
+<span class="sd">        An instance of the HGF model.</span>
+<span class="sd">    response_function_inputs :</span>
+<span class="sd">        The inputs to the response functions, here containing the decision from the</span>
+<span class="sd">        paraticipant at time *k* [0 or 1].</span>
+<span class="sd">    response_function_parameters :</span>
+<span class="sd">        Additionnal parameters for the response function (optional). Here, the inverse</span>
+<span class="sd">        temperature  is provided.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    surprise :</span>
+<span class="sd">        The surprise under the binary sofmax model.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># the expected values at the first level of the HGF</span>
+    <span class="n">beliefs</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="mi">1</span>
+        <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="o">-</span><span class="n">response_function_parameters</span> <span class="o">*</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># the sum of the binary surprises</span>
+    <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+        <span class="n">binary_surprise</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">response_function_inputs</span><span class="p">,</span> <span class="n">expected_mean</span><span class="o">=</span><span class="n">beliefs</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># ensure that inf is returned if the model cannot fit</span>
+    <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">surprise</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">surprise</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">surprise</span></div>
+
 </pre></div>
 
                 </article>
