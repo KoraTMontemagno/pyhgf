@@ -521,9 +521,6 @@ In this situation, it is trivial to write such a decision function and generate 
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a binary Hierarchical Gaussian Filter with 2 levels.
 ... Create the update sequence from the network structure.
 ... Create the belief propagation function.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Cache the belief propagation function.
 Adding 320 new observations.
 </pre></div>
 </div>
@@ -860,7 +857,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div><div class="output text_html">
     <div>
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:03&lt;00:00 Sampling chain 0, 0 divergences]
+      100.00% [2000/2000 00:02&lt;00:00 Sampling chain 0, 0 divergences]
     </div>
     </div><div class="output text_html">
 <style>
@@ -925,7 +922,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
       <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
       100.00% [2000/2000 00:01&lt;00:00 Sampling chain 3, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 9 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 8 seconds.
 </pre></div>
 </div>
 </div>
@@ -971,19 +968,19 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
   <tbody>
     <tr>
       <th>tonic_volatility_2</th>
-      <td>-3.951</td>
-      <td>0.508</td>
-      <td>-4.922</td>
-      <td>-3.02</td>
-      <td>0.012</td>
+      <td>-3.964</td>
+      <td>0.505</td>
+      <td>-4.968</td>
+      <td>-3.062</td>
+      <td>0.013</td>
       <td>0.009</td>
-      <td>1736.0</td>
-      <td>2342.0</td>
+      <td>1591.0</td>
+      <td>2406.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/bfa189b19098e94ea0f1f03d0f8dfc1037a538126bcbde54af67cb72a70b9b6a.png" src="../_images/bfa189b19098e94ea0f1f03d0f8dfc1037a538126bcbde54af67cb72a70b9b6a.png" />
+</div></div><img alt="../_images/6dba5b6e321b182421610660ad59e1b0c379dfc71189fbd65d650e970f472464.png" src="../_images/6dba5b6e321b182421610660ad59e1b0c379dfc71189fbd65d650e970f472464.png" />
 </div>
 </div>
 <p>The results above indicate that given the responses provided by the participant, the most likely values for the parameter <span class="math notranslate nohighlight">\(\omega_2\)</span> are between -4.9 and -3.1, with a mean at -3.9 (you can find slightly different values if you sample different actions from the decisions function). We can consider this as an excellent estimate given the sparsity of the data, and the complexity of the model.</p>
@@ -1011,7 +1008,7 @@ surprise | y &amp; = \sum_{t=1}^{t} - \log(p(y^t | \hat{\mu}_1)) \\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sat Mar 16 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Mar 17 2024
 
 Python implementation: CPython
 Python version       : 3.10.13
@@ -1021,12 +1018,12 @@ pyhgf : 0.0.15
 jax   : 0.4.19
 jaxlib: 0.4.19
 
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
-pymc      : 5.11.0
-arviz     : 0.17.1
-jax       : 0.4.19
 numpy     : 1.22.0
+sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 matplotlib: 3.8.3
+jax       : 0.4.19
+arviz     : 0.17.1
+pymc      : 5.11.0
 
 Watermark: 2.4.3
 </pre></div>

@@ -693,23 +693,31 @@ document.write(`
                 <span class="p">)</span>
 
             <span class="c1"># initialize the model so it is ready to receive new observations</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_belief_propagation_fn</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;HGF&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the update functions.</span>
+    <span class="k">def</span> <span class="nf">create_belief_propagation_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;HGF&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the belief propagation function.</span>
 
-<span class="sd">        This step should be called after creating the network to compile the update</span>
-<span class="sd">        sequence and before providing any input data.</span>
+<span class="sd">        .. note:</span>
+<span class="sd">           This step is called by default when using py:meth:`input_data`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        overwrite :</span>
+<span class="sd">            If `True` (default), create a new belief propagation function and ignore</span>
+<span class="sd">            preexisting values. Otherwise, do not create a new function if the attribute</span>
+<span class="sd">            `scan_fn` is already defined.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># create the update sequence automatically if not provided</span>
+        <span class="c1"># create the update sequence if it does not already exist</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_update_sequence</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Create the update sequence from the network structure.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># create the belief propagation function that will be scanned</span>
+        <span class="c1"># create the belief propagation function</span>
+        <span class="c1"># this function is laer used by scan to loop over observations</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="o">=</span> <span class="n">Partial</span><span class="p">(</span>
                 <span class="n">beliefs_propagation</span><span class="p">,</span>
@@ -719,6 +727,33 @@ document.write(`
             <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Create the belief propagation function.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">overwrite</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="o">=</span> <span class="n">Partial</span><span class="p">(</span>
+                    <span class="n">beliefs_propagation</span><span class="p">,</span>
+                    <span class="n">update_sequence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span><span class="p">,</span>
+                    <span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span>
+                    <span class="n">input_nodes_idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Create the belief propagation function (overwrite).&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... The belief propagation function is already defined.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">cache_belief_propagation_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;HGF&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Blank call to the belief propagation function.</span>
+
+<span class="sd">        .. note:</span>
+<span class="sd">           This step is called by default when using py:meth:`input_data`. It can</span>
+<span class="sd">           sometimes be convenient to call this step independently to chache the JITed</span>
+<span class="sd">           function before fitting the model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_belief_propagation_fn</span><span class="p">()</span>
 
         <span class="c1"># blanck call to cache the JIT-ed functions</span>
         <span class="n">_</span> <span class="o">=</span> <span class="n">scan</span><span class="p">(</span>
@@ -765,6 +800,8 @@ document.write(`
 <span class="sd">            missing in the event log, or rejected trials).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_belief_propagation_fn</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">((</span><span class="sa">f</span><span class="s2">&quot;Adding </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> new observations.&quot;</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">time_steps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
