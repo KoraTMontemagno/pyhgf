@@ -528,7 +528,6 @@ document.write(`
 <span class="k">def</span> <span class="nf">continuous_input_value_prediction_error</span><span class="p">(</span>
     <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
     <span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span><span class="p">,</span>
-    <span class="n">time_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Store value prediction error and expected precision from an input node.</span>
@@ -558,8 +557,6 @@ document.write(`
 <span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as the node</span>
 <span class="sd">        number. For each node, the index lists the value and volatility parents and</span>
 <span class="sd">        children.</span>
-<span class="sd">    time_step :</span>
-<span class="sd">        The time interval between the previous time point and the current time point.</span>
 <span class="sd">    node_idx :</span>
 <span class="sd">        Pointer to the input node.</span>
 
@@ -597,19 +594,14 @@ document.write(`
     <span class="n">expected_precision</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;input_noise&quot;</span><span class="p">]</span>
 
     <span class="c1"># influence of a volatility parent on the input node</span>
-    <span class="n">volatility_parents_idxs</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>  <span class="c1"># type:ignore</span>
-    <span class="k">if</span> <span class="n">volatility_parents_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">volatility_parents_idx</span><span class="p">,</span> <span class="n">volatility_coupling</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-            <span class="n">volatility_parents_idxs</span><span class="p">,</span>
-            <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;volatility_coupling_parents&quot;</span><span class="p">],</span>
-        <span class="p">):</span>
-            <span class="n">expected_precision</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span>
-                <span class="n">time_step</span>
-                <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-                    <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parents_idx</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span>
-                    <span class="o">*</span> <span class="n">volatility_coupling</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+    <span class="n">volatility_parent</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span>  <span class="c1"># type:ignore</span>
+    <span class="k">if</span> <span class="n">volatility_parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">volatility_coupling</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span>
+            <span class="s2">&quot;volatility_coupling_children&quot;</span>
+        <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">expected_precision</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">volatility_parent</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">volatility_coupling</span>
+        <span class="p">)</span>
 
     <span class="c1"># store in the current node for later use in the update step</span>
     <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;temp&quot;</span><span class="p">][</span><span class="s2">&quot;value_prediction_error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_prediction_error</span>
@@ -688,15 +680,13 @@ document.write(`
         <span class="c1"># Store value prediction errors</span>
         <span class="c1"># -----------------------------</span>
         <span class="n">attributes</span> <span class="o">=</span> <span class="n">continuous_input_value_prediction_error</span><span class="p">(</span>
-            <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span> <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span> <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span> <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span>
         <span class="p">)</span>
 
         <span class="c1"># Store volatility prediction errors</span>
         <span class="c1"># ----------------------------------</span>
         <span class="n">attributes</span> <span class="o">=</span> <span class="n">continuous_input_volatility_prediction_error</span><span class="p">(</span>
-            <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span>
-            <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
-            <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span><span class="p">,</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span> <span class="n">node_idx</span><span class="o">=</span><span class="n">node_idx</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">attributes</span></div>
