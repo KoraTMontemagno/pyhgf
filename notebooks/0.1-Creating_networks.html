@@ -40,7 +40,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=c7cdf6fe"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
@@ -684,7 +684,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 Adding 1000 new observations.
 </pre></div>
 </div>
-<img alt="../_images/bae0e6600c26ea5bba2d67481ae662700f6c62bc116bf25df36d690ad96da401.png" src="../_images/bae0e6600c26ea5bba2d67481ae662700f6c62bc116bf25df36d690ad96da401.png" />
+<img alt="../_images/221c31981920b3d91515573146c63f2d140a54cffffe1934fa39200399a750b2.png" src="../_images/221c31981920b3d91515573146c63f2d140a54cffffe1934fa39200399a750b2.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -703,17 +703,10 @@ Adding 1000 new observations.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 
-<span class="c1"># simulate some time series - sampling from N(0, 1) sometime multiplied by 5</span>
-<span class="n">u_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="n">u_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-
-<span class="n">u_0</span><span class="p">[</span><span class="mi">200</span><span class="p">:</span><span class="mi">400</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">3</span>
-<span class="n">u_1</span><span class="p">[</span><span class="mi">600</span><span class="p">:</span><span class="mi">800</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">3</span>
-
-<span class="n">u_0</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">3</span>
-<span class="n">u_1</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">3</span>
-
-<span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">u_0</span><span class="p">,</span> <span class="n">u_1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">input_data</span><span class="p">[</span><span class="mi">900</span><span class="p">:]</span> <span class="o">*=</span> <span class="mi">3</span>
+<span class="n">input_data</span><span class="p">[</span><span class="mi">200</span><span class="p">:</span><span class="mi">400</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">3</span>
+<span class="n">input_data</span><span class="p">[</span><span class="mi">600</span><span class="p">:</span><span class="mi">800</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </div>
@@ -766,7 +759,7 @@ Adding 1000 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c18ddcec6489d1f3c89c467fab190b581f173562daf3a0680476da7898e4a7b7.png" src="../_images/c18ddcec6489d1f3c89c467fab190b581f173562daf3a0680476da7898e4a7b7.png" />
+<img alt="../_images/9d6dc6db31a4390aa98e45e38aaa391b8dfcba4289f614ad78946a149d1e72a0.png" src="../_images/9d6dc6db31a4390aa98e45e38aaa391b8dfcba4289f614ad78946a149d1e72a0.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -834,7 +827,7 @@ Adding 1000 new observations.
 Adding 1000 new observations.
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7ed30d3e18d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7ff4e8cda7a0&gt;
 </pre></div>
 </div>
 </div>
@@ -859,7 +852,7 @@ Adding 1000 new observations.
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/e5fd5d02e5e1075166dc3f0598225135882e04ea39af6ddcf25b722c87c499a7.png" src="../_images/e5fd5d02e5e1075166dc3f0598225135882e04ea39af6ddcf25b722c87c499a7.png" />
+<img alt="../_images/6ec17ade51eab517745bb7b3312e7100d86f09f6245e52c55b48dae4c462abfd.png" src="../_images/6ec17ade51eab517745bb7b3312e7100d86f09f6245e52c55b48dae4c462abfd.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -870,20 +863,128 @@ Adding 1000 new observations.
 </section>
 <section id="the-case-of-multivariate-ascendency">
 <h4>The case of <em>multivariate ascendency</em><a class="headerlink" href="#the-case-of-multivariate-ascendency" title="Link to this heading">#</a></h4>
-<p><em>Multivariate ascendency</em> refers to situations where a node is influenced (and updates backwards through prediction errors) multiple value or volatility parents.</p>
+<p><em>Multivariate ascendency</em> refers to situations where a node is influenced (and updates backwards through prediction errors) by multiple value or volatility parents.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="c1"># simulate some time series - sampling from N(0, 1) sometime multiplied by 3</span>
+<span class="n">input_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">input_data</span><span class="p">[</span><span class="mi">250</span><span class="p">:</span><span class="mi">750</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span>
+<span class="n">input_data</span><span class="p">[</span><span class="mi">1000</span><span class="p">:</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="value-coupling">
 <h4>Value coupling<a class="headerlink" href="#value-coupling" title="Link to this heading">#</a></h4>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Work in progress</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># creating a network with multiple volatility parents </span>
+<span class="n">many_value_parents_hgf</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">n_nodes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;input_noise&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">)</span>
+
+<span class="c1"># plot the network</span>
+<span class="n">many_value_parents_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
+</pre></div>
+</div>
+<img alt="../_images/bcd8eabb6b414c7de442fe7937e9b43ec475156c19ab536b0a150e686ec158ea.svg" src="../_images/bcd8eabb6b414c7de442fe7937e9b43ec475156c19ab536b0a150e686ec158ea.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_value_parents_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Create the update sequence from the network structure.
+... Create the belief propagation function.
+Adding 2000 new observations.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_value_parents_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">show_observations</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c827feac4849b55299842d46676290cecfc42a5e6d7f5795e21b23e93a947053.png" src="../_images/c827feac4849b55299842d46676290cecfc42a5e6d7f5795e21b23e93a947053.png" />
+</div>
 </div>
 </section>
 <section id="volatility-coupling">
 <h4>Volatility coupling<a class="headerlink" href="#volatility-coupling" title="Link to this heading">#</a></h4>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Work in progress</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># creating a network with multiple volatility parents </span>
+<span class="n">many_volatility_parents_hgf</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">n_nodes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;input_noise&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">)</span>
+
+<span class="c1"># plot the network</span>
+<span class="n">many_volatility_parents_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
+</pre></div>
+</div>
+<img alt="../_images/b5232cee86f1ab0c955671d61235032d44797d5846e367abb0991a7ac60e3a9d.svg" src="../_images/b5232cee86f1ab0c955671d61235032d44797d5846e367abb0991a7ac60e3a9d.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_parents_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Create the update sequence from the network structure.
+... Create the belief propagation function.
+Adding 2000 new observations.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_volatility_parents_hgf</span><span class="o">.</span><span class="n">plot_nodes</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">show_observations</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8062dd249e1b92ed1e0e68209606a9d6794493d48dde00b474b51522f434b876.png" src="../_images/8062dd249e1b92ed1e0e68209606a9d6794493d48dde00b474b51522f434b876.png" />
+</div>
 </div>
 </section>
 </section>
@@ -951,20 +1052,20 @@ Adding 1000 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Mar 19 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Apr 18 2024
 
 Python implementation: CPython
-Python version       : 3.10.13
-IPython version      : 8.22.2
+Python version       : 3.10.14
+IPython version      : 8.23.0
 
 pyhgf : 0.0.16
 jax   : 0.4.19
 jaxlib: 0.4.19
 
+sys       : 3.10.14 (main, Mar 20 2024, 15:15:25) [GCC 11.4.0]
+matplotlib: 3.8.4
 seaborn   : 0.13.2
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
 numpy     : 1.22.0
-matplotlib: 3.8.3
 
 Watermark: 2.4.3
 </pre></div>
@@ -1084,7 +1185,7 @@ Watermark: 2.4.3
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.6.
     <br/>
   </p>
 </div>

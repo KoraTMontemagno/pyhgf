@@ -40,7 +40,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=c7cdf6fe"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
@@ -554,7 +554,7 @@ P(A|\mu, t) = \frac{\mu^t}{\mu^t + (1-\mu)^t}
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/ceb976ba1e81a04e44768e549055b4df9f49113aef45b03f5de73adb326acbe1.png" src="../_images/ceb976ba1e81a04e44768e549055b4df9f49113aef45b03f5de73adb326acbe1.png" />
+<img alt="../_images/6fd1a5490af3d4338e3a8ea15f22191e0d849d6c20aa348116d67a78ff4e84f2.png" src="../_images/6fd1a5490af3d4338e3a8ea15f22191e0d849d6c20aa348116d67a78ff4e84f2.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -566,13 +566,16 @@ P(A|\mu, t) = \frac{\mu^t}{\mu^t + (1-\mu)^t}
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">initial_mean</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
-    <span class="n">initial_precision</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">},</span>
-    <span class="n">tonic_volatility</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">},</span>
+    <span class="n">initial_mean</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
 <span class="p">)</span>
-
-<span class="c1"># observations (always the same), simulated decisions, sample values for temperature and volatility</span>
-<span class="n">inputs</span><span class="p">,</span> <span class="n">responses</span><span class="p">,</span> <span class="n">temperatures</span><span class="p">,</span> <span class="n">volatilities</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># observations (always the same), simulated decisions, sample values for temperature and volatility</span>
+<span class="n">responses</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
     <span class="c1"># sample one new value of the tonic volatility at the second level and fit to observations</span>
     <span class="n">volatility</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
@@ -584,7 +587,6 @@ P(A|\mu, t) = \frac{\mu^t}{\mu^t + (1-\mu)^t}
     <span class="n">p</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">agent</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">],</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">)</span>
 
     <span class="c1"># store observations and decisions separately</span>
-    <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
     <span class="n">responses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -604,7 +606,7 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span>
     <span class="n">response_function</span><span class="o">=</span><span class="n">binary_softmax_inverse_temperature</span><span class="p">,</span>
     <span class="n">response_function_inputs</span><span class="o">=</span><span class="n">responses</span><span class="p">,</span>
 <span class="p">)</span>
@@ -653,7 +655,7 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f3ab0d526d25ecf957af2913fe58da7f2e3f9ef6a026e8caf199c7011a4d3c2e.svg" src="../_images/f3ab0d526d25ecf957af2913fe58da7f2e3f9ef6a026e8caf199c7011a4d3c2e.svg" /></div>
+<img alt="../_images/b16cc490c6cc561b222c5f906b95d37911f8739aa261fe6d29a52692d13edb83.svg" src="../_images/b16cc490c6cc561b222c5f906b95d37911f8739aa261fe6d29a52692d13edb83.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -678,52 +680,17 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [mu_volatility, sigma_volatility, volatility, mu_temperature, sigma_temperature, inverse_temperature]
 </pre></div>
 </div>
-<div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:32&lt;00:00 Sampling chain 0, 0 divergences]
-    </div>
-    </div><div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [2000/2000 00:24&lt;00:00 Sampling chain 1, 1 divergences]
-    </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 56 seconds.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 1 divergences after tuning. Increase `target_accept` or reparameterize.
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+</pre>
+</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 58 seconds.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
@@ -742,7 +709,7 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6a3f1ae5c31b6a4ade5c573f4cea25df4d74a028bc6083c7ac98538aa921d267.png" src="../_images/6a3f1ae5c31b6a4ade5c573f4cea25df4d74a028bc6083c7ac98538aa921d267.png" />
+<img alt="../_images/750086786c51bf3a91974437adce436fb5517b9a2fc7b9f0eb6ed549cd2c0865.png" src="../_images/750086786c51bf3a91974437adce436fb5517b9a2fc7b9f0eb6ed549cd2c0865.png" />
 </div>
 </div>
 <p>The reference values on both posterior distributions indicate the mean of the distribution used for simulation.</p>
@@ -758,24 +725,24 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Mar 19 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Apr 18 2024
 
 Python implementation: CPython
-Python version       : 3.10.13
-IPython version      : 8.22.2
+Python version       : 3.10.14
+IPython version      : 8.23.0
 
 pyhgf : 0.0.16
 jax   : 0.4.19
 jaxlib: 0.4.19
 
-seaborn   : 0.13.2
-numpy     : 1.22.0
-arviz     : 0.17.1
-matplotlib: 3.8.3
 jax       : 0.4.19
-pytensor  : 2.18.6
-pymc      : 5.11.0
-sys       : 3.10.13 (main, Aug 28 2023, 08:28:42) [GCC 11.4.0]
+numpy     : 1.22.0
+sys       : 3.10.14 (main, Mar 20 2024, 15:15:25) [GCC 11.4.0]
+seaborn   : 0.13.2
+pymc      : 5.13.1
+arviz     : 0.17.1
+pytensor  : 2.20.0
+matplotlib: 3.8.4
 
 Watermark: 2.4.3
 </pre></div>
@@ -868,7 +835,7 @@ Watermark: 2.4.3
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.6.
     <br/>
   </p>
 </div>

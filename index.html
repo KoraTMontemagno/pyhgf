@@ -40,7 +40,7 @@
   <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="_static/documentation_options.js?v=c7cdf6fe"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
@@ -49,6 +49,8 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=36754332"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="icon" href="_static/logo_small.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -438,7 +440,7 @@ document.write(`
 </section>
 <section id="how-does-it-work">
 <h3>How does it work?<a class="headerlink" href="#how-does-it-work" title="Link to this heading">#</a></h3>
-<p>The nodalized Hierarchical Gaussian Filter consists of a network of probabilistic nodes hierarchically structured where each node can inherit its value and volatility sufficient statistics from other parent nodes. The presentation of a new observation at the lowest level of the hierarchy (i.e., the input node) triggers a recursive update of the nodes’ belief (i.e., posterior distribution) through the bottom-up propagation of precision-weighted prediction error.</p>
+<p>The nodalized Hierarchical Gaussian Filter consists of a network of probabilistic nodes hierarchically structured where each node can inherit its value and volatility sufficient statistics from other parent nodes. The presentation of a new observation at the lower level of the hierarchy (i.e. the input node) triggers a recursive update of the nodes’ belief through the bottom-up propagation of precision-weighted prediction error.</p>
 <p>More generally, pyhgf operates on graph neural networks that can be defined and updated through the following variables:</p>
 <ul class="simple">
 <li><p>The node parameters (dictionary) that store each node’s parameters (value, precision, learning rates, volatility coupling, …).</p></li>
@@ -447,14 +449,14 @@ document.write(`
 <li><p>An update sequence (tuple) that defines the order in which the update functions are called, and the target node.</p></li>
 </ul>
 <p><img alt="png" src="_images/graph_networks.svg" /></p>
-<p>Value parents and volatility parents are nodes themselves. Any node can be a value and/or volatility parent for other nodes and have multiple value and/or volatility parents. A filtering structure consists of nodes embedding other nodes hierarchically. Nodes are parametrized by their sufficient statistic and parents. The transformations between nodes can be linear, non-linear, or any function (thus a <em>generalization</em> of the HGF).</p>
-<p>The resulting probabilistic network operates as a filter for new observations. If a decision function (taking the whole model as a parameter) is also defined, behaviours can be triggered accordingly. By comparing those behaviours with actual outcomes, a surprise function can be optimized over the range of parameters of interest.</p>
+<p>Value parent and volatility parent are nodes themself. Any node can be a value and/or volatility parent for other nodes and have multiple value and/or volatility parents. A filtering structure consists of nodes embedding other nodes hierarchically. Nodes are parametrized by their sufficient statistic and parents. The transformations between nodes can be linear, non-linear, or any function (thus a <em>generalization</em> of the HGF).</p>
+<p>The resulting probabilistic network operates as a filter towards new observation. If a decision function (taking the whole model as a parameter) is also defined, behaviours can be triggered accordingly. By comparing those behaviours with actual outcomes, a surprise function can be optimized over the range of parameters of interest.</p>
 </section>
 <section id="the-hierarchical-gaussian-filter">
 <h3>The Hierarchical Gaussian Filter<a class="headerlink" href="#the-hierarchical-gaussian-filter" title="Link to this heading">#</a></h3>
-<p>The Hierarchical Gaussian Filter for binary and continuous inputs as it was described in <span id="id1">[<a class="reference internal" href="references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>, <a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>, and later implemented in the Matlab HGF Toolbox (part of <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">TAPAS</a> <span id="id2">[<a class="reference internal" href="references.html#id10" title="Stefan Frässle, Eduardo A. Aponte, Saskia Bollmann, Kay H. Brodersen, Cao T. Do, Olivia K. Harrison, Samuel J. Harrison, Jakob Heinzle, Sandra Iglesias, Lars Kasper, Ekaterina I. Lomakina, Christoph Mathys, Matthias Müller-Schrader, Inês Pereira, Frederike H. Petzschner, Sudhir Raman, Dario Schöbi, Birte Toussaint, Lilian A. Weber, Yu Yao, and Klaas E. Stephan. TAPAS: an open-source software package for translational neuromodeling and computational psychiatry. Frontiers in Psychiatry, June 2021. URL: https://doi.org/10.3389/fpsyt.2021.680811, doi:10.3389/fpsyt.2021.680811.">Frässle <em>et al.</em>, 2021</a>]</span>), can be seen as a special case of this node structure such as:</p>
+<p>The Hierarchical Gaussian Filter for binary and continuous inputs as it was described in <span id="id1">[<a class="reference internal" href="references.html#id3" title="Christoph D. Mathys, Ekaterina I. Lomakina, Jean Daunizeau, Sandra Iglesias, Kay H. Brodersen, Karl J. Friston, and Klaas E. Stephan. Uncertainty in perception and the hierarchical gaussian filter. Frontiers in Human Neuroscience, 2014. URL: https://www.frontiersin.org/articles/10.3389/fnhum.2014.00825, doi:10.3389/fnhum.2014.00825.">Mathys <em>et al.</em>, 2014</a>, <a class="reference internal" href="references.html#id2" title="Christoph D. Mathys. A Bayesian foundation for individual learning under uncertainty. Frontiers in Human Neuroscience, 5(May):1–20, 2011. URL: http://journal.frontiersin.org/article/10.3389/fnhum.2011.00039/abstract, doi:10.3389/fnhum.2011.00039.">Mathys, 2011</a>]</span>, and later implemented in the Matlab Tapas toolbox <span id="id2">[<a class="reference internal" href="references.html#id10" title="Stefan Frässle, Eduardo A. Aponte, Saskia Bollmann, Kay H. Brodersen, Cao T. Do, Olivia K. Harrison, Samuel J. Harrison, Jakob Heinzle, Sandra Iglesias, Lars Kasper, Ekaterina I. Lomakina, Christoph Mathys, Matthias Müller-Schrader, Inês Pereira, Frederike H. Petzschner, Sudhir Raman, Dario Schöbi, Birte Toussaint, Lilian A. Weber, Yu Yao, and Klaas E. Stephan. TAPAS: an open-source software package for translational neuromodeling and computational psychiatry. Frontiers in Psychiatry, June 2021. URL: https://doi.org/10.3389/fpsyt.2021.680811, doi:10.3389/fpsyt.2021.680811.">Frässle <em>et al.</em>, 2021</a>]</span>, can be seen as a special case of this node structure such as:</p>
 <p><img alt="Figure2" src="_images/hgf.png" /></p>
-<p>The pyhgf package includes pre-implemented standard HGF models that can be used together with other neural network libraries or Bayesian inference tools. It is also possible for the user to build custom network structures which match specific needs.</p>
+<p>The pyhgf package includes pre-implemented standard HGF models that can be used together with other neural network libraries of Bayesian inference tools. It is also possible for the user to build custom network structures that would match specific needs.</p>
 </section>
 <section id="model-fitting">
 <h3>Model fitting<a class="headerlink" href="#model-fitting" title="Link to this heading">#</a></h3>
@@ -497,7 +499,7 @@ document.write(`
 </section>
 <section id="acknowledgments">
 <h2>Acknowledgments<a class="headerlink" href="#acknowledgments" title="Link to this heading">#</a></h2>
-<p>This implementation of the Hierarchical Gaussian Filter was inspired by the original <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">Matlab HGF Toolbox</a>. A Julia implementation of the generalized, nodalized and multilevel HGF is also available <a class="reference external" href="https://github.com/ilabcode/HGF.jl">here</a>.</p>
+<p>This implementation of the Hierarchical Gaussian Filter was largely inspired by the original <a class="reference external" href="https://translationalneuromodeling.github.io/tapas">Matlab version</a>. A Julia implementation of the generalized, nodalised and multilevel HGF is also available <a class="reference external" href="https://github.com/ilabcode/HGF.jl">here</a>.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
@@ -604,7 +606,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.6.
     <br/>
   </p>
 </div>
