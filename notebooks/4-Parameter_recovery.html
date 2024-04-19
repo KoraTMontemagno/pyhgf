@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Recovering computational parameters from the observed behaviours &#8212; pyhgf 0.0.16 documentation</title>
+    <title>Recovering computational parameters from observed behaviours &#8212; pyhgf 0.0.16 documentation</title>
   
   
   
@@ -439,8 +439,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="recovering-computational-parameters-from-the-observed-behaviours">
-<span id="parameters-recovery"></span><h1>Recovering computational parameters from the observed behaviours<a class="headerlink" href="#recovering-computational-parameters-from-the-observed-behaviours" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="recovering-computational-parameters-from-observed-behaviours">
+<span id="parameters-recovery"></span><h1>Recovering computational parameters from observed behaviours<a class="headerlink" href="#recovering-computational-parameters-from-observed-behaviours" title="Link to this heading">#</a></h1>
 <p><a class="reference external" href="https://colab.research.google.com/github/ilabcode/pyhgf/blob/master/docs/source/notebooks/4-Parameter_recovery.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <div class="cell tag_hide-cell docutils container">
 <details class="hide above-input">
@@ -489,14 +489,21 @@ document.write(`
 </div>
 </div>
 </div>
-<p>An important application of Hierarchical Gaussian Filters consists in the inference of computational parameters from observed behaviours, as well as the inference of data-generating models (e.g. are the participants answering randomly or are they learning environmental volatilities that are better approached with a Rescorla-Wagner or a Hierarchical Gaussian Filter?). <strong>Parameter recovery</strong> refers to the ability to recover true data-generating parameters; <strong>model recovery</strong> refers to the ability to correctly identify the true data-generating model using model comparison techniques. It is often a good idea to test parameter/model recovery of a computational model using simulated data before applying this model to experimental data . In this tutorial, we are going to demonstrate how to recover some parameters of the generative model of the Hierarchical Gaussian Filter.</p>
+<p>An important application of Hierarchical Gaussian Filters consists in the inference of computational parameters from observed behaviours, as well as the inference of data-generating models (e.g. are the participants answering randomly or are they learning environmental volatilities that are better approached with a Rescorla-Wagner or a Hierarchical Gaussian Filter?). <strong>Parameter recovery</strong> refers to the ability to recover true data-generating parameters; <strong>model recovery</strong> refers to the ability to correctly identify the true data-generating model using model comparison techniques. It is often a good idea to test parameter/model recovery of a computational model using simulated data before applying this model to experimental data . In this tutorial, we demonstrate how to recover some parameters of the generative model of the Hierarchical Gaussian Filter.</p>
 <section id="simulate-behaviours-from-a-one-armed-bandit-task">
 <h2>Simulate behaviours from a one-armed bandit task<a class="headerlink" href="#simulate-behaviours-from-a-one-armed-bandit-task" title="Link to this heading">#</a></h2>
-<p>Using a given task structure, we are going to simulate behaviours from a group of participants assuming that they are updating beliefs of environmental volatility using a two-level Hierarchical Gaussian Filter, using a simple sigmoid as a response function parametrized by an inverse temperature parameter. For each participant, the inverse temperature and the tonic volatility at the second level are free parameters that will be estimated during the inference step.</p>
+<p>Using a given task structure, we simulate behaviours from a group of participants assuming that they are updating beliefs of environmental volatility using a two-level Hierarchical Gaussian Filter, using a simple sigmoid as a response function parametrized by an inverse temperature parameter. For each participant, the inverse temperature and the tonic volatility at the second level are free parameters that will be estimated during the inference step.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># u is the vector encoding the presence/absence of association</span>
-<span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span>  <span class="c1"># the vector encoding the presence/absence of association</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># the number of agents to simulate</span>
+
+<span class="c1"># sample one value for the inverse temperature (here in log space) and simulate responses</span>
+<span class="n">temperatures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+<span class="c1"># sample one new value of the tonic volatility at the second level and fit to observations</span>
+<span class="n">volatilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -512,15 +519,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">40</span>  <span class="c1"># number of agents to simulate</span>
-
-<span class="c1"># sample one value for the inverse temperature (here in log space) and simulate responses</span>
-<span class="n">temperatures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-
-<span class="c1"># sample one new value of the tonic volatility at the second level and fit to observations</span>
-<span class="n">volatilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
-
-<span class="c1"># create just one default network - we will simply change the values of interest before fitting to save time</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create just one default network - we will simply change the values of interest before fitting to save time</span>
 <span class="n">agent</span> <span class="o">=</span> <span class="n">HGF</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -552,6 +551,9 @@ document.write(`
 </div>
 </div>
 </div>
+</section>
+<section id="inference-from-the-simulated-behaviours">
+<h2>Inference from the simulated behaviours<a class="headerlink" href="#inference-from-the-simulated-behaviours" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
@@ -565,339 +567,27 @@ document.write(`
 </div>
 </div>
 </div>
+<p>Here, we are not assuming hyperpriors to ensure that individual estimates are independent and avoid hierarchical partial pooling.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">two_levels_binary_hgf</span><span class="p">:</span>
+
     <span class="c1"># tonic volatility</span>
-    <span class="n">volatility</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;volatility&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,))</span>
+    <span class="n">volatility</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">censored_volatility</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Censored</span><span class="p">(</span><span class="s2">&quot;censored_volatility&quot;</span><span class="p">,</span> <span class="n">volatility</span><span class="p">,</span> <span class="n">lower</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># inverse temperature</span>
-    <span class="c1">#inverse_temperature = pm.LogNormal(&quot;inverse_temperature&quot;, 1.0, 1.0, shape=(N,))</span>
+    <span class="n">inverse_temperature</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="s2">&quot;inverse_temperature&quot;</span><span class="p">,</span> <span class="mf">.1</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">initval</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
 
     <span class="c1"># The multi-HGF distribution</span>
     <span class="c1"># --------------------------</span>
     <span class="n">pm</span><span class="o">.</span><span class="n">Potential</span><span class="p">(</span>
         <span class="s2">&quot;hgf_loglike&quot;</span><span class="p">,</span>
         <span class="n">hgf_logp_op</span><span class="p">(</span>
-            <span class="n">tonic_volatility_2</span><span class="o">=</span><span class="n">volatility</span><span class="p">,</span>
-            <span class="c1">#response_function_parameters=inverse_temperature,</span>
+            <span class="n">tonic_volatility_2</span><span class="o">=</span><span class="n">censored_volatility</span><span class="p">,</span>
+            <span class="n">response_function_parameters</span><span class="o">=</span><span class="n">inverse_temperature</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="sampling">
-<h2>Sampling<a class="headerlink" href="#sampling" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">find_MAP</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">two_levels_binary_hgf</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
-"ipywidgets" for Jupyter support
-  warnings.warn('install "ipywidgets" for Jupyter support')
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
-</pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
-</pre>
-</div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;volatility&#39;: array([-3.34013667, -3.44310028, -2.97446305, -3.3861849 , -3.26258507,
-        -2.85390475, -2.71784516, -2.73372055, -3.16427233, -3.2242682 ,
-        -2.85003347, -3.05625359, -2.92830365, -2.75943116, -3.12125423,
-        -2.82104244, -2.70847383, -2.70698777, -2.8780476 , -2.53908088,
-        -2.30560357, -2.27881608, -2.26668636, -2.13817918, -2.76557135,
-        -2.47956058, -1.95697856, -2.38597414, -2.42256802, -2.31303146,
-        -1.62356039, -2.10991874, -1.14031518, -1.55364697, -1.46609445,
-        -1.66927224, -1.68940567, -1.14785426, -1.44347727, -1.21000584])}
 </pre></div>
 </div>
 </div>
@@ -919,10 +609,162 @@ document.write(`
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sequential sampling (2 chains in 1 job)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [volatility]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [censored_volatility, inverse_temperature]
 </pre></div>
 </div>
 <div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
 "ipywidgets" for Jupyter support
   warnings.warn('install "ipywidgets" for Jupyter support')
 </pre>
@@ -932,64 +774,68 @@ document.write(`
 </div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
 </div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
 </pre>
-</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 150 seconds.
+</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 118 seconds.
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 30 divergences after tuning. Increase `target_accept` or reparameterize.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>There were 1998 divergences after tuning. Increase `target_accept` or reparameterize.
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>We recommend running at least 4 chains for robust computation of convergence diagnostics
 </pre></div>
 </div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
 </pre></div>
 </div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details
+</pre></div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../_images/a769a2c9efd06348b567a45c77c247070656e78c43411dfa994abced890fb7f4.png" src="../_images/a769a2c9efd06348b567a45c77c247070656e78c43411dfa994abced890fb7f4.png" />
 </div>
 </div>
 </section>
-<section id="id1">
-<h2>Parameters recovery<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
+<section id="visualizing-parameters-recovery">
+<h2>Visualizing parameters recovery<a class="headerlink" href="#visualizing-parameters-recovery" title="Link to this heading">#</a></h2>
+<p>A successful parameter recovery is usually inferred from the scatterplot of simulated values and inferred values of the parameters. Here, we can see that the model can recover fairly accurate values close to the underlying parameters. Additionally, we can report the coefficient of correlation between the two variables, as a more objective measure of correspondence.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">temperatures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">refs</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;volatility&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">volatilities</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">[</span><span class="s2">&quot;censored_volatility&quot;</span><span class="p">,</span> <span class="s2">&quot;inverse_temperature&quot;</span><span class="p">],</span> 
+    <span class="p">[</span><span class="n">volatilities</span><span class="p">,</span> <span class="n">temperatures</span><span class="p">],</span> 
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> 
 <span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
-        <span class="n">mean</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="n">var_name</span><span class="p">)[</span>
-                <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
-            <span class="p">]</span>
-            <span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
-        <span class="p">)</span>
+    <span class="n">inferred_parameters</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="n">var_name</span><span class="p">)[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
-        <span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-            <span class="n">refs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-            <span class="n">mean</span><span class="p">,</span>
-            <span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="mf">.4</span><span class="p">,</span>
-            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#582766&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">refs</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">inferred_parameters</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+        <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Reds&quot;</span> <span class="k">if</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;censored_volatility&quot;</span> <span class="k">else</span> <span class="s2">&quot;Greens&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">.4</span>
+    <span class="p">)</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">refs</span><span class="p">,</span>
+        <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">two_level_hgf_idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="n">var_name</span><span class="p">)[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">.8</span><span class="p">,</span>
+        <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span> <span class="s2">&quot;#c44e52&quot;</span> <span class="k">if</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;censored_volatility&quot;</span> <span class="k">else</span> <span class="s2">&quot;#55a868&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Simulated parameter&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Infered parameter&quot;</span><span class="p">)</span>
+    
 
 <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Second level tonic volatility&quot;</span><span class="p">)</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Inverse temperature&quot;</span><span class="p">)</span>
@@ -997,8 +843,9 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
-<img alt="../_images/de7b35507b50395998af979799a998cf2c40d3167a9abdf576fcc66b3bd6f411.png" src="../_images/de7b35507b50395998af979799a998cf2c40d3167a9abdf576fcc66b3bd6f411.png" />
+<img alt="../_images/7dff89b41c930bed7a497f1272b5669c36cfb0b2b3e5550d3f1b48f8d42cefb2.png" src="../_images/7dff89b41c930bed7a497f1272b5669c36cfb0b2b3e5550d3f1b48f8d42cefb2.png" />
 </div>
 </div>
 </section>
@@ -1024,12 +871,12 @@ jax   : 0.4.26
 jaxlib: 0.4.26
 
 numpy     : 1.26.0
-sys       : 3.12.3 (main, Apr 10 2024, 03:36:41) [GCC 11.4.0]
 seaborn   : 0.13.2
+matplotlib: 3.8.4
+pymc      : 5.13.1
 jax       : 0.4.26
 arviz     : 0.18.0
-pymc      : 5.13.1
-matplotlib: 3.8.4
+sys       : 3.12.3 (main, Apr 10 2024, 03:36:41) [GCC 11.4.0]
 
 Watermark: 2.4.3
 </pre></div>
@@ -1066,10 +913,10 @@ Watermark: 2.4.3
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Recovering computational parameters from the observed behaviours</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Recovering computational parameters from observed behaviours</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulate-behaviours-from-a-one-armed-bandit-task">Simulate behaviours from a one-armed bandit task</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling">Sampling</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Parameters recovery</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-from-the-simulated-behaviours">Inference from the simulated behaviours</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-parameters-recovery">Visualizing parameters recovery</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#system-configuration">System configuration</a></li>

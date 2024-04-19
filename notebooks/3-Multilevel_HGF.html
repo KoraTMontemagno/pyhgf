@@ -545,7 +545,7 @@ P(A|\mu, t) = \frac{\mu^t}{\mu^t + (1-\mu)^t}
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_palette</span><span class="p">(</span><span class="s2">&quot;rocket&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">temp</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">64.0</span><span class="p">]:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temp</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;$\lambda  = </span><span class="si">{</span><span class="n">temp</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temp</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">rf</span><span class="s1">&#39;$ \lambda = </span><span class="si">{</span><span class="n">temp</span><span class="si">}</span><span class="s1">$&#39;</span><span class="p">);</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;The unit square sigmoid function&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">();</span>
@@ -554,12 +554,6 @@ P(A|\mu, t) = \frac{\mu^t}{\mu^t + (1-\mu)^t}
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;&gt;:4: SyntaxWarning: invalid escape sequence &#39;\l&#39;
-&lt;&gt;:4: SyntaxWarning: invalid escape sequence &#39;\l&#39;
-/tmp/ipykernel_3772/2475200731.py:4: SyntaxWarning: invalid escape sequence &#39;\l&#39;
-  plt.plot(x, sigmoid(x, temp), label=f&quot;$\lambda  = {temp}$&quot;)
-</pre></div>
-</div>
 <img alt="../_images/6fd1a5490af3d4338e3a8ea15f22191e0d849d6c20aa348116d67a78ff4e84f2.png" src="../_images/6fd1a5490af3d4338e3a8ea15f22191e0d849d6c20aa348116d67a78ff4e84f2.png" />
 </div>
 </div>
@@ -612,7 +606,7 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf_logp_op</span> <span class="o">=</span> <span class="n">HGFDistribution</span><span class="p">(</span>
     <span class="n">n_levels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">model_type</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span>  <span class="c1"># the inputs are the same for all agents - just duplicate the array</span>
     <span class="n">response_function</span><span class="o">=</span><span class="n">binary_softmax_inverse_temperature</span><span class="p">,</span>
     <span class="n">response_function_inputs</span><span class="o">=</span><span class="n">responses</span><span class="p">,</span>
 <span class="p">)</span>
@@ -661,7 +655,7 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b297cef85e17b28060d3821e6a7ccd20ebf5e4c70d90a8057bb811f4116ff4f9.svg" src="../_images/b297cef85e17b28060d3821e6a7ccd20ebf5e4c70d90a8057bb811f4116ff4f9.svg" /></div>
+<img alt="../_images/7b6a825c5c7571ce565752d4d3165835f20e714bd4931b48738173e6bd404084.svg" src="../_images/7b6a825c5c7571ce565752d4d3165835f20e714bd4931b48738173e6bd404084.svg" /></div>
 </div>
 </section>
 <section id="sampling">
@@ -687,6 +681,10 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </pre></div>
 </div>
 <div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
+"ipywidgets" for Jupyter support
+  warnings.warn('install "ipywidgets" for Jupyter support')
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/rich/live.py:231: UserWarning: install 
 "ipywidgets" for Jupyter support
   warnings.warn('install "ipywidgets" for Jupyter support')
 </pre>
@@ -790,7 +788,7 @@ To estimate group-level parameters, we will have to fit multiple models at the s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/289abbf8995c398d45c9660e5fd49d6c5c9e64f990a1c452ac26c4b206ad933b.png" src="../_images/289abbf8995c398d45c9660e5fd49d6c5c9e64f990a1c452ac26c4b206ad933b.png" />
+<img alt="../_images/6d634785ed8dc588f22354d434d07bef9c5a379d4f07e9d82cb0da034cd9a497.png" src="../_images/6d634785ed8dc588f22354d434d07bef9c5a379d4f07e9d82cb0da034cd9a497.png" />
 </div>
 </div>
 <p>The reference values on both posterior distributions indicate the mean of the distribution used for simulation.</p>
@@ -818,11 +816,11 @@ jaxlib: 0.4.26
 
 sys       : 3.12.3 (main, Apr 10 2024, 03:36:41) [GCC 11.4.0]
 arviz     : 0.18.0
-numpy     : 1.26.0
-pymc      : 5.13.1
-jax       : 0.4.26
 pytensor  : 2.20.0
 seaborn   : 0.13.2
+jax       : 0.4.26
+numpy     : 1.26.0
+pymc      : 5.13.1
 matplotlib: 3.8.4
 
 Watermark: 2.4.3
