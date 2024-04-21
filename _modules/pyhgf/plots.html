@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyhgf.plots &#8212; pyhgf 0.0.16 documentation</title>
+    <title>pyhgf.plots &#8212; pyhgf 0.0.17 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=c7cdf6fe"></script>
+    <script src="../../_static/documentation_options.js?v=63b572e7"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -711,8 +711,6 @@ document.write(`
             <span class="n">label</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Bi-</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;box&quot;</span>
         <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
             <span class="n">label</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Ca-</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;diamond&quot;</span>
-        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;dirichlet&quot;</span><span class="p">:</span>
-            <span class="n">label</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;DP-</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;doublecircle&quot;</span>
         <span class="n">graphviz_structure</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
@@ -1067,9 +1065,9 @@ document.write(`
                     <span class="p">)</span>
 
                     <span class="c1"># hide surprise if the input was not observed</span>
-                    <span class="n">node_surprise</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;observed&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-                    <span class="p">)</span>
+                    <span class="n">node_surprise</span><span class="p">[</span>
+                        <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;observed&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+                    <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
                     <span class="n">surprise_ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                         <span class="n">trajectories_df</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                         <span class="n">node_surprise</span><span class="p">,</span>
