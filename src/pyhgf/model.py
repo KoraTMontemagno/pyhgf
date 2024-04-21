@@ -252,22 +252,30 @@ class HGF(object):
                 )
 
             # initialize the model so it is ready to receive new observations
-            self.init()
+            self.create_belief_propagation_fn()
 
-    def init(self) -> "HGF":
-        """Initialize the update functions.
+    def create_belief_propagation_fn(self, overwrite: bool = True) -> "HGF":
+        """Create the belief propagation function.
 
-        This step should be called after creating the network to compile the update
-        sequence and before providing any input data.
+        .. note:
+           This step is called by default when using py:meth:`input_data`.
+
+        Parameters
+        ----------
+        overwrite :
+            If `True` (default), create a new belief propagation function and ignore
+            preexisting values. Otherwise, do not create a new function if the attribute
+            `scan_fn` is already defined.
 
         """
-        # create the update sequence automatically if not provided
+        # create the update sequence if it does not already exist
         if self.update_sequence is None:
             self.set_update_sequence()
             if self.verbose:
                 print("... Create the update sequence from the network structure.")
 
-        # create the belief propagation function that will be scanned
+        # create the belief propagation function
+        # this function is laer used by scan to loop over observations
         if self.scan_fn is None:
             self.scan_fn = Partial(
                 beliefs_propagation,
@@ -277,6 +285,33 @@ class HGF(object):
             )
             if self.verbose:
                 print("... Create the belief propagation function.")
+        else:
+            if overwrite:
+                self.scan_fn = Partial(
+                    beliefs_propagation,
+                    update_sequence=self.update_sequence,
+                    edges=self.edges,
+                    input_nodes_idx=self.input_nodes_idx.idx,
+                )
+                if self.verbose:
+                    print("... Create the belief propagation function (overwrite).")
+            else:
+                if self.verbose:
+                    print("... The belief propagation function is already defined.")
+
+        return self
+
+    def cache_belief_propagation_fn(self) -> "HGF":
+        """Blank call to the belief propagation function.
+
+        .. note:
+           This step is called by default when using py:meth:`input_data`. It can
+           sometimes be convenient to call this step independently to chache the JITed
+           function before fitting the model.
+
+        """
+        if self.scan_fn is None:
+            self = self.create_belief_propagation_fn()
 
         # blanck call to cache the JIT-ed functions
         _ = scan(
@@ -323,6 +358,8 @@ class HGF(object):
             missing in the event log, or rejected trials).
 
         """
+        if self.scan_fn is None:
+            self = self.create_belief_propagation_fn()
         if self.verbose:
             print((f"Adding {len(input_data)} new observations."))
         if time_steps is None:
@@ -462,12 +499,16 @@ class HGF(object):
     def surprise(
         self,
         response_function: Optional[Callable] = None,
-        response_function_parameters: Tuple = (),
+        response_function_inputs: Tuple = (),
+        response_function_parameters: Optional[
+            Union[np.ndarray, ArrayLike, float]
+        ] = None,
     ):
-        """Surprise (negative log probability) under new observations.
+        """Surprise of the model conditioned by the response function.
 
-        The surprise depends on the input data, the model parameters, the response
-        function and its additional parameters(optional).
+        The surprise (negative log probability) depends on the input data, the model
+        parameters, the response function, its inputs and its additional parameters
+        (optional).
 
         Parameters
         ----------
@@ -475,8 +516,14 @@ class HGF(object):
             The response function to use to compute the model surprise. If `None`
             (default), return the sum of Gaussian surprise if `model_type=="continuous"`
             or the sum of the binary surprise if `model_type=="binary"`.
+        response_function_inputs :
+            A list of tuples with the same length as the number of models. Each tuple
+            contains additional data and parameters that can be accessible to the
+            response functions.
         response_function_parameters :
-            Additional parameters to the response function (optional).
+            A list of additional parameters that will be passed to the response
+            function. This can include values over which inferece is performed in a
+            PyMC model (e.g. the inverse temperature of a binary softmax).
 
         Returns
         -------
@@ -493,6 +540,7 @@ class HGF(object):
 
         return response_function(
             hgf=self,
+            response_function_inputs=response_function_inputs,
             response_function_parameters=response_function_parameters,
         )
 

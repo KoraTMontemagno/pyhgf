@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.10']
+        python-version: ['3.12']
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -34,6 +34,6 @@ jobs:
         python -m ipykernel install --user --name python3
     - name: Run tests and coverage
       run: |
-        pytest ./tests/ --cov=./pyhgf/ --cov-report=xml
+        pytest ./tests/ --cov=./src/pyhgf/ --cov-report=xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
