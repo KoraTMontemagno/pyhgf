@@ -448,21 +448,6 @@ document.write(`
 <span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 
-<span class="k">class</span> <span class="nc">SufficientStatistics</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sufficient statistics from the exponential family distributions.</span>
-
-<span class="sd">    The sufficient statistics are returned as a one dimentional vector of unique values.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">normal</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute sufficient statistics from a normal distribution.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">])</span>
-
-    <span class="k">def</span> <span class="nf">multivariate_normal</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute sufficient statistics from an n dimentional normal distribution.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)[</span><span class="n">jnp</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]])</span>
-
-
 <div class="viewcode-block" id="gaussian_density">
 <a class="viewcode-back" href="../../generated/pyhgf.math/pyhgf.math.gaussian_density.html#pyhgf.math.gaussian_density">[docs]</a>
 <span class="k">def</span> <span class="nf">gaussian_density</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">precision</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span>
