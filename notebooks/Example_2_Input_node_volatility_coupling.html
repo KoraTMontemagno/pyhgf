@@ -602,7 +602,7 @@ Adding 1000 new observations.
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/69370e3104aa5e06a4f047bf59716ee2bed25351821efb61c7c544f7fb4db863.png" src="../_images/69370e3104aa5e06a4f047bf59716ee2bed25351821efb61c7c544f7fb4db863.png" />
+<img alt="../_images/9419123f1d069efe21fd302aa9c26d59ca3b77f0aed681bc0dec36de8f5e2603.png" src="../_images/9419123f1d069efe21fd302aa9c26d59ca3b77f0aed681bc0dec36de8f5e2603.png" />
 </div>
 </div>
 </section>
@@ -624,7 +624,7 @@ Adding 1000 new observations.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_precision_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;input_noise&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;input_precision&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">})</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">})</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">})</span>
 <span class="p">)</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
@@ -640,6 +640,204 @@ Adding 1000 new observations.
 </pre></div>
 </div>
 <img alt="../_images/df8d2784694f45c319ae47a7000b4dc08c13f05d0e5a32a163756f8fe2466b52.svg" src="../_images/df8d2784694f45c319ae47a7000b4dc08c13f05d0e5a32a163756f8fe2466b52.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>time_steps</th>
+      <th>time</th>
+      <th>observation_input_0</th>
+      <th>x_1_mean</th>
+      <th>x_1_precision</th>
+      <th>x_1_expected_mean</th>
+      <th>x_1_expected_precision</th>
+      <th>observation_input_0_surprise</th>
+      <th>observation_input_0_expected_precision</th>
+      <th>x_1_surprise</th>
+      <th>total_surprise</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>3.914369</td>
+      <td>3.913978</td>
+      <td>10001.000000</td>
+      <td>0.000000</td>
+      <td>0.999665</td>
+      <td>76607.750000</td>
+      <td>10000.0</td>
+      <td>8.576149</td>
+      <td>76616.328125</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>5.997345</td>
+      <td>5.608260</td>
+      <td>12296.460938</td>
+      <td>3.913978</td>
+      <td>2296.461182</td>
+      <td>21698.417969</td>
+      <td>10000.0</td>
+      <td>3293.151611</td>
+      <td>24991.570312</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.0</td>
+      <td>3.0</td>
+      <td>5.282979</td>
+      <td>5.345922</td>
+      <td>12399.307617</td>
+      <td>5.608260</td>
+      <td>2399.307861</td>
+      <td>525.354431</td>
+      <td>10000.0</td>
+      <td>79.589531</td>
+      <td>604.943970</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.0</td>
+      <td>4.0</td>
+      <td>3.493705</td>
+      <td>3.852584</td>
+      <td>12403.197266</td>
+      <td>5.345922</td>
+      <td>2403.197510</td>
+      <td>17149.839844</td>
+      <td>10000.0</td>
+      <td>2676.660645</td>
+      <td>19826.500000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.0</td>
+      <td>5.0</td>
+      <td>4.421400</td>
+      <td>4.311182</td>
+      <td>12403.343750</td>
+      <td>3.852584</td>
+      <td>2403.343506</td>
+      <td>1614.070190</td>
+      <td>10000.0</td>
+      <td>249.753448</td>
+      <td>1863.823608</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>1.0</td>
+      <td>996.0</td>
+      <td>5.634763</td>
+      <td>5.381019</td>
+      <td>12403.349609</td>
+      <td>4.325226</td>
+      <td>2403.349365</td>
+      <td>8570.754883</td>
+      <td>10000.0</td>
+      <td>1336.532715</td>
+      <td>9907.287109</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>1.0</td>
+      <td>997.0</td>
+      <td>6.069919</td>
+      <td>5.936433</td>
+      <td>12403.349609</td>
+      <td>5.381019</td>
+      <td>2403.349365</td>
+      <td>2369.226562</td>
+      <td>10000.0</td>
+      <td>367.725189</td>
+      <td>2736.951660</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>1.0</td>
+      <td>998.0</td>
+      <td>4.090673</td>
+      <td>4.448319</td>
+      <td>12403.349609</td>
+      <td>5.936433</td>
+      <td>2403.349365</td>
+      <td>17030.470703</td>
+      <td>10000.0</td>
+      <td>2658.116455</td>
+      <td>19688.587891</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>1.0</td>
+      <td>999.0</td>
+      <td>5.470264</td>
+      <td>5.272245</td>
+      <td>12403.349609</td>
+      <td>4.448319</td>
+      <td>2403.349365</td>
+      <td>5218.171875</td>
+      <td>10000.0</td>
+      <td>812.789185</td>
+      <td>6030.960938</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>1.0</td>
+      <td>1000.0</td>
+      <td>3.888570</td>
+      <td>4.156679</td>
+      <td>12403.349609</td>
+      <td>5.272245</td>
+      <td>2403.349365</td>
+      <td>9569.107422</td>
+      <td>10000.0</td>
+      <td>1492.496460</td>
+      <td>11061.603516</td>
+    </tr>
+  </tbody>
+</table>
+<p>1000 rows × 11 columns</p>
+</div></div></div>
 </div>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
@@ -658,13 +856,10 @@ Adding 1000 new observations.
 
     <span class="c1"># extract the sufficient statistics from the input node (and parents)</span>
     <span class="n">mean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">x_1_expected_mean</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-        <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">mean_precision_hgf</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">x_2_expected_mean</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
-<span class="p">)</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">df</span><span class="o">.</span><span class="n">observation_input_0_expected_precision</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
     <span class="c1"># the model expectations</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">norm</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-
 
 <span class="c1"># the sampling distribution</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">norm</span><span class="p">(</span><span class="n">dist_mean</span><span class="p">,</span> <span class="n">dist_std</span><span class="p">)</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#582766&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
@@ -693,21 +888,21 @@ Adding 1000 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu May 02 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed May 08 2024
 
 Python implementation: CPython
 Python version       : 3.12.3
 IPython version      : 8.24.0
 
 pyhgf : 0.0.17
-jax   : 0.4.26
-jaxlib: 0.4.26
+jax   : 0.4.27
+jaxlib: 0.4.27
 
-matplotlib: 3.8.4
-sys       : 3.12.3 (main, Apr 10 2024, 03:36:41) [GCC 11.4.0]
-pymc      : 5.14.0
 numpy     : 1.26.0
 arviz     : 0.18.0
+sys       : 3.12.3 (main, Apr 10 2024, 03:36:41) [GCC 11.4.0]
+pymc      : 5.14.0
+matplotlib: 3.8.4
 seaborn   : 0.13.2
 
 Watermark: 2.4.3

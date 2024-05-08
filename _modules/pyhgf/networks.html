@@ -941,14 +941,18 @@ document.write(`
     <span class="p">)</span>
     <span class="n">trajectories_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">trajectories_df</span><span class="p">,</span> <span class="n">df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="c1"># Surprises</span>
-    <span class="c1"># ---------</span>
+    <span class="c1"># Expectations and surprises</span>
+    <span class="c1"># --------------------------</span>
 
-    <span class="c1"># add the surprise computed from the continuous inputs</span>
+    <span class="c1"># add the surprise and expected precision computed from the continuous inputs</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
         <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span>
             <span class="n">idx</span>
         <span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">!=</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
+            <span class="n">trajectories_df</span><span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">_expected_precision&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
 
     <span class="c1"># for value parents of binary inputs nodes</span>
     <span class="n">binary_nodes_idxs</span> <span class="o">=</span> <span class="p">[]</span>
