@@ -49,6 +49,8 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generated/pyhgf.updates.prediction.continuous/pyhgf.updates.prediction.continuous.predict_mean';</script>
     <link rel="icon" href="../../_static/logo_small.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -534,6 +536,26 @@ document.write(`
 <dt class="sig sig-object py" id="pyhgf.updates.prediction.continuous.predict_mean">
 <span class="sig-prename descclassname"><span class="pre">pyhgf.updates.prediction.continuous.</span></span><span class="sig-name descname"><span class="pre">predict_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Indexes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Array</span></span></span><a class="reference internal" href="../../_modules/pyhgf/updates/prediction/continuous.html#predict_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.updates.prediction.continuous.predict_mean" title="Link to this definition">#</a></dt>
 <dd><p>Compute the expected mean of a continuous state node.</p>
+<p>The expected mean at time <span class="math notranslate nohighlight">\(k\)</span> for a state node <span class="math notranslate nohighlight">\(a\)</span> with optional value
+parent(s) <span class="math notranslate nohighlight">\(b\)</span> is given by:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\mu}_a^{(k)} = \lambda_a \mu_a^{(k-1)} + P_a^{(k)}\]</div>
+<p>where P_a^{(k)} is the drift rate (the total predicted drift of the mean, which sums
+the tonic and - optionally - phasic drifts). The variable <span class="math notranslate nohighlight">\(lambda_a\)</span>
+represents the state’s autoconnection strength, with <span class="math notranslate nohighlight">\(\lambda_a \in [0, 1]\)</span>.
+When <span class="math notranslate nohighlight">\(lambda_a = 1\)</span>, the node is performing a Gaussian Random Walk using the
+value :math:` P_a^{(k)}` as total drift rate. When <span class="math notranslate nohighlight">\(\lambda_a &lt; 1\)</span>, the state
+will revert back to the total mean <span class="math notranslate nohighlight">\(M_a\)</span>, which is given by:</p>
+<div class="math notranslate nohighlight">
+\[M_a = \frac{\rho_a + f\left(x_b^{(k)}\right)} {1-\lambda_a},\]</div>
+<p>If <span class="math notranslate nohighlight">\(\lambda_a = 0\)</span>, the node is not influenced by its own mean anymore, but
+by the value received by the value parent.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>By combining one parameter <span class="math notranslate nohighlight">\(\lambda_a \in [0, 1]\)</span> and the influence of
+value parents, it is possible to implement both Gaussian Random Walks and
+Autoregressive Processes, without requiring specific coupling types.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -552,11 +574,20 @@ nodes. For each node, the index list value/volatility - parents/children.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>expected_mean</dt><dd><p>The new expected mean of the value parent.</p>
+<dt>expected_mean</dt><dd><p>The new expected mean of the state node.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rfbef0cd15534-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Weber, L. A., Waade, P. T., Legrand, N., Møller, A. H., Stephan, K. E., &amp;
+Mathys, C. (2023). The generalized Hierarchical Gaussian Filter (Version 1).
+arXiv. <a class="reference external" href="https://doi.org/10.48550/ARXIV.2305.10937">https://doi.org/10.48550/ARXIV.2305.10937</a></p>
+</div>
+</div>
 </dd></dl>
 
 </section>

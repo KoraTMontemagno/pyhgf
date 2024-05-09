@@ -460,6 +460,32 @@ document.write(`
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the expected mean of a continuous state node.</span>
 
+<span class="sd">    The expected mean at time :math:`k` for a state node :math:`a` with optional value</span>
+<span class="sd">    parent(s) :math:`b` is given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \hat{\mu}_a^{(k)} = \lambda_a \mu_a^{(k-1)} + P_a^{(k)}</span>
+
+<span class="sd">    where P_a^{(k)} is the drift rate (the total predicted drift of the mean, which sums</span>
+<span class="sd">    the tonic and - optionally - phasic drifts). The variable :math:`lambda_a`</span>
+<span class="sd">    represents the state&#39;s autoconnection strength, with :math:`\lambda_a \in [0, 1]`.</span>
+<span class="sd">    When :math:`lambda_a = 1`, the node is performing a Gaussian Random Walk using the</span>
+<span class="sd">    value :math:` P_a^{(k)}` as total drift rate. When :math:`\lambda_a &lt; 1`, the state</span>
+<span class="sd">    will revert back to the total mean :math:`M_a`, which is given by:</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">            M_a = \frac{\rho_a + f\left(x_b^{(k)}\right)} {1-\lambda_a},</span>
+
+<span class="sd">    If :math:`\lambda_a = 0`, the node is not influenced by its own mean anymore, but</span>
+<span class="sd">    by the value received by the value parent.</span>
+
+<span class="sd">    .. hint::</span>
+
+<span class="sd">        By combining one parameter :math:`\lambda_a \in [0, 1]` and the influence of</span>
+<span class="sd">        value parents, it is possible to implement both Gaussian Random Walks and</span>
+<span class="sd">        Autoregressive Processes, without requiring specific coupling types.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    attributes :</span>
@@ -477,7 +503,13 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    expected_mean :</span>
-<span class="sd">        The new expected mean of the value parent.</span>
+<span class="sd">        The new expected mean of the state node.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Weber, L. A., Waade, P. T., Legrand, N., Møller, A. H., Stephan, K. E., &amp;</span>
+<span class="sd">       Mathys, C. (2023). The generalized Hierarchical Gaussian Filter (Version 1).</span>
+<span class="sd">       arXiv. https://doi.org/10.48550/ARXIV.2305.10937</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># List the node&#39;s value parents</span>
@@ -495,21 +527,10 @@ document.write(`
         <span class="p">):</span>
             <span class="n">driftrate</span> <span class="o">+=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">value_parent_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
 
-    <span class="c1"># New expected mean from the previous value</span>
-    <span class="n">expected_mean</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
-
-    <span class="c1"># Take the drift into account</span>
-    <span class="n">expected_mean</span> <span class="o">+=</span> <span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span>
-
-    <span class="c1"># Add qualities that come from the autoregressive process if not zero</span>
-    <span class="n">expected_mean</span> <span class="o">+=</span> <span class="p">(</span>
-        <span class="n">time_step</span>
-        <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;autoregressive_coefficient&quot;</span><span class="p">]</span>
-        <span class="o">*</span> <span class="p">(</span>
-            <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;autoregressive_intercept&quot;</span><span class="p">]</span>
-            <span class="o">-</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
+    <span class="c1"># The new expected mean from the previous value</span>
+    <span class="n">expected_mean</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;autoconnection_strength&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">time_step</span> <span class="o">*</span> <span class="n">driftrate</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">expected_mean</span></div>
 
@@ -571,6 +592,12 @@ document.write(`
 <span class="sd">    effective_precision :</span>
 <span class="sd">        The effective_precision :math:`\gamma_a^{(k)}`. This value is stored in the</span>
 <span class="sd">        node for later use in the update steps.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Weber, L. A., Waade, P. T., Legrand, N., Møller, A. H., Stephan, K. E., &amp;</span>
+<span class="sd">       Mathys, C. (2023). The generalized Hierarchical Gaussian Filter (Version 1).</span>
+<span class="sd">       arXiv. https://doi.org/10.48550/ARXIV.2305.10937</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># List the node&#39;s volatility parents</span>
