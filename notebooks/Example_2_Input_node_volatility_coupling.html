@@ -547,8 +547,8 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update_type</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;input_noise&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">8.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">input_precision</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">expected_precision</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">8.0</span><span class="p">)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
 <span class="n">mean_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
 </pre></div>
@@ -604,7 +604,7 @@ Adding 1000 new observations.
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/9419123f1d069efe21fd302aa9c26d59ca3b77f0aed681bc0dec36de8f5e2603.png" src="../_images/9419123f1d069efe21fd302aa9c26d59ca3b77f0aed681bc0dec36de8f5e2603.png" />
+<img alt="../_images/69370e3104aa5e06a4f047bf59716ee2bed25351821efb61c7c544f7fb4db863.png" src="../_images/69370e3104aa5e06a4f047bf59716ee2bed25351821efb61c7c544f7fb4db863.png" />
 </div>
 </div>
 </section>
@@ -626,9 +626,9 @@ Adding 1000 new observations.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_precision_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;input_precision&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">})</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">})</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tonic_volatility&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">input_precision</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">6.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">6.0</span><span class="p">)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
 <span class="n">mean_precision_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
 </pre></div>
@@ -687,70 +687,70 @@ Adding 1000 new observations.
       <td>1.0</td>
       <td>1.0</td>
       <td>3.914369</td>
-      <td>3.913978</td>
-      <td>10001.000000</td>
+      <td>1.957513</td>
+      <td>1.999665</td>
       <td>0.000000</td>
       <td>0.999665</td>
-      <td>76607.750000</td>
-      <td>10000.0</td>
-      <td>8.576149</td>
-      <td>76616.328125</td>
+      <td>8.580082</td>
+      <td>1.0</td>
+      <td>2.834392</td>
+      <td>11.414474</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1.0</td>
       <td>2.0</td>
       <td>5.997345</td>
-      <td>5.608260</td>
-      <td>12296.460938</td>
-      <td>3.913978</td>
-      <td>2296.461182</td>
-      <td>21698.417969</td>
-      <td>10000.0</td>
-      <td>3293.151611</td>
-      <td>24991.570312</td>
+      <td>3.304877</td>
+      <td>2.998324</td>
+      <td>1.957513</td>
+      <td>1.998324</td>
+      <td>9.079062</td>
+      <td>1.0</td>
+      <td>2.386652</td>
+      <td>11.465714</td>
     </tr>
     <tr>
       <th>2</th>
       <td>1.0</td>
       <td>3.0</td>
       <td>5.282979</td>
-      <td>5.345922</td>
-      <td>12399.307617</td>
-      <td>5.608260</td>
-      <td>2399.307861</td>
-      <td>525.354431</td>
-      <td>10000.0</td>
-      <td>79.589531</td>
-      <td>604.943970</td>
+      <td>3.799982</td>
+      <td>3.995311</td>
+      <td>3.304877</td>
+      <td>2.995311</td>
+      <td>2.875382</td>
+      <td>1.0</td>
+      <td>0.737534</td>
+      <td>3.612916</td>
     </tr>
     <tr>
       <th>3</th>
       <td>1.0</td>
       <td>4.0</td>
       <td>3.493705</td>
-      <td>3.852584</td>
-      <td>12403.197266</td>
-      <td>5.345922</td>
-      <td>2403.197510</td>
-      <td>17149.839844</td>
-      <td>10000.0</td>
-      <td>2676.660645</td>
-      <td>19826.500000</td>
+      <td>3.738604</td>
+      <td>4.989964</td>
+      <td>3.799982</td>
+      <td>3.989964</td>
+      <td>0.965841</td>
+      <td>1.0</td>
+      <td>0.234563</td>
+      <td>1.200405</td>
     </tr>
     <tr>
       <th>4</th>
       <td>1.0</td>
       <td>5.0</td>
       <td>4.421400</td>
-      <td>4.311182</td>
-      <td>12403.343750</td>
-      <td>3.852584</td>
-      <td>2403.343506</td>
-      <td>1614.070190</td>
-      <td>10000.0</td>
-      <td>249.753448</td>
-      <td>1863.823608</td>
+      <td>3.852752</td>
+      <td>5.981625</td>
+      <td>3.738604</td>
+      <td>4.981625</td>
+      <td>1.152044</td>
+      <td>1.0</td>
+      <td>0.148516</td>
+      <td>1.300559</td>
     </tr>
     <tr>
       <th>...</th>
@@ -771,70 +771,70 @@ Adding 1000 new observations.
       <td>1.0</td>
       <td>996.0</td>
       <td>5.634763</td>
-      <td>5.381019</td>
-      <td>12403.349609</td>
-      <td>4.325226</td>
-      <td>2403.349365</td>
-      <td>8570.754883</td>
-      <td>10000.0</td>
-      <td>1336.532715</td>
-      <td>9907.287109</td>
+      <td>4.823756</td>
+      <td>55.100357</td>
+      <td>4.808765</td>
+      <td>54.100357</td>
+      <td>1.260075</td>
+      <td>1.0</td>
+      <td>-1.070403</td>
+      <td>0.189672</td>
     </tr>
     <tr>
       <th>996</th>
       <td>1.0</td>
       <td>997.0</td>
       <td>6.069919</td>
-      <td>5.936433</td>
-      <td>12403.349609</td>
-      <td>5.381019</td>
-      <td>2403.349365</td>
-      <td>2369.226562</td>
-      <td>10000.0</td>
-      <td>367.725189</td>
-      <td>2736.951660</td>
+      <td>4.846372</td>
+      <td>55.100357</td>
+      <td>4.823756</td>
+      <td>54.100357</td>
+      <td>1.695400</td>
+      <td>1.0</td>
+      <td>-1.062646</td>
+      <td>0.632754</td>
     </tr>
     <tr>
       <th>997</th>
       <td>1.0</td>
       <td>998.0</td>
       <td>4.090673</td>
-      <td>4.448319</td>
-      <td>12403.349609</td>
-      <td>5.936433</td>
-      <td>2403.349365</td>
-      <td>17030.470703</td>
-      <td>10000.0</td>
-      <td>2658.116455</td>
-      <td>19688.587891</td>
+      <td>4.832657</td>
+      <td>55.100357</td>
+      <td>4.846372</td>
+      <td>54.100357</td>
+      <td>1.204479</td>
+      <td>1.0</td>
+      <td>-1.071394</td>
+      <td>0.133085</td>
     </tr>
     <tr>
       <th>998</th>
       <td>1.0</td>
       <td>999.0</td>
       <td>5.470264</td>
-      <td>5.272245</td>
-      <td>12403.349609</td>
-      <td>4.448319</td>
-      <td>2403.349365</td>
-      <td>5218.171875</td>
-      <td>10000.0</td>
-      <td>812.789185</td>
-      <td>6030.960938</td>
+      <td>4.844229</td>
+      <td>55.100357</td>
+      <td>4.832657</td>
+      <td>54.100357</td>
+      <td>1.122210</td>
+      <td>1.0</td>
+      <td>-1.072860</td>
+      <td>0.049350</td>
     </tr>
     <tr>
       <th>999</th>
       <td>1.0</td>
       <td>1000.0</td>
       <td>3.888570</td>
-      <td>4.156679</td>
-      <td>12403.349609</td>
-      <td>5.272245</td>
-      <td>2403.349365</td>
-      <td>9569.107422</td>
-      <td>10000.0</td>
-      <td>1492.496460</td>
-      <td>11061.603516</td>
+      <td>4.826885</td>
+      <td>55.100357</td>
+      <td>4.844229</td>
+      <td>54.100357</td>
+      <td>1.375581</td>
+      <td>1.0</td>
+      <td>-1.068345</td>
+      <td>0.307236</td>
     </tr>
   </tbody>
 </table>
@@ -900,12 +900,12 @@ pyhgf : 0.0.17
 jax   : 0.4.28
 jaxlib: 0.4.28
 
-seaborn   : 0.13.2
+arviz     : 0.18.0
 numpy     : 1.26.0
 matplotlib: 3.8.4
-sys       : 3.12.3 (main, Apr 10 2024, 03:36:41) [GCC 11.4.0]
+seaborn   : 0.13.2
 pymc      : 5.14.0
-arviz     : 0.18.0
+sys       : 3.12.3 (main, Apr 10 2024, 03:36:41) [GCC 11.4.0]
 
 Watermark: 2.4.3
 </pre></div>

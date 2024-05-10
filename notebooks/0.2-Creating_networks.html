@@ -586,9 +586,9 @@ One of the advantages of reasoning this way is that it dissociates variables tha
 </div>
 </section>
 </section>
-<section id="modifying-the-parameter-structure">
-<h2>Modifying the parameter structure<a class="headerlink" href="#modifying-the-parameter-structure" title="Link to this heading">#</a></h2>
-<p>The simpler change we can make on a network is to change the values of some of its parameters. The parameters are stored in the <code class="docutils literal notranslate"><span class="pre">attributes</span></code> variable as a dictionary where the key (integers) are node indexes. Therefore, modifying the expected precision of the third node in the previous example is as simple as:</p>
+<section id="modifying-the-attributes">
+<h2>Modifying the attributes<a class="headerlink" href="#modifying-the-attributes" title="Link to this heading">#</a></h2>
+<p>The simpler change we can make on a network is to change the values of some of its parameters. The parameters are stored in the <code class="docutils literal notranslate"><span class="pre">attributes</span></code> variable as a dictionary where the key (integers) are node indexes. Therefore, modifying the precision of the third node in the previous example is as simple as:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hgf</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.0</span>
@@ -596,15 +596,36 @@ One of the advantages of reasoning this way is that it dissociates variables tha
 </div>
 </div>
 </div>
-<p>However, modifying parameters values <em>manually</em> should not be that common as this is something we want the model to perform dynamically as we present new observations, but this can be used for example to generate prior predictive by sampling some parameter values from a distribution.</p>
+<p>It is also possible to initialize the network with given attribute values. You can provide additional parameters by using the <code class="docutils literal notranslate"><span class="pre">node_parameters</span></code> arguments in <code class="xref py py-meth docutils literal notranslate"><span class="pre">pyhgf.model.add_nodes()</span></code>, or simply by passing additional keyword arguments. When using keyword arguments, the key should match with the existing keys found in the node’s attributes. This is not a requirement when passing values using <code class="docutils literal notranslate"><span class="pre">node_parameters</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># method 1</span>
+<span class="n">new_input_precision_1</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">input_precision</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># method 2</span>
+<span class="n">new_input_precision_2</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;input_precision&quot;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">})</span>
+<span class="p">)</span>
+
+<span class="c1"># both methods change the default values, but only method 2 will create a new key without error</span>
+<span class="k">assert</span> <span class="n">new_input_precision_1</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;input_precision&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">new_input_precision_2</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;input_precision&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>However, modifying parameter values <em>manually</em> should not be that common as this is something we want the model to perform dynamically as we present new observations, but this can be used for example to generate prior predictive by sampling some parameter values from a distribution.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>What is a valid parameter/value?
-A probabilistic node can store an arbitrary number of parameters. Parameter values should be valid JAX types, therefore a node cannot contain strings. You can provide additional parameters by using the <code class="docutils literal notranslate"><span class="pre">additional_parameters</span></code> arguments in <code class="xref py py-meth docutils literal notranslate"><span class="pre">pyhgf.model.add_input_node()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">pyhgf.model.add_value_parent()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">pyhgf.model.add_volatility_parent()</span></code>. Most of the nodes that are being used in the HGF use Gaussian distribution, therefore they contain the current mean and precision (<code class="docutils literal notranslate"><span class="pre">mu</span></code> and <code class="docutils literal notranslate"><span class="pre">pi</span></code>) as well as the expected mean and precision (<code class="docutils literal notranslate"><span class="pre">muhat</span></code> and <code class="docutils literal notranslate"><span class="pre">pihat</span></code>).</p>
+A probabilistic node can store an arbitrary number of parameters. Parameter values should be valid JAX types, therefore a node cannot contain strings. Most of the nodes that are being used in the HGF use Gaussian distribution, therefore they contain the current mean and precision (<code class="docutils literal notranslate"><span class="pre">mean</span></code> and <code class="docutils literal notranslate"><span class="pre">precision</span></code>) as well as the expected mean and precision (<code class="docutils literal notranslate"><span class="pre">expected_mean</span></code> and <code class="docutils literal notranslate"><span class="pre">expected_precision</span></code>).</p>
 </div>
 </section>
-<section id="modifying-the-network-structure">
-<h2>Modifying the network structure<a class="headerlink" href="#modifying-the-network-structure" title="Link to this heading">#</a></h2>
+<section id="modifying-the-edges">
+<h2>Modifying the edges<a class="headerlink" href="#modifying-the-edges" title="Link to this heading">#</a></h2>
 <p>The second way we can modify a probabilistic network is by modifying its structure (i.e. the number of nodes, the type of nodes and the way they are connected with each other). Because nodes and connections are modular, a large variety of network structures can be declared. The only restrictions are that the network should be <strong>acyclic</strong> and <strong>rooted</strong> (the roots being input nodes).</p>
 <p>For example, the following networks are valid HGF structures:</p>
 <div class="cell docutils container">
@@ -703,7 +724,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">n_nodes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="c1"># plot the network</span>
@@ -733,7 +754,7 @@ Contrary to standard graph networks, the directed connection between nodes can h
 Adding 1000 new observations.
 </pre></div>
 </div>
-<img alt="../_images/1dd763dc3fafb23f9d5d6cdc5c23923492b2e6e5d04c5ecdc31cd296561807c7.png" src="../_images/1dd763dc3fafb23f9d5d6cdc5c23923492b2e6e5d04c5ecdc31cd296561807c7.png" />
+<img alt="../_images/cd646f0333c0d3c2e85b48e165ffbe45498ece74c847c8a5257916c92ead7701.png" src="../_images/cd646f0333c0d3c2e85b48e165ffbe45498ece74c847c8a5257916c92ead7701.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -769,7 +790,7 @@ Adding 1000 new observations.
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">n_nodes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">mean</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="c1"># plot the network</span>
@@ -818,12 +839,7 @@ Adding 1000 new observations.
 </section>
 <section id="coupling-with-binary-nodes">
 <h5>Coupling with binary nodes<a class="headerlink" href="#coupling-with-binary-nodes" title="Link to this heading">#</a></h5>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 
@@ -838,7 +854,6 @@ Adding 1000 new observations.
 </pre></div>
 </div>
 </div>
-</details>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -866,7 +881,7 @@ Adding 1000 new observations.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_binary_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">many_binary_children_hgf</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -874,9 +889,6 @@ Adding 1000 new observations.
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... Create the update sequence from the network structure.
 ... Create the belief propagation function.
 Adding 1000 new observations.
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;pyhgf.model.HGF at 0x7f651cd47350&gt;
 </pre></div>
 </div>
 </div>
@@ -933,7 +945,7 @@ Adding 1000 new observations.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># creating a network with multiple volatility parents </span>
 <span class="n">many_value_parents_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">n_nodes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;input_noise&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">n_nodes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">input_precision</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">expected_precision</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
@@ -977,7 +989,7 @@ Adding 2000 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/913fefd9608b3b685d657436b20371d1667bbe09b6a7aa71da51014a8af7cd1d.png" src="../_images/913fefd9608b3b685d657436b20371d1667bbe09b6a7aa71da51014a8af7cd1d.png" />
+<img alt="../_images/c827feac4849b55299842d46676290cecfc42a5e6d7f5795e21b23e93a947053.png" src="../_images/c827feac4849b55299842d46676290cecfc42a5e6d7f5795e21b23e93a947053.png" />
 </div>
 </div>
 </section>
@@ -988,7 +1000,7 @@ Adding 2000 new observations.
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># creating a network with multiple volatility parents </span>
 <span class="n">many_volatility_parents_hgf</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">n_nodes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;input_noise&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;expected_precision&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">n_nodes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">input_precision</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">expected_precision</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
@@ -1032,7 +1044,7 @@ Adding 2000 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4b4ccf2aa4277be9a30875719bac80d3a2ec5cd3d8bcbc3c589b5e0503999aa9.png" src="../_images/4b4ccf2aa4277be9a30875719bac80d3a2ec5cd3d8bcbc3c589b5e0503999aa9.png" />
+<img alt="../_images/29a25e4cf9635b83f5cf25cd8f138386d39b0f3dca355a549dc353a81451dec1.png" src="../_images/29a25e4cf9635b83f5cf25cd8f138386d39b0f3dca355a549dc353a81451dec1.png" />
 </div>
 </div>
 </section>
@@ -1111,10 +1123,10 @@ pyhgf : 0.0.17
 jax   : 0.4.28
 jaxlib: 0.4.28
 
-seaborn   : 0.13.2
-numpy     : 1.26.0
 sys       : 3.12.3 (main, Apr 10 2024, 03:36:41) [GCC 11.4.0]
 matplotlib: 3.8.4
+numpy     : 1.26.0
+seaborn   : 0.13.2
 
 Watermark: 2.4.3
 </pre></div>
@@ -1175,8 +1187,8 @@ Watermark: 2.4.3
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-probabilistic-networks">Visualizing probabilistic networks</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-the-parameter-structure">Modifying the parameter structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-the-network-structure">Modifying the network structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-the-attributes">Modifying the attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modifying-the-edges">Modifying the edges</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-coupling">Multivariate coupling</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-case-of-multivariate-descendency">The case of <em>multivariate descendency</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-value-coupling">Continuous value coupling</a></li>
