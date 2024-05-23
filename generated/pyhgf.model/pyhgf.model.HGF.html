@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyhgf.model.HGF &#8212; pyhgf 0.0.17 documentation</title>
+    <title>pyhgf.model.HGF &#8212; pyhgf 0.0.18 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=63b572e7"></script>
+    <script src="../../_static/documentation_options.js?v=8bafd125"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>let toggleHintShow = 'Click to show';</script>
@@ -542,11 +542,12 @@ HGF. The inputs can be continuous or binary.</p>
 <dt><strong>attributes</strong></dt><dd><p>The attributes of the probabilistic nodes.</p>
 </dd>
 <dt><strong>edges</strong></dt><dd><p>The edges of the probabilistic nodes as a tuple of
-<code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.AdjacencyLists</span></code>. The tuple has the same length as the
-node number. For each node, the index lists the value/volatility
-parents/children.</p>
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.Indexes</span></code>. The tuple has the same length as the node
+number. For each node, the index lists the value/volatility parents/children.</p>
 </dd>
-<dt><strong>inputs</strong></dt><dd><p>Information on the input nodes.</p>
+<dt><strong>input_nodes_idx</strong></dt><dd><p>Indexes of the input nodes with input types
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.typing.InputIndexes</span></code>. The default input node is <cite>0</cite> if the
+network only has one input node.</p>
 </dd>
 <dt><strong>model_type</strong></dt><dd><p>The model implemented (can be <cite>“continuous”</cite>, <cite>“binary”</cite> or <cite>“custom”</cite>).</p>
 </dd>
@@ -650,34 +651,31 @@ random walk. Defaults set all entries to <cite>0.0</cite> (no drift).</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_belief_propagation_fn</span></code>([overwrite])</p></td>
 <td><p>Create the belief propagation function.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_network</span></code>()</p></td>
-<td><p>Return the attributes, structure and update sequence defining the network.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_custom_sequence</span></code>(update_branches, ...)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_custom_sequence</span></code>(update_branches, ...)</p></td>
 <td><p>Add new observations with custom update sequences.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_data</span></code>(input_data[, time_steps, observed])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_data</span></code>(input_data[, time_steps, observed])</p></td>
 <td><p>Add new observations.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlations</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlations</span></code>()</p></td>
 <td><p>Plot the heatmap of cross-trajectories correlation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_network</span></code>()</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_network</span></code>()</p></td>
 <td><p>Visualization of node network using GraphViz.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_nodes</span></code>(node_idxs, **kwargs)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_nodes</span></code>(node_idxs, **kwargs)</p></td>
 <td><p>Plot the node(s) beliefs trajectories.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_trajectories</span></code>(**kwargs)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_trajectories</span></code>(**kwargs)</p></td>
 <td><p>Plot the parameters trajectories.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_update_sequence</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_update_sequence</span></code>()</p></td>
 <td><p>Generate an update sequence from the network's structure.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">surprise</span></code>([response_function, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">surprise</span></code>([response_function, ...])</p></td>
 <td><p>Surprise of the model conditioned by the response function.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_pandas</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_pandas</span></code>()</p></td>
 <td><p>Export the nodes trajectories and surprise as a Pandas data frame.</p></td>
 </tr>
 </tbody>
