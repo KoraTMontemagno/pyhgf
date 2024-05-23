@@ -450,7 +450,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">jax.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">from</span> <span class="nn">pyhgf.math</span> <span class="kn">import</span> <span class="n">binary_surprise</span><span class="p">,</span> <span class="n">gaussian_surprise</span>
-<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Indexes</span><span class="p">,</span> <span class="n">UpdateSequence</span>
+<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">AdjacencyLists</span><span class="p">,</span> <span class="n">Attributes</span><span class="p">,</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">UpdateSequence</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.posterior.binary</span> <span class="kn">import</span> <span class="n">binary_node_update_infinite</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.posterior.categorical</span> <span class="kn">import</span> <span class="n">categorical_input_update</span>
 <span class="kn">from</span> <span class="nn">pyhgf.updates.posterior.continuous</span> <span class="kn">import</span> <span class="p">(</span>
@@ -473,18 +473,17 @@ document.write(`
 <span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+    <span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">Network</span>
 
 
 <div class="viewcode-block" id="beliefs_propagation">
 <a class="viewcode-back" href="../../generated/pyhgf.networks/pyhgf.networks.beliefs_propagation.html#pyhgf.networks.beliefs_propagation">[docs]</a>
-<span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;update_sequence&quot;</span><span class="p">,</span> <span class="s2">&quot;edges&quot;</span><span class="p">,</span> <span class="s2">&quot;input_nodes_idx&quot;</span><span class="p">))</span>
+<span class="nd">@partial</span><span class="p">(</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;update_sequence&quot;</span><span class="p">,</span> <span class="s2">&quot;structure&quot;</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">beliefs_propagation</span><span class="p">(</span>
-    <span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">attributes</span><span class="p">:</span> <span class="n">Attributes</span><span class="p">,</span>
     <span class="n">input_data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
     <span class="n">update_sequence</span><span class="p">:</span> <span class="n">UpdateSequence</span><span class="p">,</span>
-    <span class="n">edges</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
-    <span class="n">input_nodes_idx</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span>
+    <span class="n">structure</span><span class="p">:</span> <span class="n">Structure</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the network&#39;s parameters after observing new data point(s).</span>
 
@@ -502,39 +501,38 @@ document.write(`
 <span class="sd">    input_data :</span>
 <span class="sd">        An array containing the new observation(s) as well as the time steps. The new</span>
 <span class="sd">        observations can be a single value or a vector of observation with a length</span>
-<span class="sd">        matching the length `input_nodes_idx`. `input_nodes_idx` is used to index the</span>
+<span class="sd">        matching the length `inputs.idx`. `inputs.idx` is used to index the</span>
 <span class="sd">        ith value in the vector to the ith input node, so the ordering of the input</span>
 <span class="sd">        array matters. The time steps are the last column of the array, the default is</span>
 <span class="sd">        unit incrementation.</span>
 <span class="sd">    update_sequence :</span>
 <span class="sd">        The sequence of updates that will be applied to the node structure.</span>
-<span class="sd">    edges :</span>
-<span class="sd">        The nodes structure.</span>
-<span class="sd">    input_nodes_idx :</span>
-<span class="sd">        An array of input indexes. The default is `[0]` (one input node, the first node</span>
-<span class="sd">        in the network).</span>
+<span class="sd">    structure :</span>
+<span class="sd">        Information on the network&#39;s structure, including input types and edges.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    attributes, attributes :</span>
 <span class="sd">        A tuple of parameters structure (carryover and accumulated).</span>
 
-
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># unpack static info about the network structure</span>
+    <span class="n">inputs</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">structure</span>
+    <span class="n">input_idxs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+
     <span class="c1"># extract value(s) and time steps</span>
     <span class="n">values</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">observed</span> <span class="o">=</span> <span class="n">input_data</span>
 
-    <span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">)</span>
     <span class="c1"># Fit the model with the current time and value variables, given the model structure</span>
     <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">update_sequence</span><span class="p">:</span>
         <span class="n">node_idx</span><span class="p">,</span> <span class="n">update_fn</span> <span class="o">=</span> <span class="n">sequence</span>
 
         <span class="c1"># if we are updating an input node, select the value that should be passed</span>
         <span class="c1"># otherwise, just pass 0.0 and the value will be ignored</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">),</span> <span class="n">values</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">input_idxs</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">),</span> <span class="n">values</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
 
         <span class="c1"># is it an observation or a missing observation</span>
-        <span class="n">observed_value</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">input_nodes_idx</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">)</span> <span class="o">*</span> <span class="n">observed</span><span class="p">)</span>
+        <span class="n">observed_value</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">input_idxs</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">)</span> <span class="o">*</span> <span class="n">observed</span><span class="p">)</span>
 
         <span class="n">attributes</span> <span class="o">=</span> <span class="n">update_fn</span><span class="p">(</span>
             <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span>
@@ -651,14 +649,17 @@ document.write(`
 <div class="viewcode-block" id="fill_categorical_state_node">
 <a class="viewcode-back" href="../../generated/pyhgf.networks/pyhgf.networks.fill_categorical_state_node.html#pyhgf.networks.fill_categorical_state_node">[docs]</a>
 <span class="k">def</span> <span class="nf">fill_categorical_state_node</span><span class="p">(</span>
-    <span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">binary_input_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">binary_parameters</span><span class="p">:</span> <span class="n">Dict</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;HGF&quot;</span><span class="p">:</span>
+    <span class="n">network</span><span class="p">:</span> <span class="s2">&quot;Network&quot;</span><span class="p">,</span>
+    <span class="n">node_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">binary_input_idxs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">binary_parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Network&quot;</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a binary network implied by categorical state(-transition) nodes.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    hgf :</span>
-<span class="sd">        Instance of a HGF model.</span>
+<span class="sd">    network :</span>
+<span class="sd">        Instance of a Network.</span>
 <span class="sd">    node_idx :</span>
 <span class="sd">        Index to the categorical state node.</span>
 <span class="sd">    binary_input_idxs :</span>
@@ -673,7 +674,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># add the binary inputs - one for each category</span>
-    <span class="n">hgf</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
         <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary-input&quot;</span><span class="p">,</span>
         <span class="n">n_nodes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">binary_input_idxs</span><span class="p">),</span>
         <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
@@ -682,16 +683,16 @@ document.write(`
     <span class="p">)</span>
 
     <span class="c1"># add the value dependency between the categorical and binary nodes</span>
-    <span class="n">edges_as_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Indexes</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
-    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">binary_input_idxs</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">edges_as_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AdjacencyLists</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+    <span class="n">edges_as_list</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">AdjacencyLists</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">binary_input_idxs</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">binary_idx</span> <span class="ow">in</span> <span class="n">binary_input_idxs</span><span class="p">:</span>
-        <span class="n">edges_as_list</span><span class="p">[</span><span class="n">binary_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,),</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">edges_as_list</span><span class="p">)</span>
+        <span class="n">edges_as_list</span><span class="p">[</span><span class="n">binary_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">AdjacencyLists</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">edges_as_list</span><span class="p">)</span>
 
     <span class="c1"># loop over the number of categories and create as many second-levels binary HGF</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]):</span>
         <span class="c1"># binary state node</span>
-        <span class="n">hgf</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
             <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;binary-state&quot;</span><span class="p">,</span>
             <span class="n">value_children</span><span class="o">=</span><span class="n">binary_input_idxs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
             <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
@@ -702,7 +703,7 @@ document.write(`
 
     <span class="c1"># add the continuous parent node</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]):</span>
-        <span class="n">hgf</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
             <span class="n">value_children</span><span class="o">=</span><span class="n">binary_input_idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">],</span>
             <span class="n">node_parameters</span><span class="o">=</span><span class="p">{</span>
                 <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;mean_2&quot;</span><span class="p">],</span>
@@ -713,7 +714,7 @@ document.write(`
 
     <span class="c1"># add the higher level volatility parents</span>
     <span class="c1"># as a shared parents between the second level nodes</span>
-    <span class="n">hgf</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span>
         <span class="n">volatility_children</span><span class="o">=</span><span class="p">[</span>
             <span class="n">idx</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">binary_parameters</span><span class="p">[</span><span class="s2">&quot;n_categories&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">binary_input_idxs</span>
         <span class="p">],</span>
@@ -724,13 +725,13 @@ document.write(`
         <span class="p">},</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">hgf</span></div>
+    <span class="k">return</span> <span class="n">network</span></div>
 
 
 
 <div class="viewcode-block" id="get_update_sequence">
 <a class="viewcode-back" href="../../generated/pyhgf.networks/pyhgf.networks.get_update_sequence.html#pyhgf.networks.get_update_sequence">[docs]</a>
-<span class="k">def</span> <span class="nf">get_update_sequence</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">get_update_sequence</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="n">update_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an update sequence from the network&#39;s structure.</span>
 
 <span class="sd">    This function return an optimized update sequence considering the edges of the</span>
@@ -744,8 +745,14 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    hgf :</span>
-<span class="sd">        An instance of the HGF model.</span>
+<span class="sd">    network :</span>
+<span class="sd">        A neural network, instance of :py:class:`pyhgf.model.network.Network`.</span>
+<span class="sd">    update_type :</span>
+<span class="sd">        The type of update to perform for volatility coupling. Can be `&quot;eHGF&quot;`</span>
+<span class="sd">        (defaults) or `&quot;standard&quot;`. The eHGF update step was proposed as an</span>
+<span class="sd">        alternative to the original definition in that it starts by updating the</span>
+<span class="sd">        mean and then the precision of the parent node, which generally reduces the</span>
+<span class="sd">        errors associated with impossible parameter space and improves sampling.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -757,21 +764,21 @@ document.write(`
     <span class="n">update_sequence</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">prediction_sequence</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+    <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
 
     <span class="c1"># list all nodes that should compute PE and update</span>
     <span class="n">node_without_pe</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">)]</span>
     <span class="n">node_without_update</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">)]</span>
 
     <span class="c1"># start with the update of all input nodes</span>
-    <span class="k">for</span> <span class="n">input_idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">input_idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">update_fn</span> <span class="o">=</span> <span class="n">continuous_input_prediction_error</span>
             <span class="n">update_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">input_idx</span><span class="p">,</span> <span class="n">update_fn</span><span class="p">))</span>
 
-        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># add the update steps for the binary state node as well</span>
-            <span class="n">binary_state_idx</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">input_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+            <span class="n">binary_state_idx</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">input_idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
 
             <span class="c1"># TODO: once HGF and Network classes implemented separately, we can add the</span>
             <span class="c1"># finite binary HGF back</span>
@@ -810,8 +817,8 @@ document.write(`
             <span class="n">all_children</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">i</span>
                 <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="p">[</span>
-                    <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
-                    <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
+                    <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">,</span>
+                    <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span><span class="p">,</span>
                 <span class="p">]</span>
                 <span class="k">if</span> <span class="n">idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span>
@@ -821,12 +828,12 @@ document.write(`
             <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_without_pe</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">all_children</span><span class="p">]):</span>
                 <span class="n">no_update</span> <span class="o">=</span> <span class="kc">False</span>
 
-                <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">update_type</span> <span class="o">==</span> <span class="s2">&quot;eHGF&quot;</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">update_type</span> <span class="o">==</span> <span class="s2">&quot;eHGF&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">update_fn</span> <span class="o">=</span> <span class="n">continuous_node_update_ehgf</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">update_fn</span> <span class="o">=</span> <span class="n">continuous_node_update</span>
-                <span class="k">elif</span> <span class="n">hgf</span><span class="o">.</span><span class="n">update_type</span> <span class="o">==</span> <span class="s2">&quot;standard&quot;</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">update_type</span> <span class="o">==</span> <span class="s2">&quot;standard&quot;</span><span class="p">:</span>
                     <span class="n">update_fn</span> <span class="o">=</span> <span class="n">continuous_node_update</span>
 
                 <span class="n">update_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">,</span> <span class="n">update_fn</span><span class="p">))</span>
@@ -842,8 +849,8 @@ document.write(`
             <span class="n">all_parents</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">i</span>
                 <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="p">[</span>
-                    <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
-                    <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
+                    <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">,</span>
+                    <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">volatility_parents</span><span class="p">,</span>
                 <span class="p">]</span>
                 <span class="k">if</span> <span class="n">idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span>
@@ -870,8 +877,8 @@ document.write(`
     <span class="n">prediction_sequence</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">update_sequence</span><span class="p">)</span>
 
     <span class="c1"># add the categorical update here, if any</span>
-    <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="c1"># create a new sequence step and add it to the list</span>
             <span class="n">prediction_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">,</span> <span class="n">categorical_input_update</span><span class="p">))</span>
 
@@ -879,7 +886,7 @@ document.write(`
 
 
 
-<span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="n">hgf</span><span class="p">:</span> <span class="s2">&quot;HGF&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="s2">&quot;Network&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Export the nodes trajectories and surprise as a Pandas data frame.</span>
 
 <span class="sd">    Returns</span>
@@ -892,11 +899,9 @@ document.write(`
     <span class="c1"># get time and time steps from the first input node</span>
     <span class="n">trajectories_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="p">{</span>
-            <span class="s2">&quot;time_steps&quot;</span><span class="p">:</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span>
-                <span class="s2">&quot;time_step&quot;</span>
-            <span class="p">],</span>
+            <span class="s2">&quot;time_steps&quot;</span><span class="p">:</span> <span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time_step&quot;</span><span class="p">],</span>
             <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span>
-                <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]</span>
+                <span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time_step&quot;</span><span class="p">]</span>
             <span class="p">),</span>
         <span class="p">}</span>
     <span class="p">)</span>
@@ -905,35 +910,35 @@ document.write(`
     <span class="c1"># ------------</span>
 
     <span class="c1"># add the observations from input nodes</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
                 <span class="nb">dict</span><span class="p">(</span>
                     <span class="p">[</span>
                         <span class="p">(</span>
                             <span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                            <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">][:,</span> <span class="n">i</span><span class="p">],</span>
+                            <span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">][:,</span> <span class="n">i</span><span class="p">],</span>
                         <span class="p">)</span>
-                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                     <span class="p">]</span>
                 <span class="p">)</span>
             <span class="p">)</span>
             <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">trajectories_df</span><span class="p">,</span> <span class="n">df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span>
-                <span class="s2">&quot;value&quot;</span>
-            <span class="p">]</span>
+            <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span>
+                <span class="n">idx</span>
+            <span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
     <span class="c1"># loop over non input nodes and store sufficient statistics with surprise</span>
     <span class="n">indexes</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">i</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span>
     <span class="p">]</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="nb">dict</span><span class="p">(</span>
             <span class="p">[</span>
-                <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">var</span><span class="p">])</span>
+                <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">var</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indexes</span>
                 <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;precision&quot;</span><span class="p">,</span> <span class="s2">&quot;expected_mean&quot;</span><span class="p">,</span> <span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
             <span class="p">]</span>
@@ -945,39 +950,39 @@ document.write(`
     <span class="c1"># --------------------------</span>
 
     <span class="c1"># add the surprise and expected precision computed from the continuous inputs</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
-        <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span>
-            <span class="n">idx</span>
-        <span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">kind</span> <span class="o">!=</span> <span class="s2">&quot;categorical&quot;</span><span class="p">:</span>
-            <span class="n">trajectories_df</span><span class="p">[</span>
-                <span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">_expected_precision&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
+        <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;surprise&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;observation_input_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">_expected_precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
 
     <span class="c1"># for value parents of binary inputs nodes</span>
     <span class="n">binary_nodes_idxs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">par_idx</span> <span class="ow">in</span> <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">par_idx</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">value_parents</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
                 <span class="n">binary_nodes_idxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">par_idx</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">binary_nodes_idxs</span><span class="p">:</span>
-            <span class="n">binary_input</span> <span class="o">=</span> <span class="n">hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+            <span class="n">binary_input</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value_children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
             <span class="n">surprise</span> <span class="o">=</span> <span class="n">binary_surprise</span><span class="p">(</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">binary_input</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-                <span class="n">expected_mean</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">],</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">binary_input</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
+                <span class="n">expected_mean</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">],</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">surprise</span> <span class="o">=</span> <span class="n">gaussian_surprise</span><span class="p">(</span>
-                <span class="n">x</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
-                <span class="n">expected_mean</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">],</span>
-                <span class="n">expected_precision</span><span class="o">=</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">],</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+                <span class="n">expected_mean</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_mean&quot;</span><span class="p">],</span>
+                <span class="n">expected_precision</span><span class="o">=</span><span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;expected_precision&quot;</span><span class="p">],</span>
             <span class="p">)</span>
 
         <span class="c1"># fill with nans when the model cannot fit</span>
         <span class="n">surprise</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-            <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">hgf</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">surprise</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">surprise</span>
         <span class="p">)</span>
         <span class="n">trajectories_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_surprise&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">surprise</span>
 

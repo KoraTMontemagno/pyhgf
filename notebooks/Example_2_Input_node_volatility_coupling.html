@@ -517,7 +517,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
 
 <span class="kn">from</span> <span class="nn">pyhgf.distribution</span> <span class="kn">import</span> <span class="n">HGFDistribution</span>
-<span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">HGF</span>
+<span class="kn">from</span> <span class="nn">pyhgf.model</span> <span class="kn">import</span> <span class="n">Network</span>
 </pre></div>
 </div>
 </div>
@@ -546,21 +546,16 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_hgf</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update_type</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span><span class="p">)</span>
+    <span class="n">Network</span><span class="p">()</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">input_precision</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">expected_precision</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">8.0</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">set_update_sequence</span><span class="p">(</span><span class="n">update_type</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span><span class="p">)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">input_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
 <span class="n">mean_hgf</span><span class="o">.</span><span class="n">plot_network</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
-... Create the update sequence from the network structure.
-... Create the belief propagation function.
-Adding 1000 new observations.
-</pre></div>
-</div>
 <img alt="../_images/a34923585ffa11e68b6a2ce4d53163bbd132b54bfe2dde9a00df3a396bef4cee.svg" src="../_images/a34923585ffa11e68b6a2ce4d53163bbd132b54bfe2dde9a00df3a396bef4cee.svg" /></div>
 </div>
 <div class="admonition note">
@@ -625,7 +620,7 @@ Adding 1000 new observations.
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_precision_hgf</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">HGF</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">Network</span><span class="p">()</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;continuous-input&quot;</span><span class="p">,</span> <span class="n">input_precision</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">value_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">6.0</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="n">volatility_children</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tonic_volatility</span><span class="o">=-</span><span class="mf">6.0</span><span class="p">)</span>
@@ -635,211 +630,7 @@ Adding 1000 new observations.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
-... Create the update sequence from the network structure.
-... Create the belief propagation function.
-Adding 1000 new observations.
-</pre></div>
-</div>
 <img alt="../_images/df8d2784694f45c319ae47a7000b4dc08c13f05d0e5a32a163756f8fe2466b52.svg" src="../_images/df8d2784694f45c319ae47a7000b4dc08c13f05d0e5a32a163756f8fe2466b52.svg" /></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>time_steps</th>
-      <th>time</th>
-      <th>observation_input_0</th>
-      <th>x_1_mean</th>
-      <th>x_1_precision</th>
-      <th>x_1_expected_mean</th>
-      <th>x_1_expected_precision</th>
-      <th>observation_input_0_surprise</th>
-      <th>observation_input_0_expected_precision</th>
-      <th>x_1_surprise</th>
-      <th>total_surprise</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>3.914369</td>
-      <td>1.957513</td>
-      <td>1.999665</td>
-      <td>0.000000</td>
-      <td>0.999665</td>
-      <td>8.580082</td>
-      <td>1.0</td>
-      <td>2.834392</td>
-      <td>11.414474</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>5.997345</td>
-      <td>3.304877</td>
-      <td>2.998324</td>
-      <td>1.957513</td>
-      <td>1.998324</td>
-      <td>9.079062</td>
-      <td>1.0</td>
-      <td>2.386652</td>
-      <td>11.465714</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1.0</td>
-      <td>3.0</td>
-      <td>5.282979</td>
-      <td>3.799982</td>
-      <td>3.995311</td>
-      <td>3.304877</td>
-      <td>2.995311</td>
-      <td>2.875382</td>
-      <td>1.0</td>
-      <td>0.737534</td>
-      <td>3.612916</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>3.493705</td>
-      <td>3.738604</td>
-      <td>4.989964</td>
-      <td>3.799982</td>
-      <td>3.989964</td>
-      <td>0.965841</td>
-      <td>1.0</td>
-      <td>0.234563</td>
-      <td>1.200405</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1.0</td>
-      <td>5.0</td>
-      <td>4.421400</td>
-      <td>3.852752</td>
-      <td>5.981625</td>
-      <td>3.738604</td>
-      <td>4.981625</td>
-      <td>1.152044</td>
-      <td>1.0</td>
-      <td>0.148516</td>
-      <td>1.300559</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>995</th>
-      <td>1.0</td>
-      <td>996.0</td>
-      <td>5.634763</td>
-      <td>4.823756</td>
-      <td>55.100357</td>
-      <td>4.808765</td>
-      <td>54.100357</td>
-      <td>1.260075</td>
-      <td>1.0</td>
-      <td>-1.070403</td>
-      <td>0.189672</td>
-    </tr>
-    <tr>
-      <th>996</th>
-      <td>1.0</td>
-      <td>997.0</td>
-      <td>6.069919</td>
-      <td>4.846372</td>
-      <td>55.100357</td>
-      <td>4.823756</td>
-      <td>54.100357</td>
-      <td>1.695400</td>
-      <td>1.0</td>
-      <td>-1.062646</td>
-      <td>0.632754</td>
-    </tr>
-    <tr>
-      <th>997</th>
-      <td>1.0</td>
-      <td>998.0</td>
-      <td>4.090673</td>
-      <td>4.832657</td>
-      <td>55.100357</td>
-      <td>4.846372</td>
-      <td>54.100357</td>
-      <td>1.204479</td>
-      <td>1.0</td>
-      <td>-1.071394</td>
-      <td>0.133085</td>
-    </tr>
-    <tr>
-      <th>998</th>
-      <td>1.0</td>
-      <td>999.0</td>
-      <td>5.470264</td>
-      <td>4.844229</td>
-      <td>55.100357</td>
-      <td>4.832657</td>
-      <td>54.100357</td>
-      <td>1.122210</td>
-      <td>1.0</td>
-      <td>-1.072860</td>
-      <td>0.049350</td>
-    </tr>
-    <tr>
-      <th>999</th>
-      <td>1.0</td>
-      <td>1000.0</td>
-      <td>3.888570</td>
-      <td>4.826885</td>
-      <td>55.100357</td>
-      <td>4.844229</td>
-      <td>54.100357</td>
-      <td>1.375581</td>
-      <td>1.0</td>
-      <td>-1.068345</td>
-      <td>0.307236</td>
-    </tr>
-  </tbody>
-</table>
-<p>1000 rows × 11 columns</p>
-</div></div></div>
 </div>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
@@ -900,11 +691,11 @@ pyhgf : 0.0.18
 jax   : 0.4.28
 jaxlib: 0.4.28
 
-numpy     : 1.26.0
 seaborn   : 0.13.2
 arviz     : 0.18.0
-pymc      : 5.15.0
 sys       : 3.12.3 (main, May  9 2024, 14:51:07) [GCC 11.4.0]
+numpy     : 1.26.0
+pymc      : 5.15.0
 matplotlib: 3.9.0
 
 Watermark: 2.4.3

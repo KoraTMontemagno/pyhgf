@@ -662,7 +662,7 @@ continuous inputs, with two or three levels. This class wraps the previous JAX m
 and creates a standard node structure for these models.</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGF</span></code></a>([n_levels, model_type, update_type, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGF</span></code></a>([n_levels, model_type, initial_mean, ...])</p></td>
 <td><p>The two-level and three-level Hierarchical Gaussian Filters (HGF).</p></td>
 </tr>
 </tbody>
@@ -674,16 +674,16 @@ and creates a standard node structure for these models.</p>
 observing new data.</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.plots/pyhgf.plots.plot_trajectories.html#pyhgf.plots.plot_trajectories" title="pyhgf.plots.plot_trajectories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_trajectories</span></code></a>(hgf[, ci, show_surprise, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.plots/pyhgf.plots.plot_trajectories.html#pyhgf.plots.plot_trajectories" title="pyhgf.plots.plot_trajectories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_trajectories</span></code></a>(network[, ci, ...])</p></td>
 <td><p>Plot the trajectories of the nodes' sufficient statistics and surprise.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.plots/pyhgf.plots.plot_correlations.html#pyhgf.plots.plot_correlations" title="pyhgf.plots.plot_correlations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlations</span></code></a>(hgf)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.plots/pyhgf.plots.plot_correlations.html#pyhgf.plots.plot_correlations" title="pyhgf.plots.plot_correlations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_correlations</span></code></a>(network)</p></td>
 <td><p>Plot the heatmap correlation of the sufficient statistics trajectories.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.plots/pyhgf.plots.plot_network.html#pyhgf.plots.plot_network" title="pyhgf.plots.plot_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_network</span></code></a>(hgf)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.plots/pyhgf.plots.plot_network.html#pyhgf.plots.plot_network" title="pyhgf.plots.plot_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_network</span></code></a>(network)</p></td>
 <td><p>Visualization of node network using GraphViz.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.plots/pyhgf.plots.plot_nodes.html#pyhgf.plots.plot_nodes" title="pyhgf.plots.plot_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_nodes</span></code></a>(hgf, node_idxs[, ci, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.plots/pyhgf.plots.plot_nodes.html#pyhgf.plots.plot_nodes" title="pyhgf.plots.plot_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_nodes</span></code></a>(network, node_idxs[, ci, ...])</p></td>
 <td><p>Plot the trajectory of expected sufficient statistics of a set of nodes.</p></td>
 </tr>
 </tbody>
@@ -727,10 +727,10 @@ least the HGF instance as input after observation and returning surprise.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.networks/pyhgf.networks.list_branches.html#pyhgf.networks.list_branches" title="pyhgf.networks.list_branches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_branches</span></code></a>(node_idxs, edges[, branch_list])</p></td>
 <td><p>Return the branch of a network from a given set of root nodes.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.networks/pyhgf.networks.fill_categorical_state_node.html#pyhgf.networks.fill_categorical_state_node" title="pyhgf.networks.fill_categorical_state_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fill_categorical_state_node</span></code></a>(hgf, node_idx, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyhgf.networks/pyhgf.networks.fill_categorical_state_node.html#pyhgf.networks.fill_categorical_state_node" title="pyhgf.networks.fill_categorical_state_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fill_categorical_state_node</span></code></a>(network, ...)</p></td>
 <td><p>Generate a binary network implied by categorical state(-transition) nodes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.networks/pyhgf.networks.get_update_sequence.html#pyhgf.networks.get_update_sequence" title="pyhgf.networks.get_update_sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_update_sequence</span></code></a>(hgf)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyhgf.networks/pyhgf.networks.get_update_sequence.html#pyhgf.networks.get_update_sequence" title="pyhgf.networks.get_update_sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_update_sequence</span></code></a>(network, update_type)</p></td>
 <td><p>Generate an update sequence from the network's structure.</p></td>
 </tr>
 </tbody>

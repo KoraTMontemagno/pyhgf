@@ -532,7 +532,7 @@ document.write(`
 <h1>pyhgf.networks.get_update_sequence<a class="headerlink" href="#pyhgf-networks-get-update-sequence" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyhgf.networks.get_update_sequence">
-<span class="sig-prename descclassname"><span class="pre">pyhgf.networks.</span></span><span class="sig-name descname"><span class="pre">get_update_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hgf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../pyhgf.model/pyhgf.model.HGF.html#pyhgf.model.HGF" title="pyhgf.model.HGF"><span class="pre">HGF</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="../../_modules/pyhgf/networks.html#get_update_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.networks.get_update_sequence" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyhgf.networks.</span></span><span class="sig-name descname"><span class="pre">get_update_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="../../_modules/pyhgf/networks.html#get_update_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyhgf.networks.get_update_sequence" title="Link to this definition">#</a></dt>
 <dd><p>Generate an update sequence from the network’s structure.</p>
 <p>This function return an optimized update sequence considering the edges of the
 network. The function ensures that the following principles apply:
@@ -545,7 +545,13 @@ node’s type (<cite>“continuous”</cite>, <cite>“binary”</cite> or <cite
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>hgf</strong></dt><dd><p>An instance of the HGF model.</p>
+<dt><strong>network</strong></dt><dd><p>A neural network, instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">pyhgf.model.network.Network</span></code>.</p>
+</dd>
+<dt><strong>update_type</strong></dt><dd><p>The type of update to perform for volatility coupling. Can be <cite>“eHGF”</cite>
+(defaults) or <cite>“standard”</cite>. The eHGF update step was proposed as an
+alternative to the original definition in that it starts by updating the
+mean and then the precision of the parent node, which generally reduces the
+errors associated with impossible parameter space and improves sampling.</p>
 </dd>
 </dl>
 </dd>

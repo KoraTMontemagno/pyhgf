@@ -710,27 +710,20 @@ z(\xi, \nu) := (\int \exp(\nu(\eta(\vartheta) · \xi−b(\vartheta)))d\vartheta)
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">univariate_hgf</span><span class="o">.</span><span class="n">set_update_sequence</span><span class="p">()</span>
-<span class="n">attributes</span> <span class="o">=</span> <span class="n">univariate_hgf</span><span class="o">.</span><span class="n">attributes</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">attributes</span><span class="p">,</span> <span class="n">structure</span><span class="p">,</span> <span class="n">update_sequence</span> <span class="o">=</span> <span class="n">univariate_hgf</span><span class="o">.</span><span class="n">get_network</span><span class="p">()</span>
 
 <span class="n">nus</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
     <span class="n">mean</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
 
     <span class="n">attributes</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">beliefs_propagation</span><span class="p">(</span>
-        <span class="n">edges</span><span class="o">=</span><span class="n">univariate_hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span>
+        <span class="n">structure</span><span class="o">=</span><span class="n">structure</span><span class="p">,</span>
         <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span>
         <span class="n">input_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">),</span>
-        <span class="n">input_nodes_idx</span><span class="o">=</span><span class="n">univariate_hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
-        <span class="n">update_sequence</span><span class="o">=</span><span class="n">univariate_hgf</span><span class="o">.</span><span class="n">update_sequence</span><span class="p">,</span>
+        <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">new_mean</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
@@ -811,26 +804,22 @@ z(\xi, \nu) := (\int \exp(\nu(\eta(\vartheta) · \xi−b(\vartheta)))d\vartheta)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing a network with custom node structure.
-</pre></div>
-</div>
 <img alt="../_images/b38f4f12c360a9917c9db910205de8f6279bda7ef33fc7996f7823a10639234e.svg" src="../_images/b38f4f12c360a9917c9db910205de8f6279bda7ef33fc7996f7823a10639234e.svg" /></div>
 </div>
 <p>For us to compute the hyperparameter after each update, we need to <em>manually</em> call the belief propagation sequence.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bivariate_hgf</span><span class="o">.</span><span class="n">set_update_sequence</span><span class="p">()</span>
-<span class="n">attributes</span> <span class="o">=</span> <span class="n">bivariate_hgf</span><span class="o">.</span><span class="n">attributes</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">attributes</span><span class="p">,</span> <span class="n">structure</span><span class="p">,</span> <span class="n">update_sequence</span> <span class="o">=</span> <span class="n">bivariate_hgf</span><span class="o">.</span><span class="n">get_network</span><span class="p">()</span>
+
 <span class="n">nus</span><span class="p">,</span> <span class="n">means</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
     <span class="n">mean</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">attributes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span>
     <span class="n">means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
     <span class="n">attributes</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">beliefs_propagation</span><span class="p">(</span>
-        <span class="n">edges</span><span class="o">=</span><span class="n">bivariate_hgf</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span>
+        <span class="n">structure</span><span class="o">=</span><span class="n">structure</span><span class="p">,</span>
         <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span>
         <span class="n">input_data</span><span class="o">=</span><span class="p">(</span><span class="n">sufficient_statistics</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">)),</span>
-        <span class="n">input_nodes_idx</span><span class="o">=</span><span class="n">bivariate_hgf</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
-        <span class="n">update_sequence</span><span class="o">=</span><span class="n">bivariate_hgf</span><span class="o">.</span><span class="n">update_sequence</span><span class="p">,</span>
+        <span class="n">update_sequence</span><span class="o">=</span><span class="n">update_sequence</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">new_mean</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">attributes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span>
@@ -956,9 +945,9 @@ pyhgf : 0.0.18
 jax   : 0.4.28
 jaxlib: 0.4.28
 
-seaborn   : 0.13.2
-jax       : 0.4.28
 numpy     : 1.26.0
+jax       : 0.4.28
+seaborn   : 0.13.2
 matplotlib: 3.9.0
 
 Watermark: 2.4.3
