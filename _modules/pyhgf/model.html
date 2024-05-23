@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -46,7 +46,7 @@
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyhgf/model';</script>
     <link rel="icon" href="../../_static/logo_small.svg"/>
@@ -457,7 +457,15 @@ document.write(`
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyhgf.plots</span> <span class="kn">import</span> <span class="n">plot_correlations</span><span class="p">,</span> <span class="n">plot_network</span><span class="p">,</span> <span class="n">plot_nodes</span><span class="p">,</span> <span class="n">plot_trajectories</span>
 <span class="kn">from</span> <span class="nn">pyhgf.response</span> <span class="kn">import</span> <span class="n">first_level_binary_surprise</span><span class="p">,</span> <span class="n">first_level_gaussian_surprise</span>
-<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="n">Edges</span><span class="p">,</span> <span class="n">Indexes</span><span class="p">,</span> <span class="n">InputIndexes</span><span class="p">,</span> <span class="n">UpdateSequence</span>
+<span class="kn">from</span> <span class="nn">pyhgf.typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AdjacencyLists</span><span class="p">,</span>
+    <span class="n">Attributes</span><span class="p">,</span>
+    <span class="n">Edges</span><span class="p">,</span>
+    <span class="n">Inputs</span><span class="p">,</span>
+    <span class="n">Network</span><span class="p">,</span>
+    <span class="n">UpdateSequence</span><span class="p">,</span>
+    <span class="n">input_types</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="HGF">
@@ -474,12 +482,11 @@ document.write(`
 <span class="sd">        The attributes of the probabilistic nodes.</span>
 <span class="sd">    edges :</span>
 <span class="sd">        The edges of the probabilistic nodes as a tuple of</span>
-<span class="sd">        :py:class:`pyhgf.typing.Indexes`. The tuple has the same length as the node</span>
-<span class="sd">        number. For each node, the index lists the value/volatility parents/children.</span>
-<span class="sd">    input_nodes_idx :</span>
-<span class="sd">        Indexes of the input nodes with input types</span>
-<span class="sd">        :py:class:`pyhgf.typing.InputIndexes`. The default input node is `0` if the</span>
-<span class="sd">        network only has one input node.</span>
+<span class="sd">        :py:class:`pyhgf.typing.AdjacencyLists`. The tuple has the same length as the</span>
+<span class="sd">        node number. For each node, the index lists the value/volatility</span>
+<span class="sd">        parents/children.</span>
+<span class="sd">    inputs :</span>
+<span class="sd">        Information on the input nodes.</span>
 <span class="sd">    model_type :</span>
 <span class="sd">        The model implemented (can be `&quot;continuous&quot;`, `&quot;binary&quot;` or `&quot;custom&quot;`).</span>
 <span class="sd">    n_levels :</span>
@@ -600,10 +607,11 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_levels</span> <span class="o">=</span> <span class="n">n_levels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span> <span class="n">Edges</span> <span class="o">=</span> <span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">:</span> <span class="n">Dict</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span> <span class="n">Attributes</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UpdateSequence</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span> <span class="n">Inputs</span>
 
         <span class="k">if</span> <span class="n">model_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -711,6 +719,10 @@ document.write(`
 <span class="sd">            `scan_fn` is already defined.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># create the network structure from edges and inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">Inputs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+
         <span class="c1"># create the update sequence if it does not already exist</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_update_sequence</span><span class="p">()</span>
@@ -718,13 +730,12 @@ document.write(`
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Create the update sequence from the network structure.&quot;</span><span class="p">)</span>
 
         <span class="c1"># create the belief propagation function</span>
-        <span class="c1"># this function is laer used by scan to loop over observations</span>
+        <span class="c1"># this function is used by scan to loop over observations</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="o">=</span> <span class="n">Partial</span><span class="p">(</span>
                 <span class="n">beliefs_propagation</span><span class="p">,</span>
                 <span class="n">update_sequence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span><span class="p">,</span>
-                <span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span>
-                <span class="n">input_nodes_idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
+                <span class="n">structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Create the belief propagation function.&quot;</span><span class="p">)</span>
@@ -733,8 +744,7 @@ document.write(`
                 <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="o">=</span> <span class="n">Partial</span><span class="p">(</span>
                     <span class="n">beliefs_propagation</span><span class="p">,</span>
                     <span class="n">update_sequence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span><span class="p">,</span>
-                    <span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span>
-                    <span class="n">input_nodes_idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
+                    <span class="n">structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Create the belief propagation function (overwrite).&quot;</span><span class="p">)</span>
@@ -761,7 +771,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span>
             <span class="p">(</span>
-                <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">))),</span>
+                <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">))),</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
             <span class="p">),</span>
@@ -896,8 +906,7 @@ document.write(`
             <span class="n">Partial</span><span class="p">(</span>
                 <span class="n">beliefs_propagation</span><span class="p">,</span>
                 <span class="n">update_sequence</span><span class="o">=</span><span class="n">seq</span><span class="p">,</span>
-                <span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span>
-                <span class="n">input_nodes_idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
+                <span class="n">structure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">update_branches</span>
         <span class="p">]</span>
@@ -918,7 +927,7 @@ document.write(`
 
         <span class="c1"># because some of the input nodes might not have been updated, here we manually</span>
         <span class="c1"># insert the input data to the input node (without triggering updates)</span>
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">inp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">inp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node_trajectories</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="n">inp</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">self</span>
@@ -1227,19 +1236,19 @@ document.write(`
         <span class="n">node_parameters</span> <span class="o">=</span> <span class="n">default_parameters</span>
 
         <span class="k">if</span> <span class="s2">&quot;input&quot;</span> <span class="ow">in</span> <span class="n">kind</span><span class="p">:</span>
-            <span class="n">input_type</span> <span class="o">=</span> <span class="n">kind</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">input_type</span> <span class="o">=</span> <span class="n">input_types</span><span class="p">[</span><span class="n">kind</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">input_type</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># convert the structure to a list to modify it</span>
-        <span class="n">edges_as_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Indexes</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+        <span class="n">edges_as_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AdjacencyLists</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
             <span class="n">node_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>  <span class="c1"># the index of the new node</span>
 
             <span class="c1"># add a new edge</span>
             <span class="n">edges_as_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">Indexes</span><span class="p">(</span>
+                <span class="n">AdjacencyLists</span><span class="p">(</span>
                     <span class="n">couplings</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">couplings</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -1248,18 +1257,18 @@ document.write(`
                 <span class="c1"># this is the first node, create the node structure</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="p">{</span><span class="n">node_idx</span><span class="p">:</span> <span class="n">node_parameters</span><span class="p">}</span>
                 <span class="k">if</span> <span class="n">input_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">((</span><span class="n">node_idx</span><span class="p">,),</span> <span class="p">(</span><span class="n">input_type</span><span class="p">,))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">Inputs</span><span class="p">((</span><span class="n">node_idx</span><span class="p">,),</span> <span class="p">(</span><span class="n">input_type</span><span class="p">,))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># update the node structure</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_parameters</span>
 
                 <span class="k">if</span> <span class="n">input_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="c1"># add information about the new input node in the indexes</span>
-                    <span class="n">new_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">idx</span>
+                    <span class="n">new_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">idx</span>
                     <span class="n">new_idx</span> <span class="o">+=</span> <span class="p">(</span><span class="n">node_idx</span><span class="p">,)</span>
-                    <span class="n">new_kind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span><span class="o">.</span><span class="n">kind</span>
+                    <span class="n">new_kind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">kind</span>
                     <span class="n">new_kind</span> <span class="o">+=</span> <span class="p">(</span><span class="n">input_type</span><span class="p">,)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes_idx</span> <span class="o">=</span> <span class="n">InputIndexes</span><span class="p">(</span><span class="n">new_idx</span><span class="p">,</span> <span class="n">new_kind</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">Inputs</span><span class="p">(</span><span class="n">new_idx</span><span class="p">,</span> <span class="n">new_kind</span><span class="p">)</span>
 
             <span class="c1"># update the existing edge structure so it links to the new node as well</span>
             <span class="k">for</span> <span class="n">coupling</span><span class="p">,</span> <span class="n">edge_type</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
@@ -1331,7 +1340,7 @@ document.write(`
                                 <span class="p">)</span>
 
                         <span class="c1"># save the updated edges back</span>
-                        <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">Indexes</span><span class="p">(</span>
+                        <span class="n">edges_as_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">AdjacencyLists</span><span class="p">(</span>
                             <span class="n">value_parents</span><span class="p">,</span>
                             <span class="n">volatility_parents</span><span class="p">,</span>
                             <span class="n">value_children</span><span class="p">,</span>
@@ -1365,7 +1374,16 @@ document.write(`
             <span class="p">)</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">get_network</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Network</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the attributes, structure and update sequence defining the network.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_belief_propagation_fn</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_sequence</span></div>
 
 </pre></div>
 
