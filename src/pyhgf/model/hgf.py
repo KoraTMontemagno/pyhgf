@@ -1,7 +1,6 @@
 # Author: Nicolas Legrand <nicolas.legrand@cas.au.dk>
 
 from typing import Callable, Dict, Optional, Tuple, Union, override
-
 import jax.numpy as jnp
 import numpy as np
 from jax.typing import ArrayLike
